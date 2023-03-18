@@ -1,6 +1,11 @@
 # CushyChat
 一个测试ChatGPT API的简易聊天机器人。支持连续对话，提供缓存的功能，可以记录历史对话，但是相关功能还懒得开发。
 
+# 特性
+- 终端运行，简单方便
+- 支持调用ChatGPT API接口
+- 支持长对话，使用`cushy-storage`缓存数据
+
 # 快速上手
 
 ```shell script
@@ -15,6 +20,7 @@ pip install -r requirements.txt
 - 读取历史消息（已经提供缓存）
 - 选取历史消息进行长对话聊天
 - 提供token长度判断功能
+- 支持多行输入
 
 
 # 参考
