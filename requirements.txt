@@ -1,0 +1,2 @@
+cushy-storage
+requests~=2.28.2
