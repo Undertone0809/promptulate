@@ -24,5 +24,6 @@ __all__ = [
     'BaseRole',
     'DefaultRole',
     'CopyWriter',
-    'LinuxTerminal'
+    'LinuxTerminal',
+    'MindMapGenerator'
 ]

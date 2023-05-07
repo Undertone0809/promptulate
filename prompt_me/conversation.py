@@ -75,7 +75,7 @@ class Conversation:
             self._append_message_to_cache(ret_msg, 'assistant')
             return ret_msg
 
-        logger.error("Failed to get data")
+        logger.error("Failed to get data. Please check your network or api key.")
         return None
 
     def _get_message_from_cache(self, msg: str) -> List[dict]:

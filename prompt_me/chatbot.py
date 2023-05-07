@@ -76,7 +76,7 @@ class ChatBot:
             self._append_message_to_cache(ret_msg, 'assistant', conversation_id)
             return ret_msg, conversation_id
 
-        logger.error("Failed to get data")
+        logger.error("Failed to get data. Please check your network or api key.")
         return None
 
     def _get_message_from_cache(self, msg: str, conversation_id: Optional[str] = None) -> tuple:
