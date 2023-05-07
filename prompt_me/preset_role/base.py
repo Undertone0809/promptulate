@@ -17,15 +17,14 @@
 # Project Link: https://github.com/Undertone0809/prompt-me
 # Contact Email: zeeland@foxmail.com
 
-from .chatbot import ChatBot
-from .conversation import Conversation
-from prompt_me.utils import utils
-from prompt_me.utils.utils import enable_log, enable_log_no_file
+from pydantic import BaseModel, Extra, Field, root_validator
 
-__all__ = [
-    'ChatBot',
-    'Conversation',
-    'utils',
-    'enable_log',
-    'enable_log_no_file'
-]
+
+class BaseRole(BaseModel):
+    name: str  # role name
+    description: str  # role description
+
+
+class DefaultRole(BaseRole):
+    name = "default-role"
+    description = "You are a helpful AI assistant."

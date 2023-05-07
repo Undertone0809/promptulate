@@ -17,39 +17,41 @@
 # Project Link: https://github.com/Undertone0809/prompt-me
 # Contact Email: zeeland@foxmail.com
 
-
+import os
 import time
 import requests
-from prompt_me import utils
 from typing import Optional, List
+
+from prompt_me import utils
+from prompt_me.config import Config
+from prompt_me.preset_role import BaseRole
 
 __all__ = ['ChatBot']
 
-OPENAI_URL = 'https://chatgpt-api.shn.hk/v1/'
-PROXY_URL = 'https://chatgpt-api.shn.hk/v1/'  # FREE API
-
 cache = utils.get_cache()
 logger = utils.get_logger()
-
-
-# utils.enable_log_no_file()
+CFG = Config()
 
 
 class ChatBot:
-    def __init__(self, key: str, enable_proxy: bool = True):
-        self.key = key
-        if enable_proxy:
-            self.base_url = PROXY_URL
-        else:
-            self.base_url = OPENAI_URL
+    def __init__(self, key: Optional[str] = None, enable_proxy: bool = True):
+        if not key and "OPENAI_API_KEY" not in os.environ.keys():
+            raise ValueError('OPENAI API key is not provided')
+        self.key = key if key else os.getenv('OPENAI_API_KEY')
+
+        CFG.set_enable_proxy(enable_proxy)
 
     def ask(self, msg: str, conversation_id: Optional[str] = None) -> Optional[tuple]:
         """
         ask him a question, return his answer and a conversation_id. You can
         continue your session when you input your conversation_id.
-        :param msg: the message you can to ask
-        :param conversation_id: conversation_id to keep session
-        :return: a tuple like ->(his_answer: str, conversation_id: str)
+
+        Args:
+            msg: the message you can to ask
+            conversation_id: conversation id
+
+        Returns:
+            a tuple like ->(his_answer: str, conversation_id: str)
         """
 
         headers = {
@@ -65,7 +67,7 @@ class ChatBot:
         }
         logger.debug(body)
 
-        response = requests.post(url=self.base_url, headers=headers, json=body)
+        response = requests.post(url=CFG.get_request_url(), headers=headers, json=body)
         if response.status_code == 200:
             ret_data = response.json()
             logger.debug(ret_data)
@@ -79,16 +81,24 @@ class ChatBot:
 
     def _get_message_from_cache(self, msg: str, conversation_id: Optional[str] = None) -> tuple:
         """
-        get a complete messages. A message is as follows:
+        Get a complete conversation messages.
+
+        Args:
+            msg:
+            conversation_id:
+
+        Returns:
+            conversation_id, messages
+
+        Examples:
+             A message is as follows:
         ---------------------------------------------------------------
         [
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": "Hello, Who are you?"}
-            {"role": "assistant", "content": "I am AI."}
+            {"preset_role": "system", "content": "You are a helpful assistant."},
+            {"preset_role": "user", "content": "Hello, Who are you?"}
+            {"preset_role": "assistant", "content": "I am AI."}
         ]
         ---------------------------------------------------------------
-        :param conversation_id:
-        :return: conversation_id, messages
         """
         messages = [
             {"role": "system", "content": "You are a helpful assistant."},
@@ -106,7 +116,12 @@ class ChatBot:
         """
         This function has two functions. Generating a new conversation_id if it
         doesn't exist, otherwise the same conversation_id as the input is returned.
-        :return: conversation_id
+
+        Args:
+            conversation_id:
+
+        Returns:
+            conversation_id
         """
         if conversation_id and conversation_id in cache:
             return conversation_id
@@ -115,8 +130,9 @@ class ChatBot:
     def get_history(self, conversation_id: str) -> Optional[List[dict]]:
         """
         get conversation from cache
-        :param conversation_id: when did you talk to him?
-        :return: conversation
+
+        Returns:
+            conversation
         """
         if conversation_id in cache:
             return cache[conversation_id]
@@ -124,11 +140,15 @@ class ChatBot:
 
     def output(self, conversation_id: str, output_type: str = 'text', file_path: str = "output.md") -> Optional[str]:
         """
-        export conversation to markdown
-        :param conversation_id: conversation to export
-        :param output_type: text or file, default is text
-        :param file_path: output file path
-        :return: conversation in markdown
+        Export conversation to markdown
+
+        Args:
+            conversation_id: conversation to export
+            output_type: text or file, default is text
+            file_path:  output file path
+
+        Returns:
+            conversation in markdown
         """
         conversation = self.get_history(conversation_id)
         if conversation is None:
@@ -136,7 +156,7 @@ class ChatBot:
 
         ret = "# Chat record\n"
         for message in conversation:
-            role = message.get('role')
+            role = message.get('preset_role')
             content = message.get('content').replace('"', '\\"')
             if role == 'assistant':
                 ret += f"## Bot said\n\n{content}\n\n"
@@ -154,6 +174,6 @@ class ChatBot:
     def _append_message_to_cache(self, msg: str, role: str, conversation_id: str) -> List[dict]:
         messages: List[dict] = cache[conversation_id]
         if role in ['user', 'assistant']:
-            messages.append({"role": role, "content": msg})
+            messages.append({"preset_role": role, "content": msg})
             cache[conversation_id] = messages
         return messages

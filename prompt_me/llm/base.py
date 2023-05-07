@@ -17,15 +17,11 @@
 # Project Link: https://github.com/Undertone0809/prompt-me
 # Contact Email: zeeland@foxmail.com
 
-from .chatbot import ChatBot
-from .conversation import Conversation
-from prompt_me.utils import utils
-from prompt_me.utils.utils import enable_log, enable_log_no_file
+from typing import TypedDict
 
-__all__ = [
-    'ChatBot',
-    'Conversation',
-    'utils',
-    'enable_log',
-    'enable_log_no_file'
-]
+
+class Message(TypedDict):
+    """OpenAI Message object containing a role and the message content"""
+
+    role: str
+    content: str

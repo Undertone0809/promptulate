@@ -18,7 +18,6 @@
 # Contact Email: zeeland@foxmail.com
 
 import os
-import sys
 import logging
 import platform
 import datetime
@@ -27,7 +26,6 @@ from cushy_storage import CushyDict
 
 __all__ = ['get_cache', 'get_logger', 'enable_log', 'enable_log_no_file']
 logger = logging.getLogger(__name__)
-
 
 def get_cache():
     return cache

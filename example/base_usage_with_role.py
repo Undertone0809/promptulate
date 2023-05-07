@@ -17,15 +17,21 @@
 # Project Link: https://github.com/Undertone0809/prompt-me
 # Contact Email: zeeland@foxmail.com
 
-from .chatbot import ChatBot
-from .conversation import Conversation
-from prompt_me.utils import utils
-from prompt_me.utils.utils import enable_log, enable_log_no_file
+import os
+from prompt_me.preset_role import CopyWriter
+from prompt_me import Conversation
 
-__all__ = [
-    'ChatBot',
-    'Conversation',
-    'utils',
-    'enable_log',
-    'enable_log_no_file'
-]
+os.environ['OPENAI_API_KEY'] = "your_key"
+
+
+def main():
+    copy_writer = CopyWriter()
+    conversation = Conversation(role=copy_writer)
+    output = conversation.predict(msg="你好,请问你是谁？")
+    print(f"[output] {output}")
+    output = conversation.predict(msg="请问你可以做什么？")
+    print(f"[output] {output}")
+
+
+if __name__ == '__main__':
+    main()

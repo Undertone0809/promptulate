@@ -17,15 +17,25 @@
 # Project Link: https://github.com/Undertone0809/prompt-me
 # Contact Email: zeeland@foxmail.com
 
-from .chatbot import ChatBot
-from .conversation import Conversation
-from prompt_me.utils import utils
-from prompt_me.utils.utils import enable_log, enable_log_no_file
+import os
 
-__all__ = [
-    'ChatBot',
-    'Conversation',
-    'utils',
-    'enable_log',
-    'enable_log_no_file'
-]
+from prompt_me.utils.singleton import Singleton
+
+
+class Config(metaclass=Singleton):
+    def __init__(self):
+        self.enable_proxy = True
+        self.openai_url = 'https://api.openai.com/v1/chat/completions'
+        self.proxy_url = 'https://chatgpt-api.shn.hk/v1/'  # FREE API
+
+    @property
+    def openai_api_key(self):
+        if "OPENAI_API_KEY" not in os.environ.keys():
+            raise ValueError('OPENAI API key is not provided')
+        return os.getenv("OPENAI_API_KEY")
+
+    def get_request_url(self) -> str:
+        return self.proxy_url if self.enable_proxy else self.openai_url
+
+    def set_enable_proxy(self, value: bool):
+        self.enable_proxy = value

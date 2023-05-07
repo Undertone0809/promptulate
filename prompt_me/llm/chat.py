@@ -17,15 +17,18 @@
 # Project Link: https://github.com/Undertone0809/prompt-me
 # Contact Email: zeeland@foxmail.com
 
-from .chatbot import ChatBot
-from .conversation import Conversation
-from prompt_me.utils import utils
-from prompt_me.utils.utils import enable_log, enable_log_no_file
+from prompt_me.llm import Message
 
-__all__ = [
-    'ChatBot',
-    'Conversation',
-    'utils',
-    'enable_log',
-    'enable_log_no_file'
-]
+
+def create_chat_message(role, content) -> Message:
+    """
+    Create a chat message with the given role and content.
+
+    Args:
+        role (str): The role of the message sender, e.g., "system", "user", or "assistant".
+        content (str): The content of the message.
+
+    Returns:
+        dict: A dictionary containing the role and content of the message.
+    """
+    return {"role": role, "content": content}

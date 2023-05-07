@@ -18,20 +18,25 @@
 # Contact Email: zeeland@foxmail.com
 
 import os
-from prompt_me import ChatBot, enable_log_no_file
+from prompt_me.preset_role import BaseRole
+from prompt_me import Conversation
 
 os.environ['OPENAI_API_KEY'] = "your_key"
 
 
+class LinuxTerminal(BaseRole):
+    name = "Linux终端"
+    description = "我想让你充当 Linux 终端。我将输入命令，您将回复终端应显示的内容。我希望您只在一个唯一的代码块内回复终端输出，而不" \
+                  "是其他任何内容。不要写解释。除非我指示您这样做，否则不要键入命令。当我需要用英语告诉你一些事情时，我会把文字放在中括号内[就像这样]。"
+
+
 def main():
-    # enable_log_no_file()
-    print("A Simple ChatBot built by ChatGPT API")
-    conversation_id = None
-    bot = ChatBot()
-    while True:
-        prompt = str(input("[User] "))
-        ret, conversation_id = bot.ask(prompt, conversation_id)
-        print(ret, conversation_id)
+    linux_terminal = LinuxTerminal()
+    conversation = Conversation(role=linux_terminal)
+    output = conversation.predict(msg="[ls]")
+    print(f"[output] {output}")
+    output = conversation.predict(msg="[cd /usr/local]")
+    print(f"[output] {output}")
 
 
 if __name__ == '__main__':

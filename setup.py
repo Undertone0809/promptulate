@@ -20,10 +20,10 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setuptools.setup(
     name="prompt-me",
-    version="1.0.0",
+    version="2.0.0",
     author="Zeeland",
     author_email="zeeland@foxmail.com",
-    description="A lightweight ChatGPT ChatBot framework",
+    description="A lightweight LLM Prompt Layer framework",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Undertone0809/prompt-me",
@@ -38,9 +38,9 @@ setuptools.setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3 :: Only",
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: Apache License",
         "Operating System :: OS Independent",
 
     ],
-    keywords="prompt-me, prompt, chatgpt, gpt, chatbot",
+    keywords="prompt-me, prompt, chatgpt, gpt, chatbot, llm",
 )
