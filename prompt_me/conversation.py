@@ -35,7 +35,7 @@ CFG = Config()
 class Conversation:
     """Create a conversation. You can set a default preset_role for conversations."""
 
-    def __init__(self, role: BaseRole = DefaultRole, enable_proxy: bool = True):
+    def __init__(self, role: BaseRole = DefaultRole(), enable_proxy: bool = True):
         CFG.set_enable_proxy(enable_proxy)
         logger.debug(f"[OPENAI_API_KEY] {CFG.openai_api_key}")
 
@@ -66,8 +66,10 @@ class Conversation:
         }
         logger.debug(body)
 
-        response = requests.post(url=CFG.get_request_url(), headers=headers, json=body)
+        response = requests.post(url=CFG.get_request_url(), headers=headers, json=body, stream=True)
         if response.status_code == 200:
+            for chunk in response.iter_content(chunk_size=None):
+                print(chunk)
             ret_data = response.json()
             logger.debug(ret_data)
             ret_msg = ret_data['choices'][0]['message']['content']

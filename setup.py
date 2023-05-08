@@ -20,7 +20,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setuptools.setup(
     name="prompt-me",
-    version="2.1.0",
+    version="2.1.1",
     author="Zeeland",
     author_email="zeeland@foxmail.com",
     description="A lightweight LLM Prompt Layer framework",
