@@ -14,5 +14,17 @@
 #
 # Copyright Owner: Zeeland
 # GitHub Link: https://github.com/Undertone0809/
-# Project Link: https://github.com/Undertone0809/prompt-me
+# Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
+
+from typing import List
+from abc import abstractmethod
+from pydantic import BaseModel
+
+from promptulate.schema import AssistantMessage
+
+
+class BaseLLM(BaseModel):
+    @abstractmethod
+    def generate_prompt(self, prompts: List[dict], ) -> AssistantMessage:
+        """llms generate prompt"""

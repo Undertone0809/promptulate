@@ -14,7 +14,7 @@
 #
 # Copyright Owner: Zeeland
 # GitHub Link: https://github.com/Undertone0809/
-# Project Link: https://github.com/Undertone0809/prompt-me
+# Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
 import os
@@ -22,9 +22,9 @@ import time
 import requests
 from typing import Optional, List
 
-from prompt_me import utils
-from prompt_me.config import Config
-from prompt_me.preset_role import BaseRole
+from promptulate import utils
+from promptulate.config import Config
+from promptulate.preset_roles import BaseRole
 
 __all__ = ['ChatBot']
 
@@ -94,9 +94,9 @@ class ChatBot:
              A message is as follows:
         ---------------------------------------------------------------
         [
-            {"preset_role": "system", "content": "You are a helpful assistant."},
-            {"preset_role": "user", "content": "Hello, Who are you?"}
-            {"preset_role": "assistant", "content": "I am AI."}
+            {"preset_roles": "system", "content": "You are a helpful assistant."},
+            {"preset_roles": "user", "content": "Hello, Who are you?"}
+            {"preset_roles": "assistant", "content": "I am AI."}
         ]
         ---------------------------------------------------------------
         """
@@ -156,7 +156,7 @@ class ChatBot:
 
         ret = "# Chat record\n"
         for message in conversation:
-            role = message.get('preset_role')
+            role = message.get('preset_roles')
             content = message.get('content').replace('"', '\\"')
             if role == 'assistant':
                 ret += f"## Bot said\n\n{content}\n\n"
@@ -174,6 +174,6 @@ class ChatBot:
     def _append_message_to_cache(self, msg: str, role: str, conversation_id: str) -> List[dict]:
         messages: List[dict] = cache[conversation_id]
         if role in ['user', 'assistant']:
-            messages.append({"preset_role": role, "content": msg})
+            messages.append({"preset_roles": role, "content": msg})
             cache[conversation_id] = messages
         return messages

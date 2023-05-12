@@ -14,16 +14,20 @@
 #
 # Copyright Owner: Zeeland
 # GitHub Link: https://github.com/Undertone0809/
-# Project Link: https://github.com/Undertone0809/prompt-me
+# Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from .base import BaseRole, DefaultRole
-from .roles import *
+import os
+from promptulate.llms import OpenAI
+from promptulate import SystemMessage, UserMessage, LLMPrompt
 
-__all__ = [
-    'BaseRole',
-    'DefaultRole',
-    'CopyWriter',
-    'LinuxTerminal',
-    'MindMapGenerator'
-]
+os.environ['OPENAI_API_KEY'] = "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"
+
+
+def main():
+    llm = OpenAI()
+    print(llm("你知道只因你太美吗？"))
+
+
+if __name__ == '__main__':
+    main()

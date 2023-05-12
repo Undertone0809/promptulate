@@ -17,23 +17,19 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-import os
-from promptulate.preset_roles import CopyWriter, MindMapGenerator, SqlGenerator
-from promptulate import Conversation, enable_log_no_file
+# from prompt_me.utils import logger
+from promptulate.utils.singleton import Singleton, AbstractSingleton
+from promptulate.utils.logger import get_logger, enable_log, enable_log_no_file
+from promptulate.utils.utils import get_project_root_path, get_default_storage_path, get_cache
 
-os.environ['OPENAI_API_KEY'] = "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"
+__all__ = [
+    'get_logger',
+    'enable_log',
+    'enable_log_no_file',
+    'get_cache',
+    'get_project_root_path',
+    'get_default_storage_path',
+    'Singleton',
+    'AbstractSingleton',
 
-
-def main():
-    enable_log_no_file()
-    # role = SqlGenerator()
-    # role = MindMapGenerator()
-    # copy_writer = CopyWriter()
-    conversation = Conversation()
-    output = conversation.predict(
-        msg="检索过去一个季度每个产品类别的总收入、订单数和平均订单价值，数据应按总收入降序排序，以用于自定义报告。")
-    print(f"[output] {output}")
-
-
-if __name__ == '__main__':
-    main()
+]

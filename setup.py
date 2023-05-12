@@ -19,14 +19,14 @@ here = pathlib.Path(__file__).parent.resolve()
 long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setuptools.setup(
-    name="prompt-me",
-    version="2.1.1",
+    name="promptulate",
+    version="1.0.0",
     author="Zeeland",
     author_email="zeeland@foxmail.com",
-    description="A lightweight LLM Prompt Layer framework",
+    description="A lightweight LLM Prompt Layer frameworks",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Undertone0809/prompt-me",
+    url="https://github.com/Undertone0809/promptulate",
     packages=setuptools.find_packages(),
     license="Apache 2.0",
     classifiers=[
@@ -43,5 +43,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
 
     ],
-    keywords="prompt-me, prompt, chatgpt, gpt, chatbot, llm",
+    keywords="promptulate, prompt-me, prompt, chatgpt, gpt, chatbot, llm",
 )

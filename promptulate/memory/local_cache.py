@@ -17,23 +17,26 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-import os
-from promptulate.preset_roles import CopyWriter, MindMapGenerator, SqlGenerator
-from promptulate import Conversation, enable_log_no_file
+import time
+from typing import Optional, List, Union
 
-os.environ['OPENAI_API_KEY'] = "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"
+from promptulate import utils
+from promptulate.config import Config
+from promptulate.frameworks.mixins import SummarizerMixin
+from promptulate.preset_roles import BaseRole, DefaultRole
+from promptulate.frameworks.schema import BaseConversationFramework, BasePromptFramework
+from promptulate.schema import (
+    SystemMessage,
+    UserMessage,
+    BaseMessage,
+    AssistantMessage,
+    LocalCacheChatMessageHistory,
+    BaseChatMessageHistory
+)
+
+cache = utils.get_cache()
+logger = utils.logger()
 
 
-def main():
-    enable_log_no_file()
-    # role = SqlGenerator()
-    # role = MindMapGenerator()
-    # copy_writer = CopyWriter()
-    conversation = Conversation()
-    output = conversation.predict(
-        msg="检索过去一个季度每个产品类别的总收入、订单数和平均订单价值，数据应按总收入降序排序，以用于自定义报告。")
-    print(f"[output] {output}")
-
-
-if __name__ == '__main__':
-    main()
+def get_message_from_cache(conversation_id) -> LocalCacheChatMessageHistory:
+    pass

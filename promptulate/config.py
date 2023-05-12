@@ -14,12 +14,12 @@
 #
 # Copyright Owner: Zeeland
 # GitHub Link: https://github.com/Undertone0809/
-# Project Link: https://github.com/Undertone0809/prompt-me
+# Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
 import os
 
-from prompt_me.utils.singleton import Singleton
+from promptulate.utils.singleton import Singleton
 
 
 class Config(metaclass=Singleton):

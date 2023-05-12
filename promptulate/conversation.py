@@ -14,16 +14,18 @@
 #
 # Copyright Owner: Zeeland
 # GitHub Link: https://github.com/Undertone0809/
-# Project Link: https://github.com/Undertone0809/prompt-me
+# Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
 import time
 import requests
-from typing import Optional, List
+from typing import Optional, List, Any
 
-from prompt_me import utils
-from prompt_me.config import Config
-from prompt_me.preset_role import BaseRole, DefaultRole
+from promptulate import utils
+from promptulate.config import Config
+from promptulate.frameworks.mixins import SummarizerMixin
+from promptulate.preset_roles import BaseRole, DefaultRole
+from promptulate.schema import BaseMessage, UserMessage, SystemMessage, AssistantMessage, BaseChatMessageHistory
 
 __all__ = ['Conversation']
 
@@ -32,14 +34,15 @@ logger = utils.get_logger()
 CFG = Config()
 
 
-class Conversation:
-    """Create a conversation. You can set a default preset_role for conversations."""
+class Conversation(SummarizerMixin):
+    """Create a conversation. You can set a default preset_roles for conversations."""
 
-    def __init__(self, role: BaseRole = DefaultRole(), enable_proxy: bool = True):
+    def __init__(self, role: BaseRole = DefaultRole(), enable_proxy: bool = True, **data: Any):
+        super().__init__(**data)
         CFG.set_enable_proxy(enable_proxy)
         logger.debug(f"[OPENAI_API_KEY] {CFG.openai_api_key}")
 
-        self.role: BaseRole = role
+        self.role: BaseRole = role or DefaultRole()
         self.conversation_id = None
 
     def predict(self, msg: str) -> Optional[str]:
@@ -66,10 +69,11 @@ class Conversation:
         }
         logger.debug(body)
 
-        response = requests.post(url=CFG.get_request_url(), headers=headers, json=body, stream=True)
+        response = requests.post(url=CFG.get_request_url(), headers=headers, json=body)
         if response.status_code == 200:
-            for chunk in response.iter_content(chunk_size=None):
-                print(chunk)
+            # todo enable stream mode
+            # for chunk in response.iter_content(chunk_size=None):
+            #     print(chunk)
             ret_data = response.json()
             logger.debug(ret_data)
             ret_msg = ret_data['choices'][0]['message']['content']
@@ -91,9 +95,9 @@ class Conversation:
              A message is as follows:
         ---------------------------------------------------------------
         [
-            {"preset_role": "system", "content": "You are a helpful assistant."},
-            {"preset_role": "user", "content": "Hello, Who are you?"}
-            {"preset_role": "assistant", "content": "I am AI."}
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "Hello, Who are you?"},
+            {"role": "assistant", "content": "I am AI."}
         ]
         ---------------------------------------------------------------
         """
@@ -143,7 +147,7 @@ class Conversation:
 
         ret = "# Chat record\n"
         for message in conversation:
-            role = message.get('preset_role')
+            role = message.get('preset_roles')
             content = message.get('content').replace('"', '\\"')
             if role == 'assistant':
                 ret += f"## Bot said\n\n{content}\n\n"

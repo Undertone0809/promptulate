@@ -14,10 +14,10 @@
 #
 # Copyright Owner: Zeeland
 # GitHub Link: https://github.com/Undertone0809/
-# Project Link: https://github.com/Undertone0809/prompt-me
+# Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from prompt_me import ChatBot
+from promptulate import ChatBot
 from unittest import TestCase, main
 
 openai_key = 'yourkey'

@@ -14,21 +14,5 @@
 #
 # Copyright Owner: Zeeland
 # GitHub Link: https://github.com/Undertone0809/
-# Project Link: https://github.com/Undertone0809/prompt-me
+# Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
-
-from prompt_me.llm import Message
-
-
-def create_chat_message(role, content) -> Message:
-    """
-    Create a chat message with the given role and content.
-
-    Args:
-        role (str): The role of the message sender, e.g., "system", "user", or "assistant".
-        content (str): The content of the message.
-
-    Returns:
-        dict: A dictionary containing the role and content of the message.
-    """
-    return {"role": role, "content": content}

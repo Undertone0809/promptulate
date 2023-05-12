@@ -14,12 +14,12 @@
 #
 # Copyright Owner: Zeeland
 # GitHub Link: https://github.com/Undertone0809/
-# Project Link: https://github.com/Undertone0809/prompt-me
+# Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
 import os
-from prompt_me.preset_role import BaseRole
-from prompt_me import Conversation
+from promptulate.preset_roles import BaseRole
+from promptulate import Conversation
 
 os.environ['OPENAI_API_KEY'] = "your_key"
 

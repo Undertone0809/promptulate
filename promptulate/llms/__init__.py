@@ -14,5 +14,13 @@
 #
 # Copyright Owner: Zeeland
 # GitHub Link: https://github.com/Undertone0809/
-# Project Link: https://github.com/Undertone0809/prompt-me
+# Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
+
+from promptulate.llms.openai import OpenAI
+from promptulate.llms.base import BaseLLM
+
+__all__ = [
+    'BaseLLM',
+    'OpenAI',
+]

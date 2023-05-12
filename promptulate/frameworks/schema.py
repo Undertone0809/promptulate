@@ -14,8 +14,26 @@
 #
 # Copyright Owner: Zeeland
 # GitHub Link: https://github.com/Undertone0809/
-# Project Link: https://github.com/Undertone0809/prompt-me
+# Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from .utils import *
-from .singleton import *
+from pydantic import BaseModel
+from typing import Union, List, Optional
+
+from promptulate.config import Config
+from promptulate.preset_roles import BaseRole, DefaultRole
+
+CFG = Config()
+
+
+class BasePromptFramework(BaseModel):
+    enable_proxy: bool = True
+
+    def set_enable_proxy(self, enable_proxy: bool = False):
+        self.enable_proxy = enable_proxy
+        CFG.set_enable_proxy(enable_proxy)
+
+
+class BaseConversationFramework(BasePromptFramework):
+    role: BaseRole
+    conversation_id: str

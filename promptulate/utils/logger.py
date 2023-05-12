@@ -14,41 +14,24 @@
 #
 # Copyright Owner: Zeeland
 # GitHub Link: https://github.com/Undertone0809/
-# Project Link: https://github.com/Undertone0809/prompt-me
+# Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
 import os
 import logging
-import platform
 import datetime
-from functools import wraps
-from cushy_storage import CushyDict
+import platform
+from promptulate import utils
 
-__all__ = ['get_cache', 'get_logger', 'enable_log', 'enable_log_no_file']
 logger = logging.getLogger(__name__)
-
-def get_cache():
-    return cache
 
 
 def get_logger():
     return logger
 
 
-def get_project_root_path() -> str:
-    project_path = os.getcwd()
-    max_depth = 10
-    count = 0
-    while not os.path.exists(os.path.join(project_path, 'README.md')):
-        project_path = os.path.split(project_path)[0]
-        count += 1
-        if count > max_depth:
-            return os.getcwd()
-    return project_path
-
-
 def _check_log_path():
-    log_path = os.path.join(get_project_root_path(), 'log')
+    log_path = os.path.join(utils.get_default_storage_path(), 'log')
     if not os.path.exists(log_path):
         os.makedirs(log_path)
 
@@ -56,7 +39,7 @@ def _check_log_path():
 def get_log_name() -> str:
     _check_log_path()
     cur_time = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-    return f"{get_project_root_path()}/log/log_{cur_time}.log"
+    return f"{utils.get_default_storage_path()}/log/log_{cur_time}.log"
 
 
 def enable_log():
@@ -70,6 +53,8 @@ def enable_log():
                 logging.StreamHandler()
             ],
         )
+    elif platform.system() == 'Linux':
+        pass
 
 
 def enable_log_no_file():
@@ -78,16 +63,3 @@ def enable_log_no_file():
         format='[%(levelname)s] %(asctime)s %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S',
     )
-
-
-def hint(fn):
-    @wraps(fn)
-    def wrapper(*args, **kwargs):
-        ret = fn(*args, **kwargs)
-        logger.debug(f'function {fn.__name__} is running now')
-        return ret
-
-    return wrapper
-
-
-cache = CushyDict(get_project_root_path() + "/cache")

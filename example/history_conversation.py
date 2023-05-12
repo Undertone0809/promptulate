@@ -14,15 +14,15 @@
 #
 # Copyright Owner: Zeeland
 # GitHub Link: https://github.com/Undertone0809/
-# Project Link: https://github.com/Undertone0809/prompt-me
+# Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from prompt_me import ChatBot, enable_log_no_file
+from promptulate import ChatBot, enable_log_no_file
 
 
 def main():
     # enable_log_no_file()
-    bot = ChatBot(key='yourkey')
+    bot = ChatBot(key='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')
     ret, conversation_id = bot.ask("please give me a bucket sort python code")
     messages = bot.get_history(conversation_id)
     for message in messages:
