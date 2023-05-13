@@ -17,144 +17,70 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-import time
-import requests
-from typing import Optional, List, Union
+from pydantic import Field
+from typing import Optional, Union
 
 from promptulate import utils
 from promptulate.config import Config
-from promptulate.frameworks.mixins import SummarizerMixin
-from promptulate.preset_roles import BaseRole, DefaultRole
-from promptulate.llms import BaseLLM, OpenAI
-from promptulate.frameworks.schema import BaseConversationFramework, BasePromptFramework
+from promptulate.llms import OpenAI
+from promptulate.llms.base import BaseLLM
+from promptulate.memory import BufferChatMemory
+from promptulate.memory.base import BaseChatMemory
+from promptulate.tips import EmptyChatMessageHistoryTip
+from promptulate.preset_roles.roles import CustomPresetRole, get_preset_role_prompt
+from promptulate.provider.mixins import SummarizerMixin, TranslatorMixin, DeriveHistoryMessageMixin
+from promptulate.frameworks.schema import BasePromptFramework
 from promptulate.schema import (
-    SystemMessage,
-    UserMessage,
-    BaseMessage,
+    LLMPrompt,
     AssistantMessage,
-    LocalCacheChatMessageHistory,
-    BaseChatMessageHistory
+    ChatMessageHistory,
+    init_chat_message_history,
 )
 
 CFG = Config()
 logger = utils.get_logger()
-cache = utils.get_cache()
 
 
-def generate_conversation_id() -> str:
-    """Generating a new conversation_id when a conversation initialize"""
-    return str(int(time.time()))
+class Conversation(
+    BasePromptFramework,
+    SummarizerMixin,
+    TranslatorMixin,
+    DeriveHistoryMessageMixin
+):
+    """
+    You can use Conversation start a conversation. Moreover, you can pass some parameters to enhance it.
 
+    Args
+        role: preset role. Default is default role.
+        llm: default is OpenAI GPT3.5. You can choose other llm.
+        conversation_id: conversation id. Default is None
+        memory: the way you want to store chat data. Default is BufferChatMemory, which is used
+            for local file storage.
 
-class Conversation(BasePromptFramework, SummarizerMixin):
-    role = DefaultRole()
-    llm: BaseLLM = OpenAI()
+    Examples
+        from promptulate import Conversation
+
+        conversation = Conversation()
+        conversation.predict("Hello, Who are you?")
+    """
     conversation_id: Optional[str] = None
-    chat_message_history: BaseChatMessageHistory = LocalCacheChatMessageHistory()
+    llm: BaseLLM = Field(default_factory=OpenAI)
+    role: Union[str, CustomPresetRole] = "default-role"
+    memory: BaseChatMemory = Field(default_factory=BufferChatMemory)
 
-    # todo 完成这里
-    def predict(self, msg: str) -> Optional[str]:
-        pass
-    #     """
-    #     ask a question, return his answer and a conversation_id. You can
-    #     continue your session when you input your conversation_id.
-    #
-    #     Args:
-    #         msg: the message you can ask
-    #
-    #     Returns:
-    #         a tuple like ->(his_answer: str, conversation_id: str)
-    #     """
-    #
-    #     self._get_message_from_cache()
-    #     self.llm.generate_prompt()
-    #     return None
-    #
-    # def _get_message_from_cache(self, msg: str) -> List[BaseMessage]:
-    #     """
-    #     Get a complete conversation messages.
-    #
-    #     Returns:
-    #         conversation_id, messages
-    #
-    #     Examples:
-    #          A message is as follows:
-    #     ---------------------------------------------------------------
-    #     [
-    #         {"preset_roles": "system", "content": "You are a helpful assistant."},
-    #         {"preset_roles": "user", "content": "Hello, Who are you?"}
-    #         {"preset_roles": "assistant", "content": "I am AI."}
-    #     ]
-    #     ---------------------------------------------------------------
-    #     """
-    #
-    #     self.chat_message_history.add_system_message(self.role.description)
-    #     self.chat_message_history.add_user_message(msg)
-    #
-    #     # messages = [
-    #     #     {"role": "system", "content": self.role.description},
-    #     #     {"role": "user", "content": msg}
-    #     # ]
-    #
-    #     if self._is_new_conversation():
-    #         self.conversation_id = generate_conversation_id()
-    #         return messages
-    #     messages = self._append_message_to_cache(msg, 'user')
-    #     return messages
-    #
-    # def _is_new_conversation(self) -> bool:
-    #     logger.debug(f"[prompt_me] current conversation is [{self.conversation_id is None}] new conversation")
-    #     return self.conversation_id is None
-
-    # def get_history(self) -> Optional[List[dict]]:
-    #     """
-    #     get conversation from cache
-    #
-    #     Returns:
-    #         conversation
-    #     """
-    #     if self.conversation_id in cache:
-    #         return cache[self.conversation_id]
-    #     return None
-    #
-    # def output(self, output_type: str = 'text', file_path: str = "output.md") -> Optional[str]:
-    #     """
-    #     Export conversation to markdown
-    #
-    #     Args:
-    #         output_type: text or file, default is text
-    #         file_path:  output file path
-    #
-    #     Returns:
-    #         conversation in markdown
-    #     """
-    #     conversation = self.get_history()
-    #     if conversation is None:
-    #         return None
-    #
-    #     ret = "# Chat record\n"
-    #     for message in conversation:
-    #         role = message.get('preset_roles')
-    #         content = message.get('content').replace('"', '\\"')
-    #         if role == 'assistant':
-    #             ret += f"## Bot said\n\n{content}\n\n"
-    #         else:
-    #             ret += f"## You said\n\n{content}\n\n"
-    #     if output_type == 'text':
-    #         return ret
-    #     elif output_type == 'file':
-    #         with open(file_path, 'w') as f:
-    #             f.write(ret)
-    #     else:
-    #         raise ValueError("Invalid output destination specified. Please choose either 'text' or 'file'.")
-    #     return ret
-
-    # def _append_message_to_cache(self, msg: str, role: str) -> List[dict]:
-    #     messages: List[dict] = cache[self.conversation_id]
-    #     if role in ['user', 'assistant']:
-    #         messages.append({"role": role, "content": msg})
-    #         cache[self.conversation_id] = messages
-    #     return messages
+    def predict(self, prompt: str) -> str:
+        try:
+            messages_history: ChatMessageHistory = self.memory.load_conversation_from_memory(self.conversation_id)
+            messages_history.add_user_message(message=prompt)
+        except EmptyChatMessageHistoryTip as e:
+            messages_history = init_chat_message_history(get_preset_role_prompt(self.role), prompt)
+            self.conversation_id = messages_history.conversation_id
+            self.memory.save_conversation_to_memory(messages_history)
+        logger.debug(f"{messages_history.messages}")
+        answer: AssistantMessage = self.llm.generate_prompt(LLMPrompt(messages=messages_history.messages))
+        messages_history.messages.append(answer)
+        self.memory.save_conversation_to_memory(messages_history)
+        return answer.content
 
 
 def main():

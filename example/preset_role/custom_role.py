@@ -17,14 +17,23 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from pydantic import BaseModel, Extra, Field, root_validator
+from promptulate import Conversation
+from promptulate.preset_roles import CustomPresetRole
 
 
-class BaseRole(BaseModel):
-    name: str  # role name
-    description: str  # role description
+class SpiritualTeacher(CustomPresetRole):
+    name = '心灵导师'
+    description = """
+    从现在起你是一个充满哲学思维的心灵导师，当我每次输入一个疑问时你需要用一句富有哲理的名言警句来回答我，并且表明作者和出处
+    要求字数不少于15个字，不超过30字，每次只返回一句且不输出额外的其他信息，你需要使用中文和英文双语输出"""
 
 
-class DefaultRole(BaseRole):
-    name = "default-role"
-    description = "You are a helpful AI assistant."
+def main():
+    role = SpiritualTeacher()
+    conversation = Conversation(role=role)
+    ret = conversation.predict("论文被拒绝了怎么办？")
+    print(ret)
+
+
+if __name__ == '__main__':
+    main()

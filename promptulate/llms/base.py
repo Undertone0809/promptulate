@@ -17,14 +17,28 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from typing import List
-from abc import abstractmethod
-from pydantic import BaseModel
-
+from typing import Any
+from pydantic import BaseModel, Extra
+from abc import ABC, abstractmethod
 from promptulate.schema import AssistantMessage
+from promptulate.schema import LLMPrompt
 
 
-class BaseLLM(BaseModel):
+class BaseLLM(BaseModel, ABC):
+    class Config:
+        """Configuration for this pydantic object."""
+
+        extra = Extra.forbid
+        arbitrary_types_allowed = True
+
     @abstractmethod
-    def generate_prompt(self, prompts: List[dict], ) -> AssistantMessage:
-        """llms generate prompt"""
+    def generate_prompt(self, prompts: LLMPrompt) -> AssistantMessage:
+        """llm generate prompt"""
+
+    @abstractmethod
+    def _parse_prompt(self, prompts: LLMPrompt) -> Any:
+        """parse prompt"""
+
+    @abstractmethod
+    def __call__(self, prompt, *args, **kwargs):
+        """input string prompt return answer"""

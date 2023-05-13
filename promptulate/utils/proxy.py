@@ -17,19 +17,25 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from pydantic import BaseModel
+from typing import Optional
 from promptulate.config import Config
 
 CFG = Config()
+PROXY_MODE = ['off', 'custom', 'promptulate']
 
 
-class BasePromptFramework(BaseModel):
-    role: str
-    conversation_id: str
+def set_proxy_mode(mode: str, proxies: Optional[dict] = None):
+    """
+    Set proxy mode. Promptulate offer three proxy mode ['off', 'custom', 'promptulate']
+    'off' disables your proxy mode. This is the normal status.
+    'custom' means you can set your custom proxy. Moreover, you must pass proxies
+    'promptulate' provide free proxy you can use it.
 
-    class Config:
-        arbitrary_types_allowed = True
-
-
-class BaseConversationFramework(BasePromptFramework):
-    pass
+    Args:
+        mode: ['off', 'custom', 'promptulate']
+        proxies: If you want to use custom proxy, you can pass it. An example
+        proxies is {'http': 'http://127.0.0.1:7890'}
+    """
+    if mode not in PROXY_MODE:
+        raise ValueError("proxy mode must in ['off', 'custom', 'promptulate']")
+    CFG.set_proxy_mode(mode, proxies)

@@ -17,31 +17,30 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from typing import Optional
+from typing import Optional, List
 
 from promptulate import utils
-from promptulate.tips import EmptyChatMessageHistoryTip
 from promptulate.memory.base import BaseChatMemory
+from promptulate.tips import EmptyChatMessageHistoryTip
 from promptulate.schema import (
     ListDictPrompt,
     ChatMessageHistory,
     generate_conversation_id,
 )
 
-cache = utils.get_cache()
 logger = utils.get_logger()
 
 
-class LocalCacheChatMemory(BaseChatMemory):
-    """Chat message will be stored in the local file cache."""
+class BufferChatMemory(BaseChatMemory):
+    """Chat message will be stored in the buffer cache."""
+    buffer: List[dict]
 
     def load_conversation_from_memory(self, conversation_id: Optional[str]) -> ChatMessageHistory:
-        if conversation_id is None or conversation_id not in cache:
+        if conversation_id is None:
             raise EmptyChatMessageHistoryTip()
-        cache_messages = cache[conversation_id]
-        return ListDictPrompt(messages=cache_messages).chat_message_history
+        return ListDictPrompt(messages=self.buffer).chat_message_history
 
     def save_conversation_to_memory(self, chat_message_history: ChatMessageHistory) -> None:
         if not chat_message_history.conversation_id:
             chat_message_history.conversation_id = generate_conversation_id()
-        cache[chat_message_history.conversation_id] = chat_message_history.listdict_message
+        self.buffer = chat_message_history.listdict_message

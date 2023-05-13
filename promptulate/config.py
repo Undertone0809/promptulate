@@ -18,24 +18,55 @@
 # Contact Email: zeeland@foxmail.com
 
 import os
-
+from typing import Optional
+from promptulate import utils
 from promptulate.utils.singleton import Singleton
+
+PROXY_MODE = ['off', 'custom', 'promptulate']
+
+
+def set_enable_cache(value: bool):
+    """Caching is enabled by default. Disabling caching is not recommended."""
+    Config().enable_cache = value
 
 
 class Config(metaclass=Singleton):
     def __init__(self):
-        self.enable_proxy = True
+        self.enable_cache: bool = True
+        self._proxy_mode: str = PROXY_MODE[0]
+        self.proxies: Optional[dict] = None
         self.openai_url = 'https://api.openai.com/v1/chat/completions'
-        self.proxy_url = 'https://chatgpt-api.shn.hk/v1/'  # FREE API
+        self.openai_proxy_url = 'https://chatgpt-api.shn.hk/v1/'  # FREE API
 
     @property
     def openai_api_key(self):
-        if "OPENAI_API_KEY" not in os.environ.keys():
-            raise ValueError('OPENAI API key is not provided')
-        return os.getenv("OPENAI_API_KEY")
+        if self.enable_cache and "OPENAI_API_KEY" in utils.get_cache():
+            return utils.get_cache()["OPENAI_API_KEY"]
+        if "OPENAI_API_KEY" in os.environ.keys():
+            if self.enable_cache:
+                utils.get_cache()["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+            return os.getenv("OPENAI_API_KEY")
+        raise ValueError('OPENAI API key is not provided. Please set your key.')
 
-    def get_request_url(self) -> str:
-        return self.proxy_url if self.enable_proxy else self.openai_url
+    @property
+    def proxy_mode(self) -> str:
+        if self.enable_cache and "PROXY_MODE" in utils.get_cache():
+            return utils.get_cache()["PROXY_MODE"]
+        return self._proxy_mode
 
-    def set_enable_proxy(self, value: bool):
-        self.enable_proxy = value
+    @proxy_mode.setter
+    def proxy_mode(self, value):
+        self._proxy_mode = value
+        if self.enable_cache:
+            utils.get_cache()['PROXY_MODE'] = value
+
+    @property
+    def openai_request_url(self) -> str:
+        if self.proxy_mode == PROXY_MODE[2]:
+            self.proxies = None
+            return self.openai_proxy_url
+        return self.openai_url
+
+    def set_proxy_mode(self, mode: str, proxies: Optional[dict] = None):
+        self.proxy_mode = mode
+        self.proxies = proxies

@@ -23,7 +23,7 @@ setuptools.setup(
     version="1.0.0",
     author="Zeeland",
     author_email="zeeland@foxmail.com",
-    description="A lightweight LLM Prompt Layer frameworks",
+    description="A powerful LLM Prompt Layer frameworks",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Undertone0809/promptulate",
@@ -44,4 +44,7 @@ setuptools.setup(
 
     ],
     keywords="promptulate, prompt-me, prompt, chatgpt, gpt, chatbot, llm",
+    entry_points={
+        'console_scripts': ['promptulate-chat=promptulate.command.chat:main']
+    },
 )

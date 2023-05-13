@@ -21,13 +21,10 @@ import os
 import logging
 import platform
 import tempfile
-import datetime
 from functools import wraps
 from cushy_storage import CushyDict
-from promptulate.config import Config
 
 __all__ = ['get_cache', 'get_project_root_path', 'get_default_storage_path']
-CFG = Config()
 logger = logging.getLogger(__name__)
 
 
@@ -46,6 +43,10 @@ def get_project_root_path() -> str:
         if count > max_depth:
             return os.getcwd()
     return project_path
+
+
+def set_openai_api_key(value: str):
+    cache['OPENAI_API_KEY'] = value
 
 
 def get_default_storage_path() -> str:

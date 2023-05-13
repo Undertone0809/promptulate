@@ -17,17 +17,13 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from promptulate.chatbot import ChatBot
 from promptulate.frameworks import Conversation
-# from prompt_me.conversation import Conversation
-from promptulate.utils import utils, enable_log, enable_log_no_file
+from promptulate.utils import enable_log, enable_log_no_file
 from promptulate.schema import UserMessage, AssistantMessage, SystemMessage, BaseChatMessageHistory, LLMPrompt
 
 __all__ = [
-    'ChatBot',
     'Conversation',
 
-    'utils',
     'enable_log',
     'enable_log_no_file',
 
@@ -35,5 +31,5 @@ __all__ = [
     'UserMessage',
     'AssistantMessage',
     'BaseChatMessageHistory',
-    'LLMPrompt'
+    'LLMPrompt',
 ]

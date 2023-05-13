@@ -18,38 +18,21 @@
 # Contact Email: zeeland@foxmail.com
 
 import requests
-from abc import ABC, abstractmethod
-from pydantic import BaseModel, root_validator
-from typing import List, Optional, Union, Any
+from typing import List, Optional
 
-from promptulate.utils import get_logger
 from promptulate.config import Config
+from promptulate.utils import get_logger
+from promptulate.llms.base import BaseLLM
+from promptulate.preset_roles.prompt import PRESET_SYSTEM_PROMPT_ZH
 from promptulate.schema import (
     LLMPrompt,
-    BaseMessage,
     UserMessage,
     SystemMessage,
     AssistantMessage,
-    BaseChatMessageHistory,
-    LocalCacheChatMessageHistory,
 )
 
 CFG = Config()
 logger = get_logger()
-
-
-class BaseLLM(BaseModel):
-    @abstractmethod
-    def generate_prompt(self, prompts: LLMPrompt) -> AssistantMessage:
-        """llm generate prompt"""
-
-    @abstractmethod
-    def _parse_prompt(self, prompts: LLMPrompt) -> Any:
-        """parse prompt"""
-
-    @abstractmethod
-    def __call__(self, prompt, *args, **kwargs):
-        """input string prompt return answer"""
 
 
 class OpenAI(BaseLLM):
@@ -77,7 +60,7 @@ class OpenAI(BaseLLM):
 
     def __call__(self, prompt, *args, **kwargs):
         llm_prompt = LLMPrompt(messages=[
-            SystemMessage(content="You are a helpful AI assistant."),
+            SystemMessage(content=PRESET_SYSTEM_PROMPT_ZH),
             UserMessage(content=prompt)
         ])
         return self.generate_prompt(llm_prompt).content
@@ -91,7 +74,9 @@ class OpenAI(BaseLLM):
             "messages": self._parse_prompt(prompts),
         }
         body.update(self.__dict__)
-        response = requests.post(url=CFG.get_request_url(), headers=headers, json=body)
+        logger.debug(f"[promptulate openai params] body {self.__dict__}")
+        logger.debug(f"[promptulate openai request] url: {CFG.openai_request_url} proxies: {CFG.proxies}")
+        response = requests.post(url=CFG.openai_request_url, headers=headers, json=body, proxies=CFG.proxies)
         if response.status_code == 200:
             # todo enable stream mode
             # for chunk in response.iter_content(chunk_size=None):
@@ -101,7 +86,7 @@ class OpenAI(BaseLLM):
             content = ret_data['choices'][0]['message']['content']
             return AssistantMessage(content=content)
 
-        logger.error("Failed to get data. Please check your network or api key.")
+        logger.error("[promptulate] Failed to get data. Please check your network or api key.")
         return AssistantMessage(content="Failed to get data.")
 
     def _parse_prompt(self, prompts: LLMPrompt) -> List[dict]:
@@ -112,25 +97,3 @@ class OpenAI(BaseLLM):
                 "content": message.content
             })
         return converted_messages
-
-
-# todo commit时删掉这里
-def main():
-    import os
-    os.environ['OPENAI_API_KEY'] = "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"
-
-    data = [
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": "Hello, Who are you?"},
-    ]
-    openai = OpenAI()
-    data = [
-        SystemMessage(content="You are a helpful AI assistant."),
-        UserMessage(content="你知道《只因你太美》吗？")
-    ]
-    openai_prompt = OpenAIPrompt(messages=data)
-    print(openai.generate_prompt(openai_prompt).content)
-
-
-if __name__ == '__main__':
-    main()

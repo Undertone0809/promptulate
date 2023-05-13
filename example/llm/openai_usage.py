@@ -17,16 +17,13 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from promptulate import ChatBot, enable_log_no_file
+from promptulate.llms import OpenAI
 
 
 def main():
-    # enable_log_no_file()
-    bot = ChatBot(key='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')
-    ret, conversation_id = bot.ask("please give me a bucket sort python code")
-    messages = bot.get_history(conversation_id)
-    for message in messages:
-        print(message)
+    llm = OpenAI()
+
+    print(llm("你知道《只因你太美》吗？"))
 
 
 if __name__ == '__main__':

@@ -17,15 +17,16 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from promptulate import ChatBot, enable_log_no_file
+
+from promptulate import Conversation
 
 
 def main():
-    # enable_log_no_file()
-    bot = ChatBot(key='yourkey')
-    ret, conversation_id = bot.ask("please give me a bucket sort python code")
-    output_str = bot.output(conversation_id, output_type='file', file_path='output.md')
-    print(output_str)
+    conversation = Conversation()
+    while True:
+        prompt = str(input("[User] "))
+        ret = conversation.predict(prompt)
+        print(f"[output] {ret}")
 
 
 if __name__ == '__main__':

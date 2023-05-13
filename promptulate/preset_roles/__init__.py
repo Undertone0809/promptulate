@@ -17,14 +17,9 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from .base import BaseRole, DefaultRole
-from .roles import *
+from promptulate.preset_roles.roles import get_all_preset_roles, CustomPresetRole
 
 __all__ = [
-    'BaseRole',
-    'DefaultRole',
-    'CopyWriter',
-    'LinuxTerminal',
-    'MindMapGenerator',
-    'SqlGenerator'
+    'get_all_preset_roles',
+    'CustomPresetRole'
 ]

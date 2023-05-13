@@ -17,17 +17,10 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-import os
-from promptulate.llms import OpenAI
-from promptulate import SystemMessage, UserMessage, LLMPrompt
-
-os.environ['OPENAI_API_KEY'] = "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"
+__all__ = [
+    'EmptyChatMessageHistoryTip'
+]
 
 
-def main():
-    llm = OpenAI()
-    print(llm("你知道只因你太美吗？"))
-
-
-if __name__ == '__main__':
-    main()
+class EmptyChatMessageHistoryTip(Exception):
+    pass

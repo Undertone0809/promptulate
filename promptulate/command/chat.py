@@ -18,20 +18,33 @@
 # Contact Email: zeeland@foxmail.com
 
 import os
-from promptulate import ChatBot, enable_log_no_file, Conversation
+import argparse
+from promptulate import Conversation
+from promptulate.utils import set_proxy_mode
 
-os.environ['OPENAI_API_KEY'] = "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"
+
+def chat():
+    parser = argparse.ArgumentParser(description='Welcome to Promptulate Chat - The best chat app ever!')
+    parser.add_argument('--openai_api_key', help='openai api key')
+    parser.add_argument('--proxy_mode', help='enable openai proxy')
+    args = parser.parse_args()
+
+    if args.openai_api_key:
+        os.environ['OPENAI_API_KEY'] = args.openai_api_key
+    if args.proxy_mode:
+        set_proxy_mode(args.proxy_mode)
+
+    set_proxy_mode('promptulate')
+    print(f'Hi there, here is promptulate chat terminal.')
+    conversation = Conversation()
+    while True:
+        prompt = str(input("[User] "))
+        ret = conversation.predict(prompt)
+        print(f"[output] {ret}")
 
 
 def main():
-    # enable_log_no_file()
-    print("A Simple ChatBot built by ChatGPT API")
-    conversation_id = None
-    bot = ChatBot()
-    while True:
-        prompt = str(input("[User] "))
-        ret, conversation_id = bot.ask(prompt, conversation_id)
-        print(ret, conversation_id)
+    chat()
 
 
 if __name__ == '__main__':

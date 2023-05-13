@@ -18,9 +18,7 @@
 # Contact Email: zeeland@foxmail.com
 
 from promptulate.llms.openai import OpenAI
-from promptulate.llms.base import BaseLLM
 
 __all__ = [
-    'BaseLLM',
     'OpenAI',
 ]

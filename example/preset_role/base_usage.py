@@ -17,25 +17,16 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from promptulate import ChatBot
-from unittest import TestCase, main
-
-openai_key = 'yourkey'
+from promptulate import Conversation
+from promptulate.preset_roles import get_all_preset_roles
 
 
-class TestChatBot(TestCase):
+def main():
+    print(get_all_preset_roles())
 
-    def test_send_and_recv(self):
-        self.bot = ChatBot(key=openai_key)
-        ret, conversation_id = self.bot.ask("hello")
-        self.assertIsNotNone(ret)
-        self.assertIsNotNone(conversation_id)
-
-    def test_get_history(self):
-        self.bot = ChatBot(key=openai_key)
-        ret, conversation_id = self.bot.ask("please give me a bucket sort python code")
-        output_str = self.bot.output(conversation_id)
-        self.assertIsNotNone(output_str)
+    conversation = Conversation(role="mind-map-generator")
+    ret = conversation.predict("请帮我生成一段python的思维导图")
+    print(ret)
 
 
 if __name__ == '__main__':

@@ -17,20 +17,25 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-import os
-from promptulate.preset_roles import CopyWriter, MindMapGenerator, SqlGenerator
 from promptulate import Conversation
-
-os.environ['OPENAI_API_KEY'] = "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"
+from promptulate.memory import LocalCacheChatMemory
+from promptulate.llms import OpenAI
 
 
 def main():
-    role = SqlGenerator()
-    conversation = Conversation(role=role)
-    # summary = conversation.summary()
-    output = conversation.predict(
-        msg="检索过去一个季度每个产品类别的总收入、订单数和平均订单价值，数据应按总收入降序排序，以用于自定义报告。")
-    print(f"[output] {output}")
+    memory = LocalCacheChatMemory()
+    llm = OpenAI(model="gpt-3.5-turbo", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)
+    conversation = Conversation(llm=llm, memory=memory)
+    ret = conversation.predict("你知道鸡哥的著作《只因你太美》吗？")
+    print(f"[predict] {ret}")
+    ret = conversation.predict_by_translate("你知道鸡哥会什么技能吗？", country='America')
+    print(f"[translate output] {ret}")
+    ret = conversation.summary_content()
+    print(f"[summary content] {ret}")
+    ret = conversation.summary_topic()
+    print(f"[summary topic] {ret}")
+    ret = conversation.export_message_to_markdown(output_type="file", file_path="output.md")
+    print(f"[export markdown] {ret}")
 
 
 if __name__ == '__main__':

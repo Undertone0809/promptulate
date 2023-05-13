@@ -17,12 +17,13 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-# from prompt_me.utils import logger
+from promptulate.utils._utils import get_project_root_path, get_default_storage_path, get_cache
+from promptulate.utils.proxy import set_proxy_mode
 from promptulate.utils.singleton import Singleton, AbstractSingleton
 from promptulate.utils.logger import get_logger, enable_log, enable_log_no_file
-from promptulate.utils.utils import get_project_root_path, get_default_storage_path, get_cache
 
 __all__ = [
+    'set_proxy_mode',
     'get_logger',
     'enable_log',
     'enable_log_no_file',

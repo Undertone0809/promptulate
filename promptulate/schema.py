@@ -17,9 +17,10 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from abc import ABC, abstractmethod
-from typing import List, Union, Tuple, Optional
-from pydantic import BaseModel, Extra, Field, root_validator
+import time
+from abc import abstractmethod
+from typing import List
+from pydantic import BaseModel, Field
 
 __all__ = [
     'BaseMessage',
@@ -27,8 +28,11 @@ __all__ = [
     'SystemMessage',
     'UserMessage',
     'AssistantMessage',
-    'LocalCacheChatMessageHistory',
-    'LLMPrompt'
+    'ChatMessageHistory',
+    'LLMPrompt',
+    'ListDictPrompt',
+    'generate_conversation_id',
+    'init_chat_message_history'
 ]
 
 
@@ -109,10 +113,6 @@ class BaseChatMessageHistory(BaseModel):
     conversation_id: str
 
     @abstractmethod
-    def switch_list_form(self) -> List[dict]:
-        """to a List[dict] type to facilitate passing API data"""
-
-    @abstractmethod
     def add_system_message(self, message):
         """add a system message"""
 
@@ -129,18 +129,9 @@ class BaseChatMessageHistory(BaseModel):
         """clear all message"""
 
 
-class LocalCacheChatMessageHistory(BaseChatMessageHistory):
+class ChatMessageHistory(BaseModel):
     messages: List[BaseMessage] = []
     conversation_id: str = ''
-
-    def switch_list_form(self) -> List[dict]:
-        cache_message: List[dict] = []
-        for message in self.messages:
-            cache_message.append({
-                "role": message.type,
-                "content": message.content
-            })
-        return cache_message
 
     def add_system_message(self, message: str) -> None:
         self.messages.append(SystemMessage(content=message))
@@ -154,6 +145,48 @@ class LocalCacheChatMessageHistory(BaseChatMessageHistory):
     def clear(self) -> None:
         self.messages = []
 
+    @property
+    def listdict_message(self) -> List[dict]:
+        listdict_message: List[dict] = []
+        for message in self.messages:
+            listdict_message.append({
+                "role": message.type,
+                "content": message.content
+            })
+        return listdict_message
+
+
+def generate_conversation_id() -> str:
+    """Generating a new conversation_id when a conversation initialize"""
+    return str(int(time.time()))
+
+
+def init_chat_message_history(system_content, user_content) -> ChatMessageHistory:
+    messages = [
+        SystemMessage(content=system_content),
+        UserMessage(content=user_content),
+    ]
+    return ChatMessageHistory(messages=messages, conversation_id=generate_conversation_id())
+
 
 class LLMPrompt(BaseModel):
     messages: List[BaseMessage]
+
+
+class ListDictPrompt(BaseModel):
+    """list dict type prompt. It can convert to ChatMessageHistory type."""
+    messages: List[dict]
+
+    @property
+    def chat_message_history(self) -> ChatMessageHistory:
+        message_history = ChatMessageHistory()
+        for message in self.messages:
+            role = message.get('role')
+            content = message.get('content')
+            if role == 'system':
+                message_history.messages.append(SystemMessage(content=content))
+            elif role == 'user':
+                message_history.messages.append(UserMessage(content=content))
+            elif role == 'assistant':
+                message_history.messages.append(AssistantMessage(content=content))
+        return message_history
