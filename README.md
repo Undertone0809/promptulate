@@ -328,6 +328,7 @@ if __name__ == '__main__':
 - Conversation传入convesation_id继续上次对话
 - 提供修改local_cache默认位置的方法
 - 为predict提供回调模式
+- 提供API池
 
 > 妈呀，我怎么还有这么多待办事项，vivo50帮帮我 >.<
 

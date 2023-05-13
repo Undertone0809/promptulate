@@ -40,12 +40,12 @@ class Config(metaclass=Singleton):
 
     @property
     def openai_api_key(self):
-        if self.enable_cache and "OPENAI_API_KEY" in utils.get_cache():
-            return utils.get_cache()["OPENAI_API_KEY"]
         if "OPENAI_API_KEY" in os.environ.keys():
             if self.enable_cache:
                 utils.get_cache()["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
             return os.getenv("OPENAI_API_KEY")
+        if self.enable_cache and "OPENAI_API_KEY" in utils.get_cache():
+            return utils.get_cache()["OPENAI_API_KEY"]
         raise ValueError('OPENAI API key is not provided. Please set your key.')
 
     @property

@@ -81,12 +81,3 @@ class Conversation(
         messages_history.messages.append(answer)
         self.memory.save_conversation_to_memory(messages_history)
         return answer.content
-
-
-def main():
-    conversation = Conversation()
-    print(conversation.enable_proxy)
-
-
-if __name__ == '__main__':
-    main()
