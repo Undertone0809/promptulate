@@ -24,9 +24,9 @@ from promptulate.utils import set_proxy_mode
 
 
 def chat():
-    parser = argparse.ArgumentParser(description='Welcome to Promptulate Chat - The best chat app ever!')
-    parser.add_argument('--openai_api_key', help='openai api key')
-    parser.add_argument('--proxy_mode', help='enable openai proxy')
+    parser = argparse.ArgumentParser(description='Welcome to Promptulate Chat - The best chat terminal ever!')
+    parser.add_argument('--openai_api_key', help='when you first run, you should enter your openai api key')
+    parser.add_argument('--proxy_mode', help='select openai proxy and provide [off, promptulate]')
     args = parser.parse_args()
 
     if args.openai_api_key:
