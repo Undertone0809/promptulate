@@ -20,7 +20,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setuptools.setup(
     name="promptulate",
-    version="1.0.1",
+    version="1.0.2",
     author="Zeeland",
     author_email="zeeland@foxmail.com",
     description="A powerful LLM Prompt Layer frameworks",
@@ -28,6 +28,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/Undertone0809/promptulate",
     packages=setuptools.find_packages(),
+    install_requires=['cushy-storage', 'pydantic', 'requests'],
     license="Apache 2.0",
     classifiers=[
         "Development Status :: 3 - Alpha",
