@@ -87,7 +87,7 @@ class OpenAI(BaseLLM):
             return AssistantMessage(content=content)
 
         logger.error("[promptulate] Failed to get data. Please check your network or api key.")
-        return AssistantMessage(content="Failed to get data.")
+        return AssistantMessage(content=response.content)
 
     def _parse_prompt(self, prompts: LLMPrompt) -> List[dict]:
         converted_messages: List[dict] = []

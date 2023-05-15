@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/Snipaste_2023-05-13_17-37-23.png"/>
+  <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/promptulate_logo_new.png"/>
 </p>
 
 
@@ -32,8 +32,9 @@
 # 特性
 
 - 大语言模型支持：支持不同类型的大语言模型的扩展接口（当前暂时只支持GPT）
+- 提供简易对话终端，直接体验与大语言模型的对话
 - 角色预设：提供预设角色，以不同的角度调用GPT
-- 内置API代理，不用科学上网也可以直接使用
+- 自治代理模式：支持调用API官方接口、自治代理或使用promptulate提供的代理
 - 接口代理：支持调用ChatGPT API官方接口或自治代理
 - 长对话模式：支持长对话聊天，支持多种方式的对话持久化
 - 数据导出：支持markdowm等格式的对话导出
@@ -76,7 +77,7 @@ promptulate-chat -openai_api_key your_key_here --proxy_mode promptulate
 
 ```text
 -openai_api_key 你的openai_api_key
---proxy_mode 代理模式，当前暂时只支持off和promptulate模式，如果你选择promptulate模式，你会发现你不用科学の上网也能访问，这是因为promptulate内置了代理。（后面会详细介绍）
+--proxy_mode 代理模式，当前暂时只支持off和promptulate模式，如果你选择promptulate模式，你会发现你不用搭建楼梯也能访问，这是因为promptulate内置了代理。（后面会详细介绍）
 ```
 
 - 当然并不是每次运行都要输入这么长的内容，因为在你第一次运行终端之后 `promptulate`
@@ -109,7 +110,8 @@ os.environ['OPENAI_API_KEY'] = "your-key"
 ```
 
 在你第一次使用的时候，需要使用`os.environ["OPENAI_API_KEY"]` 导入"OPENAI_API_KEY"
-的环境变量，但是在第一运行之后`promptulate`会进行缓存，即后面再运行就不需要再导入key了。如果你的key过期了，可以把`cache`
+的环境变量，但是在第一运行之后`promptulate`
+会进行缓存，即后面再运行就不需要再导入key了。如果你的key过期了，可以尝试重新按照上面的方法导入key，或者你也可以把`cache`
 文件给删除掉，Windows的`cache`在当前目录下，linux的`cache`在`/tmp`下。
 
 ### LLM
