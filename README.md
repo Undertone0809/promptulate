@@ -29,6 +29,8 @@
 重新构建了 `llms, message, memory, framework, preset_roles, tools, provider`等模块，将`prompt`
 的各个流程全部组件化，便有了现在的`promptualte`框架，但是工作量很大，还在不断地完善细节中，欢迎大家的参与。
 
+> [微信交流群](https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230531021108.png)
+
 # 特性
 
 - 大语言模型支持：支持不同类型的大语言模型的扩展接口（当前暂时只支持GPT）
