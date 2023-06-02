@@ -73,7 +73,7 @@ pip install -U promptulate
 - 打开终端控制台，输入以下命令，就可以开启一个简易的对话
 
 ```shell
-promptulate-chat -openai_api_key your_key_here --proxy_mode promptulate
+promptulate-chat --openai_api_key your_key_here --proxy_mode promptulate
 ```
 
 ```text
@@ -138,7 +138,7 @@ llm("你知道鸡哥的《只因你太美》？")
 - `promptulate` promptulate提供的免费代理服务器
 
 `promptulate` 提供了免费的代理服务器，感谢 [ayaka14732](https://github.com/ayaka14732/)
-，你可以在不用科学上网的情况下直接调用OpenAI的相关接口，下面是代理的设置方式：
+，你可以在不用科学上网的情况下直接调用OpenAI的相关接口（需要注意的是，如果使用这个代理的人过多，也会出现无法访问的情况，用自己的代理最稳定），下面是代理的设置方式：
 
 ```python
 from promptulate.llms import OpenAI
