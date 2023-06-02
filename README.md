@@ -21,7 +21,7 @@
 
 
 
-`promptulate` 是一个专为 Prompt Engineer设计LLM Prompt Layer框架，支持连续对话、对话保存、对话内容与标题总结、角色预设、使用外部工具等功能，开箱即用。
+`promptulate` 是一个专为 Prompt Engineer设计的LLM Prompt Layer框架，支持连续对话、对话保存、对话内容与标题总结、角色预设、使用外部工具等功能，开箱即用。
 通过 `promptulate`，你可以轻松构建起属于自己的LLM应用程序。
 
 本项目重构重构重构了两次，在本人深度阅读`langchain, Auto-GPT, django, django-rest-framework, gpt_academic...`
@@ -77,7 +77,7 @@ promptulate-chat -openai_api_key your_key_here --proxy_mode promptulate
 ```
 
 ```text
--openai_api_key 你的openai_api_key
+--openai_api_key 你的openai_api_key
 --proxy_mode 代理模式，当前暂时只支持off和promptulate模式，如果你选择promptulate模式，你会发现你不用科学の上网也能访问，这是因为promptulate内置了代理。（后面会详细介绍）
 ```
 
