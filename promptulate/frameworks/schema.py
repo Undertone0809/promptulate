@@ -19,17 +19,16 @@
 
 from pydantic import BaseModel
 from promptulate.config import Config
+from promptulate.llms.base import BaseLLM
 
 CFG = Config()
 
 
 class BasePromptFramework(BaseModel):
+    # todo remove role和conversation_id ?
     role: str
     conversation_id: str
+    llm: BaseLLM
 
     class Config:
         arbitrary_types_allowed = True
-
-
-class BaseConversationFramework(BasePromptFramework):
-    pass

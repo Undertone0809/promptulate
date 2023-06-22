@@ -1,24 +1,5 @@
-# Copyright (c) 2023 Zeeland
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-# Copyright Owner: Zeeland
-# GitHub Link: https://github.com/Undertone0809/
-# Project Link: https://github.com/Undertone0809/promptulate
-# Contact Email: zeeland@foxmail.com
-
 import requests
-from typing import List, Optional
+from typing import List, Optional, Any, Dict
 
 from promptulate.config import Config
 from promptulate.utils import get_logger
@@ -57,43 +38,108 @@ class OpenAI(BaseLLM):
     # """The maximum number of tokens to generate in the completion.
     # # -1 returns as many tokens as possible given the prompt and
     # # the models maximal context size."""
+    api_param_keys = [
+        "model",
+        "temperature",
+        "top_p",
+        "stream",
+        "frequency_penalty",
+        "presence_penalty",
+        "n",
+    ]
+    """The key of openai api parameters"""
+    preset_description: str = ""
+    """OpenAI system message"""
+    enable_private_api_key = False
+    """Enable to provide a separate api for openai llm """
+    private_api_key: str = ""
+    """Store private api key"""
+    # todo finish enable retry
+    enable_retry: bool = False
+    """Retry if API failed to get response. You can enable retry when you have a rate limited API."""
+    retry_times: int = 5
+    """If llm(like OpenAI) unable to obtain data, retry request until the data is obtained. You should
+    enable retry if you want to use retry times."""
+    retry_counter: int = 0
+    """Used in conjunction with retry_times. Refresh when get data successfully."""
 
-    def __call__(self, prompt, *args, **kwargs):
-        llm_prompt = LLMPrompt(messages=[
-            SystemMessage(content=PRESET_SYSTEM_PROMPT_ZH),
-            UserMessage(content=prompt)
-        ])
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.retry_times = CFG.get_key_retry_times(self.model)
+
+    def __call__(self, prompt, *args, **kwargs) -> str:
+        system_message = (
+            self.preset_description
+            if self.preset_description != ""
+            else PRESET_SYSTEM_PROMPT_ZH
+        )
+        llm_prompt = LLMPrompt(
+            messages=[
+                SystemMessage(content=system_message),
+                UserMessage(content=prompt),
+            ]
+        )
         return self.generate_prompt(llm_prompt).content
 
     def generate_prompt(self, prompts: LLMPrompt) -> Optional[AssistantMessage]:
+        api_key = self.api_key
+        logger.debug(f"[promptulate openai key] {api_key}")
         headers = {
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {CFG.openai_api_key}"
+            "Authorization": f"Bearer {api_key}",
         }
-        body = {
-            "messages": self._parse_prompt(prompts),
-        }
-        body.update(self.__dict__)
-        logger.debug(f"[promptulate openai params] body {self.__dict__}")
-        logger.debug(f"[promptulate openai request] url: {CFG.openai_request_url} proxies: {CFG.proxies}")
-        response = requests.post(url=CFG.openai_request_url, headers=headers, json=body, proxies=CFG.proxies)
+        body: Dict[str, Any] = self._build_api_dict(prompts)
+
+        logger.debug(f"[promptulate openai params] body {body}")
+        logger.debug(
+            f"[promptulate openai request] url: {CFG.openai_request_url} proxies: {CFG.proxies}"
+        )
+        response = requests.post(
+            url=CFG.openai_request_url, headers=headers, json=body, proxies=CFG.proxies
+        )
         if response.status_code == 200:
             # todo enable stream mode
             # for chunk in response.iter_content(chunk_size=None):
-            #     print(chunk)
+            #     logger.debug(chunk)
+            self.retry_counter = 0
             ret_data = response.json()
-            logger.debug(f"[prompt_me] {ret_data}")
-            content = ret_data['choices'][0]['message']['content']
+            logger.debug(f"[promptulate response] {ret_data}")
+            content = ret_data["choices"][0]["message"]["content"]
             return AssistantMessage(content=content)
 
-        logger.error("[promptulate] Failed to get data. Please check your network or api key.")
+        logger.error(
+            "[promptulate OpenAI] Failed to get data. Please check your network or api key."
+        )
+        logger.debug("[promptulate OpenAI] retry to get response")
+        if self.enable_retry and self.retry_counter < self.retry_times:
+            self.retry_counter += 1
+            return self.generate_prompt(prompts)
+
         return AssistantMessage(content=response.content)
 
-    def _parse_prompt(self, prompts: LLMPrompt) -> List[dict]:
+    @property
+    def api_key(self):
+        if self.enable_private_api_key and self.private_api_key != "":
+            return self.private_api_key
+        return CFG.get_openai_api_key(self.model)
+
+    def set_private_api_key(self, value: str):
+        self.enable_private_api_key = True
+        self.private_api_key = value
+
+    def _build_api_dict(self, prompts: LLMPrompt) -> Dict[str, Any]:
+        dic = {
+            "messages": self._parse_prompt(prompts),
+        }
+        for key in self.api_param_keys:
+            if key in self.__dict__:
+                dic.update({key: self.__dict__[key]})
+        return dic
+
+    def _parse_prompt(self, prompts: LLMPrompt) -> List[Dict]:
         converted_messages: List[dict] = []
         for message in prompts.messages:
-            converted_messages.append({
-                "role": message.type,
-                "content": message.content
-            })
+            converted_messages.append(
+                {"role": message.type, "content": message.content}
+            )
         return converted_messages
