@@ -17,20 +17,27 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from promptulate.utils._utils import get_project_root_path, get_default_storage_path, get_cache
+from promptulate.utils.core_utils import (
+    get_project_root_path,
+    get_default_storage_path,
+    get_cache,
+    generate_conversation_id,
+)
 from promptulate.utils.proxy import set_proxy_mode
 from promptulate.utils.singleton import Singleton, AbstractSingleton
 from promptulate.utils.logger import get_logger, enable_log, enable_log_no_file
+from promptulate.utils.openai_key_pool import export_openai_key_pool
 
 __all__ = [
-    'set_proxy_mode',
-    'get_logger',
-    'enable_log',
-    'enable_log_no_file',
-    'get_cache',
-    'get_project_root_path',
-    'get_default_storage_path',
-    'Singleton',
-    'AbstractSingleton',
-
+    "generate_conversation_id",
+    "set_proxy_mode",
+    "get_logger",
+    "enable_log",
+    "enable_log_no_file",
+    "get_cache",
+    "get_project_root_path",
+    "get_default_storage_path",
+    "Singleton",
+    "AbstractSingleton",
+    "export_openai_key_pool",
 ]

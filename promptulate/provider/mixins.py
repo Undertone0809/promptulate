@@ -18,11 +18,10 @@
 # Contact Email: zeeland@foxmail.com
 
 from pydantic import BaseModel
-from typing import List, Optional, Union
+from typing import List, Optional
 
 from promptulate.llms.base import BaseLLM
 from promptulate.memory.base import BaseChatMemory
-from promptulate.preset_roles import CustomPresetRole
 from promptulate.frameworks.prompt import SUMMARY_CONTENT_PROMPT_ZH, SUMMARY_TOPIC_PROMPT_ZH
 from promptulate.schema import (
     LLMPrompt,
@@ -34,7 +33,6 @@ from promptulate.schema import (
 
 
 class BaseMixin(BaseModel):
-    role: Union[str, CustomPresetRole]
     llm: BaseLLM
     conversation_id: Optional[str]
     memory: BaseChatMemory
