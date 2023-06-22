@@ -18,7 +18,6 @@
 # Contact Email: zeeland@foxmail.com
 
 from typing import List, Dict, Optional
-
 from cushy_storage.orm import CushyOrmCache, BaseORMModel
 from pydantic import BaseModel, Field
 
