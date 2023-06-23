@@ -22,11 +22,7 @@ from typing import Optional, List
 from promptulate import utils
 from promptulate.memory.base import BaseChatMemory
 from promptulate.tips import EmptyChatMessageHistoryTip
-from promptulate.schema import (
-    ListDictPrompt,
-    ChatMessageHistory,
-    generate_conversation_id,
-)
+from promptulate.schema import ListDictPrompt, ChatMessageHistory
 
 logger = utils.get_logger()
 
@@ -42,5 +38,5 @@ class BufferChatMemory(BaseChatMemory):
 
     def save_conversation_to_memory(self, chat_message_history: ChatMessageHistory) -> None:
         if not chat_message_history.conversation_id:
-            chat_message_history.conversation_id = generate_conversation_id()
+            chat_message_history.conversation_id = utils.generate_conversation_id()
         self.buffer = chat_message_history.listdict_message

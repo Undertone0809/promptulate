@@ -1,5 +1,8 @@
 """The singleton metaclass for ensuring only one instance of a class."""
 import abc
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Singleton(abc.ABCMeta, type):
@@ -22,3 +25,27 @@ class AbstractSingleton(abc.ABC, metaclass=Singleton):
     """
 
     pass
+
+
+class SingletonPool(metaclass=Singleton):
+    """Storing classes which cannot use metaclass=Singleton due to implement BaseModel"""
+
+    def __init__(self):
+        self.instances = {}
+
+
+def singleton():
+    def decorator(cls):
+        singleton_pool = SingletonPool()
+
+        def get_instance():
+            if cls not in singleton_pool.instances:
+                singleton_pool.instances[cls] = cls()
+                logger.debug(
+                    f"[promptulate config] class <{cls.__name__}> initialization"
+                )
+            return singleton_pool.instances[cls]
+
+        return get_instance
+
+    return decorator

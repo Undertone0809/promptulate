@@ -16,3 +16,10 @@
 # GitHub Link: https://github.com/Undertone0809/
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
+
+
+from promptulate.frameworks.conversation.conversation import Conversation
+
+__all__ = [
+    'Conversation'
+]

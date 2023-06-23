@@ -16,7 +16,7 @@
 </p>
 
 <p align="center">
-  <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/Snipaste_2023-05-13_17-37-23.png"/>
+  <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/promptulate_logo_new.png"/>
 </p>
 
 
@@ -34,8 +34,9 @@
 # 特性
 
 - 大语言模型支持：支持不同类型的大语言模型的扩展接口（当前暂时只支持GPT）
+- 提供简易对话终端，直接体验与大语言模型的对话
 - 角色预设：提供预设角色，以不同的角度调用GPT
-- 内置API代理，不用科学上网也可以直接使用
+- 自治代理模式：支持调用API官方接口、自治代理或使用promptulate提供的代理
 - 接口代理：支持调用ChatGPT API官方接口或自治代理
 - 长对话模式：支持长对话聊天，支持多种方式的对话持久化
 - 数据导出：支持markdowm等格式的对话导出
@@ -54,6 +55,14 @@
 - tools 提供外部工具扩展调用，如搜索引擎、计算器等
 - preset roles 提供预设角色，进行定制化对话
 - provider 为framework和agent提供tools和其他细粒度能力的集成
+
+通过`promptulate`，在未来，本项目旨在构建为开发者提供一种强大而灵活的平台，以创建能够自动化各种任务和应用程序的自主代理。通过Core
+AI Engine、Agent System、APIs and Tools Provider、Multimodal Processing、Knowledge Base和Task-specific Modules
+6个组件实现自动化AI平台。 Core AI Engine是该框架的核心组件，负责处理和理解各种输入，生成输出和作出决策。Agent
+System是提供高级指导和控制AI代理行为的模块；APIs and Tools Provider提供工具和服务交互的API和集成库；Multimodal
+Processing是一组处理和理解不同数据类型（如文本、图像、音频和视频）的模块，使用深度学习模型从不同数据模式中提取有意义的信息；Knowledge
+Base是一个存储和组织世界信息的大型结构化知识库，使AI代理能够访问和推理大量的知识；Task-specific
+Modules是一组专门设计用于执行特定任务的模块，例如情感分析、机器翻译或目标检测等。通过这些组件的组合，框架提供了一个全面、灵活和强大的平台，能够实现各种复杂任务和应用程序的自动化。
 
 # 快速上手
 
@@ -77,8 +86,10 @@ promptulate-chat --openai_api_key your_key_here --proxy_mode promptulate
 ```
 
 ```text
+
 --openai_api_key 你的openai_api_key
 --proxy_mode 代理模式，当前暂时只支持off和promptulate模式，如果你选择promptulate模式，你会发现你不用科学の上网也能访问，这是因为promptulate内置了代理。（后面会详细介绍）
+
 ```
 
 - 当然并不是每次运行都要输入这么长的内容，因为在你第一次运行终端之后 `promptulate`
@@ -111,7 +122,8 @@ os.environ['OPENAI_API_KEY'] = "your-key"
 ```
 
 在你第一次使用的时候，需要使用`os.environ["OPENAI_API_KEY"]` 导入"OPENAI_API_KEY"
-的环境变量，但是在第一运行之后`promptulate`会进行缓存，即后面再运行就不需要再导入key了。如果你的key过期了，可以把`cache`
+的环境变量，但是在第一运行之后`promptulate`
+会进行缓存，即后面再运行就不需要再导入key了。如果你的key过期了，可以尝试重新按照上面的方法导入key，或者你也可以把`cache`
 文件给删除掉，Windows的`cache`在当前目录下，linux的`cache`在`/tmp`下。
 
 ### LLM
@@ -122,7 +134,7 @@ os.environ['OPENAI_API_KEY'] = "your-key"
 from promptulate.llms import OpenAI
 
 llm = OpenAI()
-llm("你知道鸡哥的《只因你太美》？")
+llm("你知道鸡哥的《只因你太美》吗？")
 ```
 
 ```text
@@ -263,6 +275,32 @@ conversation.predict_by_translate("你知道鸡哥会什么技能吗？", countr
 
 如果你设置了`enable_embed_message=True`, 那么这一次的predict将保存进历史对话中，provider提供的函数默认是不会将预测结果存入对话中的哦，这一点需要注意一下。
 
+### Key池
+
+`promptulate`为OpenAI进行特别优化，构建了Key池，如果你使用的是`GPT3.5`
+5美元的账号，一定会遇到限速的问题，这个时候，如果你有一堆Key，就可以很好的解决这个问题。`promptulate`的LRU
+KEY轮询机制巧妙的解决了限速的问题，你可以使用LLM随意地进行提问（前提是你有够多的key）。此外，如果你既有`GPT4`和`GPT3.5`
+的KEY，KEY池也可以不同模型的KEY调度。下面介绍使用方法：
+
+```python
+from promptulate.llms import OpenAI
+from promptulate.utils import export_openai_key_pool
+
+
+keys = [
+    {"model": "gpt-3.5-turbo", "key": "xxxxx"},
+    {"model": "gpt-3.5-turbo", "key": "xxxxx"},
+    {"model": "gpt-3.5-turbo", "key": "xxxxx"},
+    {"model": "gpt-4.0", "key": "xxxxx"},
+]
+
+export_openai_key_pool(keys)
+llm = OpenAI()
+for i in range(10):
+    llm("你好")
+```
+
+
 ### 角色预设
 
 你可以为`framework`提供一些特定的角色，让其可以处理特殊任务，如linux终端，思维导图生成器等，通过下面的方法你可以查看当前支持所有的预设角色。
@@ -345,16 +383,18 @@ if __name__ == '__main__':
 - 预设角色的参数配置
 - 提供prompt模板与prompt结构化
 - 提供外部工具扩展
-    - 外部搜索： Google,Bing等
+    - ~~外部搜索： Google,Bing等~~
     - 可以执行shell脚本
-    - 提供Python REPL
-    - arvix论文工具箱，总结，润色
+    - ~~提供Python REPL~~
+    - ~~arxiv论文工具箱，总结，润色~~
     - 本地文件总结
+    - 关系型数据库检索
+    - 图数据库检索
 - 对话存储
     - 提供向量数据库存储
     - 提供mysql, redis等数据库存储
 - 自建知识库建立专家决策系统
-- 接入self-ask, prompt-loop架构
+- 接入self-ask, prompt-loop, tree of thoughts架构
 - 提供多种导出方式
 - ~~可以导出历史消息为markdown格式~~
 - ~~使用环境变量配置key~~
@@ -367,13 +407,28 @@ if __name__ == '__main__':
 - ~~封装消息体，完善消息体中的信息~~
 - ~~长对话自动/手动总结~~
 - ~~提供全局配置的缓存开关~~
-- 提供限速等问题的错误提示
-- Conversation传入convesation_id继续上次对话
+- ~~提供限速等问题的错误提示~~
+- ~~Conversation传入convesation_id继续上次对话~~
 - 提供修改local_cache默认位置的方法
 - 为predict提供回调模式
-- 提供API池
+- ~~提供基于LRU算法的API池，解决key限速的问题~~
+- 提供代理池，收集市面上所有可用的免费代理进行轮询
+- 构建结果正确率判别器
+- 设置工作空间
 
-> 妈呀，我怎么还有这么多待办事项，vivo50帮帮我 >.<
+# 设计原则
+
+promptulate框架的设计原则，包括：模块化、可扩展性、互操作性、鲁棒性、可维护性、安全性、效率和可用性。
+
+- 模块化是指以模块为基本单位，允许方便地集成新的组件、模型和工具。
+- 可扩展性是指框架能够处理大量数据、复杂任务和高并发的能力。
+- 互操作性是指该框架与各种外部系统、工具和服务兼容，并且能够实现无缝集成和通信。
+- 鲁棒性是指框架具备强大的错误处理、容错和恢复机制，以确保在各种条件下可靠地运行。
+- 安全性是指框架采用了严格的安全措施，以保护框架、其数据和用户免受未经授权访问和恶意行为的侵害。
+- 效率是指优化框架的性能、资源使用和响应时间，以确保流畅和敏锐的用户体验。
+- 可用性是指该框架采用用户友好的界面和清晰的文档，使其易于使用和理解。
+
+以上原则的遵循，以及最新的人工智能技术的应用，promptulate旨在为创建自动化代理提供强大而灵活的平台。
 
 # 一些问题
 

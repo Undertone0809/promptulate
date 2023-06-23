@@ -18,7 +18,7 @@
 # Contact Email: zeeland@foxmail.com
 
 
-from promptulate.frameworks.base import Conversation
+from promptulate.frameworks.conversation import Conversation
 
 __all__ = [
     'Conversation',

@@ -30,36 +30,37 @@ def get_logger():
     return logger
 
 
+def get_default_log_path():
+    return utils.get_default_storage_path("log")
+
+
 def _check_log_path():
-    log_path = os.path.join(utils.get_default_storage_path(), 'log')
+    log_path = get_default_log_path()
     if not os.path.exists(log_path):
         os.makedirs(log_path)
 
 
 def get_log_name() -> str:
     _check_log_path()
-    cur_time = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+    cur_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     return f"{utils.get_default_storage_path()}/log/log_{cur_time}.log"
 
 
-def enable_log():
-    if platform.system() == 'Windows':
-        logging.basicConfig(
-            level=logging.DEBUG,
-            format='[%(levelname)s] %(asctime)s %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S',
-            handlers=[
-                logging.FileHandler(f"{get_log_name()}", mode='w', encoding='utf-8'),
-                logging.StreamHandler()
-            ],
-        )
-    elif platform.system() == 'Linux':
-        pass
+def enable_log(level=logging.DEBUG):
+    logging.basicConfig(
+        level=level,
+        format="[%(levelname)s] %(asctime)s %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        handlers=[
+            logging.FileHandler(f"{get_log_name()}", mode="w", encoding="utf-8"),
+            logging.StreamHandler(),
+        ],
+    )
 
 
 def enable_log_no_file():
     logging.basicConfig(
         level=logging.DEBUG,
-        format='[%(levelname)s] %(asctime)s %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S',
+        format="[%(levelname)s] %(asctime)s %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
     )

@@ -26,9 +26,14 @@ from promptulate.llms import OpenAI
 from promptulate.llms.base import BaseLLM
 from promptulate.memory import BufferChatMemory
 from promptulate.memory.base import BaseChatMemory
+from promptulate.utils.core_utils import record_time
 from promptulate.tips import EmptyChatMessageHistoryTip
 from promptulate.preset_roles.roles import CustomPresetRole, get_preset_role_prompt
-from promptulate.provider.mixins import SummarizerMixin, TranslatorMixin, DeriveHistoryMessageMixin
+from promptulate.provider.mixins import (
+    SummarizerMixin,
+    TranslatorMixin,
+    DeriveHistoryMessageMixin,
+)
 from promptulate.frameworks.schema import BasePromptFramework
 from promptulate.schema import (
     LLMPrompt,
@@ -42,10 +47,7 @@ logger = utils.get_logger()
 
 
 class Conversation(
-    BasePromptFramework,
-    SummarizerMixin,
-    TranslatorMixin,
-    DeriveHistoryMessageMixin
+    BasePromptFramework, SummarizerMixin, TranslatorMixin, DeriveHistoryMessageMixin
 ):
     """
     You can use Conversation start a conversation. Moreover, you can pass some parameters to enhance it.
@@ -63,21 +65,34 @@ class Conversation(
         conversation = Conversation()
         conversation.predict("Hello, Who are you?")
     """
+
     conversation_id: Optional[str] = None
     llm: BaseLLM = Field(default_factory=OpenAI)
+    enable_stream: bool = False  # streaming transmission
     role: Union[str, CustomPresetRole] = "default-role"
     memory: BaseChatMemory = Field(default_factory=BufferChatMemory)
 
+    @record_time()
     def predict(self, prompt: str) -> str:
         try:
-            messages_history: ChatMessageHistory = self.memory.load_conversation_from_memory(self.conversation_id)
+            messages_history: ChatMessageHistory = (
+                self.memory.load_conversation_from_memory(self.conversation_id)
+            )
             messages_history.add_user_message(message=prompt)
         except EmptyChatMessageHistoryTip as e:
-            messages_history = init_chat_message_history(get_preset_role_prompt(self.role), prompt)
+            messages_history = init_chat_message_history(
+                get_preset_role_prompt(self.role), prompt
+            )
             self.conversation_id = messages_history.conversation_id
             self.memory.save_conversation_to_memory(messages_history)
-        logger.debug(f"{messages_history.messages}")
-        answer: AssistantMessage = self.llm.generate_prompt(LLMPrompt(messages=messages_history.messages))
+        logger.debug(f"[promptulate Conversation] {messages_history.messages}")
+        logger.info(
+            f"[promptulate Conversation] ask: {messages_history.messages[-1].content}"
+        )
+        answer: AssistantMessage = self.llm.generate_prompt(
+            LLMPrompt(messages=messages_history.messages)
+        )
+        logger.info(f"[promptulate Conversation] answer: {answer}")
         messages_history.messages.append(answer)
         self.memory.save_conversation_to_memory(messages_history)
         return answer.content
