@@ -29,6 +29,8 @@
 重新构建了 `llms, message, memory, framework, preset_roles, tools, provider`等模块，将`prompt`
 的各个流程全部组件化，便有了现在的`promptualte`框架，但是工作量很大，还在不断地完善细节中，欢迎大家的参与。
 
+> [微信交流群](https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230531021108.png)
+
 # 特性
 
 - 大语言模型支持：支持不同类型的大语言模型的扩展接口（当前暂时只支持GPT）
@@ -80,12 +82,14 @@ pip install -U promptulate
 - 打开终端控制台，输入以下命令，就可以开启一个简易的对话
 
 ```shell
-promptulate-chat -openai_api_key your_key_here --proxy_mode promptulate
+promptulate-chat --openai_api_key your_key_here --proxy_mode promptulate
 ```
 
 ```text
--openai_api_key 你的openai_api_key
---proxy_mode 代理模式，当前暂时只支持off和promptulate模式，如果你选择promptulate模式，你会发现你不用搭建楼梯也能访问，这是因为promptulate内置了代理。（后面会详细介绍）
+
+--openai_api_key 你的openai_api_key
+--proxy_mode 代理模式，当前暂时只支持off和promptulate模式，如果你选择promptulate模式，你会发现你不用科学の上网也能访问，这是因为promptulate内置了代理。（后面会详细介绍）
+
 ```
 
 - 当然并不是每次运行都要输入这么长的内容，因为在你第一次运行终端之后 `promptulate`
@@ -146,7 +150,7 @@ llm("你知道鸡哥的《只因你太美》吗？")
 - `promptulate` promptulate提供的免费代理服务器
 
 `promptulate` 提供了免费的代理服务器，感谢 [ayaka14732](https://github.com/ayaka14732/)
-，你可以在不用科学上网的情况下直接调用OpenAI的相关接口，下面是代理的设置方式：
+，你可以在不用科学上网的情况下直接调用OpenAI的相关接口（需要注意的是，如果使用这个代理的人过多，也会出现无法访问的情况，用自己的代理最稳定），下面是代理的设置方式：
 
 ```python
 from promptulate.llms import OpenAI
