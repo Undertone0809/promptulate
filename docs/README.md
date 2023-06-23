@@ -2,9 +2,10 @@
     promptulate
 </h1>
 
+
 <p align="center">
     <a target="_blank" href="">
-        <img src="https://img.shields.io/github/license/Undertone0809/promptulate.svg?style=flat-square" />
+        <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg?label=license" />
     </a>
     <a target="_blank" href=''>
         <img src="https://img.shields.io/github/release/Undertone0809/promptulate/all.svg?style=flat-square"/>
@@ -12,11 +13,16 @@
     <a target="_blank" href=''>
         <img src="https://bestpractices.coreinfrastructure.org/projects/3018/badge"/>
    </a>
+    <a target="_blank" href=''>
+        <img src="https://static.pepy.tech/personalized-badge/cushy-storage?period=month&units=international_system&left_color=grey&right_color=blue&left_text=Downloads/Week"/>
+   </a>
 </p>
+
 
 <p align="center">
   <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/promptulate_logo_new.png"/>
 </p>
+
 
 
 `promptulate` 是一个专为Prompt工程师设计的大语言模型自动化与应用开发框架，支持智能决策、消息持久化、外部工具调用、角色预设等功能，开箱即用。
@@ -29,7 +35,6 @@ System是提供高级指导和控制AI代理行为的模块；APIs and Tools Pro
 Processing是一组处理和理解不同数据类型（如文本、图像、音频和视频）的模块，使用深度学习模型从不同数据模式中提取有意义的信息；Knowledge
 Base是一个存储和组织世界信息的大型结构化知识库，使AI代理能够访问和推理大量的知识；Task-specific
 Modules是一组专门设计用于执行特定任务的模块，例如情感分析、机器翻译或目标检测等。通过这些组件的组合，框架提供了一个全面、灵活和强大的平台，能够实现各种复杂任务和应用程序的自动化。
-
 
 # 特性
 
@@ -48,11 +53,10 @@ Modules是一组专门设计用于执行特定任务的模块，例如情感分�
 
 # 快速开始
 
-- [快速上手 [github-pages]](https://undertone0809.github.io/promptulate/#/)
-- [快速上手 [gitee-pages]](https://zeeland.gitee.io/promptulate/#/)
-- [当前开发计划](https://undertone0809.github.io/promptulate/#/other/plan)
-- [参与贡献/开发者手册](https://undertone0809.github.io/promptulate/#/other/contribution)
-- [常见问题](https://undertone0809.github.io/promptulate/#/other/fqa)
+- [快速上手](get_started/quick_start.md#快速开始)
+- [当前开发计划](other/plan.md#开发计划)
+- [参与贡献/开发者手册](other/contribution.md#contribution)
+- [常见问题](other/fqa.md#fqa)
 - [pypi仓库](https://pypi.org/project/promptulate/)
 
 # 基础架构
@@ -68,13 +72,13 @@ Modules是一组专门设计用于执行特定任务的模块，例如情感分�
 - `framework` 框架层，实现不同类型的prompt框架，包括最基础的`Conversation`模型，还有`self-ask`和`ReAct`等模型。
 - `llm` 大语言模型，负责生成回答，可以支持不同类型的大语言模型
 - `memory` 负责对话的存储，支持不同的存储方式及其扩展，如文件存储、数据库存储等
-- `tools` 提供外部工具扩展调用，如搜索引擎、计算器、编译器等
+- `tools` 提供外部工具扩展调用，如搜索引擎、计算器等
 - `preset roles` 提供预设角色，进行定制化对话
 - `provider` 为framework和agent提供tools和其他细粒度能力的集成
 
 # 设计原则
 
-promptulate框架的设计原则包括：模块化、可扩展性、互操作性、鲁棒性、可维护性、安全性、效率和可用性。
+`promptulate`框架的设计原则包括：模块化、可扩展性、互操作性、鲁棒性、可维护性、安全性、效率和可用性。
 
 - 模块化是指以模块为基本单位，允许方便地集成新的组件、模型和工具。
 - 可扩展性是指框架能够处理大量数据、复杂任务和高并发的能力。
@@ -97,5 +101,5 @@ promptulate框架的设计原则包括：模块化、可扩展性、互操作性
 # 贡献
 
 本人正在尝试一些更加完善的抽象模式，以更好地兼容该框架，以及外部工具的扩展使用，如果你有更好的建议，欢迎一起讨论交流。
-如果你想为这个项目做贡献，请先查看[当前开发计划](https://undertone0809.github.io/promptulate/#/other/plan)
-和[参与贡献/开发者手册](https://undertone0809.github.io/promptulate/#/other/contribution)。我很高兴看到更多的人参与并优化它。
+如果你想为这个项目做贡献，请先查看[当前开发计划](other/plan.md)
+和[参与贡献/开发者手册](other/contribution.md)。我很高兴看到更多的人参与并优化它。
