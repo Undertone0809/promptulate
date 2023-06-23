@@ -18,6 +18,7 @@
 # Contact Email: zeeland@foxmail.com
 
 from typing import List, Dict, Optional
+
 from cushy_storage.orm import CushyOrmCache, BaseORMModel
 from pydantic import BaseModel, Field
 
@@ -51,16 +52,20 @@ class OpenAIKeyPool(BaseModel):
         return openai_key.key
 
     def set(self, keys: List[Dict[str, str]]):
-        for key in keys:
-            self.put(**key)
+        openai_keys = list(map(lambda key: OpenAIKey(key["model"], key["key"]), keys))
+        self.cache.set(openai_keys)
 
-    def put(self, key: str, model: str):
-        # todo 等cushy-storage更新时候直接使用self.cache.set()
-        if not self.cache.query(OpenAIKey).filter(key=key).first():
+    def add(self, key: str, model: str):
+        if not self.cache.query(OpenAIKey).filter(key=key, model=model).first():
             self.cache.add(OpenAIKey(model, key))
 
-    def delete(self, key: str):
-        openai_key: OpenAIKey = self.cache.query(OpenAIKey).filter(key=key).first()
+    def delete(self, key: str, model: Optional[str] = None):
+        if model:
+            openai_key: OpenAIKey = (
+                self.cache.query(OpenAIKey).filter(key=key, model=model).first()
+            )
+        else:
+            openai_key: OpenAIKey = self.cache.query(OpenAIKey).filter(key=key).all()
         self.cache.delete(openai_key)
 
     def get_num(self, model: str) -> int:
@@ -68,7 +73,10 @@ class OpenAIKeyPool(BaseModel):
 
 
 def export_openai_key_pool(keys: List[Dict[str, str]]):
-    openai_key_pool: OpenAIKeyPool = OpenAIKeyPool()
-    openai_key_pool.set(keys)
+    OpenAIKeyPool().set(keys)
+
+
+def add_key_to_key_pool(keys: List[Dict[str, str]]):
+    openai_key_pool = OpenAIKeyPool()
     for key_info in keys:
-        openai_key_pool.put(**key_info)
+        openai_key_pool.add(**key_info)

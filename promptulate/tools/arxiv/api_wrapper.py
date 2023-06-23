@@ -1,12 +1,7 @@
-# -*- coding: utf-8 -*-
-# @Time    : 2023/6/9 14:10
-# @Author  : Zeeland
-# @File    : api_wrapper.py
-# @Software: PyCharm
+from typing import List, Dict, Optional, Union
 
 import arxiv
 from pydantic import BaseModel, Extra, root_validator
-from typing import List, Dict, Optional, Union
 
 
 class ArxivQuerySet:

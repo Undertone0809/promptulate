@@ -1,6 +1,7 @@
 cache/
 command
 log
+gpt_output.md
 
 
 # Byte-compiled / optimized / DLL files

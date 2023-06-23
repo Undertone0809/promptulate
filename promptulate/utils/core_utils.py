@@ -17,13 +17,15 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-import os
-import time
 import logging
+import os
 import platform
+import shutil
 import tempfile
-from typing import Callable, Dict, List, Optional
+import time
 from functools import wraps
+from typing import Callable, Dict, List, Optional
+
 from cushy_storage import CushyOrmCache
 
 __all__ = [
@@ -116,6 +118,14 @@ def record_time():
         return wrapper
 
     return decorator
+
+
+def delete_cache(specified_module: str = None):
+    """Delete cache or specified cache module"""
+    cache_path = get_default_storage_path("cache")
+    if specified_module:
+        cache_path = f"{get_project_root_path()}/{specified_module[:2]}"
+    shutil.rmtree(cache_path)
 
 
 cache = CushyOrmCache(get_default_storage_path("cache"))
