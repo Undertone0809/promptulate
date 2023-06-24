@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from promptulate.utils.logger import get_logger, enable_log
 from promptulate.tools.duckduckgo.api_wrapper import DuckDuckGoSearchAPIWrapper
 from promptulate.tools.duckduckgo.tools import DuckDuckGoTool, DuckDuckGoReferenceTool
+from promptulate.utils.logger import get_logger, enable_log
 
 enable_log()
 logger = get_logger()
@@ -29,7 +29,8 @@ class TestDuckDuckGoSearchAPIWrapper(TestCase):
 class TestDuckDuckGoSearchTool(TestCase):
     def test_query(self):
         tool = DuckDuckGoTool()
-        result = tool.run("LLM")
+        query = "请介绍一下promptulate框架"
+        result = tool.run(query)
         logger.info(result)
 
 

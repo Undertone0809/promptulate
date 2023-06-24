@@ -2,9 +2,11 @@
 This mode show how to run llm at the same time
 """
 
-from promptulate.llms import OpenAI
-from promptulate.utils import set_proxy_mode, enable_log
 from broadcast_service import broadcast_service
+
+from promptulate.llms import OpenAI
+from promptulate.utils import set_proxy_mode
+
 counter = 0
 
 
@@ -47,12 +49,12 @@ def create_agent_and_ask():
 
 
 def main():
-    proxies = {'http': 'http://127.0.0.1:7890'}
+    proxies = {"http": "http://127.0.0.1:7890"}
     set_proxy_mode("custom", proxies=proxies)
     broadcast_service.publish("create_llm")
     broadcast_service.publish("create_llm")
     broadcast_service.publish("create_llm")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

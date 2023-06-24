@@ -44,6 +44,7 @@ Modules是一组专门设计用于执行特定任务的模块，例如情感分�
 - 中文优化：针对中文语境进行特别优化，更适合中文场景
 - 数据导出：支持markdowm等格式的对话导出
 - 对话总结：提供API式的对话总结、翻译、标题生成
+- 事件总线：自研总线机制，通过[broadcast-service](https://github.com/Undertone0809/broadcast-service)进行Planing与Action的并发调度
 - 高级抽象，支持插件扩展、存储扩展、大语言模型扩展
 
 # 快速开始

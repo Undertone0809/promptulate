@@ -1,11 +1,12 @@
 from unittest import TestCase
-from promptulate.utils.logger import get_logger, enable_log
+
 from promptulate.tools.arxiv.api_wrapper import ArxivAPIWrapper
 from promptulate.tools.arxiv.tools import (
     ArxivSummaryTool,
     ArxivQueryTool,
     ArxivReferenceTool,
 )
+from promptulate.utils.logger import get_logger, enable_log
 
 enable_log()
 logger = get_logger()
@@ -76,5 +77,12 @@ class TestArxivTools(TestCase):
 
     def test_arxiv_summary_tool(self):
         tool = ArxivSummaryTool()
-        ret = tool.run("Long Short-Term Memory-Networks for Machine Reading")
+        ret = tool.run("Large Language Models are Zero-Shot Reasoners")
         logger.info(f"[result] {ret}")
+        self.assertIsNotNone(ret)
+
+    def test_arxiv_summary_tool_by_arxiv_id(self):
+        tool = ArxivSummaryTool()
+        ret = tool.run("2205.11916v4")
+        logger.info(f"[result] {ret}")
+        self.assertIsNotNone(ret)

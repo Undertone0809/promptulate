@@ -5,7 +5,7 @@ keys = [
     {"model": "gpt-3.5-turbo", "key": "xxxxx"},
     {"model": "gpt-3.5-turbo", "key": "xxxxx"},
     {"model": "gpt-3.5-turbo", "key": "xxxxx"},
-    {"model": "gpt-4.0", "key": "xxxxx"},
+    {"model": "gpt-4", "key": "xxxxx"},
 ]
 
 export_openai_key_pool(keys)

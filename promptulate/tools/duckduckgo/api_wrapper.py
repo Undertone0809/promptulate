@@ -1,5 +1,4 @@
-from typing import List, Union, Any, Optional, Dict
-from promptulate.tools.base import BaseTool
+from typing import List, Optional, Dict
 
 from pydantic import BaseModel, Extra
 from pydantic.class_validators import root_validator
@@ -7,6 +6,7 @@ from pydantic.class_validators import root_validator
 
 class DuckDuckGoSearchAPIWrapper(BaseModel):
     """Wrapper for DuckDuckGo Search API. Free and does not require any setup."""
+
     region: Optional[str] = "cn-zh"
     safe_search: str = "moderate"
     time: Optional[str] = "y"
@@ -29,7 +29,9 @@ class DuckDuckGoSearchAPIWrapper(BaseModel):
             )
         return values
 
-    def query(self, keyword: str, num_results: Optional[int] = None, **kwargs) -> List[str]:
+    def query(
+            self, keyword: str, num_results: Optional[int] = None, **kwargs
+    ) -> List[str]:
         """Run query through DuckDuckGo and return concatenated results."""
         from duckduckgo_search import DDGS
 

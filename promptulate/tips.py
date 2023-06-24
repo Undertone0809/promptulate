@@ -17,10 +17,13 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-__all__ = [
-    'EmptyChatMessageHistoryTip'
-]
+__all__ = ["EmptyChatMessageHistoryTip", "NetWorkError"]
 
 
 class EmptyChatMessageHistoryTip(Exception):
     pass
+
+
+class NetWorkError(Exception):
+    def __init__(self, origin: str):
+        super().__init__(f"<{origin}> could not get data")
