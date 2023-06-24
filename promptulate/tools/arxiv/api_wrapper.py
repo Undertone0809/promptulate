@@ -131,7 +131,7 @@ class ArxivAPIWrapper(BaseModel):
             return ArxivQuerySet.from_filter_result(
                 search, *kwargs["specified_fields"]
             ).all()
-        if "from_callback" in kwargs and kwargs["from_callback"] == "ArxivQueryTool":
+        if "from_callback" in kwargs and kwargs["from_callback"] == "arxiv-query":
             keys = ["entry_id", "title", "authors", "summary"]
             return ArxivQuerySet.from_filter_result(search, *keys).all()
         return ArxivQuerySet(search).all()

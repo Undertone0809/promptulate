@@ -166,7 +166,7 @@ class ArxivSummaryTool(BaseTool):
         def get_references():
             arxiv_referencer_tool = ArxivReferenceTool()
             references = arxiv_referencer_tool.run(paper_summary)
-            self.summary_string += references + "\n"
+            self.summary_string += references + "\n\n"
             logger.debug(f"[ArxivSummaryTool summary] {self.summary_string}")
             self.summary_counter += 1
 
@@ -180,7 +180,6 @@ class ArxivSummaryTool(BaseTool):
             self.summary_string += opinion + "\n"
             logger.debug(f"[ArxivSummaryTool summary] {self.summary_string}")
             self.summary_counter += 1
-
 
         if re.match("\d{4}\.\d{5}(v\d+)?", query):
             paper_info = self.api_wrapper.query(

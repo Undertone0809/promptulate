@@ -15,14 +15,21 @@ class SemanticScholarAPIWrapper(BaseModel):
 
     BASE_API_URL: str = "https://api.semanticscholar.org/graph/v1"
     BASE_OFFICIAL_URL: str = "https://www.semanticscholar.org"
+    max_result: int = 10
     current_result: Optional[List[Dict]] = None
     paper_query_params: Dict[str, str] = {"fields": "title,url,abstract"}
 
-    def get_paper(self, query: str, **kwargs) -> List[Dict]:
+    def _get_string_fields(self) -> str:
+        return f"&fields={self.paper_query_params['fields']}&"
+
+    def get_paper(
+        self, query: str, max_result: Optional[int] = None, **kwargs
+    ) -> List[Dict]:
         """This method can obtain a list of relevant papers based on your query.
 
         Args:
-            query: keyword to search paper
+            max_result: num of max result
+            query: the papers you want to query
             **kwargs:
                 specified_fields(Optional[List[str]]): filter specified field to return.
                 For example, you can return the ["title", "url", "abstract"] fields from each arxiv query result.
@@ -58,8 +65,11 @@ class SemanticScholarAPIWrapper(BaseModel):
                         original.update(detail_item)
             return
 
+        if not max_result:
+            max_result = self.max_result
+
         query = "%20".join(query.split(" "))
-        url = f"{self.BASE_API_URL}/paper/autocomplete?query={query}"
+        url = f"{self.BASE_API_URL}/paper/autocomplete?query={query}&limit={max_result}"
         response = requests.get(url)
         if response.status_code == 200:
             self.current_result = response.json()["matches"]
@@ -84,7 +94,7 @@ class SemanticScholarAPIWrapper(BaseModel):
         """Used to get references of specified paper.
 
         Args:
-            query: the keyword you want to query
+            query: the paper you want to query
 
         Returns:
             Return List[Dict] data, the default detail fields is as follows.
@@ -93,10 +103,11 @@ class SemanticScholarAPIWrapper(BaseModel):
             - title (str): paper title
             - url (str): paper semantic scholar url
         """
-        if len(self.get_paper(query)) == 0:
+        papers = self.get_paper(query)
+        if len(papers) == 0:
             return []
 
-        paper_id: str = self.get_paper(query)[0]["id"]
+        paper_id: str = papers[0]["id"]
         url = f"{self.BASE_API_URL}/paper/{paper_id}/references"
         response = requests.get(url)
         if response.status_code == 200:
@@ -110,6 +121,51 @@ class SemanticScholarAPIWrapper(BaseModel):
                 item["citedPaper"]["id"] = item["citedPaper"]["paperId"]
                 del item["citedPaper"]["paperId"]
                 final_result.append(item["citedPaper"])
+
+            logger.debug(
+                f"[promptulate semantic scholar result] {json.dumps(final_result)}"
+            )
+            return final_result
+        raise NetWorkError("semantic scholar")
+
+    def get_citations(self, query: str, max_result: Optional[int] = None):
+        """Used to get citation of specified paper.
+
+        Args:
+            max_result: num of max result
+            query: the paper you want to query
+
+        Returns:
+            Return List[Dict] data, the default detail fields is as follows.
+            - id (str): semantic id
+            - abstract (str): paper abstract
+            - title (str): paper title
+            - url (str): paper semantic scholar url
+        """
+        papers = self.get_paper(query)
+        if len(papers) == 0:
+            return []
+        if not max_result:
+            max_result = self.max_result
+
+        paper_id: str = papers[0]["id"]
+        url = f"{self.BASE_API_URL}/paper/{paper_id}/citations?{self._get_string_fields()}offset=1&limit={max_result}"
+
+        response = requests.get(url)
+        if response.status_code == 200:
+            res_data = response.json()["data"]
+            final_result: List[Dict] = []
+
+            for i, item in enumerate(res_data):
+                if not item["citingPaper"].get("paperId"):
+                    continue
+
+                item["citingPaper"]["url"] = self._get_url(
+                    item["citingPaper"]["paperId"]
+                )
+                item["citingPaper"]["id"] = item["citingPaper"]["paperId"]
+                del item["citingPaper"]["paperId"]
+                final_result.append(item["citingPaper"])
 
             logger.debug(
                 f"[promptulate semantic scholar result] {json.dumps(final_result)}"

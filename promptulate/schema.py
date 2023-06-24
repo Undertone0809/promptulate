@@ -16,6 +16,8 @@ __all__ = [
     "LLMPrompt",
     "ListDictPrompt",
     "init_chat_message_history",
+    'parse_llm_prompt_to_dict',
+    'parse_llm_dict_to_prompt'
 ]
 
 
@@ -151,7 +153,7 @@ def _parse_openai_prompt_to_dict(prompts: LLMPrompt) -> List[Dict]:
 
 
 _parse_llm_prompt_to_dict: Dict[str, Callable] = {
-    LLMType.OpenAI: _parse_openai_prompt_to_dict
+    LLMType.OpenAI.value: _parse_openai_prompt_to_dict
 }
 
 
@@ -168,7 +170,7 @@ def _parse_dict_to_openai_prompt(prompts: List[Dict[str, str]]) -> LLMPrompt:
 
 
 _parse_llm_dict_to_prompt: Dict[str, Callable] = {
-    LLMType.OpenAI: _parse_dict_to_openai_prompt
+    LLMType.OpenAI.value: _parse_dict_to_openai_prompt
 }
 
 

@@ -33,3 +33,17 @@ class SemanticScholarReferenceTool(BaseTool):
         if "return_type" in kwargs and kwargs["return_type"] == "original":
             return result
         return listdict_to_string(result, item_suffix="\n\n")
+
+
+class SemanticScholarCitationTool(BaseTool):
+    name = "semantic-scholar-citation-tool"
+    description = ""
+    api_wrapper: SemanticScholarAPIWrapper = Field(
+        default_factory=SemanticScholarAPIWrapper
+    )
+
+    def run(self, query: str, **kwargs) -> Union[str, List[Dict]]:
+        result = self.api_wrapper.get_citations(query)
+        if "return_type" in kwargs and kwargs["return_type"] == "original":
+            return result
+        return listdict_to_string(result, item_suffix="\n\n")
