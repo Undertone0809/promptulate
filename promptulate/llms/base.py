@@ -17,11 +17,12 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from typing import Any
-from pydantic import BaseModel, Extra
 from abc import ABC, abstractmethod
-from promptulate.schema import AssistantMessage
-from promptulate.schema import LLMPrompt
+from typing import Any
+
+from pydantic import BaseModel, Extra
+
+from promptulate.schema import AssistantMessage, LLMPrompt
 
 
 class BaseLLM(BaseModel, ABC):

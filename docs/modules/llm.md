@@ -53,11 +53,11 @@ print(answer)
 ```python
 from promptulate.llms import OpenAI
 
-llm = OpenAI(model="gpt-4.0", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)
+llm = OpenAI(model="gpt-4", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)
 llm("请介绍一下引力波的放射与广义相对论的必然关系")
 ```
 
-上面的示例中，使用`OpenAI(model="gpt-4.0", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)`
+上面的示例中，使用`OpenAI(model="gpt-4", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)`
 进行初始化一个大模型，里面是OpenAI需要传入的一些参数，具体可以查看[https://platform.openai.com/docs/api-reference/chat/create](https://platform.openai.com/docs/api-reference/chat/create)
 查看具体含义，这里不做详细讲解，如果你不想理会这些参数，你也可以直接`llm = OpenAI()`就好啦，默认使用`gpt-3.5-turbo`
 作为大语言模型，其他参数使用默认的就好了。
@@ -124,7 +124,7 @@ keys = [
     {"model": "gpt-3.5-turbo", "key": "xxxxx"},
     {"model": "gpt-3.5-turbo", "key": "xxxxx"},
     {"model": "gpt-3.5-turbo", "key": "xxxxx"},
-    {"model": "gpt-4.0", "key": "xxxxx"},
+    {"model": "gpt-4", "key": "xxxxx"},
 ]
 
 export_openai_key_pool(keys)

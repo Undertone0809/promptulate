@@ -17,30 +17,31 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from pydantic import Field
 from typing import Optional, Union
+
+from pydantic import Field
 
 from promptulate import utils
 from promptulate.config import Config
+from promptulate.frameworks.schema import BasePromptFramework
 from promptulate.llms import OpenAI
 from promptulate.llms.base import BaseLLM
 from promptulate.memory import BufferChatMemory
 from promptulate.memory.base import BaseChatMemory
-from promptulate.utils.core_utils import record_time
-from promptulate.tips import EmptyChatMessageHistoryTip
 from promptulate.preset_roles.roles import CustomPresetRole, get_preset_role_prompt
 from promptulate.provider.mixins import (
     SummarizerMixin,
     TranslatorMixin,
     DeriveHistoryMessageMixin,
 )
-from promptulate.frameworks.schema import BasePromptFramework
 from promptulate.schema import (
     LLMPrompt,
     AssistantMessage,
     ChatMessageHistory,
     init_chat_message_history,
 )
+from promptulate.tips import EmptyChatMessageHistoryTip
+from promptulate.utils.core_utils import record_time
 
 CFG = Config()
 logger = utils.get_logger()
@@ -85,14 +86,12 @@ class Conversation(
             )
             self.conversation_id = messages_history.conversation_id
             self.memory.save_conversation_to_memory(messages_history)
-        logger.debug(f"[promptulate Conversation] {messages_history.messages}")
-        logger.info(
-            f"[promptulate Conversation] ask: {messages_history.messages[-1].content}"
+        logger.debug(
+            f"[promptulate Conversation] conversation_id: <{self.conversation_id}> messages: <{messages_history.messages}>"
         )
         answer: AssistantMessage = self.llm.generate_prompt(
             LLMPrompt(messages=messages_history.messages)
         )
-        logger.info(f"[promptulate Conversation] answer: {answer}")
         messages_history.messages.append(answer)
         self.memory.save_conversation_to_memory(messages_history)
         return answer.content

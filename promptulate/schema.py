@@ -1,6 +1,9 @@
-from typing import List
+import enum
 from abc import abstractmethod
+from typing import List, Dict, Callable
+
 from pydantic import BaseModel, Field
+
 from promptulate.utils import generate_conversation_id
 
 __all__ = [
@@ -29,7 +32,7 @@ class BaseMessage(BaseModel):
 
 
 class SystemMessage(BaseMessage):
-    """Type of message that is a system message."""
+    """Type of message that is a system message. Currently used in OpenAI."""
 
     @property
     def type(self) -> str:
@@ -38,7 +41,7 @@ class SystemMessage(BaseMessage):
 
 
 class UserMessage(BaseMessage):
-    """Type of message that is a user message."""
+    """Type of message that is a user message. Currently used in OpenAI."""
 
     @property
     def type(self) -> str:
@@ -46,7 +49,7 @@ class UserMessage(BaseMessage):
 
 
 class AssistantMessage(BaseMessage):
-    """Type of message that is an assistant message."""
+    """Type of message that is an assistant message. Currently used in OpenAI."""
 
     @property
     def type(self) -> str:
@@ -119,7 +122,7 @@ class LLMPrompt(BaseModel):
 class ListDictPrompt(BaseModel):
     """list dict type prompt. It can convert to ChatMessageHistory type."""
 
-    messages: List[dict]
+    messages: List[Dict[str, str]]
 
     @property
     def chat_message_history(self) -> ChatMessageHistory:
@@ -134,3 +137,54 @@ class ListDictPrompt(BaseModel):
             elif role == "assistant":
                 message_history.messages.append(AssistantMessage(content=content))
         return message_history
+
+
+class LLMType(enum.Enum):
+    OpenAI = "OpenAI"
+
+
+def _parse_openai_prompt_to_dict(prompts: LLMPrompt) -> List[Dict]:
+    converted_messages: List[dict] = []
+    for message in prompts.messages:
+        converted_messages.append({"role": message.type, "content": message.content})
+    return converted_messages
+
+
+_parse_llm_prompt_to_dict: Dict[str, Callable] = {
+    LLMType.OpenAI: _parse_openai_prompt_to_dict
+}
+
+
+def _parse_dict_to_openai_prompt(prompts: List[Dict[str, str]]) -> LLMPrompt:
+    messages: List[BaseMessage] = []
+    for prompt in prompts:
+        if prompt["type"] == "system":
+            messages.append(SystemMessage(content=prompt["message"]))
+        elif prompt["type"] == "user":
+            messages.append(UserMessage(content=prompt["message"]))
+        elif prompt["type"] == "assistant":
+            messages.append(AssistantMessage(content=prompt["message"]))
+    return LLMPrompt(messages=messages)
+
+
+_parse_llm_dict_to_prompt: Dict[str, Callable] = {
+    LLMType.OpenAI: _parse_dict_to_openai_prompt
+}
+
+
+def parse_llm_prompt_to_dict(
+        prompts: LLMPrompt, llm_type: str = LLMType.OpenAI
+) -> List[Dict]:
+    """This method is compatible with different LLMs.
+    You can convert LLMPrompt Data to Json Data of different LLMs format.
+    """
+    return _parse_llm_prompt_to_dict[llm_type](prompts)
+
+
+def parse_llm_dict_to_prompt(
+        prompts: List[Dict[str, str]], llm_type: str = LLMType.OpenAI
+) -> LLMPrompt:
+    """This method is compatible with different LLMs.
+    You can convert JSON Data to LLMPrompt Data of different LLMs format.
+    """
+    return _parse_llm_dict_to_prompt[llm_type](prompts)

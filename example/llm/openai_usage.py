@@ -23,8 +23,8 @@ from promptulate.llms import OpenAI
 def main():
     llm = OpenAI()
 
-    print(llm("你知道《只因你太美》吗？"))
+    print(llm("请解释一下引力波的放射与广义相对论的必然关系"))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

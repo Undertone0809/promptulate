@@ -1,8 +1,9 @@
+import json
+from typing import Optional, Any, Dict
+
 import requests
-from typing import List, Optional, Any, Dict
 
 from promptulate.config import Config
-from promptulate.utils import get_logger
 from promptulate.llms.base import BaseLLM
 from promptulate.preset_roles.prompt import PRESET_SYSTEM_PROMPT_ZH
 from promptulate.schema import (
@@ -10,7 +11,9 @@ from promptulate.schema import (
     UserMessage,
     SystemMessage,
     AssistantMessage,
+    parse_llm_prompt_to_dict,
 )
+from promptulate.utils.logger import get_logger
 
 CFG = Config()
 logger = get_logger()
@@ -55,7 +58,7 @@ class OpenAI(BaseLLM):
     private_api_key: str = ""
     """Store private api key"""
     # todo finish enable retry
-    enable_retry: bool = False
+    enable_retry: bool = True
     """Retry if API failed to get response. You can enable retry when you have a rate limited API."""
     retry_times: int = 5
     """If llm(like OpenAI) unable to obtain data, retry request until the data is obtained. You should
@@ -67,18 +70,18 @@ class OpenAI(BaseLLM):
         super().__init__(**kwargs)
         self.retry_times = CFG.get_key_retry_times(self.model)
 
-    def __call__(self, prompt, *args, **kwargs) -> str:
-        system_message = (
-            self.preset_description
-            if self.preset_description != ""
-            else PRESET_SYSTEM_PROMPT_ZH
-        )
-        llm_prompt = LLMPrompt(
-            messages=[
-                SystemMessage(content=system_message),
-                UserMessage(content=prompt),
-            ]
-        )
+    def __call__(self, prompt: str, *args, **kwargs) -> str:
+    system_message = (
+        self.preset_description
+        if self.preset_description != ""
+        else PRESET_SYSTEM_PROMPT_ZH
+    )
+    llm_prompt = LLMPrompt(
+        messages=[
+            SystemMessage(content=system_message),
+            UserMessage(content=prompt),
+        ]
+    )
         return self.generate_prompt(llm_prompt).content
 
     def generate_prompt(self, prompts: LLMPrompt) -> Optional[AssistantMessage]:
@@ -88,7 +91,7 @@ class OpenAI(BaseLLM):
             "Content-Type": "application/json",
             "Authorization": f"Bearer {api_key}",
         }
-        body: Dict[str, Any] = self._build_api_dict(prompts)
+        body: Dict[str, Any] = self._build_api_params_dict(prompts)
 
         logger.debug(f"[promptulate openai params] body {body}")
         logger.debug(
@@ -103,8 +106,9 @@ class OpenAI(BaseLLM):
             #     logger.debug(chunk)
             self.retry_counter = 0
             ret_data = response.json()
-            logger.debug(f"[promptulate response] {ret_data}")
+            logger.debug(f"[promptulate openai response] {json.dumps(ret_data)}")
             content = ret_data["choices"][0]["message"]["content"]
+            logger.debug(f"[promptulate openai answer] {content}")
             return AssistantMessage(content=content)
 
         logger.error(
@@ -127,19 +131,14 @@ class OpenAI(BaseLLM):
         self.enable_private_api_key = True
         self.private_api_key = value
 
-    def _build_api_dict(self, prompts: LLMPrompt) -> Dict[str, Any]:
-        dic = {
-            "messages": self._parse_prompt(prompts),
-        }
-        for key in self.api_param_keys:
-            if key in self.__dict__:
-                dic.update({key: self.__dict__[key]})
-        return dic
+    def _build_api_params_dict(self, prompts: LLMPrompt) -> Dict[str, Any]:
+    dic = {
+        "messages": self._parse_prompt(prompts),
+    }
+    for key in self.api_param_keys:
+        if key in self.__dict__:
+            dic.update({key: self.__dict__[key]})
+    return dic
 
     def _parse_prompt(self, prompts: LLMPrompt) -> List[Dict]:
-        converted_messages: List[dict] = []
-        for message in prompts.messages:
-            converted_messages.append(
-                {"role": message.type, "content": message.content}
-            )
-        return converted_messages
+        return parse_llm_prompt_to_dict(prompts)

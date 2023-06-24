@@ -17,10 +17,10 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-import os
-import logging
 import datetime
-import platform
+import logging
+import os
+
 from promptulate import utils
 
 logger = logging.getLogger(__name__)
@@ -34,16 +34,13 @@ def get_default_log_path():
     return utils.get_default_storage_path("log")
 
 
-def _check_log_path():
+def get_log_name() -> str:
     log_path = get_default_log_path()
     if not os.path.exists(log_path):
         os.makedirs(log_path)
 
-
-def get_log_name() -> str:
-    _check_log_path()
     cur_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    return f"{utils.get_default_storage_path()}/log/log_{cur_time}.log"
+    return f"{log_path}/log_{cur_time}.log"
 
 
 def enable_log(level=logging.DEBUG):

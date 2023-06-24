@@ -65,7 +65,7 @@ class OpenAIKeyPool(BaseModel):
                 self.cache.query(OpenAIKey).filter(key=key, model=model).first()
             )
         else:
-            openai_key: OpenAIKey = self.cache.query(OpenAIKey).filter(key=key).all()
+            openai_key: List[OpenAIKey] = self.cache.query(OpenAIKey).filter(key=key).all()
         self.cache.delete(openai_key)
 
     def get_num(self, model: str) -> int:

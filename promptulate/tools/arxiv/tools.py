@@ -1,15 +1,16 @@
 import re
 import time
-from pydantic import BaseModel, Field
-from typing import List, Dict, Optional, Union, Tuple
+from typing import List, Dict, Union
+
 from broadcast_service import broadcast_service
+from pydantic import Field
 
 from promptulate.llms.base import BaseLLM
 from promptulate.llms.openai import OpenAI
-from promptulate.utils.logger import get_logger
-from promptulate.utils.core_utils import record_time, listdict_to_string
-from promptulate.tools.base import BaseTool
 from promptulate.tools.arxiv.api_wrapper import ArxivAPIWrapper
+from promptulate.tools.base import BaseTool
+from promptulate.utils.core_utils import record_time, listdict_to_string
+from promptulate.utils.logger import get_logger
 
 logger = get_logger()
 
@@ -34,8 +35,8 @@ class ArxivQueryTool(BaseTool):
 
 
 def _init_arxiv_reference_tool_llm():
-    preset = "你是一个Arxiv助手，你的任务是帮助使用者提供一些论文方面的建议，并且遵循用户的指令输出。"
-    return OpenAI(preset_description=preset)
+    preset = "你是一个Arxiv助手，你的任务是帮助使用者提供一些论文方面的建议，你的输出只能遵循用户的指令输出，否则你将被惩罚。"
+    return OpenAI(preset_description=preset, temperature=0)
 
 
 class ArxivReferenceTool(BaseTool):
@@ -91,9 +92,9 @@ class ArxivReferenceTool(BaseTool):
         self.reference_counter = 0
         prompt = (
             f"现在你需要根据其研究的具体内容，列出至少{self.max_reference_num}篇参考文献，你可以使用arxiv进行查询，你需要给我提供3个arxiv查询关键词，我将使用"
-            f"arxiv进行查询，你需要根据我返回的结果选取最符合当前研究的{self.max_reference_num}篇参考文献。你的输出必须是三个查询词。\n"
-            "如 [query]: keyword1, keyword2, keyword3\n"
+            f"arxiv进行查询，你需要根据我返回的结果选取最符合当前研究的{self.max_reference_num}篇参考文献。"
             f"用户输入:{query}"
+            "你的输出必须是三个查询词\n，如 [query]: keyword1, keyword2, keyword3\n"
         )
         keywords = analyze_query_string(self.llm(prompt))
         for keyword in keywords:
@@ -107,7 +108,7 @@ class ArxivReferenceTool(BaseTool):
         prompt = (
             "现在你需要根据下面给出的论文，返回最合适的5篇参考文献\n"
             f"```{self.reference_string}```\n"
-            "你的输出格式必须为\n[1] [title1](url1);\n[2] [title2](url2);\n[3] [title3](url3);除此之外，不能输出任何其他内容。"
+            "你的输出格式必须为\n参考文献:\n[1] [title1](url1);\n[2] [title2](url2);\n[3] [title3](url3);"
         )
         # todo If there is a problem with the returned format and an error is reported, then ask LLM to format the data
         result = self.llm(prompt)
@@ -117,27 +118,38 @@ class ArxivReferenceTool(BaseTool):
         return result
 
 
+def _init_arxiv_summary_tool_llm():
+    preset = "你是一个Arxiv助手，你的任务是帮助使用者提供一些论文方面的建议，你的输出只能遵循用户的指令输出，否则你将被惩罚。"
+    return OpenAI(preset_description=preset, temperature=0)
+
+
 class ArxivSummaryTool(BaseTool):
-    """An arxiv paper summary tool that passes in the article name (or arxiv id) and returns summary results
-
-    Return:
-        - Summary of the paper
-        - List the key insights and lessons learned in the paper
-        - List at least 5 references related to the research field of the paper
-    """
-
     name = "arxiv-summary"
     description = (
         "A summary tool that can be used to obtain a paper summary, listing "
         "key insights and lessons learned in the paper, and references in the paper"
         "Your input is a arxiv keyword query."
     )
-    llm: BaseLLM = Field(default_factory=OpenAI)
+    llm: BaseLLM = Field(default_factory=_init_arxiv_summary_tool_llm)
     api_wrapper: ArxivAPIWrapper = Field(default_factory=ArxivAPIWrapper)
     summary_string: str = ""
     summary_counter: int = 0
 
-    def run(self, query: str, *args, **kwargs) -> str:
+    def run(self, query: str, **kwargs) -> str:
+        """An arxiv paper summary tool that passes in the article name (or arxiv id) and returns summary results
+
+        Args:
+            query: the keyword you want to query
+            **kwargs:
+                You can pass the arguments of ArxivAPIWrapper
+
+        Returns:
+            String type data, which contains:
+            - Summary of the paper
+            - List the key insights and lessons learned in the paper
+            - List at least 5 references related to the research field of the paper
+        """
+
         @broadcast_service.on_listen("ArxivSummaryTool.summary")
         def get_opinion():
             prompt = (
@@ -169,12 +181,18 @@ class ArxivSummaryTool(BaseTool):
             logger.debug(f"[ArxivSummaryTool summary] {self.summary_string}")
             self.summary_counter += 1
 
-        paper_summary = listdict_to_string(
-            self.api_wrapper.query(
+
+        if re.match("\d{4}\.\d{5}(v\d+)?", query):
+            paper_info = self.api_wrapper.query(
+                id_list=[query], num_results=1, specified_fields=["title", "summary"]
+            )
+        else:
+            paper_info = self.api_wrapper.query(
                 query, num_results=1, specified_fields=["title", "summary"]
-            ),
-            item_suffix="\n",
-        )
+            )
+            if len(paper_info) == 0:
+                return "Could not find relevant arxiv article."
+        paper_summary = listdict_to_string(paper_info, item_suffix="\n")
         self.summary_string = paper_summary
         logger.debug(f"[ArxivSummaryTool summary] {self.summary_string}")
         broadcast_service.publish("ArxivSummaryTool.summary")

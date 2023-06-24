@@ -19,6 +19,4 @@
 
 from promptulate.llms.openai import OpenAI
 
-__all__ = [
-    'OpenAI',
-]
+__all__ = ["OpenAI"]
