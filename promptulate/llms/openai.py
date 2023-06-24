@@ -1,5 +1,5 @@
 import json
-from typing import Optional, Any, Dict
+from typing import Optional, Any, Dict, List
 
 import requests
 
@@ -82,7 +82,7 @@ class OpenAI(BaseLLM):
             UserMessage(content=prompt),
         ]
     )
-        return self.generate_prompt(llm_prompt).content
+    return self.generate_prompt(llm_prompt).content
 
     def generate_prompt(self, prompts: LLMPrompt) -> Optional[AssistantMessage]:
         api_key = self.api_key
