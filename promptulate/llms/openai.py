@@ -71,18 +71,18 @@ class OpenAI(BaseLLM):
         self.retry_times = CFG.get_key_retry_times(self.model)
 
     def __call__(self, prompt: str, *args, **kwargs) -> str:
-    system_message = (
-        self.preset_description
-        if self.preset_description != ""
-        else PRESET_SYSTEM_PROMPT_ZH
-    )
-    llm_prompt = LLMPrompt(
-        messages=[
-            SystemMessage(content=system_message),
-            UserMessage(content=prompt),
-        ]
-    )
-    return self.generate_prompt(llm_prompt).content
+        system_message = (
+            self.preset_description
+            if self.preset_description != ""
+            else PRESET_SYSTEM_PROMPT_ZH
+        )
+        llm_prompt = LLMPrompt(
+            messages=[
+                SystemMessage(content=system_message),
+                UserMessage(content=prompt),
+            ]
+        )
+        return self.generate_prompt(llm_prompt).content
 
     def generate_prompt(self, prompts: LLMPrompt) -> Optional[AssistantMessage]:
         api_key = self.api_key
@@ -132,13 +132,13 @@ class OpenAI(BaseLLM):
         self.private_api_key = value
 
     def _build_api_params_dict(self, prompts: LLMPrompt) -> Dict[str, Any]:
-    dic = {
-        "messages": self._parse_prompt(prompts),
-    }
-    for key in self.api_param_keys:
-        if key in self.__dict__:
-            dic.update({key: self.__dict__[key]})
-    return dic
+        dic = {
+            "messages": self._parse_prompt(prompts),
+        }
+        for key in self.api_param_keys:
+            if key in self.__dict__:
+                dic.update({key: self.__dict__[key]})
+        return dic
 
     def _parse_prompt(self, prompts: LLMPrompt) -> List[Dict]:
         return parse_llm_prompt_to_dict(prompts)
