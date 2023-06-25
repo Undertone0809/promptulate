@@ -8,6 +8,14 @@ Please update the latest version. The old version is shit.
 pip install -U promptulate
 ```
 
+## 1.2.0 2023-06-25
+
+#### feat
+
+1. 增加semantic scholar查询与引用查询工具
+2. 完善key_pool单元测试
+3. 增加paper-summary tool
+
 ## v1.1.0 2023-06-23
 
 #### feat

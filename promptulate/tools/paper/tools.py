@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 def _init_paper_summary_llm():
-    preset = "你是一个中文科研论文助手，你的任务是帮助使用者提供一些论文方面的建议和帮助，你的输出只能遵循用户的指令输出，否则你将被惩罚。"
+    preset = "你是一个中文科研领域论文助手，你的任务是帮助使用者提供一些论文方面的专业建议和帮助，你的输出只能遵循用户的指令输出，否则你将被惩罚。"
     return OpenAI(temperature=0, preset_description=preset)
 
 
@@ -67,44 +67,53 @@ class PaperSummaryTool(BaseTool):
             references: List[Dict] = self.semantic_scholar_reference_tool.run(
                 kwargs["paper_title"], max_result=10, return_type="original"
             )
-            references_string = "相关论文：\n"
+            references_string = "相关论文：\n\n"
             for i, reference in enumerate(references):
                 references_string += (
-                    f"""[{i + 1}] [{reference["title"]}]({reference["url"]})\n"""
+                    f"""[{i + 1}] [{reference["title"]}]({reference["url"]})\n\n"""
                 )
-            self.summary_dic["references"] = references_string
+            self.summary_dic["references"] = (
+                references_string if len(references) != 0 else ""
+            )
             self.summary_counter += 1
-            print(self.summary_counter)
 
         @broadcast_service.on_listen("PaperSummaryTool.run.get_translate")
         def get_translate():
             prompt = (
                 f"请将下面的科研论文标题和摘要翻译成中文\n ```{paper_summary}```"
-                "你的输出格式为:\n标题：{标题翻译}\n摘要：{摘要翻译}"
+                "你的输出格式为:\n标题：{标题翻译}\n\n摘要：{摘要翻译}"
             )
             self.summary_dic["summary_zh"] = self.llm(prompt)
             self.summary_counter += 1
-            print(self.summary_counter)
 
         @broadcast_service.on_listen("PaperSummaryTool.run.get_opinion")
         def get_opinion():
             prompt = (
-                f"请就下面的论文摘要，列出论文中的关键见解和由论文得出的经验教训，你的输出需要分点给出 ```{paper_summary}```"
+                f"请就下面的论文摘要，总结论文中的关键见解和由论文得出的经验教训，你的输出需要分点给出 ```{paper_summary}```"
                 "你的输出格式为:\n关键见解：\n{分点给出关键见解}\n经验教训：\n{分点给出经验教训}，用`-`区分每点"
+                # "你需要用中文输出正确结果，但是部分专业词汇或者中文不好表达含义的部分可以使用英文"
             )
             self.summary_dic["opinion"] = self.llm(prompt)
             self.summary_counter += 1
-            print(self.summary_counter)
+
+        @broadcast_service.on_listen("PaperSummaryTool.run.get_keywords")
+        def get_keywords():
+            prompt = (
+                f"请就下面的论文摘要，总结列出论文中的keywords，不超过7个```{paper_summary}```"
+                "你的输出格式为:\n关键词：keyword1, keyword2, keyword3"
+            )
+            self.summary_dic["keywords"] = self.llm(prompt)
+            self.summary_counter += 1
 
         @broadcast_service.on_listen("PaperSummaryTool.run.get_advice")
         def get_advice():
             prompt = (
                 f"请就下面的论文摘要，为其相关主题或未来研究方向提供3-5个建议，你的输出需要分点给出  ```{paper_summary}```"
                 "你的输出格式为:\n相关建议：\n{分点给出相关建议}，用`-`区分每点"
+                "你需要用中文输出正确结果，但是部分专业词汇或者中文不好表达含义的部分可以使用英文"
             )
             self.summary_dic["advice"] = self.llm(prompt)
             self.summary_counter += 1
-            print(self.summary_counter)
 
         self.summary_counter = 0
         if re.match("\d{4}\.\d{5}(v\d+)?", query):
@@ -132,11 +141,15 @@ class PaperSummaryTool(BaseTool):
         time.sleep(0.01)
         broadcast_service.publish("PaperSummaryTool.run.get_advice")
         time.sleep(0.01)
+        broadcast_service.publish("PaperSummaryTool.run.get_keywords")
 
-        while self.summary_counter < 4:
-            time.sleep(0.2)
+        while self.summary_counter < 5:
+            time.sleep(0.1)
 
         return (
-            f"""{self.summary_dic["summary_zh"]}\n{self.summary_dic["opinion"]}\n"""
-            f"""{self.summary_dic["advice"]}\n{self.summary_dic["references"]}"""
+            f"""{self.summary_dic["summary_zh"]}\n\n"""
+            f"""{self.summary_dic["keywords"]}\n\n"""
+            f"""{self.summary_dic["opinion"]}\n\n"""
+            f"""{self.summary_dic["advice"]}\n\n"""
+            f"""{self.summary_dic["references"]}"""
         )

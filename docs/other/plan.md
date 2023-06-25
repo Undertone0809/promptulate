@@ -39,6 +39,7 @@
 - ~~提供全局配置的缓存开关~~
 - ~~提供限速等问题的错误提示~~
 - ~~Conversation传入convesation_id继续上次对话~~
+- 拷贝Conversation的持久化数据，开启一段新的历史对话
 - 提供修改local_cache默认位置的方法
 -
 构建回调系统，在LLM执行的生命周期进行回调触发（使用[broadcast-service](https://github.com/Undertone0809/broadcast-service)
