@@ -79,8 +79,9 @@ class SemanticScholarAPIWrapper(BaseModel):
 
             for item in self.current_result:
                 item["url"] = self._get_url(item["id"])
-                if "specified_fields" in kwargs:
-                    get_detail()
+
+            if "specified_fields" in kwargs:
+                get_detail()
             logger.debug(
                 f"[promptulate semantic scholar result] {json.dumps(self.current_result)}"
             )
@@ -90,10 +91,11 @@ class SemanticScholarAPIWrapper(BaseModel):
     def _get_url(self, id: str) -> str:
         return f"{self.BASE_OFFICIAL_URL}/paper/{id}"
 
-    def get_references(self, query: str) -> List[Dict]:
+    def get_references(self, query: str, max_result: int = 500, **kwargs) -> List[Dict]:
         """Used to get references of specified paper.
 
         Args:
+            max_result: num of max result
             query: the paper you want to query
 
         Returns:
@@ -108,7 +110,7 @@ class SemanticScholarAPIWrapper(BaseModel):
             return []
 
         paper_id: str = papers[0]["id"]
-        url = f"{self.BASE_API_URL}/paper/{paper_id}/references"
+        url = f"{self.BASE_API_URL}/paper/{paper_id}/references?offset=1&limit={max_result}"
         response = requests.get(url)
         if response.status_code == 200:
             res_data = response.json()["data"]
