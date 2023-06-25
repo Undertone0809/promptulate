@@ -152,8 +152,8 @@ def _parse_openai_prompt_to_dict(prompts: LLMPrompt) -> List[Dict]:
     return converted_messages
 
 
-_parse_llm_prompt_to_dict: Dict[str, Callable] = {
-    LLMType.OpenAI.value: _parse_openai_prompt_to_dict
+_parse_llm_prompt_to_dict: Dict[LLMType, Callable] = {
+    LLMType.OpenAI: _parse_openai_prompt_to_dict
 }
 
 
@@ -169,13 +169,13 @@ def _parse_dict_to_openai_prompt(prompts: List[Dict[str, str]]) -> LLMPrompt:
     return LLMPrompt(messages=messages)
 
 
-_parse_llm_dict_to_prompt: Dict[str, Callable] = {
-    LLMType.OpenAI.value: _parse_dict_to_openai_prompt
+_parse_llm_dict_to_prompt: Dict[LLMType, Callable] = {
+    LLMType.OpenAI: _parse_dict_to_openai_prompt
 }
 
 
 def parse_llm_prompt_to_dict(
-        prompts: LLMPrompt, llm_type: str = LLMType.OpenAI
+        prompts: LLMPrompt, llm_type: LLMType = LLMType.OpenAI
 ) -> List[Dict]:
     """This method is compatible with different LLMs.
     You can convert LLMPrompt Data to Json Data of different LLMs format.
@@ -184,7 +184,7 @@ def parse_llm_prompt_to_dict(
 
 
 def parse_llm_dict_to_prompt(
-        prompts: List[Dict[str, str]], llm_type: str = LLMType.OpenAI
+        prompts: List[Dict[str, str]], llm_type: LLMType = LLMType.OpenAI
 ) -> LLMPrompt:
     """This method is compatible with different LLMs.
     You can convert JSON Data to LLMPrompt Data of different LLMs format.

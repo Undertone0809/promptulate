@@ -62,7 +62,7 @@ class TestSemanticScholarQueryTool(TestCase):
     def test_run_return_specified_fields(self):
         tool = SemanticScholarQueryTool()
         fields = ["title", "url", "abstract", "referenceCount"]
-        result = tool.run("attention is all you need", sepcified_fields=fields)
+        result = tool.run("attention is all you need", specified_fields=fields)
         self.assertTrue("id" in result)
         self.assertTrue("title" in result)
         self.assertTrue("url" in result)
@@ -81,6 +81,17 @@ class TestSemanticScholarReferenceTool(TestCase):
     def test_run_return_listdict(self):
         tool = SemanticScholarReferenceTool()
         result = tool.run("attention is all you need", return_type="original")
+        self.assertIsNotNone(result[0])
+        self.assertIsNotNone(result[0]["id"])
+        self.assertIsNotNone(result[0]["title"])
+        self.assertIsNotNone(result[0]["url"])
+
+    def test_run_with_max_result(self):
+        tool = SemanticScholarReferenceTool()
+        result = tool.run(
+            "attention is all you need", max_result=5, return_type="original"
+        )
+        self.assertEqual(len(result), 5)
         self.assertIsNotNone(result[0])
         self.assertIsNotNone(result[0]["id"])
         self.assertIsNotNone(result[0]["title"])

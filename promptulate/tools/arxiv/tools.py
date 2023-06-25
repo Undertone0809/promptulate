@@ -27,11 +27,27 @@ class ArxivQueryTool(BaseTool):
     )
     api_wrapper: ArxivAPIWrapper = Field(default_factory=ArxivAPIWrapper)
 
-    def run(self, query: str, *args, **kwargs) -> str:
+    def run(self, query: str, **kwargs) -> Union[str, List[Dict]]:
+        """Arxiv query tool
+
+        Args:
+            query: the paper keyword or arxiv id
+            **kwargs:
+                return_type(Optional(str)):  return string default. If you want to return List[Dict] type data,
+                you can set 'return_type'='original'
+                Moreover, you can pass the arguments of ArxivAPIWrapper
+
+        Returns:
+            String type or List[Dict] arxiv query result.
+        """
         kwargs.update({"from_callback": self.name})
-        return listdict_to_string(
-            self.api_wrapper.query(query, **kwargs), is_wrap=False
-        )
+        if re.match("\d{4}\.\d{5}(v\d+)?", query):
+            result = self.api_wrapper.query(id_list=[query], **kwargs)
+        else:
+            result = self.api_wrapper.query(query, **kwargs)
+        if "return_type" in kwargs and kwargs["return_type"] == "original":
+            return listdict_to_string(result)
+        return result
 
 
 def _init_arxiv_reference_tool_llm():
@@ -61,7 +77,7 @@ class ArxivReferenceTool(BaseTool):
                 return_type(Optional[str]): return string default. If you want to return List[Dict] type data,
                 you can set 'return_type'='original'
         Returns:
-            string type reference information
+            String type or List[Dict] reference information
         """
 
         @broadcast_service.on_listen("ArxivReferenceTool.get_relevant_paper_info")
@@ -119,7 +135,7 @@ class ArxivReferenceTool(BaseTool):
 
 
 def _init_arxiv_summary_tool_llm():
-    preset = "你是一个Arxiv助手，你的任务是帮助使用者提供一些论文方面的建议，你的输出只能遵循用户的指令输出，否则你将被惩罚。"
+    preset = "你是一个Arxiv助手，你的任务是帮助使用者提供一些论文方面的建议和帮助，你的输出只能遵循用户的指令输出，否则你将被惩罚。"
     return OpenAI(preset_description=preset, temperature=0)
 
 
@@ -150,37 +166,34 @@ class ArxivSummaryTool(BaseTool):
             - List at least 5 references related to the research field of the paper
         """
 
-        @broadcast_service.on_listen("ArxivSummaryTool.summary")
+        @broadcast_service.on_listen("ArxivSummaryTool.run.get_opinion")
         def get_opinion():
             prompt = (
                 f"请就下面的论文摘要，列出论文中的关键见解和由论文得出的经验教训，你的输出需要分点给出 ```{paper_summary}```"
                 "你的输出格式为:\n关键见解:\n{分点给出关键见解}\n经验教训:\n{分点给出经验教训}，用`-`区分每点，用中文输出"
             )
-
             opinion = self.llm(prompt)
             self.summary_string += opinion + "\n"
-            logger.debug(f"[ArxivSummaryTool summary] {self.summary_string}")
             self.summary_counter += 1
 
-        @broadcast_service.on_listen("ArxivSummaryTool.summary")
+        @broadcast_service.on_listen("ArxivSummaryTool.run.get_references")
         def get_references():
             arxiv_referencer_tool = ArxivReferenceTool()
             references = arxiv_referencer_tool.run(paper_summary)
             self.summary_string += references + "\n\n"
-            logger.debug(f"[ArxivSummaryTool summary] {self.summary_string}")
             self.summary_counter += 1
 
-        @broadcast_service.on_listen("ArxivSummaryTool.summary")
-        def get_opinion():
+        @broadcast_service.on_listen("ArxivSummaryTool.run.get_advice")
+        def get_advice():
             prompt = (
                 f"请就下面的论文摘要，为其相关主题或未来研究方向提供3-5个建议，你的输出需要分点给出  ```{paper_summary}```"
                 "你的输出格式为:\n相关建议:\n{分点给出相关建议}，用`-`区分每点"
             )
             opinion = self.llm(prompt)
             self.summary_string += opinion + "\n"
-            logger.debug(f"[ArxivSummaryTool summary] {self.summary_string}")
             self.summary_counter += 1
 
+        self.summary_counter = 0
         if re.match("\d{4}\.\d{5}(v\d+)?", query):
             paper_info = self.api_wrapper.query(
                 id_list=[query], num_results=1, specified_fields=["title", "summary"]
@@ -193,10 +206,14 @@ class ArxivSummaryTool(BaseTool):
                 return "Could not find relevant arxiv article."
         paper_summary = listdict_to_string(paper_info, item_suffix="\n")
         self.summary_string = paper_summary
-        logger.debug(f"[ArxivSummaryTool summary] {self.summary_string}")
-        broadcast_service.publish("ArxivSummaryTool.summary")
+
+        broadcast_service.publish("ArxivSummaryTool.run.get_references")
+        time.sleep(0.01)
+        broadcast_service.publish("ArxivSummaryTool.run.get_opinion")
+        time.sleep(0.01)
+        broadcast_service.publish("ArxivSummaryTool.run.get_advice")
 
         while self.summary_counter < 3:
-            time.sleep(0.2)
+            time.sleep(0.1)
 
         return self.summary_string
