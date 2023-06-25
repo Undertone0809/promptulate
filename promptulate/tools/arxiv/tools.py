@@ -166,27 +166,24 @@ class ArxivSummaryTool(BaseTool):
             - List at least 5 references related to the research field of the paper
         """
 
-        @broadcast_service.on_listen("ArxivSummaryTool.summary")
+        @broadcast_service.on_listen("ArxivSummaryTool.run.get_opinion")
         def get_opinion():
             prompt = (
                 f"请就下面的论文摘要，列出论文中的关键见解和由论文得出的经验教训，你的输出需要分点给出 ```{paper_summary}```"
                 "你的输出格式为:\n关键见解:\n{分点给出关键见解}\n经验教训:\n{分点给出经验教训}，用`-`区分每点，用中文输出"
             )
-
             opinion = self.llm(prompt)
             self.summary_string += opinion + "\n"
-            logger.debug(f"[ArxivSummaryTool summary] {self.summary_string}")
             self.summary_counter += 1
 
-        @broadcast_service.on_listen("ArxivSummaryTool.summary")
+        @broadcast_service.on_listen("ArxivSummaryTool.run.get_references")
         def get_references():
             arxiv_referencer_tool = ArxivReferenceTool()
             references = arxiv_referencer_tool.run(paper_summary)
             self.summary_string += references + "\n\n"
-            logger.debug(f"[ArxivSummaryTool summary] {self.summary_string}")
             self.summary_counter += 1
 
-        @broadcast_service.on_listen("ArxivSummaryTool.summary")
+        @broadcast_service.on_listen("ArxivSummaryTool.run.get_advice")
         def get_advice():
             prompt = (
                 f"请就下面的论文摘要，为其相关主题或未来研究方向提供3-5个建议，你的输出需要分点给出  ```{paper_summary}```"
@@ -194,7 +191,6 @@ class ArxivSummaryTool(BaseTool):
             )
             opinion = self.llm(prompt)
             self.summary_string += opinion + "\n"
-            logger.debug(f"[ArxivSummaryTool summary] {self.summary_string}")
             self.summary_counter += 1
 
         self.summary_counter = 0
@@ -210,10 +206,14 @@ class ArxivSummaryTool(BaseTool):
                 return "Could not find relevant arxiv article."
         paper_summary = listdict_to_string(paper_info, item_suffix="\n")
         self.summary_string = paper_summary
-        logger.debug(f"[ArxivSummaryTool summary] {self.summary_string}")
-        broadcast_service.publish("ArxivSummaryTool.summary")
+
+        broadcast_service.publish("ArxivSummaryTool.run.get_references")
+        time.sleep(0.01)
+        broadcast_service.publish("ArxivSummaryTool.run.get_opinion")
+        time.sleep(0.01)
+        broadcast_service.publish("ArxivSummaryTool.run.get_advice")
 
         while self.summary_counter < 3:
-            time.sleep(0.2)
+            time.sleep(0.1)
 
         return self.summary_string

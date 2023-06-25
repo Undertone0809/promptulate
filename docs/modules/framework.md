@@ -2,16 +2,18 @@
 
 > 文档完善中...
 
-### 简介
+## 简介
 
 本文将会介绍对话模型Conversation、Prompt框架ReAct、self-ask，tree-of-thoughts的基本使用。
 
-### Conversation
+## Conversation
 
 LLM组件只提供了最基础的对话生成内容，但是其并不提供上下文对话、文章总结、角色预设等更加复杂的功能，所以接下来我们介绍功能更为强大的`Conversation`。
 
 `Conversation` 是`framework`中最基础的组件，其支持prompt生成、上下文对话、对话存储、角色预设的基本功能，此外，`provider`
 为其提供了语言翻译、markdown数据导出、对话总结、标题总结等扩展功能。
+
+### 基本使用
 
 接下来，我们先从对基础的对话开始，使用`Conversation`可以开始一段对话，使用其`predict()`函数可以生成回答。
 
@@ -28,6 +30,8 @@ conversation.predict("你知道鸡哥的《只因你太美》吗？")
 
 `Conversation`默认使用`OpenAI GPT3.5`作为LLM，当然，因为其架构设计，`Conversation`
 还可以轻松扩展其他类型的llm。
+
+### 扩展功能
 
 下面是一个更复杂的示例，展示了使用OpenAI作为大语言模型进行对话，使用本地文件进行存储，进行文章总结与标题总结的功能。
 
@@ -92,3 +96,56 @@ conversation.predict_by_translate("你知道鸡哥会什么技能吗？", countr
 ```
 
 如果你设置了`enable_embed_message=True`, 那么这一次的predict将保存进历史对话中，provider提供的函数默认是不会将预测结果存入对话中的哦，这一点需要注意一下。
+
+### 继续上一次运行的对话
+
+如果你使用LocalCacheChatMemory进行本地文件的Conversation数据存储，那么你可以轻松基于原有的对话开始继续对话。
+
+下面的示例中展示了如何继续上一次运行时的对话。
+
+- 第一次运行
+
+```python
+from promptulate import Conversation
+from promptulate.memory.local_cache import LocalCacheChatMemory
+
+conversation = Conversation(memory=LocalCacheChatMemory())
+result = conversation.predict("现在我要开一家人工智能工具，请帮我取5个名字")
+print(f"<{conversation.conversation_id}> {result}")
+```
+
+从上面的代码可以看到，通过`conversation.conversation_id`的方式可以获取conversation_id，便于下一次运行使用。下面为一次的运行结果。
+
+```text
+<1687704464> 当然可以！以下是我为您提供的五个可能的名字：
+
+1. BrainWave AI
+2. Intellibot Pro
+3. ThinkSmart Intelligence
+4. SmartMind AI Solutions
+5. AI InnovateX
+```
+
+- 第二次运行
+
+```python
+from promptulate import Conversation
+from promptulate.memory.local_cache import LocalCacheChatMemory
+
+conversation = Conversation(conversation_id="1687704464", memory=LocalCacheChatMemory())
+result = conversation.predict("再帮我取5个名字")
+print(f"<{conversation.conversation_id}> {result}")
+
+```
+
+下面为第二次运行结果，可以看到通过传入conversation_id，就可以方便地就上一次运行的结果继续推理。
+
+```text
+<1687704464> 当然，我很乐意为您提供更多的建议。以下是另外5个选项：
+
+1. 智慧之脑
+2. AI启迪
+3. 智慧赋能
+4. 全息AI
+5. 深度思维AI
+```
