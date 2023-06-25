@@ -17,15 +17,16 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-import setuptools
 import pathlib
+
+import setuptools
 
 here = pathlib.Path(__file__).parent.resolve()
 long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setuptools.setup(
     name="promptulate",
-    version="1.1.0",
+    version="1.2.0",
     author="Zeeland",
     author_email="zeeland@foxmail.com",
     description="A powerful LLM Prompt Layer frameworks",
