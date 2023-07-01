@@ -17,33 +17,15 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from pydantic import BaseModel
 from typing import List, Optional
 
-from promptulate.llms.base import BaseLLM
-from promptulate.memory.base import BaseChatMemory
 from promptulate.frameworks.prompt import SUMMARY_CONTENT_PROMPT_ZH, SUMMARY_TOPIC_PROMPT_ZH
 from promptulate.schema import (
     LLMPrompt,
     UserMessage,
-    BaseMessage,
-    AssistantMessage,
-    ChatMessageHistory
+    AssistantMessage
 )
-
-
-class BaseMixin(BaseModel):
-    llm: BaseLLM
-    conversation_id: Optional[str]
-    memory: BaseChatMemory
-
-    class Config:
-        """Configuration for this pydantic object."""
-        arbitrary_types_allowed = True
-
-    def embed_message(self, cur_message: BaseMessage, message_history: ChatMessageHistory) -> None:
-        message_history.messages.append(cur_message)
-        self.memory.save_conversation_to_memory(message_history)
+from pydantic import BaseModel
 
 
 class SummarizerMixin(BaseMixin):

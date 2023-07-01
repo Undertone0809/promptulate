@@ -18,10 +18,7 @@ import os
 os.environ['OPENAI_API_KEY'] = "your-key"
 ```
 
-在你第一次使用的时候，需要使用`os.environ["OPENAI_API_KEY"]` 导入"OPENAI_API_KEY"
-的环境变量，但是在第一运行之后`promptulate`
-会进行缓存，即后面再运行就不需要再导入key了。如果你的key过期了，可以尝试重新按照上面的方法导入key，或者你也可以把`cache`
-文件给删除掉，Windows的`cache`在当前目录下，linux的`cache`在`/tmp`下。
+在你第一次使用的时候，需要使用`os.environ["OPENAI_API_KEY"]` 导入"OPENAI_API_KEY" 的环境变量，但是在第一运行之后`promptulate` 会进行缓存，即后面再运行就不需要再导入key了。如果你的key过期了，可以尝试重新按照上面的方法导入key，或者你也可以把`cache` 文件给删除掉，Windows的`cache`在当前目录下，linux的`cache`在`/tmp`下。
 
 ### LLM快速上手
 
@@ -57,10 +54,7 @@ llm = OpenAI(model="gpt-4", temperature=0.9, top_p=1, stream=False, presence_pen
 llm("请介绍一下引力波的放射与广义相对论的必然关系")
 ```
 
-上面的示例中，使用`OpenAI(model="gpt-4", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)`
-进行初始化一个大模型，里面是OpenAI需要传入的一些参数，具体可以查看[https://platform.openai.com/docs/api-reference/chat/create](https://platform.openai.com/docs/api-reference/chat/create)
-查看具体含义，这里不做详细讲解，如果你不想理会这些参数，你也可以直接`llm = OpenAI()`就好啦，默认使用`gpt-3.5-turbo`
-作为大语言模型，其他参数使用默认的就好了。
+上面的示例中，使用`OpenAI(model="gpt-4", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)` 进行初始化一个大模型，里面是OpenAI需要传入的一些参数，具体可以查看[https://platform.openai.com/docs/api-reference/chat/create](https://platform.openai.com/docs/api-reference/chat/create) 查看具体含义，这里不做详细讲解，如果你不想理会这些参数，你也可以直接`llm = OpenAI()`就好啦，默认使用`gpt-3.5-turbo` 作为大语言模型，其他参数使用默认的就好了。
 
 LLM为`promptulate`
 中最基础的组件，为框架提供大语言模型交互能力，如果你想构建更加复杂的大语言模型应用，请跳转[Framework](modules/framework.md#Framework)
@@ -132,4 +126,37 @@ export_openai_key_pool(keys)
 llm = OpenAI()
 for i in range(10):
     llm("你好")
+```
+
+上面的示例中，当你使用了`export_openai_key_pool(keys)`之后，cache会进行缓存，因此在下一次执行的时候，你就无需再导入key或key
+pool就可以使用OpenAI进行推理了。
+
+需要注意的是，cache会初始化key pool中的数据，因此如果你的一些key失效了，可以尝试重新执行该命令进行初始化操作，或者你可以使用如下删除key_pool中的指定key。
+
+```python
+from promptulate.utils.openai_key_pool import OpenAIKey, OpenAIKeyPool
+
+key_pool: OpenAIKeyPool = OpenAIKeyPool()
+key_pool.delete("your key")
+```
+
+使用下面的方式可以进行查询当前key_pool中的所有key。
+
+```python
+from promptulate.utils.openai_key_pool import OpenAIKey, OpenAIKeyPool
+
+key_pool: OpenAIKeyPool = OpenAIKeyPool()
+keys = key_pool.all()
+for key in keys:
+    print(key)
+```
+
+输入如下所示：
+
+```text
+{'__name__': 'OpenAIKey', '__unique_id__': '62f56487-d528-4f5c-84bb-9c2a3df7354e', 'model': 'gpt-3.5-turbo', 'key': 'key1'}
+{'__name__': 'OpenAIKey', '__unique_id__': 'ac3abd29-c62e-458d-b3cc-3f825594910f', 'model': 'gpt-3.5-turbo', 'key': 'key2'}
+{'__name__': 'OpenAIKey', '__unique_id__': 'c90ab3c2-e6c0-4a16-a2f9-a298d6290218', 'model': 'gpt-3.5-turbo', 'key': 'key3'}
+{'__name__': 'OpenAIKey', '__unique_id__': 'c13b1965-5034-4463-9409-2ad90ba1d260', 'model': 'gpt-3.5-turbo', 'key': 'key4'}
+
 ```

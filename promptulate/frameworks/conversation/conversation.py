@@ -19,12 +19,10 @@
 
 from typing import Optional, Union
 
-from pydantic import Field
-
 from promptulate import utils
 from promptulate.config import Config
 from promptulate.frameworks.schema import BasePromptFramework
-from promptulate.llms import OpenAI
+from promptulate.llms import ChatOpenAI
 from promptulate.llms.base import BaseLLM
 from promptulate.memory import BufferChatMemory
 from promptulate.memory.base import BaseChatMemory
@@ -42,6 +40,7 @@ from promptulate.schema import (
 )
 from promptulate.tips import EmptyChatMessageHistoryTip
 from promptulate.utils.core_utils import record_time
+from pydantic import Field
 
 CFG = Config()
 logger = utils.get_logger()
@@ -68,7 +67,7 @@ class Conversation(
     """
 
     conversation_id: Optional[str] = None
-    llm: BaseLLM = Field(default_factory=OpenAI)
+    llm: BaseLLM = Field(default_factory=ChatOpenAI)
     enable_stream: bool = False  # streaming transmission
     role: Union[str, CustomPresetRole] = "default-role"
     memory: BaseChatMemory = Field(default_factory=BufferChatMemory)

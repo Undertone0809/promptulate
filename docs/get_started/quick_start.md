@@ -30,7 +30,7 @@ os.environ['OPENAI_API_KEY'] = "your-key"
 
 ### LLM
 
-> 详细文档请跳转[LLM](../modules/llm.md#llm)
+> 详细文档请跳转[LLM](modules/llm.md#llm)
 
 `promptulate`的架构设计可以轻松兼容不同的大语言模型扩展，在`promptulate`中，llm负责最基本的内容生成部分，因此为最基础的组件。
 
@@ -159,7 +159,7 @@ Hi there, here is promptulate chat terminal.
 [output] 很高兴你觉得如此，我会尽力为您提供最佳的服务。有任何需要帮助的问题，请尽管问我。
 ```
 
-> 需要注意的是，当前client只支持OpenAI的LLM，后续将会开放更多LLM，详情请查看[开发计划](../other/plan.md)
+> 需要注意的是，当前client只支持OpenAI的LLM，后续将会开放更多LLM，详情请查看[开发计划](other/plan.md)
 
 ### Conversation
 
