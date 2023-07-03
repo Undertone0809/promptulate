@@ -95,7 +95,7 @@ Modules是一组专门设计用于执行特定任务的模块，例如情感分�
 欢迎加入群聊一起交流讨论有关LLM相关的话题，链接过期了可以issue或email提醒一下作者。
 
 <div style="width: 250px;margin: 0 auto;">
-  <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230623214722.png"/>
+  <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230702132948.png"/>
 </div>
 
 # 贡献

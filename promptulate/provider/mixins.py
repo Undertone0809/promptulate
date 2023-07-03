@@ -19,20 +19,22 @@
 
 from typing import List, Optional
 
+from pydantic import BaseModel
+
 from promptulate.frameworks.prompt import SUMMARY_CONTENT_PROMPT_ZH, SUMMARY_TOPIC_PROMPT_ZH
+from promptulate.provider.base import BaseMixin
 from promptulate.schema import (
     LLMPrompt,
     UserMessage,
     AssistantMessage
 )
-from pydantic import BaseModel
 
 
 class SummarizerMixin(BaseMixin):
     """message summary capability provider"""
 
     def summary_content(self, enable_embed_message: bool = False, summary_prompt: str = SUMMARY_CONTENT_PROMPT_ZH):
-        message_history = self.memory.load_conversation_from_memory(self.conversation_id)
+        message_history = self.memory.load_message_set_from_memory(self.conversation_id)
         message_history.messages.append(UserMessage(content=summary_prompt))
         assistant_answer: AssistantMessage = self.llm.generate_prompt(LLMPrompt(messages=message_history.messages))
         if enable_embed_message:
@@ -40,7 +42,7 @@ class SummarizerMixin(BaseMixin):
         return assistant_answer.content
 
     def summary_topic(self, enable_embed_message: bool = False, summary_topic_prompt: str = SUMMARY_TOPIC_PROMPT_ZH):
-        message_history = self.memory.load_conversation_from_memory(self.conversation_id)
+        message_history = self.memory.load_message_set_from_memory(self.conversation_id)
         message_history.messages.append(
             UserMessage(content=summary_topic_prompt))
         assistant_answer: AssistantMessage = self.llm.generate_prompt(LLMPrompt(messages=message_history.messages))
@@ -64,7 +66,7 @@ class TranslatorMixin(BaseMixin):
         Returns:
             the country official language you choose
         """
-        message_history = self.memory.load_conversation_from_memory(self.conversation_id)
+        message_history = self.memory.load_message_set_from_memory(self.conversation_id)
         message_history.messages.append(
             UserMessage(content=f"{prompt}. Please answer question using {country} official language. "))
         assistant_answer: AssistantMessage = self.llm.generate_prompt(LLMPrompt(messages=message_history.messages))
@@ -78,7 +80,7 @@ class DeriveHistoryMessageMixin(BaseMixin):
 
     def get_history(self) -> List[dict]:
         """get history conversation from memory"""
-        return self.memory.load_conversation_from_memory(self.conversation_id).listdict_message
+        return self.memory.load_message_set_from_memory(self.conversation_id).listdict_message
 
     def export_message_to_markdown(self, output_type: str = 'text', file_path: str = "output.md") -> Optional[str]:
         """

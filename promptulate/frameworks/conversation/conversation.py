@@ -17,7 +17,9 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from typing import Optional, Union
+from typing import Optional, Union, List, Dict, Any
+
+from pydantic import Field, validator
 
 from promptulate import utils
 from promptulate.config import Config
@@ -33,14 +35,12 @@ from promptulate.provider.mixins import (
     DeriveHistoryMessageMixin,
 )
 from promptulate.schema import (
-    LLMPrompt,
+    MessageSet,
     AssistantMessage,
-    ChatMessageHistory,
     init_chat_message_history,
 )
-from promptulate.tips import EmptyChatMessageHistoryTip
+from promptulate.tips import EmptyMessageSetError
 from promptulate.utils.core_utils import record_time
-from pydantic import Field
 
 CFG = Config()
 logger = utils.get_logger()
@@ -72,25 +72,45 @@ class Conversation(
     role: Union[str, CustomPresetRole] = "default-role"
     memory: BaseChatMemory = Field(default_factory=BufferChatMemory)
 
+    @validator("conversation_id", always=True)
+    def init_conversation_id(
+        cls, conversation_id: Optional[str], values: Dict[str, Any]
+    ) -> Optional[str]:
+        """initialize self.conversation_id and memory.conversation_id"""
+        if not conversation_id:
+            return None
+
+        assert conversation_id.isdigit(), "conversation_id must a digit type string"
+        if "memory" in values and values["memory"]:
+            cls.memory.conversation_id = conversation_id
+        return conversation_id
+
+    @validator("memory", always=True)
+    def init_memory(
+        cls, memory: BaseChatMemory, values: Dict[str, Any]
+    ) -> BaseChatMemory:
+        """check whether exist conversation_id before initialize memory"""
+        if "conversation_id" in values and values["conversation_id"]:
+            memory.conversation_id = values["conversation_id"]
+        else:
+            values["conversation_id"] = memory.conversation_id
+            cls.conversation_id = memory.conversation_id
+        return memory
+
     @record_time()
-    def predict(self, prompt: str) -> str:
+    def predict(self, prompt: str, stop: List[str] = None) -> str:
         try:
-            messages_history: ChatMessageHistory = (
-                self.memory.load_conversation_from_memory(self.conversation_id)
-            )
+            messages_history: MessageSet = self.memory.load_message_set_from_memory()
             messages_history.add_user_message(message=prompt)
-        except EmptyChatMessageHistoryTip as e:
+        except EmptyMessageSetError as e:
             messages_history = init_chat_message_history(
                 get_preset_role_prompt(self.role), prompt
             )
-            self.conversation_id = messages_history.conversation_id
-            self.memory.save_conversation_to_memory(messages_history)
+            self.memory.save_message_set_to_memory(messages_history)
         logger.debug(
             f"[promptulate Conversation] conversation_id: <{self.conversation_id}> messages: <{messages_history.messages}>"
         )
-        answer: AssistantMessage = self.llm.generate_prompt(
-            LLMPrompt(messages=messages_history.messages)
-        )
+        answer: AssistantMessage = self.llm.generate_prompt(messages_history, stop=stop)
         messages_history.messages.append(answer)
-        self.memory.save_conversation_to_memory(messages_history)
+        self.memory.save_message_set_to_memory(messages_history)
         return answer.content
