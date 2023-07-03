@@ -159,7 +159,7 @@ class OpenAI(BaseOpenAI):
         logger.debug("[promptulate OpenAI] retry to get response")
         if self.enable_retry and self.retry_counter < self.retry_times:
             self.retry_counter += 1
-            return self.generate_prompt(prompts)
+            return self.generate_prompt(prompts, stop)
 
         logger.error(
             f"[promptulate OpenAI] Has retry {self.retry_times}, but all failed."
@@ -244,7 +244,7 @@ class ChatOpenAI(BaseOpenAI):
         logger.debug("[promptulate OpenAI] retry to get response")
         if self.enable_retry and self.retry_counter < self.retry_times:
             self.retry_counter += 1
-            return self.generate_prompt(prompts)
+            return self.generate_prompt(prompts, stop)
 
         logger.error(
             f"[promptulate OpenAI] Has retry {self.retry_times}, but all failed."

@@ -18,7 +18,6 @@
 # Contact Email: zeeland@foxmail.com
 
 from abc import ABC, abstractmethod
-from typing import Union
 
 from pydantic import BaseModel, Extra
 
@@ -36,7 +35,7 @@ class BaseLLM(BaseModel, ABC):
 
     @abstractmethod
     def generate_prompt(
-            self, prompts: Union[str, MessageSet], **kwargs
+            self, prompts: MessageSet, **kwargs
     ) -> AssistantMessage:
         """llm generate prompt"""
 
