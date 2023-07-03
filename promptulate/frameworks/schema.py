@@ -18,17 +18,19 @@
 # Contact Email: zeeland@foxmail.com
 
 from pydantic import BaseModel
+
 from promptulate.config import Config
 from promptulate.llms.base import BaseLLM
+from promptulate.memory.base import BaseChatMemory
 
 CFG = Config()
 
 
 class BasePromptFramework(BaseModel):
-    # todo remove role和conversation_id ?
     role: str
     conversation_id: str
     llm: BaseLLM
+    memory: BaseChatMemory
 
     class Config:
         arbitrary_types_allowed = True

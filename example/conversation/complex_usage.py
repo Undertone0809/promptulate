@@ -18,12 +18,12 @@
 # Contact Email: zeeland@foxmail.com
 
 from promptulate import Conversation
-from promptulate.memory import LocalCacheChatMemory
 from promptulate.llms import OpenAI
+from promptulate.memory import FileChatMemory
 
 
 def main():
-    memory = LocalCacheChatMemory()
+    memory = FileChatMemory()
     llm = OpenAI(model="gpt-3.5-turbo", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)
     conversation = Conversation(llm=llm, memory=memory)
     ret = conversation.predict("你知道鸡哥的著作《只因你太美》吗？")

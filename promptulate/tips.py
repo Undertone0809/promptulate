@@ -17,11 +17,16 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-__all__ = ["EmptyChatMessageHistoryTip", "NetWorkError"]
+__all__ = ["EmptyMessageSetError", "OpenAIError", "NetWorkError"]
 
 
-class EmptyChatMessageHistoryTip(Exception):
+class EmptyMessageSetError(Exception):
     pass
+
+
+class OpenAIError(Exception):
+    def __init__(self, msg: str):
+        super().__init__(f"<OpenAI> could not get data correctly, reasons: {msg}")
 
 
 class NetWorkError(Exception):

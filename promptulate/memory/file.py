@@ -17,7 +17,10 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from typing import Optional, List, Dict
+from typing import Optional
+
+from cushy_storage import CushyOrmCache
+from pydantic import Field, validator
 
 from promptulate import utils
 from promptulate.memory.base import BaseChatMemory
@@ -25,38 +28,29 @@ from promptulate.schema import MessageSet
 from promptulate.tips import EmptyMessageSetError
 
 logger = utils.get_logger()
-buffer: Dict[str, List[Dict]] = {}
-"""Here is a buffer example: 
-{
-    "conversation_id1": [message...],
-    "conversation_id2": [message...],
-}
-"""
 
 
-class BufferChatMemory(BaseChatMemory):
-    """Chat message will be stored in the buffer cache."""
+class FileChatMemory(BaseChatMemory):
+    """Chat message will be stored in the local file cache."""
+
+    file_path: Optional[str] = None
+    """If you want to change default store path, you can set specified file_path"""
+    cache: CushyOrmCache = Field(default_factory=CushyOrmCache)
+
+    @validator("file_path", always=True)
+    def init_cache(cls, file_path: Optional[str]) -> str:
+        if not file_path:
+            return None
+
+        cls.cache = CushyOrmCache(file_path)
+        return file_path
 
     def load_message_set_from_memory(
             self, recently_n: Optional[int] = None
     ) -> MessageSet:
-        """Load message from buffer memory
-
-        Args:
-            recently_n: load all messages if it is None, or return recently n messages.
-
-        Returns:
-            messages wrapping by MessageSet
-        """
-        if not buffer:
-            raise EmptyMessageSetError
-        recently_n = (
-            recently_n if recently_n else len(buffer[self.conversation_id])
-        )
-        num_messages = len(buffer[self.conversation_id])
-        return MessageSet.from_listdict_data(
-            buffer[self.conversation_id][num_messages - recently_n:]
-        )
+        if self.conversation_id not in self.cache:
+            raise EmptyMessageSetError()
+        return MessageSet.from_listdict_data(self.cache[self.conversation_id])
 
     def save_message_set_to_memory(self, message_set: MessageSet) -> None:
-        buffer[self.conversation_id] = message_set.memory_messages
+        self.cache[self.conversation_id] = message_set.listdict_messages

@@ -18,8 +18,8 @@
 # Contact Email: zeeland@foxmail.com
 
 from promptulate.frameworks import Conversation
+from promptulate.schema import UserMessage, AssistantMessage, SystemMessage, LLMPrompt
 from promptulate.utils import enable_log, enable_log_no_file
-from promptulate.schema import UserMessage, AssistantMessage, SystemMessage, BaseChatMessageHistory, LLMPrompt
 
 __all__ = [
     'Conversation',
@@ -30,6 +30,5 @@ __all__ = [
     'SystemMessage',
     'UserMessage',
     'AssistantMessage',
-    'BaseChatMessageHistory',
     'LLMPrompt',
 ]

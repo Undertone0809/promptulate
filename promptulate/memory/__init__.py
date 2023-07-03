@@ -18,9 +18,9 @@
 # Contact Email: zeeland@foxmail.com
 
 from promptulate.memory.buffer import BufferChatMemory
-from promptulate.memory.local_cache import LocalCacheChatMemory
+from promptulate.memory.file import FileChatMemory
 
 __all__ = [
     'BufferChatMemory',
-    'LocalCacheChatMemory'
+    'FileChatMemory'
 ]

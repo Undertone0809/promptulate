@@ -17,8 +17,18 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from typing import Optional
 from abc import abstractmethod
+from typing import Optional, Any, Dict
+
+from pydantic import BaseModel
+
+from promptulate.schema import MessageSet
+from promptulate.utils.core_utils import generate_conversation_id
+
+
+class BaseMemory(BaseModel):
+    store: Any
+    """storage medium"""
 
 from promptulate import utils
 from promptulate.utils import AbstractSingleton
@@ -34,12 +44,26 @@ class BaseChatMemory(AbstractSingleton):
     class. It's means there are utils class to read and write chat data.
     """
 
+    summary: str = ""
+    conversation_id: Optional[str] = None
+    additional_kwargs: Dict[str, Any] = {}
+
+    class Config:
+        arbitrary_types_allowed = True
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        if "conversation_id" not in kwargs:
+            self.conversation_id = generate_conversation_id()
+
     @abstractmethod
-    def load_conversation_from_memory(self, conversation_id: Optional[str]) -> ChatMessageHistory:
+    def load_message_set_from_memory(
+            self, recently_n: Optional[int] = None
+    ) -> MessageSet:
         """Return key-value pairs given the text input to the chain.
         If None, return all memories
         """
 
     @abstractmethod
-    def save_conversation_to_memory(self, inputs: ChatMessageHistory) -> None:
+    def save_message_set_to_memory(self, inputs: MessageSet) -> None:
         """Save the context of this model run to memory."""

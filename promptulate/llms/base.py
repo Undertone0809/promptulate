@@ -20,11 +20,14 @@
 from abc import ABC, abstractmethod
 from typing import Union
 
-from promptulate.schema import AssistantMessage, LLMPrompt
 from pydantic import BaseModel, Extra
+
+from promptulate.schema import AssistantMessage, MessageSet, LLMType
 
 
 class BaseLLM(BaseModel, ABC):
+    llm_type: LLMType
+
     class Config:
         """Configuration for this pydantic object."""
 
@@ -32,12 +35,10 @@ class BaseLLM(BaseModel, ABC):
         arbitrary_types_allowed = True
 
     @abstractmethod
-    def generate_prompt(self, prompts: Union[str, LLMPrompt]) -> AssistantMessage:
+    def generate_prompt(
+            self, prompts: Union[str, MessageSet], **kwargs
+    ) -> AssistantMessage:
         """llm generate prompt"""
-
-    # @abstractmethod
-    # def _parse_prompt(self, prompts: LLMPrompt) -> Any:
-    #     """parse prompt"""
 
     @abstractmethod
     def __call__(self, prompt: str, *args, **kwargs):
