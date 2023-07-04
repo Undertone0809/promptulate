@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Zeeland
+# Copyright (c) 2023 promptulate
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,10 +23,10 @@ from promptulate.utils.core_utils import (
     get_cache,
     generate_conversation_id,
 )
-from promptulate.utils.proxy import set_proxy_mode
-from promptulate.utils.singleton import Singleton, AbstractSingleton
 from promptulate.utils.logger import get_logger, enable_log, enable_log_no_file
 from promptulate.utils.openai_key_pool import export_openai_key_pool
+from promptulate.utils.proxy import set_proxy_mode
+from promptulate.utils.singleton import Singleton, AbstractSingleton
 
 __all__ = [
     "generate_conversation_id",

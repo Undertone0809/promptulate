@@ -92,7 +92,7 @@ if __name__ == '__main__':
 from promptulate import Conversation
 
 conversation = Conversation()
-conversation.predict_by_translate("你知道鸡哥会什么技能吗？", country='America', enable_embed_message=True)
+conversation.predict_by_translate("引力波的放射与广义相对论的必然关系", country='America', enable_embed_message=True)
 ```
 
 如果你设置了`enable_embed_message=True`, 那么这一次的predict将保存进历史对话中，provider提供的函数默认是不会将预测结果存入对话中的哦，这一点需要注意一下。
@@ -149,3 +149,65 @@ print(f"<{conversation.conversation_id}> {result}")
 4. 全息AI
 5. 深度思维AI
 ```
+
+### 获取历史数据
+
+在某些时候，你或许有需要导出数据的需求，幸运的是，`promptulate`在`v1.3.0`版本之后升级了内部的统一消息结构，`framework` `agent` `memory`组件都可以使用`MessageSet`来读取导出历史对话数据，并且可以用`MessageSet`完成不同类型LLM之间的API转换。下面一个示例展示了如何在`Conversation`对话中用`MessageSet`获取所有的对话数据。
+
+```python
+from promptulate import Conversation
+from promptulate.schema import MessageSet
+
+conversation = Conversation()
+result = conversation.predict("引力波")
+messages: MessageSet = conversation.memory.load_message_set_from_memory()
+list(map(lambda message: print(messages), messages.listdict_messages))
+```
+
+输出结果如下：
+
+```text
+{'role': 'system', 'content': '\nYou are an assistant to a human, powered by a large language model trained by OpenAI.\nYou are designed to be able to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. As a language model, you are able to generate human-like text based on the input you receive, allowing you to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.\nOverall, you are a powerful tool that can help with a wide range of tasks and provide valuable insights and information on a wide range of topics. Whether the human needs help with a specific question or just wants to have a conversation about a particular topic, you are here to assist.\n'}
+{'role': 'user', 'content': '引力波'}
+{'role': 'assistant', 'content': '引力波是物理学中一种重要的现象，它是由爱因斯坦的广义相对论所预言和描述的。引力波是在时空中传播的扰动，它是由于质量和能量分布的变化而产生的，并且在空间中传播着能量和动量。与电磁波不同，引力波会扰动时空本身，而不是扰动电磁场。\n\n引力波最早于2015年由LIGO科学合作组织通过直接探测实验首次成功地被探测到。这次事件也被称为“重力波爆发”。这一重大的突破验证了爱因斯坦广义相对论的重要预言，并为天文学和物理学带来了革命性的变革。\n\n引力波的发现让科学家们有机会以一种前所未有的方式观测宇宙。由于引力波传播的是时空本身的扰动，它们可以透过天空中的物质和辐射传递，提供与传统观测方法不同的信息。通过观测引力波，科学家们可以研究黑洞、中子星和其他极端天体的性质，甚至可以通过引力波探测到宇宙的起源和演化过程。\n\n引力波的研究正在快速发展中，未来还有更多令人兴奋的发现和进展可以期待。通过不断改进探测技术和增加观测灵敏度，我们有望进一步了解宇宙中引力波的起源和性质，从而提供更深入的理解宇宙的工具和洞察力。'}
+```
+
+
+如果你仔细看过`promptulate`的源码，你会发现在`v1.3.0`版本升级之后，`llm`的功能变强了，因为其`generate_prompt`可以接受一个MessageSet作为参数，这意味着在某些时候，你可以使用`llm`代替`Conversation`使用，下面的示例展示了这种实现。
+
+```python
+import json
+
+from promptulate.llms.openai import OpenAI
+from promptulate.schema import (
+    SystemMessage,
+    UserMessage,
+    AssistantMessage,
+    MessageSet,
+)
+
+messages = [
+    SystemMessage(content="Answer the following questions as best you can."),
+    UserMessage(content="Joe平均每分钟出拳25次。一场战斗持续5轮，每轮3分钟。他打了多少拳？ 让我们一步一步地思考。"),
+    AssistantMessage(
+        content="""好的，让我们来解决这个问题。
+首先，一轮战斗持续3分钟，Joe每分钟出拳25次，那么一轮他出拳的次数是25乘以3等于75次。
+接下来，我们将五轮的数量相加，即75乘以5等于 <<75*5=375>>375。
+因此，Joe在这场战斗中打了375次拳。"""
+    ),
+    UserMessage(
+        content="""请输出最终答案，你的输出格式为：
+{answer}
+除此之外，不能输出其他任何内容，否则你将被惩罚。
+"""
+    ),
+]
+chat_history = MessageSet(messages=messages)
+
+llm = OpenAI(temperature=0)
+answer: AssistantMessage = llm.generate_prompt(chat_history)
+chat_history.messages.append(answer)
+print(json.dumps(chat_history.listdict_messages))
+```
+
+> 后续我们会专门开设一篇文档介绍MessageSet，如果你有更好的建议，我们非常期待你的想法！欢迎提出issue。

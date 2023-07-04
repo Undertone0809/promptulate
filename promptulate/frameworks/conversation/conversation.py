@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Zeeland
+# Copyright (c) 2023 promptulate
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from typing import Optional, Union, List, Dict, Any
+from typing import Optional, Union, Dict, Any
 
 from pydantic import Field, validator
 
@@ -52,7 +52,7 @@ class Conversation(
     """
     You can use Conversation start a conversation. Moreover, you can pass some parameters to enhance it.
 
-    Args
+    Attributes
         role: preset role. Default is default role.
         llm: default is OpenAI GPT3.5. You can choose other llm.
         conversation_id: conversation id. Default is None
@@ -98,7 +98,7 @@ class Conversation(
         return memory
 
     @record_time()
-    def predict(self, prompt: str, stop: List[str] = None) -> str:
+    def predict(self, prompt: str, **kwargs) -> str:
         try:
             messages_history: MessageSet = self.memory.load_message_set_from_memory()
             messages_history.add_user_message(message=prompt)
@@ -110,7 +110,11 @@ class Conversation(
         logger.debug(
             f"[promptulate Conversation] conversation_id: <{self.conversation_id}> messages: <{messages_history.messages}>"
         )
-        answer: AssistantMessage = self.llm.generate_prompt(messages_history, stop=stop)
+        prompt_params = {"prompts": messages_history}
+        if "stop" in kwargs:
+            prompt_params.update({"update": kwargs["stop"]})
+
+        answer: AssistantMessage = self.llm.generate_prompt(**prompt_params)
         messages_history.messages.append(answer)
         self.memory.save_message_set_to_memory(messages_history)
         return answer.content

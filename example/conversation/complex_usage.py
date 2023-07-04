@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Zeeland
+# Copyright (c) 2023 promptulate
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,9 +26,9 @@ def main():
     memory = FileChatMemory()
     llm = OpenAI(model="gpt-3.5-turbo", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)
     conversation = Conversation(llm=llm, memory=memory)
-    ret = conversation.predict("你知道鸡哥的著作《只因你太美》吗？")
+    ret = conversation.predict("什么是引力波")
     print(f"[predict] {ret}")
-    ret = conversation.predict_by_translate("你知道鸡哥会什么技能吗？", country='America')
+    ret = conversation.predict_by_translate("请介绍一下引力波与广义相对论的必然关系", country='America')
     print(f"[translate output] {ret}")
     ret = conversation.summary_content()
     print(f"[summary content] {ret}")

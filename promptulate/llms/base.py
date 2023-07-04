@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Zeeland
+# Copyright (c) 2023 promptulate
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,9 +34,7 @@ class BaseLLM(BaseModel, ABC):
         arbitrary_types_allowed = True
 
     @abstractmethod
-    def generate_prompt(
-            self, prompts: MessageSet, **kwargs
-    ) -> AssistantMessage:
+    def generate_prompt(self, prompts: MessageSet, **kwargs) -> AssistantMessage:
         """llm generate prompt"""
 
     @abstractmethod

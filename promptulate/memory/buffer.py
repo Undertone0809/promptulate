@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Zeeland
+# Copyright (c) 2023 promptulate
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ from promptulate.tips import EmptyMessageSetError
 
 logger = utils.get_logger()
 buffer: Dict[str, List[Dict]] = {}
-"""Here is a buffer example: 
+"""global message buffer, here is a buffer example: 
 {
     "conversation_id1": [message...],
     "conversation_id2": [message...],

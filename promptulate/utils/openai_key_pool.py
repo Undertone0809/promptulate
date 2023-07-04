@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Zeeland
+# Copyright (c) 2023 promptulate
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,9 +20,10 @@
 from typing import List, Dict, Optional
 
 from cushy_storage.orm import CushyOrmCache, BaseORMModel
+from pydantic import BaseModel, Field
+
 from promptulate.utils.core_utils import get_cache
 from promptulate.utils.singleton import singleton
-from pydantic import BaseModel, Field
 
 
 class OpenAIKey(BaseORMModel):

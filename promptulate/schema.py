@@ -1,4 +1,3 @@
-from enum import Enum
 from abc import abstractmethod
 from enum import Enum
 from typing import List, Dict, Callable, Any, Optional
@@ -7,16 +6,11 @@ from pydantic import BaseModel, Field
 
 __all__ = [
     "BaseMessage",
-    "BaseChatMessageHistory",
-    "LLMType",
     "CompletionMessage",
     "SystemMessage",
     "UserMessage",
     "AssistantMessage",
-    "ChatMessageHistory",
-    "LLMPrompt",
     "MessageSet",
-    "ListDictPrompt",
     "init_chat_message_history",
 ]
 
@@ -72,35 +66,6 @@ MESSAGE_TYPE = {
     "user": UserMessage,
     "assistant": AssistantMessage,
 }
-
-
-class BaseChatMessageHistory(BaseModel):
-    """Base interface for chat message history
-    See `ChatMessageHistory` for default implementation.
-    """
-
-    messages: List[BaseMessage]
-    conversation_id: str
-
-    @abstractmethod
-    def add_system_message(self, message):
-        """add a system message"""
-
-    @abstractmethod
-    def add_user_message(self, message):
-        """add a user message"""
-
-    @abstractmethod
-    def add_ai_message(self, message):
-        """add a ai message"""
-
-    @abstractmethod
-    def clear(self):
-        """clear all message"""
-
-
-class LLMPrompt(BaseModel):
-    messages: List[BaseMessage]
 
 
 class LLMType(str, Enum):
@@ -180,30 +145,6 @@ class MessageSet(BaseModel):
         self.messages.append(AssistantMessage(content=message))
 
 
-class ChatMessageHistory(BaseModel):
-    messages: List[BaseMessage] = []
-    conversation_id: str = ""
-
-    def add_system_message(self, message: str) -> None:
-        self.messages.append(SystemMessage(content=message))
-
-    def add_user_message(self, message: str) -> None:
-        self.messages.append(UserMessage(content=message))
-
-    def add_ai_message(self, message: str) -> None:
-        self.messages.append(AssistantMessage(content=message))
-
-    def clear(self) -> None:
-        self.messages = []
-
-    @property
-    def listdict_message(self) -> List[dict]:
-        listdict_message: List[dict] = []
-        for message in self.messages:
-            listdict_message.append({"role": message.type, "content": message.content})
-        return listdict_message
-
-
 def init_chat_message_history(system_content, user_content) -> MessageSet:
     messages = [
         SystemMessage(content=system_content),
@@ -212,36 +153,12 @@ def init_chat_message_history(system_content, user_content) -> MessageSet:
     return MessageSet(messages=messages)
 
 
-class ListDictPrompt(BaseModel):
-    """list dict type prompt. It can convert to ChatMessageHistory type."""
-
-    messages: List[Dict[str, str]]
-
-    @property
-    def chat_message_history(self) -> ChatMessageHistory:
-        message_history = ChatMessageHistory()
-        for message in self.messages:
-            role = message.get("role")
-            content = message.get("content")
-            if role == "system":
-                message_history.messages.append(SystemMessage(content=content))
-            elif role == "user":
-                message_history.messages.append(UserMessage(content=content))
-            elif role == "assistant":
-                message_history.messages.append(AssistantMessage(content=content))
-        return message_history
-
-
 def _to_openai_llm_prompt(message_set: MessageSet) -> str:
     return message_set.string_messages
 
 
 def _to_chat_openai_llm_prompt(message_set: MessageSet) -> List[Dict]:
     return message_set.listdict_messages
-    # converted_messages: List[dict] = []
-    # for message in message_set.messages:
-    #     converted_messages.append({"role": message.type, "content": message.content})
-    # return converted_messages
 
 
 _to_llm_prompt: Dict[LLMType, Callable] = {

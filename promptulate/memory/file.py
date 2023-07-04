@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Zeeland
+# Copyright (c) 2023 promptulate
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ class FileChatMemory(BaseChatMemory):
     cache: CushyOrmCache = Field(default_factory=CushyOrmCache)
 
     @validator("file_path", always=True)
-    def init_cache(cls, file_path: Optional[str]) -> str:
+    def init_cache(cls, file_path: Optional[str]) -> Optional[str]:
         if not file_path:
             return None
 
@@ -46,8 +46,16 @@ class FileChatMemory(BaseChatMemory):
         return file_path
 
     def load_message_set_from_memory(
-            self, recently_n: Optional[int] = None
+        self, recently_n: Optional[int] = None
     ) -> MessageSet:
+        """Load message from file memory
+
+        Args:
+            recently_n: load all messages if it is None, or return recently n messages.
+
+        Returns:
+            messages wrapping by MessageSet
+        """
         if self.conversation_id not in self.cache:
             raise EmptyMessageSetError()
         return MessageSet.from_listdict_data(self.cache[self.conversation_id])
