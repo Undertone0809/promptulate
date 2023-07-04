@@ -76,6 +76,8 @@ Modules是一组专门设计用于执行特定任务的模块，例如情感分�
 - `preset roles` 提供预设角色，进行定制化对话
 - `provider` 为framework和agent提供tools和其他细粒度能力的集成
 
+<img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230704180202.png"/>
+
 # 设计原则
 
 `promptulate`框架的设计原则包括：模块化、可扩展性、互操作性、鲁棒性、可维护性、安全性、效率和可用性。
@@ -101,5 +103,5 @@ Modules是一组专门设计用于执行特定任务的模块，例如情感分�
 # 贡献
 
 本人正在尝试一些更加完善的抽象模式，以更好地兼容该框架，以及外部工具的扩展使用，如果你有更好的建议，欢迎一起讨论交流。
-如果你想为这个项目做贡献，请先查看[当前开发计划](other/plan.md)
-和[参与贡献/开发者手册](other/contribution.md)。我很高兴看到更多的人参与并优化它。
+如果你想为这个项目做贡献，请先查看[当前开发计划](other/plan.md#开发计划)
+和[参与贡献/开发者手册](other/contribution.md#contribution)。我很高兴看到更多的人参与并优化它。

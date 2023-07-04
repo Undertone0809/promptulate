@@ -11,6 +11,8 @@
   - [tool 外部工具扩展](modules/tools.md#tools)
   - [preset 角色预设](modules/preset.md#preset-角色预设)
   - [client 客户端](modules/client.md#client)
+  - other
+    - [String Template 字符串格式化](modules/other/string_template.md#string-template)
 
 - Other
   - [知识扫盲](other/knowledge.md) 

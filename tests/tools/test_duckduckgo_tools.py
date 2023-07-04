@@ -29,7 +29,7 @@ class TestDuckDuckGoSearchAPIWrapper(TestCase):
 class TestDuckDuckGoSearchTool(TestCase):
     def test_query(self):
         tool = DuckDuckGoTool()
-        query = "请介绍一下promptulate框架"
+        query = "什么是promptulate框架"
         result = tool.run(query)
         logger.info(result)
 

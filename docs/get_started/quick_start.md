@@ -11,7 +11,10 @@ pip install -U promptulate
 
 ## 基本使用
 
-> 下列文档全部使用`OPENAI GPT3.5`进行测试
+> 下列教程全部使用`OPENAI gpt-3.5-turbo`进行测试
+
+该部分将会介绍`promptulate`中一些常用组件的基本使用，带你快速了解`promptulate`的架构组成，快速上手部分仅仅提供最简单的使用，如果你有开发复杂应用程序的需求，请跳转至各个模块进行功能的详细阅读。
+
 
 ### KEY配置
 
@@ -299,8 +302,8 @@ from promptulate.preset_roles import CustomPresetRole
 
 
 class SpiritualTeacher(CustomPresetRole):
-    name = '心灵导师'
-    description = """
+    name: str = "心灵导师"
+    description: str = """
     从现在起你是一个充满哲学思维的心灵导师，当我每次输入一个疑问时你需要用一句富有哲理的名言警句来回答我，并且表明作者和出处
     要求字数不少于15个字，不超过30字，每次只返回一句且不输出额外的其他信息，你需要使用中文和英文双语输出"""
 

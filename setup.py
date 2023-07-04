@@ -36,7 +36,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         'cushy-storage',
-        'pydantic',
+        'pydantic==1.10.0',
         'requests',
         'duckduckgo_search',
         'broadcast-service==1.3.2',

@@ -4,6 +4,8 @@ import time
 from typing import List, Dict
 
 from broadcast_service import broadcast_service
+from pydantic import Field, Extra
+
 from promptulate.llms.base import BaseLLM
 from promptulate.llms.openai import ChatOpenAI
 from promptulate.tools.arxiv.api_wrapper import ArxivAPIWrapper
@@ -13,7 +15,6 @@ from promptulate.tools.semantic_scholar import (
     SemanticScholarQueryTool,
     SemanticScholarReferenceTool,
 )
-from pydantic import Field
 
 __all__ = ["PaperSummaryTool"]
 logger = logging.getLogger(__name__)
@@ -27,8 +28,8 @@ def _init_paper_summary_llm():
 class PaperSummaryTool(BaseTool):
     """A powerful paper summary tool"""
 
-    name = "paper-summary"
-    description = (
+    name: str = "paper-summary"
+    description: str = (
         "A summary tool that can be used to obtain a paper summary, this tool will find"
         "top k paper and providing: 1.paper abstract 2.paper key sights 3.lessons learned"
         "in the paper 4.referenced papers and its url."
@@ -45,6 +46,12 @@ class PaperSummaryTool(BaseTool):
     arxiv_query_tool: ArxivQueryTool = Field(default_factory=ArxivQueryTool)
     summary_dic: Dict[str, str] = {}
     summary_counter: int = 0
+
+    class Config:
+        """Configuration for this pydantic object."""
+
+        extra = Extra.forbid
+        arbitrary_types_allowed = True
 
     def run(self, query: str, **kwargs) -> str:
         """A paper summary tool that passes in the article name (or arxiv id) and returns summary results

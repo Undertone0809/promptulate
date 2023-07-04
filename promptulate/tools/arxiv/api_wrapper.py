@@ -1,7 +1,7 @@
 from typing import List, Dict, Optional, Union
 
 import arxiv
-from pydantic import BaseModel, Extra, root_validator
+from pydantic import BaseModel, root_validator
 
 
 class ArxivQuerySet:
@@ -52,10 +52,9 @@ class ArxivAPIWrapper(BaseModel):
 
     class Config:
         """Configuration for this pydantic object."""
+        arbitrary_types_allowed = True
 
-        extra = Extra.forbid
-
-    @root_validator()
+    @root_validator(skip_on_failure=True)
     def validate_environment(cls, values: Dict) -> Dict:
         """Validate that python package exists in environment."""
         try:
@@ -68,10 +67,10 @@ class ArxivAPIWrapper(BaseModel):
         return values
 
     def _query(
-        self,
-        keyword: Optional[str] = None,
-        id_list: Union[List[str], str, None] = None,
-        num_results: Optional[int] = None,
+            self,
+            keyword: Optional[str] = None,
+            id_list: Union[List[str], str, None] = None,
+            num_results: Optional[int] = None,
     ) -> arxiv.Search:
         """
         query arxiv paper by keyword or id_list
@@ -99,11 +98,11 @@ class ArxivAPIWrapper(BaseModel):
         return search
 
     def query(
-        self,
-        keyword: Optional[str] = None,
-        id_list: Union[List[str], str, None] = None,
-        num_results: Optional[int] = None,
-        **kwargs,
+            self,
+            keyword: Optional[str] = None,
+            id_list: Union[List[str], str, None] = None,
+            num_results: Optional[int] = None,
+            **kwargs,
     ) -> List[Dict]:
         """
         Query arxiv paper by keyword or id_list. You can make ArxivQuerySet return the
