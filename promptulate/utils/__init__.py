@@ -27,6 +27,7 @@ from promptulate.utils.logger import get_logger, enable_log, enable_log_no_file
 from promptulate.utils.openai_key_pool import export_openai_key_pool
 from promptulate.utils.proxy import set_proxy_mode
 from promptulate.utils.singleton import Singleton, AbstractSingleton
+from promptulate.utils.string_template import StringTemplate
 
 __all__ = [
     "generate_conversation_id",
@@ -40,4 +41,5 @@ __all__ = [
     "Singleton",
     "AbstractSingleton",
     "export_openai_key_pool",
+    "StringTemplate"
 ]

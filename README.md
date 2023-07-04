@@ -73,6 +73,8 @@ Modules是一组专门设计用于执行特定任务的模块，例如情感分�
 - `preset roles` 提供预设角色，进行定制化对话
 - `provider` 为framework和agent提供tools和其他细粒度能力的集成
 
+<img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230704180202.png"/>
+
 # 设计原则
 
 promptulate框架的设计原则包括：模块化、可扩展性、互操作性、鲁棒性、可维护性、安全性、效率和可用性。

@@ -16,8 +16,8 @@ logger = get_logger()
 
 
 class ArxivQueryTool(BaseTool):
-    name = "arxiv-query"
-    description = (
+    name: str = "arxiv-query"
+    description: str = (
         "A query tool around Arxiv.org "
         "Useful for when you need to answer questions about Physics, Mathematics, "
         "Computer Science, Quantitative Biology, Quantitative Finance, Statistics, "
@@ -56,8 +56,8 @@ def _init_arxiv_reference_tool_llm():
 
 
 class ArxivReferenceTool(BaseTool):
-    name = "arxiv-reference"
-    description = (
+    name: str = "arxiv-reference"
+    description: str = (
         "Use this tool to find search related to the field."
         "Your input is a arxiv keyword query."
     )
@@ -140,8 +140,8 @@ def _init_arxiv_summary_tool_llm():
 
 
 class ArxivSummaryTool(BaseTool):
-    name = "arxiv-summary"
-    description = (
+    name: str = "arxiv-summary"
+    description: str = (
         "A summary tool that can be used to obtain a paper summary, listing "
         "key insights and lessons learned in the paper, and references in the paper"
         "Your input is a arxiv keyword query."

@@ -8,8 +8,8 @@ from promptulate.utils.core_utils import listdict_to_string
 
 
 class SemanticScholarQueryTool(BaseTool):
-    name = "semantic-scholar-query"
-    description = (
+    name: str = "semantic-scholar-query"
+    description: str = (
         "A query tool around Semantic Scholar."
         "Useful for when you need to answer questions about Physics, Mathematics, "
         "Computer Science, Quantitative Biology, Quantitative Finance, Statistics, "
@@ -30,8 +30,8 @@ class SemanticScholarQueryTool(BaseTool):
 
 
 class SemanticScholarReferenceTool(BaseTool):
-    name = "semantic-scholar-reference-tool"
-    description = ""
+    name: str = "semantic-scholar-reference-tool"
+    description: str = ""
     api_wrapper: SemanticScholarAPIWrapper = Field(
         default_factory=SemanticScholarAPIWrapper
     )
@@ -44,8 +44,8 @@ class SemanticScholarReferenceTool(BaseTool):
 
 
 class SemanticScholarCitationTool(BaseTool):
-    name = "semantic-scholar-citation-tool"
-    description = ""
+    name: str = "semantic-scholar-citation-tool"
+    description: str = ""
     api_wrapper: SemanticScholarAPIWrapper = Field(
         default_factory=SemanticScholarAPIWrapper
     )
