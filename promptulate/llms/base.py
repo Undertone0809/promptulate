@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Zeeland
+# Copyright (c) 2023 promptulate
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,14 +18,15 @@
 # Contact Email: zeeland@foxmail.com
 
 from abc import ABC, abstractmethod
-from typing import Any
 
 from pydantic import BaseModel, Extra
 
-from promptulate.schema import AssistantMessage, LLMPrompt
+from promptulate.schema import AssistantMessage, MessageSet, LLMType
 
 
 class BaseLLM(BaseModel, ABC):
+    llm_type: LLMType
+
     class Config:
         """Configuration for this pydantic object."""
 
@@ -33,13 +34,9 @@ class BaseLLM(BaseModel, ABC):
         arbitrary_types_allowed = True
 
     @abstractmethod
-    def generate_prompt(self, prompts: LLMPrompt) -> AssistantMessage:
+    def generate_prompt(self, prompts: MessageSet, **kwargs) -> AssistantMessage:
         """llm generate prompt"""
 
     @abstractmethod
-    def _parse_prompt(self, prompts: LLMPrompt) -> Any:
-        """parse prompt"""
-
-    @abstractmethod
-    def __call__(self, prompt, *args, **kwargs):
+    def __call__(self, prompt: str, *args, **kwargs):
         """input string prompt return answer"""

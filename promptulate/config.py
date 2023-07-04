@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Zeeland
+# Copyright (c) 2023 promptulate
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,10 +19,11 @@
 
 import os
 from typing import Optional
+
 from promptulate import utils
-from promptulate.utils.singleton import Singleton
-from promptulate.utils.openai_key_pool import OpenAIKeyPool
 from promptulate.utils.logger import get_logger
+from promptulate.utils.openai_key_pool import OpenAIKeyPool
+from promptulate.utils.singleton import Singleton
 
 PROXY_MODE = ["off", "custom", "promptulate"]
 logger = get_logger()
@@ -39,7 +40,8 @@ class Config(metaclass=Singleton):
         self.enable_cache: bool = True
         self._proxy_mode: str = PROXY_MODE[0]
         self._proxies: Optional[dict] = None
-        self.openai_url = "https://api.openai.com/v1/chat/completions"
+        self.openai_chat_api_url = "https://api.openai.com/v1/chat/completions"
+        self.openai_completion_api_url = "https://api.openai.com/v1/completions"
         self.openai_proxy_url = "https://chatgpt-api.shn.hk/v1/"  # FREE API
         self.key_default_retry_times = 5
         """If llm(like OpenAI) unable to obtain data, retry request until the data is obtained."""
@@ -56,13 +58,13 @@ class Config(metaclass=Singleton):
         raise ValueError("OPENAI API key is not provided. Please set your key.")
 
     def get_openai_api_key(self, model: str) -> str:
+        """Get openai key from KeyPool and environ"""
         if self.enable_cache:
             openai_key_pool: OpenAIKeyPool = OpenAIKeyPool()
             key = openai_key_pool.get(model)
             if key:
                 return key
         return self.openai_api_key
-
 
     def get_key_retry_times(self, model: str) -> int:
         if self.enable_cache:
@@ -95,11 +97,18 @@ class Config(metaclass=Singleton):
             utils.get_cache()["PROXIES"] = value
 
     @property
-    def openai_request_url(self) -> str:
+    def openai_chat_request_url(self) -> str:
         if self.proxy_mode == PROXY_MODE[2]:
             self.proxies = None
             return self.openai_proxy_url
-        return self.openai_url
+        return self.openai_chat_api_url
+
+    @property
+    def openai_completion_request_url(self) -> str:
+        if self.proxy_mode == PROXY_MODE[2]:
+            self.proxies = None
+            return f"{self.openai_proxy_url}completions"
+        return self.openai_completion_api_url
 
     def set_proxy_mode(self, mode: str, proxies: Optional[dict] = None):
         self.proxy_mode = mode

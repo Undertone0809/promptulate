@@ -1,23 +1,17 @@
-import enum
 from abc import abstractmethod
-from typing import List, Dict, Callable
+from enum import Enum
+from typing import List, Dict, Callable, Any, Optional
 
 from pydantic import BaseModel, Field
 
-from promptulate.utils import generate_conversation_id
-
 __all__ = [
     "BaseMessage",
-    "BaseChatMessageHistory",
+    "CompletionMessage",
     "SystemMessage",
     "UserMessage",
     "AssistantMessage",
-    "ChatMessageHistory",
-    "LLMPrompt",
-    "ListDictPrompt",
+    "MessageSet",
     "init_chat_message_history",
-    'parse_llm_prompt_to_dict',
-    'parse_llm_dict_to_prompt'
 ]
 
 
@@ -31,6 +25,14 @@ class BaseMessage(BaseModel):
     @abstractmethod
     def type(self) -> str:
         """Type of the message, used for serialization."""
+
+
+class CompletionMessage(BaseMessage):
+    """Type of completion message. Used in OpenAI currently"""
+
+    @property
+    def type(self) -> str:
+        return "completion"
 
 
 class SystemMessage(BaseMessage):
@@ -58,34 +60,80 @@ class AssistantMessage(BaseMessage):
         return "assistant"
 
 
-class BaseChatMessageHistory(BaseModel):
-    """Base interface for chat message history
-    See `ChatMessageHistory` for default implementation.
+MESSAGE_TYPE = {
+    "completion": CompletionMessage,
+    "system": SystemMessage,
+    "user": UserMessage,
+    "assistant": AssistantMessage,
+}
+
+
+class LLMType(str, Enum):
+    """All LLM type here"""
+
+    OpenAI = "OpenAI"
+    ChatOpenAI = "ChatOpenAI"
+
+
+class MessageSet(BaseModel):
+    """MessageSet can be used in Memory, LLMs, Framework and some else.
+    It's a universal chat message format in promptulate.
     """
 
-    messages: List[BaseMessage]
-    conversation_id: str
-
-    @abstractmethod
-    def add_system_message(self, message):
-        """add a system message"""
-
-    @abstractmethod
-    def add_user_message(self, message):
-        """add a user message"""
-
-    @abstractmethod
-    def add_ai_message(self, message):
-        """add a ai message"""
-
-    @abstractmethod
-    def clear(self):
-        """clear all message"""
-
-
-class ChatMessageHistory(BaseModel):
     messages: List[BaseMessage] = []
-    conversation_id: str = ""
+    conversation_id: Optional[str] = None
+    """Used to memory"""
+
+    @classmethod
+    def from_listdict_data(cls, value: List[Dict]) -> "MessageSet":
+        """initialize MessageSet from a List[Dict] data
+
+        Args:
+            value(List[Dict]): the example is as follow:
+                [
+                    {"type": "user", "content": "This is a message1."},
+                    {"type": "assistant", "content": "This is a message2."}
+                ]
+
+        Returns:
+            initialized MessageSet
+        """
+        messages: List[BaseMessage] = [
+            MESSAGE_TYPE[item["role"]](content=item["content"]) for item in value
+        ]
+        return cls(messages=messages)
+
+    @property
+    def listdict_messages(self) -> List[Dict]:
+        converted_messages = []
+        for message in self.messages:
+            converted_messages.append(
+                {"role": message.type, "content": message.content}
+            )
+        return converted_messages
+
+    @property
+    def memory_messages(self) -> List[Dict]:
+        return self.listdict_messages
+
+    def to_llm_prompt(self, llm_type: LLMType) -> Any:
+        """Convert the MessageSet messages to specified llm prompt"""
+        if not llm_type:
+            ValueError(
+                "Missing llm_type, you should pass a llm_type if you want to use llm_prompt"
+            )
+        return _to_llm_prompt[llm_type](self)
+
+    @property
+    def string_messages(self) -> str:
+        """Convert the message to a string type, it can be used as a prompt for OpenAI completion."""
+        string_result = ""
+        for message in self.messages:
+            string_result += f"{message.content}\n"
+        return string_result
+
+    def add_completion_message(self, message: str) -> None:
+        self.messages.append(CompletionMessage(content=message))
 
     def add_system_message(self, message: str) -> None:
         self.messages.append(SystemMessage(content=message))
@@ -96,97 +144,24 @@ class ChatMessageHistory(BaseModel):
     def add_ai_message(self, message: str) -> None:
         self.messages.append(AssistantMessage(content=message))
 
-    def clear(self) -> None:
-        self.messages = []
 
-    @property
-    def listdict_message(self) -> List[dict]:
-        listdict_message: List[dict] = []
-        for message in self.messages:
-            listdict_message.append({"role": message.type, "content": message.content})
-        return listdict_message
-
-
-def init_chat_message_history(system_content, user_content) -> ChatMessageHistory:
+def init_chat_message_history(system_content, user_content) -> MessageSet:
     messages = [
         SystemMessage(content=system_content),
         UserMessage(content=user_content),
     ]
-    return ChatMessageHistory(
-        messages=messages, conversation_id=generate_conversation_id()
-    )
+    return MessageSet(messages=messages)
 
 
-class LLMPrompt(BaseModel):
-    messages: List[BaseMessage]
+def _to_openai_llm_prompt(message_set: MessageSet) -> str:
+    return message_set.string_messages
 
 
-class ListDictPrompt(BaseModel):
-    """list dict type prompt. It can convert to ChatMessageHistory type."""
-
-    messages: List[Dict[str, str]]
-
-    @property
-    def chat_message_history(self) -> ChatMessageHistory:
-        message_history = ChatMessageHistory()
-        for message in self.messages:
-            role = message.get("role")
-            content = message.get("content")
-            if role == "system":
-                message_history.messages.append(SystemMessage(content=content))
-            elif role == "user":
-                message_history.messages.append(UserMessage(content=content))
-            elif role == "assistant":
-                message_history.messages.append(AssistantMessage(content=content))
-        return message_history
+def _to_chat_openai_llm_prompt(message_set: MessageSet) -> List[Dict]:
+    return message_set.listdict_messages
 
 
-class LLMType(enum.Enum):
-    OpenAI = "OpenAI"
-
-
-def _parse_openai_prompt_to_dict(prompts: LLMPrompt) -> List[Dict]:
-    converted_messages: List[dict] = []
-    for message in prompts.messages:
-        converted_messages.append({"role": message.type, "content": message.content})
-    return converted_messages
-
-
-_parse_llm_prompt_to_dict: Dict[LLMType, Callable] = {
-    LLMType.OpenAI: _parse_openai_prompt_to_dict
+_to_llm_prompt: Dict[LLMType, Callable] = {
+    LLMType.OpenAI: _to_openai_llm_prompt,
+    LLMType.ChatOpenAI: _to_chat_openai_llm_prompt,
 }
-
-
-def _parse_dict_to_openai_prompt(prompts: List[Dict[str, str]]) -> LLMPrompt:
-    messages: List[BaseMessage] = []
-    for prompt in prompts:
-        if prompt["type"] == "system":
-            messages.append(SystemMessage(content=prompt["message"]))
-        elif prompt["type"] == "user":
-            messages.append(UserMessage(content=prompt["message"]))
-        elif prompt["type"] == "assistant":
-            messages.append(AssistantMessage(content=prompt["message"]))
-    return LLMPrompt(messages=messages)
-
-
-_parse_llm_dict_to_prompt: Dict[LLMType, Callable] = {
-    LLMType.OpenAI: _parse_dict_to_openai_prompt
-}
-
-
-def parse_llm_prompt_to_dict(
-        prompts: LLMPrompt, llm_type: LLMType = LLMType.OpenAI
-) -> List[Dict]:
-    """This method is compatible with different LLMs.
-    You can convert LLMPrompt Data to Json Data of different LLMs format.
-    """
-    return _parse_llm_prompt_to_dict[llm_type](prompts)
-
-
-def parse_llm_dict_to_prompt(
-        prompts: List[Dict[str, str]], llm_type: LLMType = LLMType.OpenAI
-) -> LLMPrompt:
-    """This method is compatible with different LLMs.
-    You can convert JSON Data to LLMPrompt Data of different LLMs format.
-    """
-    return _parse_llm_dict_to_prompt[llm_type](prompts)

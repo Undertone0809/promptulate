@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Zeeland
+# Copyright (c) 2023 promptulate
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -65,11 +65,20 @@ class OpenAIKeyPool(BaseModel):
                 self.cache.query(OpenAIKey).filter(key=key, model=model).first()
             )
         else:
-            openai_key: List[OpenAIKey] = self.cache.query(OpenAIKey).filter(key=key).all()
+            openai_key: List[OpenAIKey] = (
+                self.cache.query(OpenAIKey).filter(key=key).all()
+            )
         self.cache.delete(openai_key)
 
     def get_num(self, model: str) -> int:
         return len(self.cache.query(OpenAIKey).filter(model=model).all())
+
+    def all(self) -> List[Dict]:
+        results = []
+        openai_keys = self.cache.query(OpenAIKey).all()
+        for openai_key in openai_keys:
+            results.append(openai_key.__dict__)
+        return results
 
 
 def export_openai_key_pool(keys: List[Dict[str, str]]):

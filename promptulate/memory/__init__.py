@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Zeeland
+# Copyright (c) 2023 promptulate
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@
 # Contact Email: zeeland@foxmail.com
 
 from promptulate.memory.buffer import BufferChatMemory
-from promptulate.memory.local_cache import LocalCacheChatMemory
+from promptulate.memory.file import FileChatMemory
 
 __all__ = [
     'BufferChatMemory',
-    'LocalCacheChatMemory'
+    'FileChatMemory'
 ]

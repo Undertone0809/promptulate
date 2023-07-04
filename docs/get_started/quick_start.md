@@ -30,7 +30,7 @@ os.environ['OPENAI_API_KEY'] = "your-key"
 
 ### LLM
 
-> 详细文档请跳转[LLM](../modules/llm.md#llm)
+> 详细文档请跳转[LLM](modules/llm.md#llm)
 
 `promptulate`的架构设计可以轻松兼容不同的大语言模型扩展，在`promptulate`中，llm负责最基本的内容生成部分，因此为最基础的组件。
 
@@ -159,7 +159,7 @@ Hi there, here is promptulate chat terminal.
 [output] 很高兴你觉得如此，我会尽力为您提供最佳的服务。有任何需要帮助的问题，请尽管问我。
 ```
 
-> 需要注意的是，当前client只支持OpenAI的LLM，后续将会开放更多LLM，详情请查看[开发计划](../other/plan.md)
+> 需要注意的是，当前client只支持OpenAI的LLM，后续将会开放更多LLM，详情请查看[开发计划](other/plan.md)
 
 ### Conversation
 
@@ -188,12 +188,12 @@ conversation.predict("你知道鸡哥的《只因你太美》吗？")
 
 ```python
 from promptulate import Conversation
-from promptulate.memory import LocalCacheChatMemory
+from promptulate.memory import FileChatMemory
 from promptulate.llms import OpenAI
 
 
 def main():
-    memory = LocalCacheChatMemory()
+    memory = FileChatMemory()
     llm = OpenAI(model="gpt-3.5-turbo", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)
     conversation = Conversation(llm=llm, memory=memory)
     ret = conversation.predict("你知道鸡哥的著作《只因你太美》吗？")
@@ -222,7 +222,7 @@ if __name__ == '__main__':
 
 上面的示例中，我们使用
 
-- `LocalCacheChatMemory()`进行聊天记录的本地化文件存储，文件存储形式默认是以json的形式进行存储的，保存在`cache`中。
+- `FileChatMemory()`进行聊天记录的本地化文件存储，文件存储形式默认是以json的形式进行存储的，保存在`cache`中。
 - `OpenAI(model="gpt-3.5-turbo", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)`
   进行初始化一个大模型，里面是OpenAI需要传入的一些参数，具体可以查看[https://platform.openai.com/docs/api-reference/chat/create](https://platform.openai.com/docs/api-reference/chat/create)
   查看具体含义，这里不做详细讲解，如果你不想理会这些参数，你也可以直接`llm = OpenAI()`就好啦，默认使用`gpt-3.5-turbo`

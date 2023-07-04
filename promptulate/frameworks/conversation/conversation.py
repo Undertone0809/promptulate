@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Zeeland
+# Copyright (c) 2023 promptulate
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,14 +17,14 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from typing import Optional, Union
+from typing import Optional, Union, Dict, Any
 
-from pydantic import Field
+from pydantic import Field, validator
 
 from promptulate import utils
 from promptulate.config import Config
 from promptulate.frameworks.schema import BasePromptFramework
-from promptulate.llms import OpenAI
+from promptulate.llms import ChatOpenAI
 from promptulate.llms.base import BaseLLM
 from promptulate.memory import BufferChatMemory
 from promptulate.memory.base import BaseChatMemory
@@ -35,12 +35,11 @@ from promptulate.provider.mixins import (
     DeriveHistoryMessageMixin,
 )
 from promptulate.schema import (
-    LLMPrompt,
+    MessageSet,
     AssistantMessage,
-    ChatMessageHistory,
     init_chat_message_history,
 )
-from promptulate.tips import EmptyChatMessageHistoryTip
+from promptulate.tips import EmptyMessageSetError
 from promptulate.utils.core_utils import record_time
 
 CFG = Config()
@@ -53,7 +52,7 @@ class Conversation(
     """
     You can use Conversation start a conversation. Moreover, you can pass some parameters to enhance it.
 
-    Args
+    Attributes
         role: preset role. Default is default role.
         llm: default is OpenAI GPT3.5. You can choose other llm.
         conversation_id: conversation id. Default is None
@@ -68,30 +67,54 @@ class Conversation(
     """
 
     conversation_id: Optional[str] = None
-    llm: BaseLLM = Field(default_factory=OpenAI)
+    llm: BaseLLM = Field(default_factory=ChatOpenAI)
     enable_stream: bool = False  # streaming transmission
     role: Union[str, CustomPresetRole] = "default-role"
     memory: BaseChatMemory = Field(default_factory=BufferChatMemory)
 
+    @validator("conversation_id", always=True)
+    def init_conversation_id(
+        cls, conversation_id: Optional[str], values: Dict[str, Any]
+    ) -> Optional[str]:
+        """initialize self.conversation_id and memory.conversation_id"""
+        if not conversation_id:
+            return None
+
+        assert conversation_id.isdigit(), "conversation_id must a digit type string"
+        if "memory" in values and values["memory"]:
+            cls.memory.conversation_id = conversation_id
+        return conversation_id
+
+    @validator("memory", always=True)
+    def init_memory(
+        cls, memory: BaseChatMemory, values: Dict[str, Any]
+    ) -> BaseChatMemory:
+        """check whether exist conversation_id before initialize memory"""
+        if "conversation_id" in values and values["conversation_id"]:
+            memory.conversation_id = values["conversation_id"]
+        else:
+            values["conversation_id"] = memory.conversation_id
+            cls.conversation_id = memory.conversation_id
+        return memory
+
     @record_time()
-    def predict(self, prompt: str) -> str:
+    def predict(self, prompt: str, **kwargs) -> str:
         try:
-            messages_history: ChatMessageHistory = (
-                self.memory.load_conversation_from_memory(self.conversation_id)
-            )
+            messages_history: MessageSet = self.memory.load_message_set_from_memory()
             messages_history.add_user_message(message=prompt)
-        except EmptyChatMessageHistoryTip as e:
+        except EmptyMessageSetError as e:
             messages_history = init_chat_message_history(
                 get_preset_role_prompt(self.role), prompt
             )
-            self.conversation_id = messages_history.conversation_id
-            self.memory.save_conversation_to_memory(messages_history)
+            self.memory.save_message_set_to_memory(messages_history)
         logger.debug(
             f"[promptulate Conversation] conversation_id: <{self.conversation_id}> messages: <{messages_history.messages}>"
         )
-        answer: AssistantMessage = self.llm.generate_prompt(
-            LLMPrompt(messages=messages_history.messages)
-        )
+        prompt_params = {"prompts": messages_history}
+        if "stop" in kwargs:
+            prompt_params.update({"update": kwargs["stop"]})
+
+        answer: AssistantMessage = self.llm.generate_prompt(**prompt_params)
         messages_history.messages.append(answer)
-        self.memory.save_conversation_to_memory(messages_history)
+        self.memory.save_message_set_to_memory(messages_history)
         return answer.content

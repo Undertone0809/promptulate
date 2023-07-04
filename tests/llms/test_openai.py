@@ -1,6 +1,7 @@
 from unittest import TestCase
-from promptulate.schema import LLMPrompt, UserMessage
-from promptulate.llms.openai import OpenAI
+
+from promptulate.llms.openai import OpenAI, ChatOpenAI
+from promptulate.schema import MessageSet, UserMessage
 from promptulate.utils.logger import get_logger, enable_log
 
 enable_log()
@@ -10,15 +11,67 @@ logger = get_logger()
 class TestOpenAI(TestCase):
     def test_call(self):
         llm = OpenAI()
-        result = llm("What is LLM")
-        logger.info(result)
+        prompt = """
+        Please strictly output the following content.
+        ```
+        [start] This is a test [end]
+        ```
+        """
+        result = llm(prompt)
+        self.assertIsNotNone(result)
+        self.assertTrue("[start] This is a test [end]")
+
+    def test_call_with_stop(self):
+        llm = OpenAI(temperature=0)
+        prompt = """
+        Please strictly output the following content.
+        ```
+        [start] This is a test [end]
+        ```
+        """
+        result = llm(prompt, stop=["[end]"])
+        self.assertIsNotNone(result)
+        self.assertTrue("This is a test" in result)
+
+    def test_generate_prompt_by_retry(self):
+        pass
+
+
+class TestOpenAIChat(TestCase):
+    def test_call(self):
+        llm = ChatOpenAI()
+        prompt = """
+        Please strictly output the following content.
+        ```
+        [start] This is a test [end]
+        ```
+        """
+        result = llm(prompt)
+        self.assertIsNotNone(result)
+        self.assertTrue("[start] This is a test [end]")
+
+    def test_call_with_stop(self):
+        llm = ChatOpenAI(temperature=0)
+        prompt = """
+        Please strictly output the following content.
+        ```
+        [start] This is a test [end]
+        ```
+        """
+        result = llm(prompt, stop=["test"])
+        self.assertTrue("test [end]" not in result)
         self.assertIsNotNone(result)
 
     def test_generate_prompt(self):
-        llm = OpenAI()
-        user_message = UserMessage(content="What is LLM")
-        result = llm.generate_prompt(LLMPrompt(messages=[user_message]))
-        logger.info(result)
+        llm = ChatOpenAI()
+        prompt = """
+        Please strictly output the following content.
+        ```
+        [start] This is a test [end]
+        ```
+        """
+        user_message = UserMessage(content=prompt)
+        result = llm.generate_prompt(MessageSet(messages=[user_message]))
         self.assertIsNotNone(result)
 
     def test_generate_prompt_by_retry(self):

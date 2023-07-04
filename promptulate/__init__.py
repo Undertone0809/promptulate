@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Zeeland
+# Copyright (c) 2023 promptulate
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,18 +18,14 @@
 # Contact Email: zeeland@foxmail.com
 
 from promptulate.frameworks import Conversation
+from promptulate.schema import UserMessage, AssistantMessage, SystemMessage
 from promptulate.utils import enable_log, enable_log_no_file
-from promptulate.schema import UserMessage, AssistantMessage, SystemMessage, BaseChatMessageHistory, LLMPrompt
 
 __all__ = [
-    'Conversation',
-
-    'enable_log',
-    'enable_log_no_file',
-
-    'SystemMessage',
-    'UserMessage',
-    'AssistantMessage',
-    'BaseChatMessageHistory',
-    'LLMPrompt',
+    "Conversation",
+    "enable_log",
+    "enable_log_no_file",
+    "SystemMessage",
+    "UserMessage",
+    "AssistantMessage",
 ]

@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Zeeland
+# Copyright (c) 2023 promptulate
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,11 +17,16 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-__all__ = ["EmptyChatMessageHistoryTip", "NetWorkError"]
+__all__ = ["EmptyMessageSetError", "OpenAIError", "NetWorkError"]
 
 
-class EmptyChatMessageHistoryTip(Exception):
+class EmptyMessageSetError(Exception):
     pass
+
+
+class OpenAIError(Exception):
+    def __init__(self, msg: str):
+        super().__init__(f"<OpenAI> could not get data correctly, reasons: {msg}")
 
 
 class NetWorkError(Exception):
