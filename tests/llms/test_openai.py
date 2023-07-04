@@ -71,7 +71,7 @@ class TestOpenAIChat(TestCase):
         ```
         """
         user_message = UserMessage(content=prompt)
-        result = llm.generate_prompt(MessageSet(messages=[user_message]))
+        result = llm.predict(MessageSet(messages=[user_message]))
         self.assertIsNotNone(result)
 
     def test_generate_prompt_by_retry(self):

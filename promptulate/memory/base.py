@@ -37,7 +37,8 @@ from promptulate.schema import ChatMessageHistory
 __all__ = ['BaseChatMemory']
 
 
-class BaseChatMemory(AbstractSingleton):
+
+class BaseChatMemory(BaseModel):
     """
     Base class for store chat message. By implementing this class, you can implement
     message storage on different storage media. Actually, every Chat Memory is a singleton

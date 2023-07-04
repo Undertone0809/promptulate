@@ -119,9 +119,9 @@ class OpenAI(BaseOpenAI):
         message_set = MessageSet(llm_type=LLMType.OpenAI)
         message_set.messages.append(CompletionMessage(content=preset))
         message_set.messages.append(CompletionMessage(content=prompt))
-        return self.generate_prompt(message_set, stop).content
+        return self.predict(message_set, stop).content
 
-    def generate_prompt(
+    def predict(
         self, prompts: MessageSet, stop: Optional[List[str]] = None
     ) -> Optional[AssistantMessage]:
         api_key = self.api_key
@@ -159,7 +159,7 @@ class OpenAI(BaseOpenAI):
         logger.debug("[promptulate OpenAI] retry to get response")
         if self.enable_retry and self.retry_counter < self.retry_times:
             self.retry_counter += 1
-            return self.generate_prompt(prompts, stop)
+            return self.predict(prompts, stop)
 
         logger.error(
             f"[promptulate OpenAI] Has retry {self.retry_times}, but all failed."
@@ -204,9 +204,9 @@ class ChatOpenAI(BaseOpenAI):
                 UserMessage(content=prompt),
             ]
         )
-        return self.generate_prompt(message_set, stop).content
+        return self.predict(message_set, stop).content
 
-    def generate_prompt(
+    def predict(
         self, prompts: MessageSet, stop: Optional[List[str]] = None
     ) -> Optional[AssistantMessage]:
         api_key = self.api_key
@@ -244,7 +244,7 @@ class ChatOpenAI(BaseOpenAI):
         logger.debug("[promptulate OpenAI] retry to get response")
         if self.enable_retry and self.retry_counter < self.retry_times:
             self.retry_counter += 1
-            return self.generate_prompt(prompts, stop)
+            return self.predict(prompts, stop)
 
         logger.error(
             f"[promptulate OpenAI] Has retry {self.retry_times}, but all failed."
