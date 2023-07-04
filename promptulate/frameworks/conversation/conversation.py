@@ -114,7 +114,7 @@ class Conversation(
         if "stop" in kwargs:
             prompt_params.update({"update": kwargs["stop"]})
 
-        answer: AssistantMessage = self.llm.generate_prompt(**prompt_params)
+        answer: AssistantMessage = self.llm.predict(**prompt_params)
         messages_history.messages.append(answer)
         self.memory.save_message_set_to_memory(messages_history)
         return answer.content

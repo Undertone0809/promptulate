@@ -34,7 +34,7 @@ class BaseLLM(BaseModel, ABC):
         arbitrary_types_allowed = True
 
     @abstractmethod
-    def generate_prompt(self, prompts: MessageSet, **kwargs) -> AssistantMessage:
+    def predict(self, prompts: MessageSet, **kwargs) -> AssistantMessage:
         """llm generate prompt"""
 
     @abstractmethod

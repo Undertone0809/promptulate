@@ -39,7 +39,7 @@ class SummarizerMixin(BaseMixin):
     ):
         message_history: MessageSet = self.memory.load_message_set_from_memory()
         message_history.messages.append(UserMessage(content=summary_prompt))
-        assistant_answer: AssistantMessage = self.llm.generate_prompt(message_history)
+        assistant_answer: AssistantMessage = self.llm.predict(message_history)
         if enable_embed_message:
             self.embed_message(assistant_answer, message_history)
         return assistant_answer.content
@@ -51,7 +51,7 @@ class SummarizerMixin(BaseMixin):
     ):
         message_history: MessageSet = self.memory.load_message_set_from_memory()
         message_history.messages.append(UserMessage(content=summary_topic_prompt))
-        assistant_answer: AssistantMessage = self.llm.generate_prompt(message_history)
+        assistant_answer: AssistantMessage = self.llm.predict(message_history)
         if enable_embed_message:
             self.embed_message(assistant_answer, message_history)
         return assistant_answer.content
@@ -80,7 +80,7 @@ class TranslatorMixin(BaseMixin):
                 content=f"{prompt}. Please answer question using {country} official language. "
             )
         )
-        assistant_answer: AssistantMessage = self.llm.generate_prompt(message_history)
+        assistant_answer: AssistantMessage = self.llm.predict(message_history)
         if enable_embed_message:
             self.embed_message(assistant_answer, message_history)
         return assistant_answer.content

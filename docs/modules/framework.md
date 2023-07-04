@@ -8,10 +8,9 @@
 
 ## Conversation
 
-LLM组件只提供了最基础的对话生成内容，但是其并不提供上下文对话、文章总结、角色预设等更加复杂的功能，所以接下来我们介绍功能更为强大的`Conversation`。
+llm组件只提供了最基础的对话生成内容，但是其并不提供上下文对话、文章总结、角色预设等更加复杂的功能，所以接下来我们介绍功能更为强大的`Conversation`。
 
-`Conversation` 是`framework`中最基础的组件，其支持prompt生成、上下文对话、对话存储、角色预设的基本功能，此外，`provider`
-为其提供了语言翻译、markdown数据导出、对话总结、标题总结等扩展功能。
+`Conversation` 是`framework`中最基础的组件，其支持prompt生成、上下文对话、对话存储、角色预设的基本功能，此外，`provider`为其提供了语言翻译、markdown数据导出、对话总结、标题总结等扩展功能。
 
 ### 基本使用
 
@@ -173,7 +172,7 @@ list(map(lambda message: print(messages), messages.listdict_messages))
 ```
 
 
-如果你仔细看过`promptulate`的源码，你会发现在`v1.3.0`版本升级之后，`llm`的功能变强了，因为其`generate_prompt`可以接受一个MessageSet作为参数，这意味着在某些时候，你可以使用`llm`代替`Conversation`使用，下面的示例展示了这种实现。
+如果你仔细看过`promptulate`的源码，你会发现在`v1.3.0`版本升级之后，`llm`的功能变强了，因为其`predict`可以接受一个MessageSet作为参数，这意味着在某些时候，你可以使用`llm`代替`Conversation`使用，下面的示例展示了这种实现。
 
 ```python
 import json
@@ -205,9 +204,13 @@ messages = [
 chat_history = MessageSet(messages=messages)
 
 llm = OpenAI(temperature=0)
-answer: AssistantMessage = llm.generate_prompt(chat_history)
+answer: AssistantMessage = llm.predict(chat_history)
 chat_history.messages.append(answer)
 print(json.dumps(chat_history.listdict_messages))
 ```
 
 > 后续我们会专门开设一篇文档介绍MessageSet，如果你有更好的建议，我们非常期待你的想法！欢迎提出issue。
+
+
+## Chain
+在[llm](modules/llm.md#llm的类型)的部分我们介绍过文本推理型与对话型llm的区别，
