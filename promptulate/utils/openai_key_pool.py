@@ -33,9 +33,41 @@ class OpenAIKey(BaseORMModel):
         self.key = key
 
 
+def _parse_openai_keys(keys: List[Dict[str, str]]) -> List[OpenAIKey]:
+    """parse list of openai keys to OpenAIKey
+
+    Args:
+        keys: There are 2 kind of method to input keys
+        1.
+            keys = [
+                {"model": "gpt-3.5-turbo","keys": "key1,key2,key3"},
+                {"model": "gpt-4.0","keys": "key4,key5,key6"},
+            ]
+        2.
+            keys = [
+            {"model": "gpt-3.5-turbo","key": "key1"},
+            {"model": "gpt-3.5-turbo","key": "key2"},
+            {"model": "gpt-4.0","key": "key3"},
+        ]
+    Returns:
+        List of OpenAIKey
+    """
+    openai_keys: List[OpenAIKey] = []
+    for key in keys:
+        if "key" in key and key["key"]:
+            openai_keys.append(OpenAIKey(key["model"], key["key"]))
+        elif "keys" in key and key["keys"]:
+            _keys = key["keys"].split(",")
+            for _key in _keys:
+                openai_keys.append(OpenAIKey(key["model"], _key))
+        else:
+            raise ValueError("Key type error, your field name must be `key` or `keys`")
+    return openai_keys
+
+
 @singleton()
 class OpenAIKeyPool(BaseModel):
-    """todo provide key expiration check"""
+    """todo provide key expiration check and token balance check"""
 
     cache: CushyOrmCache = Field(default_factory=get_cache)
 
@@ -52,12 +84,12 @@ class OpenAIKeyPool(BaseModel):
         return openai_key.key
 
     def set(self, keys: List[Dict[str, str]]):
-        openai_keys = list(map(lambda key: OpenAIKey(key["model"], key["key"]), keys))
-        self.cache.set(openai_keys)
+        """Set list of key to cache, you can see parameter description from `_parse_openai_keys()`"""
+        self.cache.set(_parse_openai_keys(keys))
 
-    def add(self, key: str, model: str):
-        if not self.cache.query(OpenAIKey).filter(key=key, model=model).first():
-            self.cache.add(OpenAIKey(model, key))
+    def add(self, keys: List[Dict[str, str]]):
+        """add list of keys to cache, you can see parameter description from `_parse_openai_keys()`"""
+        self.cache.add(_parse_openai_keys(keys))
 
     def delete(self, key: str, model: Optional[str] = None):
         if model:
@@ -87,5 +119,4 @@ def export_openai_key_pool(keys: List[Dict[str, str]]):
 
 def add_key_to_key_pool(keys: List[Dict[str, str]]):
     openai_key_pool = OpenAIKeyPool()
-    for key_info in keys:
-        openai_key_pool.add(**key_info)
+    openai_key_pool.add(keys)

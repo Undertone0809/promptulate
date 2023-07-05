@@ -113,10 +113,8 @@ from promptulate.llms import OpenAI
 from promptulate.utils import export_openai_key_pool
 
 keys = [
-    {"model": "gpt-3.5-turbo", "key": "xxxxx"},
-    {"model": "gpt-3.5-turbo", "key": "xxxxx"},
-    {"model": "gpt-3.5-turbo", "key": "xxxxx"},
-    {"model": "gpt-4", "key": "xxxxx"},
+    {"model": "gpt-3.5-turbo", "keys": "key1,key2,key3"},
+    {"model": "gpt-4", "keys": "xxxxx"},
 ]
 
 export_openai_key_pool(keys)
