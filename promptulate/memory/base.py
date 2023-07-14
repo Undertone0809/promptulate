@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Zeeland
+# Copyright (c) 2023 promptulate
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,11 +30,17 @@ class BaseMemory(BaseModel):
     store: Any
     """storage medium"""
 
-from promptulate import utils
-from promptulate.utils import AbstractSingleton
-from promptulate.schema import ChatMessageHistory
+    def query(self, key: str) -> Any:
+        ...
 
-__all__ = ['BaseChatMemory']
+    def update(self, key: str, value: str) -> Any:
+        ...
+
+    def clear(self, key: str) -> Any:
+        ...
+
+    def append(self, key: str, value: str) -> Any:
+        ...
 
 
 

@@ -26,7 +26,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setuptools.setup(
     name="promptulate",
-    version="1.2.1",
+    version="1.2.2",
     author="Zeeland",
     author_email="zeeland@foxmail.com",
     description="A powerful LLM Prompt Layer frameworks",
@@ -42,10 +42,10 @@ setuptools.setup(
         'broadcast-service==1.3.2',
         'arxiv'
     ],
+    extras_require={},
     license="Apache 2.0",
-    python_requires='>=3.6',
+    python_requires='>=3.7',
     classifiers=[
-        "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
@@ -58,7 +58,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
 
     ],
-    keywords="promptulate, prompt-me, prompt, chatgpt, gpt, chatbot, llm",
+    keywords="promptulate, prompt, chatgpt, gpt, chatbot, llm",
     entry_points={
         'console_scripts': ['promptulate-chat=promptulate.client.chat:main']
     },
