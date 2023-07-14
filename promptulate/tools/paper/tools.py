@@ -132,7 +132,11 @@ class PaperSummaryTool(BaseTool):
                 query,
                 return_type="original",
                 specified_fields=["title", "url", "abstract"],
-            )[0]
+            )
+            if paper_info:
+                paper_info = paper_info[0]
+            else:
+                return "semantic scholar query tool query result is None."
         paper_summary = (
             f"""title: {paper_info["title"]}\nabstract: {paper_info["abstract"]}"""
         )
