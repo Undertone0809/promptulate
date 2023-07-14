@@ -26,7 +26,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setuptools.setup(
     name="promptulate",
-    version="1.2.0",
+    version="1.2.1",
     author="Zeeland",
     author_email="zeeland@foxmail.com",
     description="A powerful LLM Prompt Layer frameworks",
@@ -36,7 +36,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         'cushy-storage',
-        'pydantic==1.10.0',
+        'pydantic~=1.10.0',
         'requests',
         'duckduckgo_search',
         'broadcast-service==1.3.2',
@@ -60,6 +60,6 @@ setuptools.setup(
     ],
     keywords="promptulate, prompt-me, prompt, chatgpt, gpt, chatbot, llm",
     entry_points={
-        'console_scripts': ['promptulate-chat=promptulate.command.chat:main']
+        'console_scripts': ['promptulate-chat=promptulate.client.chat:main']
     },
 )

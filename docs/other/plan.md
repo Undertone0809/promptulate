@@ -95,5 +95,5 @@
 - 构建CacheManager（单例模式），对不同类型的数据与缓存进行调度管理
 - 为Tool的LLM提供定制化的参数，提高结果的有效性
 - 复现论文[https://arxiv.org/abs/2304.03442](https://arxiv.org/abs/2304.03442)
-
+- 尝试接入[https://github.com/zilliztech/GPTCache](https://github.com/zilliztech/GPTCache)构建LLMCache，提高响应能力
 
