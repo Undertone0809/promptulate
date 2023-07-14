@@ -75,6 +75,8 @@ class OpenAIKeyPool(BaseModel):
         arbitrary_types_allowed = True
 
     def get(self, model: str) -> Optional[str]:
+        if model == "text-davinci-003":
+            model = "gpt-3.5-turbo"
         openai_key: OpenAIKey = self.cache.query(OpenAIKey).filter(model=model).first()
         if not openai_key:
             return None
