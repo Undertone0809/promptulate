@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Zeeland
+# Copyright (c) 2023 promptulate
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 # GitHub Link: https://github.com/Undertone0809/
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
-
 from abc import abstractmethod
 from typing import Optional, Any, Dict
 
@@ -30,12 +29,17 @@ class BaseMemory(BaseModel):
     store: Any
     """storage medium"""
 
-from promptulate import utils
-from promptulate.utils import AbstractSingleton
-from promptulate.schema import ChatMessageHistory
+    def query(self, key: str) -> Any:
+        ...
 
-__all__ = ['BaseChatMemory']
+    def update(self, key: str, value: str) -> Any:
+        ...
 
+    def clear(self, key: str) -> Any:
+        ...
+
+    def append(self, key: str, value: str) -> Any:
+        ...
 
 
 class BaseChatMemory(BaseModel):
@@ -59,7 +63,7 @@ class BaseChatMemory(BaseModel):
 
     @abstractmethod
     def load_message_set_from_memory(
-            self, recently_n: Optional[int] = None
+        self, recently_n: Optional[int] = None
     ) -> MessageSet:
         """Return key-value pairs given the text input to the chain.
         If None, return all memories

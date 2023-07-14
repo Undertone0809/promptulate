@@ -19,7 +19,6 @@
 
 import logging
 import os
-import platform
 import shutil
 import tempfile
 import time
@@ -40,12 +39,12 @@ logger = logging.getLogger(__name__)
 
 
 def listdict_to_string(
-        data: List[Dict],
-        prefix: Optional[str] = "",
-        suffix: Optional[str] = "\n",
-        item_prefix: Optional[str] = "",
-        item_suffix: Optional[str] = ";\n\n",
-        is_wrap: bool = True,
+    data: List[Dict],
+    prefix: Optional[str] = "",
+    suffix: Optional[str] = "\n",
+    item_prefix: Optional[str] = "",
+    item_suffix: Optional[str] = ";\n\n",
+    is_wrap: bool = True,
 ) -> str:
     """Convert List[Dict] type data to string type"""
     wrap_ch = "\n" if is_wrap else ""
@@ -84,16 +83,18 @@ def set_openai_api_key(value: str):
 
 
 def get_default_storage_path(file_name: str = "") -> str:
-    if platform.system() == "Windows":
-        return f"{get_project_root_path()}/{file_name}"
-    elif platform.system() == "Linux" or "Darwin":
-        dir_path = os.environ.get("TMPDIR")
-        if not dir_path:
-            dir_path = tempfile.gettempdir()
-        dir_path = os.path.join(dir_path, "promptulate")
-        return f"{dir_path}/{file_name}"
-    else:
-        return f"./{file_name}"
+    # if platform.system() == "Windows":
+    #     return f"{get_project_root_path()}/{file_name}"
+    # elif platform.system() == "Linux" or "Darwin":
+    #     dir_path = os.environ.get("TMPDIR")
+    #     if not dir_path:
+    #         dir_path = tempfile.gettempdir()
+    #     dir_path = os.path.join(dir_path, "promptulate")
+    #     return f"{dir_path}/{file_name}"
+    # else:
+    #     return f"./{file_name}"
+    dir_path = f"{tempfile.gettempdir()}/promptulate"
+    return f"{dir_path}/{file_name}"
 
 
 def hint(fn):
