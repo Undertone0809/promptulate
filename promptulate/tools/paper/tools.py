@@ -53,7 +53,7 @@ class PaperSummaryTool(BaseTool):
         extra = Extra.forbid
         arbitrary_types_allowed = True
 
-    def run(self, query: str, **kwargs) -> str:
+    def _run(self, query: str, **kwargs) -> str:
         """A paper summary tool that passes in the article name (or arxiv id) and returns summary results
 
         Args:
@@ -69,9 +69,9 @@ class PaperSummaryTool(BaseTool):
         """
 
         @broadcast_service.on_listen("PaperSummaryTool.run.get_paper_references")
-        def get_paper_references(**kwargs):
+        def get_paper_references(**data):
             references: List[Dict] = self.semantic_scholar_reference_tool.run(
-                kwargs["paper_title"], max_result=10, return_type="original"
+                data["paper_title"], max_result=10, return_type="original"
             )
             references_string = "相关论文：\n\n"
             for i, reference in enumerate(references):

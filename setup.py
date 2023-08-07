@@ -26,7 +26,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setuptools.setup(
     name="promptulate",
-    version="1.2.3",
+    version="1.3.0",
     author="Zeeland",
     author_email="zeeland@foxmail.com",
     description="A powerful LLM Application development framework.",
@@ -41,7 +41,8 @@ setuptools.setup(
         'duckduckgo_search',
         'broadcast-service==1.3.2',
         'arxiv',
-        'click'
+        'click',
+        'numexpr'
     ],
     license="Apache 2.0",
     python_requires='>=3.7',
