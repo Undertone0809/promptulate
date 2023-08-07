@@ -17,6 +17,8 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
+import warnings
+
 from promptulate.frameworks import Conversation
 from promptulate.schema import UserMessage, AssistantMessage, SystemMessage
 from promptulate.utils import enable_log, enable_log_no_file
@@ -29,3 +31,5 @@ __all__ = [
     "UserMessage",
     "AssistantMessage",
 ]
+
+warnings.filterwarnings("always", category=DeprecationWarning)

@@ -17,6 +17,7 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
+from promptulate.llms.base import BaseLLM
 from promptulate.llms.openai import OpenAI, ChatOpenAI
 
-__all__ = ["OpenAI", "ChatOpenAI"]
+__all__ = ["OpenAI", "ChatOpenAI", "BaseLLM"]
