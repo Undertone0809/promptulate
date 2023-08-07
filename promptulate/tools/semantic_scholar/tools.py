@@ -21,7 +21,7 @@ class SemanticScholarQueryTool(BaseTool):
         default_factory=SemanticScholarAPIWrapper
     )
 
-    def run(self, query: str, **kwargs) -> Union[str, List[Dict]]:
+    def _run(self, query: str, **kwargs) -> Union[str, List[Dict]]:
         """A semantic scholar paper query tool and return relevant paper query result."""
         result = self.api_wrapper.get_paper(query, **kwargs)
         if "return_type" in kwargs and kwargs["return_type"] == "original":
@@ -36,7 +36,7 @@ class SemanticScholarReferenceTool(BaseTool):
         default_factory=SemanticScholarAPIWrapper
     )
 
-    def run(self, query: str, **kwargs) -> Union[str, List[Dict]]:
+    def _run(self, query: str, **kwargs) -> Union[str, List[Dict]]:
         result = self.api_wrapper.get_references(query, **kwargs)
         if "return_type" in kwargs and kwargs["return_type"] == "original":
             return result
@@ -50,7 +50,7 @@ class SemanticScholarCitationTool(BaseTool):
         default_factory=SemanticScholarAPIWrapper
     )
 
-    def run(self, query: str, **kwargs) -> Union[str, List[Dict]]:
+    def _run(self, query: str, **kwargs) -> Union[str, List[Dict]]:
         result = self.api_wrapper.get_citations(query)
         if "return_type" in kwargs and kwargs["return_type"] == "original":
             return result

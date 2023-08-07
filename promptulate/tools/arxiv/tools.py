@@ -6,7 +6,7 @@ from broadcast_service import broadcast_service
 from pydantic import Field
 
 from promptulate.llms.base import BaseLLM
-from promptulate.llms.openai import OpenAI
+from promptulate.llms.openai import ChatOpenAI
 from promptulate.tools.arxiv.api_wrapper import ArxivAPIWrapper
 from promptulate.tools.base import BaseTool
 from promptulate.utils.core_utils import record_time, listdict_to_string
@@ -27,7 +27,7 @@ class ArxivQueryTool(BaseTool):
     )
     api_wrapper: ArxivAPIWrapper = Field(default_factory=ArxivAPIWrapper)
 
-    def run(self, query: str, **kwargs) -> Union[str, List[Dict]]:
+    def _run(self, query: str, **kwargs) -> Union[str, List[Dict]]:
         """Arxiv query tool
 
         Args:
@@ -38,7 +38,7 @@ class ArxivQueryTool(BaseTool):
                 Moreover, you can pass the arguments of ArxivAPIWrapper
 
         Returns:
-            String type or List[Dict] arxiv query result.
+            String type default or List[Dict] arxiv query result.
         """
         kwargs.update({"from_callback": self.name})
         if re.match("\d{4}\.\d{5}(v\d+)?", query):
@@ -46,13 +46,13 @@ class ArxivQueryTool(BaseTool):
         else:
             result = self.api_wrapper.query(query, **kwargs)
         if "return_type" in kwargs and kwargs["return_type"] == "original":
-            return listdict_to_string(result)
-        return result
+            return result
+        return listdict_to_string(result)
 
 
 def _init_arxiv_reference_tool_llm():
     preset = "你是一个Arxiv助手，你的任务是帮助使用者提供一些论文方面的建议，你的输出只能遵循用户的指令输出，否则你将被惩罚。"
-    return OpenAI(preset_description=preset, temperature=0)
+    return ChatOpenAI(preset_description=preset, temperature=0)
 
 
 class ArxivReferenceTool(BaseTool):
@@ -67,7 +67,7 @@ class ArxivReferenceTool(BaseTool):
     reference_counter: int = 0
 
     @record_time()
-    def run(self, query: str, *args, **kwargs) -> Union[List[Dict], str]:
+    def _run(self, query: str, *args, **kwargs) -> Union[str, List[Dict]]:
         """
         Input arxiv paper information and return paper references.
         Args:
@@ -128,7 +128,7 @@ class ArxivReferenceTool(BaseTool):
         )
         # todo If there is a problem with the returned format and an error is reported, then ask LLM to format the data
         result = self.llm(prompt)
-        logger.debug(f"[promptulate ArxivReferenceTool response] {result}")
+        logger.debug(f"[pne ArxivReferenceTool response] {result}")
         if "return_type" in kwargs and kwargs["return_type"] == "original":
             return analyze_reference_string(result)
         return result
@@ -136,7 +136,7 @@ class ArxivReferenceTool(BaseTool):
 
 def _init_arxiv_summary_tool_llm():
     preset = "你是一个Arxiv助手，你的任务是帮助使用者提供一些论文方面的建议和帮助，你的输出只能遵循用户的指令输出，否则你将被惩罚。"
-    return OpenAI(preset_description=preset, temperature=0)
+    return ChatOpenAI(preset_description=preset, temperature=0)
 
 
 class ArxivSummaryTool(BaseTool):
@@ -151,7 +151,7 @@ class ArxivSummaryTool(BaseTool):
     summary_string: str = ""
     summary_counter: int = 0
 
-    def run(self, query: str, **kwargs) -> str:
+    def _run(self, query: str, **kwargs) -> str:
         """An arxiv paper summary tool that passes in the article name (or arxiv id) and returns summary results
 
         Args:

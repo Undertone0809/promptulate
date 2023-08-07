@@ -17,6 +17,7 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
+import logging
 from typing import List, Dict, Optional
 
 from cushy_storage.orm import CushyOrmCache, BaseORMModel
@@ -24,6 +25,22 @@ from pydantic import BaseModel, Field
 
 from promptulate.utils.core_utils import get_cache
 from promptulate.utils.singleton import singleton
+
+logger = logging.getLogger(__name__)
+
+KEY_MODELS_MAPPER = {
+    "text-davinci-003": "gpt-3.5-turbo",
+    "gpt-3.5-turbo": "gpt-3.5-turbo",
+    "gpt-3.5-turbo-16k": "gpt-3.5-turbo",
+    "gpt-3.5-turbo-0301": "gpt-3.5-turbo",
+    "gpt-3.5-turbo-0613": "gpt-3.5-turbo",
+    "gpt-4": "gpt-4",
+    "gpt-4-0314": "gpt-4",
+    "gpt-4-0613": "gpt-4",
+    "gpt-4-32k": "gpt-4",
+    "gpt-4-32k-0314": "gpt-4",
+    "gpt-4-32k-0613": "gpt-4",
+}
 
 
 class OpenAIKey(BaseORMModel):
@@ -55,11 +72,11 @@ def _parse_openai_keys(keys: List[Dict[str, str]]) -> List[OpenAIKey]:
     openai_keys: List[OpenAIKey] = []
     for key in keys:
         if "key" in key and key["key"]:
-            openai_keys.append(OpenAIKey(key["model"], key["key"]))
+            openai_keys.append(OpenAIKey(KEY_MODELS_MAPPER[key["model"]], key["key"]))
         elif "keys" in key and key["keys"]:
             _keys = key["keys"].split(",")
             for _key in _keys:
-                openai_keys.append(OpenAIKey(key["model"], _key))
+                openai_keys.append(OpenAIKey(KEY_MODELS_MAPPER[key["model"]], _key))
         else:
             raise ValueError("Key type error, your field name must be `key` or `keys`")
     return openai_keys
@@ -75,11 +92,30 @@ class OpenAIKeyPool(BaseModel):
         arbitrary_types_allowed = True
 
     def get(self, model: str) -> Optional[str]:
-        if model == "text-davinci-003":
-            model = "gpt-3.5-turbo"
+        """Obtain the openai key from the queue header and return it, then place the key at the end of queue.
+        Use gpt4 key if the gpt3.5 key does not exist.
+
+        Args:
+            model: openai model, the option is as follows:
+                "text-davinci-003","gpt-3.5-turbo","gpt-3.5-turbo-16k","gpt-3.5-turbo-0301","gpt-3.5-turbo-0613",
+                "gpt-4","gpt-4-0314","gpt-4-0613","gpt-4-32k","gpt-4-32k-0314","gpt-4-32k-0613"
+
+        Returns:
+            specified openai key
+        """
+        model = KEY_MODELS_MAPPER[model]
         openai_key: OpenAIKey = self.cache.query(OpenAIKey).filter(model=model).first()
+
         if not openai_key:
-            return None
+            if model == "gpt-4":
+                return None
+
+            model = "gpt-4"
+            openai_key: OpenAIKey = (
+                self.cache.query(OpenAIKey).filter(model=model).first()
+            )
+            if not openai_key:
+                return None
 
         self.cache.delete(openai_key)
         self.cache.add(openai_key)
@@ -88,6 +124,7 @@ class OpenAIKeyPool(BaseModel):
     def set(self, keys: List[Dict[str, str]]):
         """Set list of key to cache, you can see parameter description from `_parse_openai_keys()`"""
         self.cache.set(_parse_openai_keys(keys))
+        logger.info("[promptulate] OpenAIKeyPool set key successfully.")
 
     def add(self, keys: List[Dict[str, str]]):
         """add list of keys to cache, you can see parameter description from `_parse_openai_keys()`"""

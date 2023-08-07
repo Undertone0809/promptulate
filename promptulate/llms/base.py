@@ -18,10 +18,12 @@
 # Contact Email: zeeland@foxmail.com
 
 from abc import ABC, abstractmethod
+from typing import Optional
 
-from pydantic import BaseModel, Extra
+from pydantic import BaseModel
 
-from promptulate.schema import AssistantMessage, MessageSet, LLMType
+from promptulate.hook import Hook, HookTable
+from promptulate.schema import MessageSet, LLMType, BaseMessage
 
 
 class BaseLLM(BaseModel, ABC):
@@ -29,13 +31,25 @@ class BaseLLM(BaseModel, ABC):
 
     class Config:
         """Configuration for this pydantic object."""
-
-        extra = Extra.forbid
         arbitrary_types_allowed = True
 
-    @abstractmethod
-    def predict(self, prompts: MessageSet, **kwargs) -> AssistantMessage:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if "hooks" in kwargs and kwargs["hooks"]:
+            for hook in kwargs["hooks"]:
+                Hook.mount_instance_hook(hook, self)
+        Hook.call_hook(HookTable.ON_LLM_CREATE, self, **kwargs)
+
+    def predict(self, prompts: MessageSet, *args, **kwargs) -> BaseMessage:
         """llm generate prompt"""
+        Hook.call_hook(HookTable.ON_LLM_START, self, prompts, *args, **kwargs)
+        result: BaseMessage = self._predict(prompts, *args, **kwargs)
+        Hook.call_hook(HookTable.ON_LLM_RESULT, self, result=result.content)
+        return result
+
+    @abstractmethod
+    def _predict(self, prompts: MessageSet, *args, **kwargs) -> Optional[BaseMessage]:
+        """Run the llm, implemented through subclass."""
 
     @abstractmethod
     def __call__(self, prompt: str, *args, **kwargs):

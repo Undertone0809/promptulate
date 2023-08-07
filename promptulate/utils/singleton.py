@@ -43,7 +43,7 @@ def singleton():
             if cls not in singleton_pool.instances:
                 singleton_pool.instances[cls] = cls()
                 logger.debug(
-                    f"[promptulate config] class <{cls.__name__}> initialization"
+                    f"[pne config] class <{cls.__name__}> initialization"
                 )
             return singleton_pool.instances[cls]
 

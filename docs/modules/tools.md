@@ -1,22 +1,53 @@
-# tools
-
-> 文档完善中...
+# Tool
 
 ## 简介
 
-tools模块为LLM提供了调用外部工具扩展的能力，可以说tools是走向智能化的第一步，通过tools来为LLM构建一套感知反馈系统，可以为LLM应用开发提供更多的可能性。本文将会介绍`promptulate`
-当前支持的外部工具，以及外部工具、工具套件的基本使用方式，最后还会介绍当前正在开发的一些工具套件。
+tools模块为LLM提供了调用外部工具扩展的能力，可以说tools是走向智能化的第一步，通过tools来为LLM构建一套感知反馈系统，可以为LLM应用开发提供更多的可能性，当前，Tool只服务于Agent进行搭配使用。本文将会介绍`promptulate`当前支持的外部工具，以及外部工具、工具套件的基本使用方式，最后还会介绍当前正在开发的一些工具套件。
 
 ## 支持的工具
 
-当前`promptulate`支持以下几种工具：
+当前`promptulate`支持以下几类工具：
 
 - DuckDuckGo Search: DDG搜索引擎
+- Calculator: 计算器
 - Arxiv: Arxiv论文检索工具
 - Semantic Scholar: Semantic Scholar论文检索工具，可以检索论文、查询论文参考文献、查询引用该论文的文献
 - Python REPL: 可以执行python脚本
 - FileManager: 可以进行文件读写
-- ...
+
+## 工具的使用
+
+下面的示例展示了如何使用一个DuckDuckGo进行外部搜索。
+
+```python
+from promptulate.tools import DuckDuckGoTool
+
+tool = DuckDuckGoTool()
+tool.run("what is promptulate?")
+```
+
+相同的导入方式，你还可以导入：
+
+```python
+from promptulate.tools import (
+    DuckDuckGoTool,
+    DuckDuckGoReferenceTool,
+    Calculator,
+    ArxivQueryTool,
+    ArxivSummaryTool,
+    PaperSummaryTool,
+    PythonREPLTool,
+    SemanticScholarQueryTool,
+    SemanticScholarCitationTool,
+    SemanticScholarReferenceTool
+)
+```
+
+所有的工具都继承`BaseTool`，因此你可以使用`tool.run(prompt)`的方式进行调用。
+
+## 在Agent中使用Tool
+
+详情查看[Agent](modules/agent.md#agent)
 
 ## 有LLM能力的Tool
 

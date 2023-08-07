@@ -40,16 +40,16 @@ Modules是一组专门设计用于执行特定任务的模块，例如情感分�
 
 - 大语言模型支持：支持不同类型的大语言模型的扩展接口
 - 对话终端：提供简易对话终端，直接体验与大语言模型的对话
-- 角色预设：提供预设角色，以不同的角度调用GPT
+- 角色预设：提供预设角色，以不同的角度调用LLM
 - 长对话模式：支持长对话聊天，支持多种方式的对话持久化
 - 外部工具：集成外部工具能力，可以进行网络搜索、执行Python代码等强大的功能
 - KEY池：提供API key池，彻底解决key限速的问题
 - 智能代理：集成ReAct，self-ask等高级Agent，结合外部工具赋能LLM
 - 自治代理模式：支持调用API官方接口、自治代理或使用promptulate提供的代理
 - 中文优化：针对中文语境进行特别优化，更适合中文场景
-- 数据导出：支持markdowm等格式的对话导出
-- 对话总结：提供API式的对话总结、翻译、标题生成
-- 高级抽象，支持插件扩展、存储扩展、大语言模型扩展
+- 数据导出：支持markdown等格式的对话导出
+- 高级抽象：支持插件扩展、存储扩展、大语言模型扩展
+- Hook与生命周期：提供Agent，Tool，llm的生命周期及Hook系统
 
 # 快速开始
 
@@ -61,20 +61,16 @@ Modules是一组专门设计用于执行特定任务的模块，例如情感分�
 
 # 基础架构
 
-在本人深度阅读`langchain, Auto-GPT, django, django-rest-framework, gpt_academic...`
-等项目的源码，参与pr之后，学习它们的架构、代码设计思路等内容，重构了两次，有了现在的版本，相较于之前的老版本`prompt-me`，`promptulate`
-重新构建了 `llms, message, memory, framework, preset_roles, tools, provider`等模块，将`prompt`
-的各个流程全部组件化，便有了现在的`promptualte`框架。当前`promptualte`仍有很多细节需要完善，也十分欢迎大家的讨论与参与。
-
-`promptualte`作为一个为大语言模型设计的Prompt Layer框架，主要由以下几部分组成：
+当前`promptulate`正处于快速开发阶段，仍有许多内容需要完善与讨论，十分欢迎大家的讨论与参与，而其作为一个大语言模型自动化与应用开发框架，主要由以下几部分组成：
 
 - `Agent` 更高级的执行器，负责复杂任务的调度和分发
-- `framework` 框架层，实现不同类型的prompt框架，包括最基础的`Conversation`模型，还有`self-ask`和`ReAct`等模型。
 - `llm` 大语言模型，负责生成回答，可以支持不同类型的大语言模型
-- `memory` 负责对话的存储，支持不同的存储方式及其扩展，如文件存储、数据库存储等
-- `tools` 提供外部工具扩展调用，如搜索引擎、计算器等
-- `preset roles` 提供预设角色，进行定制化对话
-- `provider` 为framework和agent提供tools和其他细粒度能力的集成
+- `Memory` 负责对话的存储，支持不同的存储方式及其扩展，如文件存储、数据库存储等
+- `Framework` 框架层，实现不同类型的prompt框架，包括最基础的`Conversation`模型，还有`self-ask`和`ReAct`等模型。
+- `Tool` 提供外部工具扩展调用，如搜索引擎、计算器等
+- `Hook&Lifecycle` Hook系统与生命周期系统，开发者可以进行定制化的生命周期逻辑控制
+- `Rreset roles` 提供预设角色，进行定制化对话
+- `Provider` 为系统提供更多数据源或执行自主操作，如数据库的连接
 
 <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230704180202.png"/>
 
@@ -97,7 +93,7 @@ Modules是一组专门设计用于执行特定任务的模块，例如情感分�
 欢迎加入群聊一起交流讨论有关LLM相关的话题，链接过期了可以issue或email提醒一下作者。
 
 <div style="width: 250px;margin: 0 auto;">
-  <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230714161652.png"/>
+    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230807173459.png"/>
 </div>
 
 # 贡献

@@ -3,8 +3,8 @@ There are 2 kinds of model in OpenAI, namely text generative and conversational.
 """
 
 import json
+import warnings
 from abc import ABC
-from enum import Enum
 from typing import Optional, Any, Dict, List
 
 import requests
@@ -25,10 +25,6 @@ from promptulate.utils.logger import get_logger
 
 CFG = Config()
 logger = get_logger()
-
-
-class OpenAIModelType(str, Enum):
-    pass
 
 
 class BaseOpenAI(BaseLLM, ABC):
@@ -68,6 +64,8 @@ class BaseOpenAI(BaseLLM, ABC):
     """The key of openai api parameters"""
     preset_description: str = ""
     """OpenAI system message"""
+    enable_preset_description: bool = True
+    """enable use preset description"""
     enable_private_api_key: bool = False
     """Enable to provide a separate api for openai llm """
     private_api_key: str = ""
@@ -116,25 +114,37 @@ class OpenAI(BaseOpenAI):
             if self.preset_description != ""
             else PRESET_SYSTEM_PROMPT
         )
-        message_set = MessageSet(llm_type=LLMType.OpenAI)
-        message_set.messages.append(CompletionMessage(content=preset))
-        message_set.messages.append(CompletionMessage(content=prompt))
+        if not self.enable_preset_description:
+            preset = ""
+        message_set = MessageSet(
+            messages=[
+                CompletionMessage(content=preset),
+                CompletionMessage(content=prompt),
+            ]
+        )
         return self.predict(message_set, stop).content
 
-    def predict(
-        self, prompts: MessageSet, stop: Optional[List[str]] = None
+    def _predict(
+        self, prompts: MessageSet, stop: Optional[List[str]] = None, *args, **kwargs
     ) -> Optional[AssistantMessage]:
+        """Run openai llm with custom message context."""
+        if self.model == "text-davinci-003":
+            warnings.warn(
+                "This model(text-davinci-003) version is deprecated. Migrate before January 4, 2024 to "
+                "avoid disruption of service. gpt-3.5-turbo is recommended.",
+                DeprecationWarning,
+            )
         api_key = self.api_key
-        logger.debug(f"[promptulate openai key] {api_key}")
+        logger.debug(f"[pne openai key] {api_key}")
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {api_key}",
         }
         body: Dict[str, Any] = self._build_api_params_dict(prompts, stop)
 
-        logger.debug(f"[promptulate openai params] body {json.dumps(body)}")
+        logger.debug(f"[pne openai params] body {json.dumps(body)}")
         logger.debug(
-            f"[promptulate openai request] url: {CFG.openai_completion_request_url} proxies: {CFG.proxies}"
+            f"[pne openai request] url: {CFG.openai_completion_request_url} proxies: {CFG.proxies}"
         )
         response = requests.post(
             url=CFG.openai_completion_request_url,
@@ -148,9 +158,9 @@ class OpenAI(BaseOpenAI):
             #     logger.debug(chunk)
             self.retry_counter = 0
             ret_data = response.json()
-            logger.debug(f"[promptulate openai response] {json.dumps(ret_data)}")
+            logger.debug(f"[pne openai response] {json.dumps(ret_data)}")
             content = ret_data["choices"][0]["text"]
-            logger.debug(f"[promptulate openai answer] {content}")
+            logger.debug(f"[pne openai answer] {content}")
             return AssistantMessage(content=content)
 
         logger.error(
@@ -159,10 +169,10 @@ class OpenAI(BaseOpenAI):
         logger.debug("[promptulate OpenAI] retry to get response")
         if self.enable_retry and self.retry_counter < self.retry_times:
             self.retry_counter += 1
-            return self.predict(prompts, stop)
+            return self._predict(prompts, stop)
 
         logger.error(
-            f"[promptulate OpenAI] Has retry {self.retry_times}, but all failed."
+            f"[pne OpenAI] Has retry {self.retry_times}, but all failed."
         )
         raise OpenAIError(json.dumps(response.content))
 
@@ -197,6 +207,8 @@ class ChatOpenAI(BaseOpenAI):
             if self.preset_description != ""
             else PRESET_SYSTEM_PROMPT
         )
+        if not self.enable_preset_description:
+            system_message = ""
 
         message_set = MessageSet(
             messages=[
@@ -206,20 +218,20 @@ class ChatOpenAI(BaseOpenAI):
         )
         return self.predict(message_set, stop).content
 
-    def predict(
-        self, prompts: MessageSet, stop: Optional[List[str]] = None
+    def _predict(
+        self, prompts: MessageSet, stop: Optional[List[str]] = None, *args, **kwargs
     ) -> Optional[AssistantMessage]:
         api_key = self.api_key
-        logger.debug(f"[promptulate openai key] {api_key}")
+        logger.debug(f"[pne openai key] {api_key}")
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {api_key}",
         }
         body: Dict[str, Any] = self._build_api_params_dict(prompts, stop)
 
-        logger.debug(f"[promptulate openai params] body {json.dumps(body)}")
+        logger.debug(f"[pne openai params] body {json.dumps(body)}")
         logger.debug(
-            f"[promptulate openai request] url: {CFG.openai_chat_request_url} proxies: {CFG.proxies}"
+            f"[pne openai request] url: {CFG.openai_chat_request_url} proxies: {CFG.proxies}"
         )
         response = requests.post(
             url=CFG.openai_chat_request_url,
@@ -233,9 +245,9 @@ class ChatOpenAI(BaseOpenAI):
             #     logger.debug(chunk)
             self.retry_counter = 0
             ret_data = response.json()
-            logger.debug(f"[promptulate openai response] {json.dumps(ret_data)}")
+            logger.debug(f"[pne openai response] {json.dumps(ret_data)}")
             content = ret_data["choices"][0]["message"]["content"]
-            logger.debug(f"[promptulate openai answer] {content}")
+            logger.debug(f"[pne openai answer] {content}")
             return AssistantMessage(content=content)
 
         logger.error(
@@ -244,10 +256,10 @@ class ChatOpenAI(BaseOpenAI):
         logger.debug("[promptulate OpenAI] retry to get response")
         if self.enable_retry and self.retry_counter < self.retry_times:
             self.retry_counter += 1
-            return self.predict(prompts, stop)
+            return self._predict(prompts, stop)
 
         logger.error(
-            f"[promptulate OpenAI] Has retry {self.retry_times}, but all failed."
+            f"[pne OpenAI] Has retry {self.retry_times}, but all failed."
         )
         raise OpenAIError(json.dumps(json.loads(response.content)))
 

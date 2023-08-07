@@ -36,7 +36,7 @@ def set_enable_cache(value: bool):
 
 class Config(metaclass=Singleton):
     def __init__(self):
-        logger.info(f"[promptulate config] Config initialization")
+        logger.info(f"[pne config] Config initialization")
         self.enable_cache: bool = True
         self._proxy_mode: str = PROXY_MODE[0]
         self._proxies: Optional[dict] = None
@@ -113,3 +113,4 @@ class Config(metaclass=Singleton):
     def set_proxy_mode(self, mode: str, proxies: Optional[dict] = None):
         self.proxy_mode = mode
         self.proxies = proxies
+        logger.info(f"[pne] proxy mode: {mode}, proxies: {proxies}")

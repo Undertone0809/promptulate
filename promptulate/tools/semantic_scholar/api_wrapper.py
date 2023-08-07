@@ -75,7 +75,7 @@ class SemanticScholarAPIWrapper(BaseModel):
             self.current_result = response.json()["matches"]
 
             if len(self.current_result) == 0:
-                logger.debug(f"[promptulate] semantic scholar return none")
+                logger.debug(f"[pne] semantic scholar return none")
                 return []
 
             for item in self.current_result:
@@ -84,7 +84,7 @@ class SemanticScholarAPIWrapper(BaseModel):
             if "specified_fields" in kwargs:
                 get_detail()
             logger.debug(
-                f"[promptulate] semantic scholar result {json.dumps(self.current_result)}"
+                f"[pne] semantic scholar result {json.dumps(self.current_result)}"
             )
             return self.current_result
         raise NetWorkError("semantic scholar query")
@@ -126,7 +126,7 @@ class SemanticScholarAPIWrapper(BaseModel):
                 final_result.append(item["citedPaper"])
 
             logger.debug(
-                f"[promptulate semantic scholar result] {json.dumps(final_result)}"
+                f"[pne semantic scholar result] {json.dumps(final_result)}"
             )
             return final_result
         raise NetWorkError("semantic scholar")
@@ -171,7 +171,7 @@ class SemanticScholarAPIWrapper(BaseModel):
                 final_result.append(item["citingPaper"])
 
             logger.debug(
-                f"[promptulate semantic scholar result] {json.dumps(final_result)}"
+                f"[pne semantic scholar result] {json.dumps(final_result)}"
             )
             return final_result
         raise NetWorkError("semantic scholar")

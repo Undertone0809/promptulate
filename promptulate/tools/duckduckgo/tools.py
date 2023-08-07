@@ -1,4 +1,4 @@
-from typing import List, Union, Dict, Any, Optional
+from typing import List, Union, Dict, Any
 
 from pydantic import Field
 
@@ -14,7 +14,7 @@ class DuckDuckGoTool(BaseTool):
 
     name: str = "ddg-search"
     description: str = (
-        "A wrapper around DuckDuckGo Search. "
+        "A wrapper around DuckDuckgo Web Search. "
         "Useful for when you need to answer questions about current events. "
         "Input should be a search query."
     )
@@ -22,7 +22,7 @@ class DuckDuckGoTool(BaseTool):
         default_factory=DuckDuckGoSearchAPIWrapper
     )
 
-    def run(self, keyword: str, **kwargs) -> Union[str, List[str]]:
+    def _run(self, keyword: str, **kwargs) -> Union[str, List[str]]:
         """Run duckduckgo search and get search result.
 
         Args:
@@ -46,12 +46,16 @@ class DuckDuckGoReferenceTool(BaseTool):
     """
 
     name: str = "ddg-search-with-references"
-    description: str = ""
+    description: str = (
+        "A wrapper around DuckDuckGo Search, it returns query result and references url"
+        "Useful for when you need to answer questions about current events. "
+        "Input should be a search query."
+    )
     api_wrapper: DuckDuckGoSearchAPIWrapper = Field(
         default_factory=DuckDuckGoSearchAPIWrapper
     )
 
-    def run(self, keyword: str, **kwargs) -> Union[str, List[Dict[str, str]]]:
+    def _run(self, keyword: str, **kwargs) -> Union[str, List[Dict[str, str]]]:
         """Run duckduckgo search and get search result with href, snippet, title.
 
         Args:
@@ -79,7 +83,7 @@ class DuckDuckGoLLMTool(BaseTool):
         default_factory=DuckDuckGoSearchAPIWrapper
     )
 
-    def run(self, query: str, *args, **kwargs) -> str:
+    def _run(self, query: str, *args, **kwargs) -> str:
         pass
 
 
@@ -94,5 +98,5 @@ class DuckDuckGoLLMReferenceTool(BaseTool):
         default_factory=DuckDuckGoSearchAPIWrapper
     )
 
-    def run(self, query: str, *args, **kwargs) -> Optional[str, Dict[str, Any]]:
+    def _run(self, query: str, *args, **kwargs) -> Union[str, Dict[str, Any]]:
         pass

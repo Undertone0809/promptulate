@@ -3,16 +3,16 @@
   - [快速开始](get_started/quick_start.md#快速开始)
 
 - Modules
-  - [llm](modules/llm.md#llm)
-  - [framework](modules/framework.md#framework)
-  - [provider](modules/provider.md#provider)
-  - [memory 数据存储](modules/memory.md#memory)
-  - [agent 智能代理](modules/agent.md#agent)
-  - [tool 外部工具扩展](modules/tools.md#tools)
-  - [preset 角色预设](modules/preset.md#preset-角色预设)
-  - [client 客户端](modules/client.md#client)
-  - other
-    - [String Template 字符串格式化](modules/other/string_template.md#string-template)
+  - [llm 模型](modules/llm.md#llm)
+  - [Agent 智能代理](modules/agent.md#agent)
+  - [Tool 外部工具扩展](modules/tools.md#简介)
+  - [Hook&Lifecycle 钩子与生命周期](modules/hook.md#what-is-hook)
+  - [Framework](modules/framework.md#framework)
+  - [Memory 数据存储](modules/memory.md#memory)
+  - [Preset 角色预设](modules/preset.md#preset-角色预设)
+  - [Provider](modules/provider.md#provider)
+  - [Client 客户端](modules/client.md#client)
+  - [String Template 字符串格式化](modules/other/string_template.md#string-template)
 
 - Other
   - [知识扫盲](other/knowledge.md) 

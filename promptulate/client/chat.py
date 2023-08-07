@@ -19,27 +19,51 @@
 
 import argparse
 import os
+from typing import Optional
+
+import click
 
 from promptulate import Conversation
 from promptulate.utils import set_proxy_mode
 
 
+def get_user_input() -> Optional[str]:
+    marker = (
+        "# You input are here (please delete this line)\n"
+        "You should save it and close the notebook after writing the prompt. (please delete this line)\n"
+    )
+    message = click.edit(marker)
+    if message is not None:
+        return message
+    return None
+
+
 def chat():
-    parser = argparse.ArgumentParser(description='Welcome to Promptulate Chat - The best chat terminal ever!')
-    parser.add_argument('--openai_api_key', help='when you first run, you should enter your openai api key')
-    parser.add_argument('--proxy_mode', help='select openai proxy and provide [off, promptulate]')
+    parser = argparse.ArgumentParser(
+        description="Welcome to Promptulate Chat - The best chat terminal ever!"
+    )
+    parser.add_argument(
+        "--openai_api_key",
+        help="when you first run, you should enter your openai api key",
+    )
+    parser.add_argument(
+        "--proxy_mode", help="select openai proxy and provide [off, promptulate]"
+    )
     args = parser.parse_args()
 
     if args.openai_api_key:
-        os.environ['OPENAI_API_KEY'] = args.openai_api_key
+        os.environ["OPENAI_API_KEY"] = args.openai_api_key
     if args.proxy_mode:
         set_proxy_mode(args.proxy_mode)
 
-    set_proxy_mode('promptulate')
-    print(f'Hi there, here is promptulate chat terminal.')
+    print(f"Hi there, here is promptulate chat terminal.")
     conversation = Conversation()
     while True:
-        prompt = str(input("[User] "))
+        print("[User] ")
+        prompt = get_user_input()
+        if not prompt:
+            ValueError("Your prompt is None, please input something.")
+        print(prompt)
         ret = conversation.predict(prompt)
         print(f"[output] {ret}")
 
@@ -48,5 +72,5 @@ def main():
     chat()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

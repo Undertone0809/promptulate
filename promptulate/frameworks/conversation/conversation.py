@@ -108,7 +108,7 @@ class Conversation(
             )
             self.memory.save_message_set_to_memory(messages_history)
         logger.debug(
-            f"[promptulate Conversation] conversation_id: <{self.conversation_id}> messages: <{messages_history.messages}>"
+            f"[pne Conversation] conversation_id: <{self.conversation_id}> messages: <{messages_history.messages}>"
         )
         prompt_params = {"prompts": messages_history}
         if "stop" in kwargs:

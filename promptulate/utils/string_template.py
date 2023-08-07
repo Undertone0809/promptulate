@@ -16,6 +16,7 @@ class StringTemplate:
         self.variables = re.findall(r"\{(\w+)\}", self.template)
 
     def format(self, params: List[Any] = None, **kwargs) -> str:
+        """Enter variables and return the formatted string."""
         if params:
             kwargs = {}
             for i, param in enumerate(params):

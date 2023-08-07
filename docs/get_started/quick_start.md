@@ -9,6 +9,8 @@
 pip install -U promptulate  
 ```
 
+> 有的时候我们会将promptulate称之为`pne`,其中p和e表示promptulate开头和结尾的单词，而n表示9，即p和e中间的九个单词的简写。
+
 ## 基本使用
 
 > 下列教程全部使用`OPENAI gpt-3.5-turbo`进行测试
@@ -70,7 +72,7 @@ print(answer)
 ，你可以在不用科学上网的情况下直接调用OpenAI的相关接口，下面是三种代理的设置方式：
 
 ```python
-from promptulate.llms import OpenAI
+from promptulate.llms import ChatOpenAI
 from promptulate.utils import set_proxy_mode
 
 
@@ -89,7 +91,7 @@ def turn_off_proxy():
 
 def main():
     set_free_proxy()
-    llm = OpenAI()
+    llm = ChatOpenAI()
     answer = llm("请解释一下引力波的放射与广义相对论的必然关系")
     print(answer)
 
@@ -98,8 +100,8 @@ if __name__ == '__main__':
     main()
 ```
 
-> 和OPENAI_API_KEY一样，关于代理的配置我也设置了缓存，这意味着你只需要配置一次代理即可(我也太聪明了吧)。事实上`promptulate`
-> 提供了关闭全局配置项缓存的功能，但默认开启，不推荐关闭，所以我不告诉你怎么关闭，关闭了下面key池的重磅功能你将无法使用。
+> 和OPENAI_API_KEY一样，关于代理的配置我也设置了缓存，这意味着你只需要配置一次代理即可。事实上`promptulate`
+> 提供了关闭全局配置项缓存的功能，但默认开启，不推荐关闭，所以我不告诉你怎么关闭，关闭了下面key池的功能你将无法使用。
 
 ### Key池
 
@@ -109,7 +111,7 @@ KEY轮询机制巧妙的解决了限速的问题，你可以使用LLM随意地�
 的KEY，KEY池也可以不同模型的KEY调度，你可以按照下面的方式将key导入到你的key池中。
 
 ```python
-from promptulate.llms import OpenAI
+from promptulate.llms import ChatOpenAI
 from promptulate.utils import export_openai_key_pool
 
 keys = [
@@ -119,7 +121,7 @@ keys = [
 
 export_openai_key_pool(keys)
 
-llm = OpenAI()
+llm = ChatOpenAI()
 for i in range(10):
     llm("你好")
 ```
@@ -190,12 +192,12 @@ conversation.predict("你知道鸡哥的《只因你太美》吗？")
 ```python
 from promptulate import Conversation
 from promptulate.memory import FileChatMemory
-from promptulate.llms import OpenAI
+from promptulate.llms import ChatOpenAI
 
 
 def main():
     memory = FileChatMemory()
-    llm = OpenAI(model="gpt-3.5-turbo", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)
+    llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)
     conversation = Conversation(llm=llm, memory=memory)
     ret = conversation.predict("你知道鸡哥的著作《只因你太美》吗？")
     print(f"[predict] {ret}")
@@ -224,9 +226,9 @@ if __name__ == '__main__':
 上面的示例中，我们使用
 
 - `FileChatMemory()`进行聊天记录的本地化文件存储，文件存储形式默认是以json的形式进行存储的，保存在`cache`中。
-- `OpenAI(model="gpt-3.5-turbo", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)`
+- `ChatOpenAI(model="gpt-3.5-turbo", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)`
   进行初始化一个大模型，里面是OpenAI需要传入的一些参数，具体可以查看[https://platform.openai.com/docs/api-reference/chat/create](https://platform.openai.com/docs/api-reference/chat/create)
-  查看具体含义，这里不做详细讲解，如果你不想理会这些参数，你也可以直接`llm = OpenAI()`就好啦，默认使用`gpt-3.5-turbo`
+  查看具体含义，这里不做详细讲解，如果你不想理会这些参数，你也可以直接使用`llm = ChatOpenAI()`，默认使用`gpt-3.5-turbo`
   作为大语言模型，其他参数使用默认的就好了。
 - `conversation.predict_by_translate("你知道鸡哥会什么技能吗？", country='America')`
   这个功能为使用特定语言进行预测，`provider`为其提供了`TranslatorMixin`，让`Conversation`
@@ -249,66 +251,6 @@ conversation.predict_by_translate("你知道鸡哥会什么技能吗？", countr
 
 如果你设置了`enable_embed_message=True`, 那么这一次的predict将保存进历史对话中，provider提供的函数默认是不会将预测结果存入对话中的哦，这一点需要注意一下。
 
-### 角色预设
+## 更多
 
-你可以为`framework`提供一些特定的角色，让其可以处理特殊任务，如linux终端，思维导图生成器等，通过下面的方法你可以查看当前支持所有的预设角色。
-
-```python
-from promptulate.preset_roles import get_all_preset_roles
-
-print(get_all_preset_roles())
-```
-
-> ['default-role', 'linux-terminal', 'mind-map-generator', 'sql-generator', 'copy-writer', 'code-analyzer']
-
-下面展示使用`mind-map-generator`生成md思维导图的过程：
-
-```python
-from promptulate import Conversation
-
-
-def main():
-    conversation = Conversation(role="mind-map-generator")
-    ret = conversation.predict("请帮我生成一段python的思维导图")
-    print(ret)
-
-
-if __name__ == '__main__':
-    main()
-
-```
-
-```text
-# Python
-## 基础语法
-### 数据类型
-- 数字
-- 字符串
-- 列表
-...
-```
-
-放入xmind中可以直接导入生成markdown的思维导图，咱就是说还不错，如下图所示：
-
-<img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230513172038.png"/>
-
-如果你想要自定义预设角色，可以使用如下方法：
-
-```python
-from promptulate import Conversation
-from promptulate.preset_roles import CustomPresetRole
-
-
-class SpiritualTeacher(CustomPresetRole):
-    name: str = "心灵导师"
-    description: str = """
-    从现在起你是一个充满哲学思维的心灵导师，当我每次输入一个疑问时你需要用一句富有哲理的名言警句来回答我，并且表明作者和出处
-    要求字数不少于15个字，不超过30字，每次只返回一句且不输出额外的其他信息，你需要使用中文和英文双语输出"""
-
-
-def main():
-    role = SpiritualTeacher()
-    conversation = Conversation(role=role)
-    ret = conversation.predict("论文被拒绝了怎么办？")
-    print(ret)
-```
+本文仅展示了`promtptulate`的一些简单使用，具体功能详情请查看文档查看具体实现。
