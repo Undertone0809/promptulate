@@ -8,7 +8,7 @@ KEY轮询机制巧妙的解决了限速的问题，你可以使用LLM随意地�
 的KEY，KEY池也可以不同模型的KEY调度，你可以按照下面的方式将key导入到你的key池中。
 
 ```python
-from promptulate.llms import OpenAI
+from promptulate.llms import ChatOpenAI
 from promptulate.utils import export_openai_key_pool
 
 keys = [
@@ -20,14 +20,13 @@ keys = [
 
 export_openai_key_pool(keys)
 
-llm = OpenAI()
+llm = ChatOpenAI()
 for i in range(10):
     llm("你好")
 ```
 
 ## 使用Agent、tool等复杂工具的时候无法看到中间过程？
 
-当前你可以通过将log设置为DEBUG模式来查看Agent、Tool推理的具体过程，关于print模式的构建，本人目前还在探索，但是`promptulate`
-的事件总线并行机制可以轻松构建起Agent，Tool的生命周期的回调系统，让你可以通过事件订阅抓住任何关键的锚点。（该todo目前还在计划中，欢迎讨论）
+你可以使用[Hook系统](modules/hook.md#what-is-hook)构建一个定制化的中间过程监测系统。
 
 

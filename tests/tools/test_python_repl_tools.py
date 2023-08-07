@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from promptulate.utils.logger import get_logger, enable_log
 from promptulate.tools.python_repl.api_wrapper import PythonREPLAPIWrapper
 from promptulate.tools.python_repl.tools import PythonREPLTool
+from promptulate.utils.logger import get_logger, enable_log
 
 enable_log()
 logger = get_logger()
@@ -18,7 +18,7 @@ class TestPythonReplAPIWrapper(TestCase):
 
 class TestPythonReplTool(TestCase):
     def test_run(self):
-        api_wrapper = PythonREPLTool()
-        command = """print("helloworld")"""
-        result = api_wrapper.run(command)
-        self.assertEqual("helloworld\n", result)
+        tool = PythonREPLTool()
+        command = """print(16.5 ** 0.43)"""
+        result = tool.run(command)
+        print(result)

@@ -29,9 +29,9 @@ os.environ['OPENAI_API_KEY'] = "your-key"
 下面的示例展示了如何使用OpenAI的大语言模型进行交互。
 
 ```python
-from promptulate.llms import OpenAI
+from promptulate.llms import ChatOpenAI
 
-llm = OpenAI()
+llm = ChatOpenAI()
 answer = llm("请解释一下引力波的放射与广义相对论的必然关系")
 print(answer)
 
@@ -49,13 +49,25 @@ print(answer)
 
 ### LLM的类型
 
-> 需要注意的是，当你初始化了一个`OpenAI()`之后，`promptulate`默认使用的是`text-davinci-003`模型进行文本生成推理，为什么不是`GPT-3.5`呢？
+事实上，OpenAI的LLM模型分为 **文本推理型(text-davinci-003)** 和 **对话型(GPT3.5, GPT-4.0)** ，在`promptulate`中分别对应了`OpenAI`和`ChatOpenAI`。对于文本推理型LLM(OpenAI)，直接给定一段prompt，LLM会直接在prompt的后面进行补全，比如如果你的prompt是`你好！`，那么LLM会尝试直接在你的prompt的基础上进行文本推理，其输出可能为`你好！今天真是个好天气`。
 
-事实上，OpenAI的LLM模型分为**文本推理型(text-davinci-003)**和**对话型(GPT3.5, GPT-4.0)**，文本推理型LLM即直接给定一段prompt，LLM会直接在prompt的后面进行补全，比如如果你的prompt是`你好！`，那么LLM会尝试直接在你的prompt的基础上进行文本推理，其输出可能为`你好！今天真是个好天气`。
+```python
+from promptulate.llms import OpenAI
+
+llm = OpenAI()
+answer = llm("你好")
+print(answer)
+```
+
+输出如下所示：
+
+```text
+你好！今天真是个好天气
+```
 
 那么在大多数时候，这个结果并不是的我们想要的答案，我们想要让LLM成为一个机器人，因此，我们可以使用对话型LLM，即LLM的文本推理会以对话的形式展开，这个时候，我们的输入事实上并不是一段prompt，而是一段对话，LLM会根据历史的对话得出它的回复，下面是一个示例输入：
 
-```text
+```json
 [
     {
         "role": "system",
@@ -78,7 +90,7 @@ print(answer)
 
 这个时候，`gpt-3.5-turbo`输出可能为：
 
-```text
+```json
 [
     {
         "role": "system",
@@ -122,6 +134,8 @@ print(result)
 如果你想使用`GPT-4.0`，你只需要`ChatOpenAI(model="gpt-4.0")`进行初始化就可以了，默认情况下，使用`gpt-3.5-turbo`模型。
 
 事实上，我们推荐你在大多数情况下使用`ChatOpenAI`，如果你是一个初级prompt engineer，那么文本推理型的LLM可能并不是那么适合你，相反，你可以轻松用`gpt-3.5-turbo`来构建复杂应用。
+
+> 需要注意的是，OpenAI已经准备弃用text-davinci-003模型，因此你在调用OpenAI(text-davinci-003模型)的时候，会出现`"This model version is deprecated. Migrate before January 4, 2024 to avoid disruption of service. Learn more https://platform.openai.com/docs/deprecations`的警告。
 
 ### LLM自定义参数
 对于大语言模型开发者来说，你或许知道OpenAI的GPT API提供了其他参数以便更好地调整GPT的输出特性，下面的示例展示了一个使用GPT4模型自定义参数的OpenAI模型初始化。

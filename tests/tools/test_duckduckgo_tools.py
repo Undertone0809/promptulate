@@ -15,6 +15,8 @@ class TestDuckDuckGoSearchAPIWrapper(TestCase):
 
     def test_search_by_keyword(self):
         result = self.api_wrapper.query("LLM")
+        for item in result:
+            logger.info(item)
         self.assertIsNotNone(result)
 
     def test_get_formatted_result(self):
@@ -29,7 +31,7 @@ class TestDuckDuckGoSearchAPIWrapper(TestCase):
 class TestDuckDuckGoSearchTool(TestCase):
     def test_query(self):
         tool = DuckDuckGoTool()
-        query = "什么是promptulate框架"
+        query = "What is promptulate?"
         result = tool.run(query)
         logger.info(result)
 

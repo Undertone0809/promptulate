@@ -5,6 +5,7 @@ from typing import List, Dict, Callable, Any, Optional
 from pydantic import BaseModel, Field
 
 __all__ = [
+    "LLMType",
     "BaseMessage",
     "CompletionMessage",
     "SystemMessage",

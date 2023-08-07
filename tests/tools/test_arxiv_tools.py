@@ -73,6 +73,7 @@ class TestArxivTools(TestCase):
         该论文的经验教训是，我们需要在不同的语言模型和关键任务上进行评估，以便更好地了解它们的优缺点。此外，在一些应用场景中，我们可以通过提供一些in-domain例子来改进模型。
         """
         ret = tool.run(prompt)
+        logger.info(ret)
         self.assertTrue("[1]" in ret)
 
     def test_arxiv_summary_tool(self):
