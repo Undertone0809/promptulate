@@ -4,58 +4,18 @@
 ，email，以及[交流群](README.md#交流群)进行交流。
 
 
-## v1.3.0 发展计划(当前开发中)
-> 该版本为本人自行开发，旨在为promptulate构建更加完善的架构体系
-
-- 提供完善的agent,提供Agent进行复杂任务调度
-  - 构建ToolAgent
-- 提供ReAct, self-ask的framework支持
-- 优化message的消息存储结构
-- 优化Memory架构
-
-
-
-## v1.4.0 发展计划(v1.3.0版本发布之后该部分会发布在issue中)
-该issue为`promptulate` v1.4.0的发展计划，**开发中**的计划表示已经有相关的进展，正在开发中，而**计划开发**表示该版本计划完成的功能，但是还没有开始开发，如果你对某个点感兴趣，可以创建一个issue就该内容提一个简单的proposal，描述一下大体的实现思路，然后就可以开始你的开发了！
-
-需要注意的是：
-
-1. 如果你想要开发某一个功能，我十分推荐你开启一个新的issue提及该内容，避免重复开发，另一方面，issue为开发者提供了一起交流的渠道。
-2. 如果计划开发中的某一条内容有人提出issue开发，我会将其转移至**开发中**
-3. 官方文档中还有一些[其他开发计划](https://undertone0809.github.io/promptulate/#/other/plan)暂未列入当前版本的发展计划中，如果你看到了你想做的功能，我们十分乐意把其加入这个版本的开发计划中！
-
-如果你想到更多有趣的功能，十分欢迎你提出相关建议、issue 和 pr！
-
-**开发中**
-- ...
-
-**计划开发**
-- 参考构建tool的API式扩展，并无缝衔接可以与现有工具一起调用
-  - 参考
-    - [连接海量API的大模型：Gorilla](https://mp.weixin.qq.com/s/ZxZAXKVdc1YsxBRpncWTNg)
-    - [https://arxiv.org/pdf/2305.15334.pdf](https://arxiv.org/pdf/2305.15334.pdf)
-- 更多的LLM适配，如当前各种开源模型的适配
-  - ChatGLM
-  - ChatGLM2-6B
-- 提供Data Source外部数据接入解决方案
-  - 提供外部数据接入，文档、url
-- 构建更多类型tool
-  - 数据库 SqlToolKit的构建 
-    - 参考：[SqlDatabaseTookKit](https://github.com/hwchase17/langchain/blob/master/langchain/agents/agent_toolkits/sql/base.py#L14)
-  - 接入更多类型的 search API，如google
-- BaseFramework的role以及preset的功能是否需要去除，或者有更好的替代方案？
-- Memory存储Agent相关的配置信息
-- Memory兼容关系型数据库存储
-- 完善文档，新增板块，提供LLM、prompt technique相关的知识扫盲
-- Tree of Thoughts的嵌入方式作为mixin引入？需要进一步的讨论。
-- 开发基于gradio的简易功能演示服务器
-- 构建多Agent调度模型
-
+## v1.4.0 发展计划
+- [v1.4.0开发计划]()
 
 ## 其他发展计划
+
+### Tool
+- image_generate
+
+### Other
 - ~~添加角色预设~~
 - 为预设角色提供LLM的参数配置
-- 提供prompt模板与prompt结构化
+- ~~提供prompt模板与prompt结构化~~
 - 提供外部工具扩展
   - ~~外部搜索：Google,Bing等~~
   - 可以执行shell脚本
@@ -96,4 +56,6 @@
 - 为Tool的LLM提供定制化的参数，提高结果的有效性
 - 复现论文[https://arxiv.org/abs/2304.03442](https://arxiv.org/abs/2304.03442)
 - 尝试接入[https://github.com/zilliztech/GPTCache](https://github.com/zilliztech/GPTCache)构建LLMCache，提高响应能力
-
+- 尝试兼容langchain组件
+- 兼容接入langsmith
+- 用ChatOpenAI+text context memory构建chain

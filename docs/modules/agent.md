@@ -30,6 +30,7 @@ if __name__ == "__main__":
 
 ```
 
+运行结果如下（开启了debug，便于观察过程的输出结果，后续将会构建PrintHook进行过程输出）：
 
 ```text
 E:\Programming\anaconda\envs\prompt-me\python.exe D:\Programming\Python\Project\promptulate\example\agent\tool_agent_usage.py 
