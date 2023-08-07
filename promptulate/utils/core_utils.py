@@ -19,7 +19,9 @@
 
 import logging
 import os
+import random
 import shutil
+import string
 import tempfile
 import time
 from functools import wraps
@@ -33,6 +35,7 @@ __all__ = [
     "get_default_storage_path",
     "record_time",
     "generate_conversation_id",
+    "generate_unique_id",
     "listdict_to_string",
 ]
 logger = logging.getLogger(__name__)
@@ -56,9 +59,17 @@ def listdict_to_string(
     return result[:-2]
 
 
+def generate_unique_id() -> str:
+    timestamp = int(time.time() * 1000)
+    random_string = "".join(random.choices(string.ascii_letters + string.digits, k=6))
+
+    unique_id = f"pne-{timestamp}-{random_string}"
+    return unique_id
+
+
 def generate_conversation_id() -> str:
     """Generating a new conversation_id when a conversation initialize"""
-    return str(int(time.time()))
+    return generate_unique_id()
 
 
 def get_cache():
@@ -113,7 +124,7 @@ def record_time():
             start_time = time.time()
             ret = fn(*args, **kwargs)
             duration = time.time() - start_time
-            logger.debug(f"[promptulate timer] <{fn.__name__}> run {duration}s")
+            logger.debug(f"[pne timer] <{fn.__name__}> run {duration}s")
             return ret
 
         return wrapper
