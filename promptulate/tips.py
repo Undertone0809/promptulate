@@ -17,6 +17,8 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
+from typing import Optional
+
 __all__ = ["EmptyMessageSetError", "OpenAIError", "NetWorkError"]
 
 
@@ -30,5 +32,8 @@ class OpenAIError(Exception):
 
 
 class NetWorkError(Exception):
-    def __init__(self, origin: str):
-        super().__init__(f"<{origin}> could not get data")
+    def __init__(self, origin: str, reason: Optional[str] = None):
+        msg = f"<{origin}> could not get data"
+        if reason:
+            msg += f", reason: {reason}"
+        super().__init__(msg)

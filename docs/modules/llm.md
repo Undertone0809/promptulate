@@ -8,7 +8,7 @@
 
 LLM指大语言模型，当前市面上常见的大语言模型有GPT3.5, GPT4, LLaMa, InstructGPT等大语言模型。`promptulate`可以支持不同类型的大语言模型调用。
 
-当前`promptulate`只重点适配了OpenAI的相关的大语言模型(GPT-3.5, GPT-4.0, text-davinci-003)，其他模型适配尚不成熟，正在开发中，因此下面的示例全部以OpenAI模型为例。如果你有想用的LLM或者更好的想法，欢迎提出你的想法。
+当前`promptulate`重点适配了OpenAI的相关的大语言模型(GPT-3.5, GPT-4.0, text-davinci-003)，其他模型适配尚不成熟(文心一言、ChatGLM适配中)，正在开发中，因此下面的示例全部以OpenAI模型为例。如果你有想用的LLM或者更好的想法，欢迎提出你的想法。
 
 ### KEY配置
 
@@ -20,7 +20,17 @@ import os
 os.environ['OPENAI_API_KEY'] = "your-key"
 ```
 
-在你第一次使用的时候，需要使用`os.environ["OPENAI_API_KEY"]` 导入"OPENAI_API_KEY" 的环境变量，但是在第一运行之后`promptulate` 会进行缓存，即后面再运行就不需要再导入key了。如果你的key过期了，可以尝试重新按照上面的方法导入key，或者你也可以把`cache` 文件给删除掉，Windows的`cache`在当前目录下，linux的`cache`在`/tmp`下。
+在你第一次使用的时候，需要使用`os.environ["OPENAI_API_KEY"]` 导入"OPENAI_API_KEY" 的环境变量，但是在第一运行之后`promptulate` 会进行缓存，即后面再运行就不需要再导入key了。
+
+如果你的key过期了，可以尝试重新按照上面的方法导入key，或者你也可以把`cache` 文件给删除掉，通过以下代码可以获取到缓存文件的位置:
+
+```python
+from promptulate.utils import get_default_storage_path
+
+print(get_default_storage_path())
+```
+
+
 
 ### LLM快速上手
 
