@@ -188,7 +188,7 @@ enable_log()
 
 def main():
     tool = PaperSummaryTool()
-    result = tool.run("attention is all you need")
+    result = tool.run("Attention Is All You Need")
     # you can also input an arxiv id as follows
     # result = tool.run("2303.09014")
     print(result)
@@ -258,4 +258,4 @@ Scholar中获取论文、引用等相关数据），但是`prompulate`的事件�
 
 ## 在Agent中使用Tool
 
-> 待完善...
+详情请查看[Agent](modules/agent.md#agent)文档
