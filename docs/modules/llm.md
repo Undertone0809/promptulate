@@ -190,7 +190,7 @@ llm是否支持stop，要看其LLM模型本身是否支持，当前OpenAI系列�
 ### proxy
 我想你可能遇到了无法访问的小问题，It's OK, `promptulate` 提供了三种访问OpenAI的方式，分别是
 
-- `off` 默认的访问方式，不开代理
+- `off` 默认的访问方式，不开代理（如果你打开了全局代理工具，可以选择该模式）
 - `custom` 自定义代理方式
 - `promptulate` promptulate提供的免费代理服务器
 
