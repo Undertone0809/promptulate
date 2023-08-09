@@ -8,6 +8,7 @@ from pydantic import Field, Extra
 
 from promptulate.llms.base import BaseLLM
 from promptulate.llms.openai import ChatOpenAI
+from promptulate.tips import NetWorkError
 from promptulate.tools.arxiv.api_wrapper import ArxivAPIWrapper
 from promptulate.tools.arxiv.tools import ArxivQueryTool
 from promptulate.tools.base import BaseTool
@@ -126,18 +127,31 @@ class PaperSummaryTool(BaseTool):
         if re.match("\d{4}\.\d{5}(v\d+)?", query):
             paper_info = self.arxiv_apiwrapper.query(
                 id_list=[query], num_results=1, specified_fields=["title", "summary"]
-            )[0]
-            paper_info["abstract"] = paper_info["summary"]
-        else:
-            paper_info = self.semantic_scholar_query_tool.run(
-                query,
-                return_type="original",
-                specified_fields=["title", "url", "abstract"],
             )
             if paper_info:
                 paper_info = paper_info[0]
-            else:
-                return "semantic scholar query tool query result is None."
+                paper_info["abstract"] = paper_info["summary"]
+        else:
+            try:
+                paper_info = self.semantic_scholar_query_tool.run(
+                    query,
+                    return_type="original",
+                    specified_fields=["title", "url", "abstract"],
+                )
+                if paper_info:
+                    paper_info = paper_info[0]
+
+            except NetWorkError as e:
+                paper_info = self.arxiv_apiwrapper.query(
+                    keyword=query, num_results=1, specified_fields=["title", "summary"]
+                )
+                if paper_info:
+                    paper_info = paper_info[0]
+                    paper_info["abstract"] = paper_info["summary"]
+
+        if not paper_info:
+            return "semantic scholar query tool and arxiv query tool query result is None."
+
         paper_summary = (
             f"""title: {paper_info["title"]}\nabstract: {paper_info["abstract"]}"""
         )

@@ -135,7 +135,7 @@ class OpenAI(BaseOpenAI):
                 DeprecationWarning,
             )
         api_key = self.api_key
-        logger.debug(f"[pne openai key] {api_key}")
+        logger.debug(f"[pne openai key] sk-....{api_key[-6:]}")
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {api_key}",
@@ -222,7 +222,7 @@ class ChatOpenAI(BaseOpenAI):
         self, prompts: MessageSet, stop: Optional[List[str]] = None, *args, **kwargs
     ) -> Optional[AssistantMessage]:
         api_key = self.api_key
-        logger.debug(f"[pne openai key] {api_key}")
+        logger.debug(f"[pne openai key] sk-....{api_key[-6:]}")
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {api_key}",
