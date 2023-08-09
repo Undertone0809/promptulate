@@ -46,19 +46,29 @@ class SemanticScholarAPIWrapper(BaseModel):
         """
 
         def get_detail():
+            """
+            Get more paper attributions for specified_fields.
+            ref: https://api.semanticscholar.org/api-docs/graph#tag/Paper-Data/operation/post_graph_get_papers
+            """
             paper_ids = list(map(lambda p: p["id"], self.current_result))
             fields: List[str] = kwargs["specified_fields"]
             params: Dict[str, str] = {"fields": ",".join(fields)}
 
-            r = requests.post(
+            resp = requests.post(
                 f"{self.BASE_API_URL}/paper/batch",
                 params=params,
                 json={"ids": paper_ids},
             )
             if response.status_code != 200:
-                raise NetWorkError("")
+                raise NetWorkError("SemanticScholarAPIWrapper.get_paper.get_detail")
 
-            detail_result = r.json()
+            detail_result = resp.json()
+            if isinstance(detail_result, dict):
+                raise NetWorkError(
+                    "SemanticScholarAPIWrapper.get_paper.get_detail",
+                    reason=detail_result["message"],
+                )
+
             for original in self.current_result:
                 for detail_item in detail_result:
                     if detail_item["paperId"] == original["id"]:
@@ -90,6 +100,7 @@ class SemanticScholarAPIWrapper(BaseModel):
         raise NetWorkError("semantic scholar query")
 
     def _get_url(self, id: str) -> str:
+        """Get paper url from paper id."""
         return f"{self.BASE_OFFICIAL_URL}/paper/{id}"
 
     def get_references(self, query: str, max_result: int = 500, **kwargs) -> List[Dict]:
@@ -125,9 +136,7 @@ class SemanticScholarAPIWrapper(BaseModel):
                 del item["citedPaper"]["paperId"]
                 final_result.append(item["citedPaper"])
 
-            logger.debug(
-                f"[pne semantic scholar result] {json.dumps(final_result)}"
-            )
+            logger.debug(f"[pne semantic scholar result] {json.dumps(final_result)}")
             return final_result
         raise NetWorkError("semantic scholar")
 
@@ -170,8 +179,6 @@ class SemanticScholarAPIWrapper(BaseModel):
                 del item["citingPaper"]["paperId"]
                 final_result.append(item["citingPaper"])
 
-            logger.debug(
-                f"[pne semantic scholar result] {json.dumps(final_result)}"
-            )
+            logger.debug(f"[pne semantic scholar result] {json.dumps(final_result)}")
             return final_result
         raise NetWorkError("semantic scholar")

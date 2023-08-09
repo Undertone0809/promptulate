@@ -5,7 +5,7 @@
 
 
 ## v1.4.0 发展计划
-- [v1.4.0开发计划]()
+- [v1.4.0开发计划](https://github.com/Undertone0809/promptulate/issues/20)
 
 ## 其他发展计划
 
@@ -59,3 +59,4 @@
 - 尝试兼容langchain组件
 - 兼容接入langsmith
 - 用ChatOpenAI+text context memory构建chain
+- 接入Hugging face

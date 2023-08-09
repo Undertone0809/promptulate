@@ -122,6 +122,7 @@ class PaperSummaryTool(BaseTool):
             self.summary_counter += 1
 
         self.summary_counter = 0
+        # judge arxiv id or string type paper title
         if re.match("\d{4}\.\d{5}(v\d+)?", query):
             paper_info = self.arxiv_apiwrapper.query(
                 id_list=[query], num_results=1, specified_fields=["title", "summary"]

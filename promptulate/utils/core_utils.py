@@ -18,7 +18,6 @@
 # Contact Email: zeeland@foxmail.com
 
 import logging
-import os
 import random
 import shutil
 import string
@@ -31,7 +30,6 @@ from cushy_storage import CushyOrmCache
 
 __all__ = [
     "get_cache",
-    "get_project_root_path",
     "get_default_storage_path",
     "record_time",
     "generate_conversation_id",
@@ -76,36 +74,17 @@ def get_cache():
     return cache
 
 
-def get_project_root_path() -> str:
-    """get project root path or current path"""
-    project_path = os.getcwd()
-    max_depth = 10
-    count = 0
-    while not os.path.exists(os.path.join(project_path, "README.md")):
-        project_path = os.path.split(project_path)[0]
-        count += 1
-        if count > max_depth:
-            return os.getcwd()
-    return project_path
-
-
 def set_openai_api_key(value: str):
     cache["OPENAI_API_KEY"] = value
 
 
-def get_default_storage_path(file_name: str = "") -> str:
-    # if platform.system() == "Windows":
-    #     return f"{get_project_root_path()}/{file_name}"
-    # elif platform.system() == "Linux" or "Darwin":
-    #     dir_path = os.environ.get("TMPDIR")
-    #     if not dir_path:
-    #         dir_path = tempfile.gettempdir()
-    #     dir_path = os.path.join(dir_path, "promptulate")
-    #     return f"{dir_path}/{file_name}"
-    # else:
-    #     return f"./{file_name}"
-    dir_path = f"{tempfile.gettempdir()}/promptulate"
-    return f"{dir_path}/{file_name}"
+def convert_backslashes(path):
+    """Convert all \\ to / of file path."""
+    return path.replace("\\", "/")
+
+
+def get_default_storage_path(module_name: str = "") -> str:
+    return convert_backslashes(f"{tempfile.gettempdir()}/promptulate/{module_name}")
 
 
 def hint(fn):
@@ -136,7 +115,7 @@ def delete_cache(specified_module: str = None):
     """Delete cache or specified cache module"""
     cache_path = get_default_storage_path("cache")
     if specified_module:
-        cache_path = f"{get_project_root_path()}/{specified_module[:2]}"
+        cache_path = f"{cache_path}/{specified_module[:2]}"
     shutil.rmtree(cache_path)
 
 
