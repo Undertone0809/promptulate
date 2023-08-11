@@ -18,13 +18,14 @@
 # Contact Email: zeeland@foxmail.com
 
 from promptulate import Conversation
-from promptulate.llms import OpenAI
+from promptulate.llms import OpenAI, ChatOpenAI, ErnieBot
 from promptulate.memory import FileChatMemory
 
 
 def main():
     memory = FileChatMemory()
-    llm = OpenAI(model="gpt-3.5-turbo", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)
+    llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)
+    #llm = ErnieBot()
     conversation = Conversation(llm=llm, memory=memory)
     ret = conversation.predict("什么是引力波")
     print(f"[predict] {ret}")

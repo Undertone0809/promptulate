@@ -37,7 +37,7 @@ from promptulate.provider.mixins import (
 from promptulate.schema import (
     MessageSet,
     AssistantMessage,
-    init_chat_message_history,
+    init_chat_message_history, LLMType,
 )
 from promptulate.tips import EmptyMessageSetError
 from promptulate.utils.core_utils import record_time
@@ -72,9 +72,14 @@ class Conversation(
     role: Union[str, CustomPresetRole] = "default-role"
     memory: BaseChatMemory = Field(default_factory=BufferChatMemory)
 
+    def __init__(self, **data: Any):
+        super().__init__(**data)
+        if self.role == "default-role" and self.llm.llm_type == LLMType.ErnieBot:
+            self.role = "default-role2"
+
     @validator("conversation_id", always=True)
     def init_conversation_id(
-        cls, conversation_id: Optional[str], values: Dict[str, Any]
+            cls, conversation_id: Optional[str], values: Dict[str, Any]
     ) -> Optional[str]:
         """initialize self.conversation_id and memory.conversation_id"""
         if not conversation_id:
@@ -87,7 +92,7 @@ class Conversation(
 
     @validator("memory", always=True)
     def init_memory(
-        cls, memory: BaseChatMemory, values: Dict[str, Any]
+            cls, memory: BaseChatMemory, values: Dict[str, Any]
     ) -> BaseChatMemory:
         """check whether exist conversation_id before initialize memory"""
         if "conversation_id" in values and values["conversation_id"]:
@@ -104,7 +109,7 @@ class Conversation(
             messages_history.add_user_message(message=prompt)
         except EmptyMessageSetError as e:
             messages_history = init_chat_message_history(
-                get_preset_role_prompt(self.role), prompt
+                get_preset_role_prompt(self.role), prompt, self.llm.llm_type
             )
             self.memory.save_message_set_to_memory(messages_history)
         logger.debug(

@@ -141,9 +141,10 @@ print(result)
 你好！有什么我可以帮助你的吗？
 ```
 
-如果你想使用`GPT-4.0`，你只需要`ChatOpenAI(model="gpt-4.0")`进行初始化就可以了，默认情况下，使用`gpt-3.5-turbo`模型。
+如果你想使用`GPT-4.0`，你只需要`ChatOpenAI(model="gpt-4.0")`进行初始化就可以了，默认情况下，使用`gpt-3.5-turbo`模型。同理你想使用国产文心系列模型，只需要 ErnieBot()进行初始化，文心模型虽然与openai模型有较大差异，但是框架提供了尽可能完美的兼容。
+你还可以使用ErnieBot(model="ernie-bot")来具体选择对应的文心模型，目前框架提供了两种文心模型，分别是文心一言（"ernie-bot"）和文心turbo（"ernie-bot-turbo"）,默认为文心turbo模型。
 
-事实上，我们推荐你在大多数情况下使用`ChatOpenAI`，如果你是一个初级prompt engineer，那么文本推理型的LLM可能并不是那么适合你，相反，你可以轻松用`gpt-3.5-turbo`来构建复杂应用。
+事实上，我们推荐你在大多数情况下使用`ChatOpenAI`，如果你是一个初级prompt engineer，那么文本推理型的LLM可能并不是那么适合你，相反，你可以轻松用`gpt-3.5-turbo`来构建复杂应用
 
 > 需要注意的是，OpenAI已经准备弃用text-davinci-003模型，因此你在调用OpenAI(text-davinci-003模型)的时候，会出现`"This model version is deprecated. Migrate before January 4, 2024 to avoid disruption of service. Learn more https://platform.openai.com/docs/deprecations`的警告。
 
@@ -186,11 +187,11 @@ result = llm(prompt, stop=["test"])
 ```
 
 llm是否支持stop，要看其LLM模型本身是否支持，当前OpenAI系列的产品支持stop，因此你可以`ChatOpenAI` `OpenAI`都可以使用上面的方式进行调用。
-
+文心系列模型不支持stop,但是框架本身提供了简易的stop。
 ### proxy
 我想你可能遇到了无法访问的小问题，It's OK, `promptulate` 提供了三种访问OpenAI的方式，分别是
 
-- `off` 默认的访问方式，不开代理（如果你打开了全局代理工具，可以选择该模式）
+- `off` 默认的访问方式，不开代理（如果你打开了全局代理工具或者使用国产大模型，可以选择该模式）
 - `custom` 自定义代理方式
 - `promptulate` promptulate提供的免费代理服务器
 

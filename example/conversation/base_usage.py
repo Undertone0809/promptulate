@@ -19,10 +19,12 @@
 
 
 from promptulate import Conversation
+from promptulate.llms import ErnieBot, ChatOpenAI
 
 
 def main():
-    conversation = Conversation()
+    llm = ErnieBot()
+    conversation = Conversation(llm=llm,role="linux-terminal")
     while True:
         prompt = str(input("[User] "))
         ret = conversation.predict(prompt)

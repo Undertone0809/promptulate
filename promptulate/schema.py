@@ -74,6 +74,7 @@ class LLMType(str, Enum):
 
     OpenAI = "OpenAI"
     ChatOpenAI = "ChatOpenAI"
+    ErnieBot = "ErnieBot"
 
 
 class MessageSet(BaseModel):
@@ -146,11 +147,18 @@ class MessageSet(BaseModel):
         self.messages.append(AssistantMessage(content=message))
 
 
-def init_chat_message_history(system_content, user_content) -> MessageSet:
-    messages = [
-        SystemMessage(content=system_content),
-        UserMessage(content=user_content),
-    ]
+def init_chat_message_history(system_content, user_content, llm: LLMType) -> MessageSet:
+    if llm == llm.ChatOpenAI or llm == llm.OpenAI:
+        messages = [
+            SystemMessage(content=system_content),
+            UserMessage(content=user_content),
+        ]
+    else:
+        messages = [
+            UserMessage(content=system_content),
+            AssistantMessage(content="好的"),
+            UserMessage(content=user_content),
+        ]
     return MessageSet(messages=messages)
 
 
@@ -162,7 +170,12 @@ def _to_chat_openai_llm_prompt(message_set: MessageSet) -> List[Dict]:
     return message_set.listdict_messages
 
 
+def _to_ernie_bot_llm_prompt(message_set: MessageSet) -> List[Dict]:
+    return message_set.listdict_messages
+
+
 _to_llm_prompt: Dict[LLMType, Callable] = {
     LLMType.OpenAI: _to_openai_llm_prompt,
     LLMType.ChatOpenAI: _to_chat_openai_llm_prompt,
+    LLMType.ErnieBot: _to_ernie_bot_llm_prompt,
 }
