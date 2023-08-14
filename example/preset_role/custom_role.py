@@ -18,7 +18,6 @@
 # Contact Email: zeeland@foxmail.com
 
 from promptulate import Conversation
-from promptulate.llms import ErnieBot
 from promptulate.preset_roles import CustomPresetRole
 
 
@@ -30,12 +29,11 @@ class SpiritualTeacher(CustomPresetRole):
 
 
 def main():
-    llm = ErnieBot()
     role = SpiritualTeacher()
-    conversation = Conversation(llm = llm,role=role)
+    conversation = Conversation(role=role)
     ret = conversation.predict("论文被拒绝了怎么办？")
     print(ret)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

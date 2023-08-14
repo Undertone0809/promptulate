@@ -21,4 +21,4 @@ from promptulate.llms.base import BaseLLM
 from promptulate.llms.erniebot.erniebot import ErnieBot
 from promptulate.llms.openai import OpenAI, ChatOpenAI
 
-__all__ = ["OpenAI", "ChatOpenAI", "BaseLLM","ErnieBot"]
+__all__ = ["OpenAI", "ChatOpenAI", "BaseLLM", "ErnieBot"]

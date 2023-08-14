@@ -37,7 +37,8 @@ from promptulate.provider.mixins import (
 from promptulate.schema import (
     MessageSet,
     AssistantMessage,
-    init_chat_message_history, LLMType,
+    init_chat_message_history,
+    LLMType,
 )
 from promptulate.tips import EmptyMessageSetError
 from promptulate.utils.core_utils import record_time
@@ -75,11 +76,11 @@ class Conversation(
     def __init__(self, **data: Any):
         super().__init__(**data)
         if self.role == "default-role" and self.llm.llm_type == LLMType.ErnieBot:
-            self.role = "default-role2"
+            self.role = "ernie-default-role"
 
     @validator("conversation_id", always=True)
     def init_conversation_id(
-            cls, conversation_id: Optional[str], values: Dict[str, Any]
+        cls, conversation_id: Optional[str], values: Dict[str, Any]
     ) -> Optional[str]:
         """initialize self.conversation_id and memory.conversation_id"""
         if not conversation_id:
@@ -92,7 +93,7 @@ class Conversation(
 
     @validator("memory", always=True)
     def init_memory(
-            cls, memory: BaseChatMemory, values: Dict[str, Any]
+        cls, memory: BaseChatMemory, values: Dict[str, Any]
     ) -> BaseChatMemory:
         """check whether exist conversation_id before initialize memory"""
         if "conversation_id" in values and values["conversation_id"]:
