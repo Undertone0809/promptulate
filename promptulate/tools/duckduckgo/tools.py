@@ -75,6 +75,7 @@ class DuckDuckGoReferenceTool(BaseTool):
 
 class DuckDuckGoLLMTool(BaseTool):
     """ddg web QA search using llm"""
+
     # todo need to implement
 
     name: str = "ddg-llm-search"
@@ -89,6 +90,7 @@ class DuckDuckGoLLMTool(BaseTool):
 
 class DuckDuckGoLLMReferenceTool(BaseTool):
     """Providing ddg web QA search with reference using llm"""
+
     # todo need to implement
 
     name: str = "ddg-llm-search-with-references"

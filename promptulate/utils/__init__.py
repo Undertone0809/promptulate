@@ -18,7 +18,6 @@
 # Contact Email: zeeland@foxmail.com
 
 from promptulate.utils.core_utils import (
-    get_project_root_path,
     get_default_storage_path,
     get_cache,
     generate_conversation_id,
@@ -36,7 +35,6 @@ __all__ = [
     "enable_log",
     "enable_log_no_file",
     "get_cache",
-    "get_project_root_path",
     "get_default_storage_path",
     "Singleton",
     "AbstractSingleton",

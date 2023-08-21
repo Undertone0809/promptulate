@@ -3,10 +3,8 @@ from typing import List, Any, Optional
 
 from promptulate.config import Config
 from promptulate.tools.base import BaseTool
-from promptulate.utils.logger import enable_log
 
 logger = logging.getLogger(__name__)
-enable_log()
 cfg = Config()
 
 
