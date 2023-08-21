@@ -18,25 +18,34 @@
 # Contact Email: zeeland@foxmail.com
 
 from promptulate import Conversation
-from promptulate.llms import OpenAI
+from promptulate.llms import OpenAI, ChatOpenAI, ErnieBot
 from promptulate.memory import FileChatMemory
 
 
 def main():
     memory = FileChatMemory()
-    llm = OpenAI(model="gpt-3.5-turbo", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)
+    llm = ChatOpenAI(
+        model="gpt-3.5-turbo",
+        temperature=0.9,
+        top_p=1,
+        stream=False,
+        presence_penalty=0,
+        n=1,
+    )
     conversation = Conversation(llm=llm, memory=memory)
     ret = conversation.predict("什么是引力波")
     print(f"[predict] {ret}")
-    ret = conversation.predict_by_translate("请介绍一下引力波与广义相对论的必然关系", country='America')
+    ret = conversation.predict_by_translate("请介绍一下引力波与广义相对论的必然关系", country="America")
     print(f"[translate output] {ret}")
     ret = conversation.summary_content()
     print(f"[summary content] {ret}")
     ret = conversation.summary_topic()
     print(f"[summary topic] {ret}")
-    ret = conversation.export_message_to_markdown(output_type="file", file_path="output.md")
+    ret = conversation.export_message_to_markdown(
+        output_type="file", file_path="output.md"
+    )
     print(f"[export markdown] {ret}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

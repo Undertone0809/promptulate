@@ -1,4 +1,5 @@
 import json
+import time
 from typing import List, Optional, Dict
 
 import requests
@@ -68,6 +69,10 @@ class SemanticScholarAPIWrapper(BaseModel):
                     "SemanticScholarAPIWrapper.get_paper.get_detail",
                     reason=detail_result["message"],
                 )
+
+            detail_result = resp.json()
+
+            time.sleep(0.1)
 
             for original in self.current_result:
                 for detail_item in detail_result:

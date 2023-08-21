@@ -22,7 +22,7 @@ from promptulate import Conversation
 
 
 def main():
-    conversation = Conversation()
+    conversation = Conversation(role="linux-terminal")
     while True:
         prompt = str(input("[User] "))
         ret = conversation.predict(prompt)

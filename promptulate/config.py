@@ -21,6 +21,7 @@ import os
 from typing import Optional
 
 from promptulate import utils
+from promptulate.utils.ernie_token_pool import ErnieTokenPool
 from promptulate.utils.logger import get_logger
 from promptulate.utils.openai_key_pool import OpenAIKeyPool
 from promptulate.utils.singleton import Singleton
@@ -43,8 +44,13 @@ class Config(metaclass=Singleton):
         self.openai_chat_api_url = "https://api.openai.com/v1/chat/completions"
         self.openai_completion_api_url = "https://api.openai.com/v1/completions"
         self.openai_proxy_url = "https://chatgpt-api.shn.hk/v1/"  # FREE API
+        self.ernie_bot_url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions"
+        self.ernie_bot_turbo_url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant"
+        self.ernie_bot_token = "https://aip.baidubce.com/oauth/2.0/token"
         self.key_default_retry_times = 5
         """If llm(like OpenAI) unable to obtain data, retry request until the data is obtained."""
+        ernie_token_pool: ErnieTokenPool = ErnieTokenPool()
+        ernie_token_pool.start(self.get_ernie_api_key, self.get_ernie_api_secret)
 
     @property
     def openai_api_key(self):
@@ -65,6 +71,35 @@ class Config(metaclass=Singleton):
             if key:
                 return key
         return self.openai_api_key
+
+    @property
+    def get_ernie_api_key(self) -> str:
+        if "ERNIE_API_KEY" in os.environ.keys():
+            if self.enable_cache:
+                utils.get_cache()["ERNIE_API_KEY"] = os.getenv("ERNIE_API_KEY")
+            return os.getenv("ERNIE_API_KEY")
+        if self.enable_cache and "ERNIE_API_KEY" in utils.get_cache():
+            return utils.get_cache()["ERNIE_API_KEY"]
+        raise ValueError("ERNIE_API_KEY is not provided. Please set your key.")
+
+    @property
+    def get_ernie_api_secret(self) -> str:
+        if "ERNIE_API_SECRET" in os.environ.keys():
+            if self.enable_cache:
+                utils.get_cache()["ERNIE_API_SECRET"] = os.getenv("ERNIE_API_SECRET")
+            return os.getenv("ERNIE_API_SECRET")
+        if self.enable_cache and "ERNIE_API_SECRET" in utils.get_cache():
+            return utils.get_cache()["ERNIE_API_SECRET"]
+        raise ValueError("ERNIE_API_SECRET  is not provided. Please set your secret.")
+
+    def get_ernie_token(self) -> str:
+        ernie_token_pool: ErnieTokenPool = ErnieTokenPool()
+        if self.enable_cache:
+            if "ERNIE_TOKEN" in utils.get_cache():
+                return ernie_token_pool.get_token()
+        return ernie_token_pool.nocache_get_token(
+            self.get_ernie_api_key, self.get_ernie_api_secret
+        )
 
     def get_key_retry_times(self, model: str) -> int:
         if self.enable_cache:

@@ -35,17 +35,23 @@ setuptools.setup(
     url="https://github.com/Undertone0809/promptulate",
     packages=setuptools.find_packages(),
     install_requires=[
-        'cushy-storage',
-        'pydantic~=1.10.0',
-        'requests',
-        'duckduckgo_search',
-        'broadcast-service==1.3.2',
-        'arxiv',
-        'click',
-        'numexpr'
+        "cushy-storage",
+        "pydantic~=1.10.0",
+        "requests",
+        "duckduckgo_search",
+        "broadcast-service==1.3.2",
+        "arxiv",
+        "click",
+        "numexpr",
+        "apscheduler~=3.10.3",
+        "backports.zoneinfo~=0.2.1",
+        "pytz~=2023.3",
+        "six~=1.16.0",
+        "tzdata~=2023.3",
+        "tzlocal~=5.0.1",
     ],
     license="Apache 2.0",
-    python_requires='>=3.7',
+    python_requires=">=3.7",
     classifiers=[
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 3",
@@ -57,10 +63,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3 :: Only",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
-
     ],
     keywords="promptulate, prompt-me, prompt, chatgpt, gpt, chatbot, llm",
-    entry_points={
-        'console_scripts': ['promptulate-chat=promptulate.client.chat:main']
-    },
+    entry_points={"console_scripts": ["promptulate-chat=promptulate.client.chat:main"]},
 )
