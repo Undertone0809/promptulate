@@ -18,11 +18,9 @@
   <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/promptulate_logo_new.png"/>
 </p>
 
+`Promptulate AI` 专注于构建大语言模型应用的开发者平台，致力于为开发者和企业提供构建、扩展、评估大语言模型应用的能力。`Promptulate` 是 `Promptulate AI` 旗下的大语言模型自动化与应用开发框架，旨在帮助开发者通过更小的成本构建行业级的大模型应用，其包含了LLM领域应用层开发的大部分常用组件，如外部工具组件、模型组件、Agent智能代理、外部数据源接入模块、数据存储模块、生命周期模块等。 通过 `Promptulate`，你可以轻松构建起属于自己的LLM应用程序。
 
-`promptulate` 是一个专为Prompt工程师设计的大语言模型自动化与应用开发框架，支持智能决策、消息持久化、外部工具调用、角色预设等功能，开箱即用。
-通过 `promptulate`，你可以轻松构建起属于自己的LLM应用程序。
-
-`promptulate`旨在构建为开发者提供一种强大而灵活的平台，以创建能够自动化各种任务和应用程序的自主代理。通过Core
+更多地，为构建一个强大而灵活的LLM应用开发平台，以创建能够自动化各种任务和应用程序的自主代理，`Promptulate` 通过Core
 AI Engine、Agent System、APIs and Tools Provider、Multimodal Processing、Knowledge Base和Task-specific Modules
 6个组件实现自动化AI平台。 Core AI Engine是该框架的核心组件，负责处理和理解各种输入，生成输出和作出决策。Agent
 System是提供高级指导和控制AI代理行为的模块；APIs and Tools Provider提供工具和服务交互的API和集成库；Multimodal
@@ -89,7 +87,7 @@ promptulate框架的设计原则包括：模块化、可扩展性、互操作性
 欢迎加入群聊一起交流讨论有关LLM相关的话题，链接过期了可以issue或email提醒一下作者。
 
 <div style="width: 250px;margin: 0 auto;">
-  <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230807173459.png"/>
+  <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230822012928.png"/>
 </div>
 
 
