@@ -11,11 +11,9 @@ from promptulate.tools import BaseTool, PythonREPLTool
 from promptulate.tools.duckduckgo import DuckDuckGoTool
 from promptulate.tools.manager import ToolManager
 from promptulate.tools.paper.tools import PaperSummaryTool
-from promptulate.utils.logger import enable_log
 from promptulate.utils.string_template import StringTemplate
 
 logger = logging.getLogger(__name__)
-enable_log()
 
 
 def _load_tools() -> List[type(BaseTool)]:
@@ -49,7 +47,9 @@ class ToolAgent(BaseAgent):
     def __init__(
         self,
         tools: List[BaseTool],
-        llm: BaseLLM = ChatOpenAI(model="gpt-3.5-turbo-16k", temperature=0.2, enable_preset_description=False),
+        llm: BaseLLM = ChatOpenAI(
+            model="gpt-3.5-turbo-16k", temperature=0.2, enable_preset_description=False
+        ),
         stop_sequences: List[str] = None,
         system_prompt_template: StringTemplate = StringTemplate(REACT_ZERO_SHOT_PROMPT),
         hooks: List[Callable] = None,
@@ -79,9 +79,7 @@ class ToolAgent(BaseAgent):
 
     def _run(self, prompt: str) -> str:
         self.conversation_prompt = self._build_preset_prompt(prompt)
-        logger.info(
-            f"[pne] tool agent system prompt: {self.conversation_prompt}"
-        )
+        logger.info(f"[pne] tool agent system prompt: {self.conversation_prompt}")
 
         counter = 0
         while True:
@@ -93,7 +91,7 @@ class ToolAgent(BaseAgent):
             )
 
             if "Final Answer" in answer:
-                return answer
+                return answer.split("Final Answer:")[-1]
 
             action, action_input = self._find_action(answer)
             tool_result = self.tool_manager.run_tool(action, action_input)
@@ -123,6 +121,8 @@ class ToolAgent(BaseAgent):
 
         if action_input_match:
             action_input = action_input_match.group(1)
+            if action_input.startswith('"'):
+                action_input = action_input[1:-1]
             logger.info(f"[pne] tool agent get Action Input <{action_input}>")
 
         return action, action_input
