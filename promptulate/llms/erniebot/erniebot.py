@@ -6,7 +6,6 @@ from typing import List, Optional, Dict, Any
 import requests
 
 from promptulate.config import Config
-from promptulate.hook import Hook, HookTable
 from promptulate.llms import BaseLLM
 from promptulate.schema import (
     LLMType,
@@ -21,27 +20,24 @@ CFG = Config()
 logger = get_logger()
 
 
-def get_access_token():
-    """
-    使用 AK，SK 生成鉴权签名（Access Token）
-    :return: access_token，或是None(如果错误)
-    """
-    url = "https://aip.baidubce.com/oauth/2.0/token"
-    params = {
-        "grant_type": "client_credentials",
-        "client_id": CFG.get_ernie_api_key(),
-        "client_secret": CFG.get_ernie_api_secret(),
-    }
-    return str(requests.post(url, params=params).json().get("access_token"))
-
-
 class ErnieBot(BaseLLM, ABC):
     llm_type: LLMType = LLMType.ErnieBot
     """Used to MessageSet data convert"""
     model: str = "ernie-bot-turbo"
     """Model name to use."""
-    temperature: float = 1.0
+    temperature: float = 0.95
     """What sampling temperature to use."""
+    top_p: float = 0.8
+    """variety of text"""
+    stream: bool = False
+    """Whether to stream the results or not."""
+    penalty_score: float = 1.0
+    api_param_keys: List[str] = [
+        "temperature",
+        "top_p",
+        "stream",
+        "penalty_score",
+    ]
     url: str = CFG.ernie_bot_url
 
     def __call__(
@@ -68,11 +64,11 @@ class ErnieBot(BaseLLM, ABC):
             self.url = CFG.ernie_bot_url
             logging.debug("[pne use ernie-bot]")
         body: Dict[str, Any] = self._build_api_params_dict(prompts)
-        response = requests.request(
-            "POST",
-            self.url + "?access_token=" + get_access_token(),
+        response = requests.post(
+            url=self.url + "?access_token=" + CFG.get_ernie_token(),
             headers=headers,
             json=body,
+            proxies=CFG.proxies,
         )
         logger.debug(f"[pne ernie body] {body}")
         if response.status_code == 200:
@@ -99,4 +95,7 @@ class ErnieBot(BaseLLM, ABC):
         dic = {
             "messages": prompts.to_llm_prompt(self.llm_type),
         }
+        for key in self.api_param_keys:
+            if key in self.__dict__:
+                dic.update({key: self.__dict__[key]})
         return dic
