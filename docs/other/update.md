@@ -8,6 +8,12 @@ Please update the latest version.
 pip install -U promptulate
 ```
 
+## 1.4.0 2023-08-28
+- feat: 提供百度文心大模型模型支持 [https://github.com/Undertone0809/promptulate/pull/27](https://github.com/Undertone0809/promptulate/pull/27)
+- fix: 修复ToolAgent经常遇到None Tool的问题
+- pref: 优化pne-chat client的使用
+
+
 ## 1.3.0 2023-08-08
 
 #### Features

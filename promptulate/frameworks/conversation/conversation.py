@@ -118,7 +118,7 @@ class Conversation(
         )
         prompt_params = {"prompts": messages_history}
         if "stop" in kwargs:
-            prompt_params.update({"update": kwargs["stop"]})
+            prompt_params.update({"stop": kwargs["stop"]})
 
         answer: AssistantMessage = self.llm.predict(**prompt_params)
         messages_history.messages.append(answer)

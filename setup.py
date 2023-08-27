@@ -26,7 +26,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setuptools.setup(
     name="promptulate",
-    version="1.3.2",
+    version="1.4.0",
     author="Zeeland",
     author_email="zeeland@foxmail.com",
     description="A powerful LLM Application development framework.",
@@ -63,7 +63,8 @@ setuptools.setup(
         "Programming Language :: Python :: 3 :: Only",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
+
     ],
     keywords="promptulate, prompt-me, prompt, chatgpt, gpt, chatbot, llm",
-    entry_points={"console_scripts": ["promptulate-chat=promptulate.client.chat:main"]},
+    entry_points={"console_scripts": ["pne-chat=promptulate.client.chat:main"]},
 )

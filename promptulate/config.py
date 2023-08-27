@@ -90,7 +90,7 @@ class Config(metaclass=Singleton):
             return os.getenv("ERNIE_API_SECRET")
         if self.enable_cache and "ERNIE_API_SECRET" in utils.get_cache():
             return utils.get_cache()["ERNIE_API_SECRET"]
-        raise ValueError("ERNIE_API_SECRET  is not provided. Please set your secret.")
+        raise ValueError("ERNIE_API_SECRET is not provided. Please set your secret.")
 
     def get_ernie_token(self) -> str:
         ernie_token_pool: ErnieTokenPool = ErnieTokenPool()
