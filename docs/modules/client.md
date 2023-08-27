@@ -5,7 +5,7 @@
 - 打开终端控制台，输入以下命令，就可以开启一个简易的对话
 
 ```shell
-promptulate-chat --openai_api_key your_key_here --proxy_mode promptulate
+pne-chat --openai_api_key your_key_here --proxy_mode promptulate
 ```
 
 ```text
@@ -19,7 +19,7 @@ promptulate-chat --openai_api_key your_key_here --proxy_mode promptulate
   会对你的配置信息进行缓存，因此下一次运行的时候，你只需要输入下面的命令就可以开始一段对话了
 
 ```shell
-promptulate-chat
+pne-chat
 ```
 
 - 然后你就可以
