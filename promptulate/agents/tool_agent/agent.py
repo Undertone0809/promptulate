@@ -1,23 +1,19 @@
 import logging
 import re
+import time
 from abc import abstractmethod, ABC
-from typing import List, Callable
+from typing import List, Callable, Optional
 
 from promptulate.agents.tool_agent.prompt import REACT_ZERO_SHOT_PROMPT
 from promptulate.hook import Hook, HookTable
 from promptulate.llms.base import BaseLLM
 from promptulate.llms.openai import ChatOpenAI
-from promptulate.tools import BaseTool, PythonREPLTool
-from promptulate.tools.duckduckgo import DuckDuckGoTool
+from promptulate.tools import BaseTool
 from promptulate.tools.manager import ToolManager
-from promptulate.tools.paper.tools import PaperSummaryTool
+from promptulate.utils.core_utils import generate_run_id
 from promptulate.utils.string_template import StringTemplate
 
 logger = logging.getLogger(__name__)
-
-
-def _load_tools() -> List[type(BaseTool)]:
-    return [PythonREPLTool, DuckDuckGoTool, PaperSummaryTool]
 
 
 class BaseAgent(ABC):
@@ -55,6 +51,7 @@ class ToolAgent(BaseAgent):
         hooks: List[Callable] = None,
     ):
         super().__init__(hooks=hooks)
+        self.run_id = generate_run_id()
         self.llm: BaseLLM = llm
         """llm driver"""
         self.stop_sequences: List[str] = stop_sequences
@@ -65,6 +62,10 @@ class ToolAgent(BaseAgent):
         """Used to manage all tools."""
         self.conversation_prompt: str = ""
         """Store all conversation message when conversation."""
+        self.max_iterations: Optional[int] = 15
+        """The maximum number of executions."""
+        self.max_execution_time: Optional[float] = None
+        """The longest running time. """
 
         if not stop_sequences:
             self.stop_sequences = ["Observation"]
@@ -81,13 +82,15 @@ class ToolAgent(BaseAgent):
         self.conversation_prompt = self._build_preset_prompt(prompt)
         logger.info(f"[pne] tool agent system prompt: {self.conversation_prompt}")
 
-        counter = 0
-        while True:
-            counter += 1
-            answer = self.llm(self.conversation_prompt, stop=self.stop_sequences)
+        iterations = 0
+        used_time = 0.0
+        start_time = time.time()
+
+        while self._should_continue(iterations, used_time):
+            answer = self.llm(prompt=self.conversation_prompt, stop=self.stop_sequences)
             self.conversation_prompt += f"{answer}\n"
             logger.info(
-                f"[pne] tool agent <{counter}> current prompt: {self.conversation_prompt}"
+                f"[pne] tool agent <{iterations}> current prompt: {self.conversation_prompt}"
             )
 
             if "Final Answer" in answer:
@@ -95,7 +98,27 @@ class ToolAgent(BaseAgent):
 
             action, action_input = self._find_action(answer)
             tool_result = self.tool_manager.run_tool(action, action_input)
-            self.conversation_prompt += f"Observation: {tool_result}"
+            self.conversation_prompt += f"Observation: {tool_result}\nThought: "
+
+            iterations += 1
+            used_time += time.time() - start_time
+
+    def _should_continue(self, current_iteration: int, current_time_elapsed) -> bool:
+        """Determine whether to stop, both timeout and exceeding the maximum number of
+        iterations will stop.
+
+        Args:
+            current_iteration: current iteration times.
+            current_time_elapsed: current running time.
+
+        Returns:
+            Whether to stop.
+        """
+        if self.max_iterations and current_iteration >= self.max_iterations:
+            return False
+        if self.max_execution_time and current_time_elapsed >= self.max_execution_time:
+            return False
+        return True
 
     def _find_action(self, answer: str) -> (str, str):
         """Parse next instruction of LLM output.
