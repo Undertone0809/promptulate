@@ -254,7 +254,7 @@ if __name__ == "__main__":
 此外，上面的例子中，含有多步的LLM推理（四次推理过程）和多次API调用（从Arxiv和Semantic
 Scholar中获取论文、引用等相关数据），但是`prompulate`的事件总线并行机制大大化简了推理总时间，平均推理时间保持在十几秒（具体事件取决于网络环境）。
 
-因为采用并行机制，因此在使用有LLM能力的Tool或者Agent时会在同一时间内快速地多次调用API，如果你的key有限速问题，推荐你使用[key-pool](modules/llm.md#key池)来解决key限速的问题（如果你是5美元的key）。
+因为采用并行机制，因此在使用有LLM能力的Tool或者Agent时会在同一时间内快速地多次调用API，如果你的key有限速问题，推荐你使用[key-pool](modules/llm/llm.md#key池)来解决key限速的问题（如果你是5美元的key）。
 
 ## 在Agent中使用Tool
 

@@ -35,7 +35,7 @@ os.environ['OPENAI_API_KEY'] = "your-key"
 
 ### LLM
 
-> 详细文档请跳转[LLM](modules/llm.md#llm)
+> 详细文档请跳转[LLM](modules/llm/llm.md#llm)
 
 `promptulate`的架构设计可以轻松兼容不同的大语言模型扩展，在`promptulate`中，llm负责最基本的内容生成部分，因此为最基础的组件。
 
@@ -134,7 +134,7 @@ for i in range(10):
 - 选择特定工具进行 **Agent 对话**
 - LLM + WebSearch 进行**基于网络搜索的对话**
 
-![](images/client_result_2.png)
+![](../images/client_result_2.png)
 
 **快速上手**
 
@@ -159,7 +159,7 @@ pne-chat
 
 - 然后你就可以随着 `pne`的引导进行操作
 
-![](images/client_result_1.png)
+![](../images/client_result_1.png)
 
 ```text
 Hi there, here is promptulate chat terminal.

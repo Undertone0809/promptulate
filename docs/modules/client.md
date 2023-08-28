@@ -6,7 +6,7 @@
 - 选择特定工具进行 **Agent 对话**
 - LLM + WebSearch 进行**基于网络搜索的对话**
 
-![](images/client_result_2.png)
+![](../images/client_result_2.png)
 
 ## 快速上手
 
@@ -31,7 +31,7 @@ pne-chat
 
 - 然后你就可以随着 `pne`的引导进行操作
 
-![](images/client_result_1.png)
+![](../images/client_result_1.png)
 
 ```text
 Hi there, here is promptulate chat terminal.
