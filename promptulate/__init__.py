@@ -19,7 +19,6 @@
 
 import warnings
 
-from promptulate.config import turn_off_stdout_hook
 from promptulate.frameworks import Conversation
 from promptulate.schema import UserMessage, AssistantMessage, SystemMessage
 from promptulate.utils import enable_log, enable_log_no_file
@@ -31,7 +30,6 @@ __all__ = [
     "SystemMessage",
     "UserMessage",
     "AssistantMessage",
-    "turn_off_stdout_hook",
 ]
 
 warnings.filterwarnings("always", category=DeprecationWarning)

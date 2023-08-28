@@ -22,8 +22,8 @@ from typing import Optional
 
 import requests
 
-from promptulate import utils
 from promptulate.hook.stdout_hook import StdOutHook
+from promptulate.utils.core_utils import get_cache
 from promptulate.utils.logger import get_logger
 from promptulate.utils.openai_key_pool import OpenAIKeyPool
 from promptulate.utils.singleton import Singleton
@@ -70,10 +70,10 @@ class Config(metaclass=Singleton):
         """This attribution has deprecated to use. Using `get_openai_api_key`"""
         if "OPENAI_API_KEY" in os.environ.keys():
             if self.enable_cache:
-                utils.get_cache()["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+                get_cache()["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
             return os.getenv("OPENAI_API_KEY")
-        if self.enable_cache and "OPENAI_API_KEY" in utils.get_cache():
-            return utils.get_cache()["OPENAI_API_KEY"]
+        if self.enable_cache and "OPENAI_API_KEY" in get_cache():
+            return get_cache()["OPENAI_API_KEY"]
         raise ValueError("OPENAI API key is not provided. Please set your key.")
 
     def get_openai_api_key(self, model: str) -> str:
@@ -89,20 +89,20 @@ class Config(metaclass=Singleton):
     def get_ernie_api_key(self) -> str:
         if "ERNIE_API_KEY" in os.environ.keys():
             if self.enable_cache:
-                utils.get_cache()["ERNIE_API_KEY"] = os.getenv("ERNIE_API_KEY")
+                get_cache()["ERNIE_API_KEY"] = os.getenv("ERNIE_API_KEY")
             return os.getenv("ERNIE_API_KEY")
-        if self.enable_cache and "ERNIE_API_KEY" in utils.get_cache():
-            return utils.get_cache()["ERNIE_API_KEY"]
+        if self.enable_cache and "ERNIE_API_KEY" in get_cache():
+            return get_cache()["ERNIE_API_KEY"]
         raise ValueError("ERNIE_API_KEY is not provided. Please set your key.")
 
     @property
     def get_ernie_api_secret(self) -> str:
         if "ERNIE_API_SECRET" in os.environ.keys():
             if self.enable_cache:
-                utils.get_cache()["ERNIE_API_SECRET"] = os.getenv("ERNIE_API_SECRET")
+                get_cache()["ERNIE_API_SECRET"] = os.getenv("ERNIE_API_SECRET")
             return os.getenv("ERNIE_API_SECRET")
-        if self.enable_cache and "ERNIE_API_SECRET" in utils.get_cache():
-            return utils.get_cache()["ERNIE_API_SECRET"]
+        if self.enable_cache and "ERNIE_API_SECRET" in get_cache():
+            return get_cache()["ERNIE_API_SECRET"]
         raise ValueError("ERNIE_API_SECRET is not provided. Please set your secret.")
 
     def get_ernie_token(self) -> str:
@@ -122,27 +122,27 @@ class Config(metaclass=Singleton):
 
     @property
     def proxy_mode(self) -> str:
-        if self.enable_cache and "PROXY_MODE" in utils.get_cache():
-            return utils.get_cache()["PROXY_MODE"]
+        if self.enable_cache and "PROXY_MODE" in get_cache():
+            return get_cache()["PROXY_MODE"]
         return self._proxy_mode
 
     @proxy_mode.setter
     def proxy_mode(self, value):
         self._proxy_mode = value
         if self.enable_cache:
-            utils.get_cache()["PROXY_MODE"] = value
+            get_cache()["PROXY_MODE"] = value
 
     @property
     def proxies(self) -> Optional[dict]:
-        if self.enable_cache and "PROXIES" in utils.get_cache():
-            return utils.get_cache()["PROXIES"] if self.proxy_mode == "custom" else None
+        if self.enable_cache and "PROXIES" in get_cache():
+            return get_cache()["PROXIES"] if self.proxy_mode == "custom" else None
         return self._proxies
 
     @proxies.setter
     def proxies(self, value):
         self._proxies = value
         if self.enable_cache:
-            utils.get_cache()["PROXIES"] = value
+            get_cache()["PROXIES"] = value
 
     @property
     def openai_chat_request_url(self) -> str:

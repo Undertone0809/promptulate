@@ -21,7 +21,6 @@ from typing import Optional
 
 from promptulate.config import Config
 
-CFG = Config()
 PROXY_MODE = ['off', 'custom', 'promptulate']
 
 
@@ -39,4 +38,4 @@ def set_proxy_mode(mode: str, proxies: Optional[dict] = None):
     """
     if mode not in PROXY_MODE:
         raise ValueError("proxy mode must in ['off', 'custom', 'promptulate']")
-    CFG.set_proxy_mode(mode, proxies)
+    Config().set_proxy_mode(mode, proxies)

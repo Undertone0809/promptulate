@@ -82,7 +82,7 @@ if __name__ == "__main__":
 控制台带有颜色输出的内容由`StdOutHook`驱动，你可以使用如下方式关闭：
 
 ```python
-from promptulate import turn_off_stdout_hook
+from promptulate.config import turn_off_stdout_hook
 
 turn_off_stdout_hook()
 ```
