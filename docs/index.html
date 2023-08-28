@@ -7,6 +7,9 @@
     <meta name="description" content="Description">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+    <script src="//cdn.jsdelivr.net/npm/docsify-edit-on-github"></script>
+    <style>
+    </style>
 </head>
 <body>
 <nav>
@@ -16,8 +19,9 @@
 <div id="app"></div>
 <script>
     window.$docsify = {
-        name: 'promptulate',
+        name: 'Promptulate',
         repo: 'https://github.com/Undertone0809/promptulate',
+        // logo: '/images/logo.svg',
         loadNavbar: true,
         loadSidebar: true,
         subMaxLevel: 3,
@@ -33,6 +37,55 @@
             fontsize: '0.9em',
             color: 'rgb(90,90,90)',
             language: 'english'
+        },
+        plugins: [
+            EditOnGithubPlugin.create(
+                'https://github.com/Undertone0809/promptulate/tree/main/docs/',
+                null,
+                function (file) {
+                    if (file.indexOf('en') === -1) {
+                        return '编辑文档'
+                    } else {
+                        return 'edit on github'
+                    }
+                }
+            ),
+            function (hook) {
+                var footer = [
+                    '<hr/>',
+                    '<footer>',
+                    '<span><a href="https://github.com/Undertone0809/">Promptulate/Zeeland</a> &copy;2023.</span>',
+                    '<span>Published with <a href="https://github.com/QingWei-Li/docsify" target="_blank">docsify</a>.</span>',
+                    '</footer>'
+                ].join('')
+
+                hook.afterEach(function (html) {
+                    return html + footer
+                })
+            },
+        ]
+
+    }
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.css">
+
+<script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/gitalk.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js"></script>
+<script>
+    var gitalk = new Gitalk({
+        clientID: '0b1cb7e36ac5fa3233ba',
+        clientSecret: '4148c415d7ed173e3dcffc861b9ac3eea79fbdbb',
+        repo: 'promptulate',
+        owner: 'Undertone0809',
+        admin: ['Undertone0809'],
+        title: `Document comment ${location.hash.match(/#(.*?)([?]|$)/)[1]}`,
+        id: location.hash.match(/#(.*?)([?]|$)/)[1],
+    })
+    // Listen for changes in hash in the URL. If an MD file is found to have changed,
+    // refresh the page to solve the problem of using a single digital comment issue for the entire website.
+    window.onhashchange = function (event) {
+        if (event.newURL.split('?')[0] !== event.oldURL.split('?')[0]) {
+            location.reload()
         }
     }
 </script>

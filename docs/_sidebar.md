@@ -1,18 +1,20 @@
 - Get started
-  - [介绍](README.md)
-  - [快速开始](get_started/quick_start.md#快速开始)
+  - [:bookmark_tabs: 介绍](README.md)
+  - [:bookmark: 快速开始](get_started/quick_start.md#快速开始)
 
 - Modules
-  - [llm 模型](modules/llm.md#llm)
-  - [Agent 智能代理](modules/agent.md#agent)
-  - [Tool 外部工具扩展](modules/tools.md#简介)
-  - [Hook&Lifecycle 钩子与生命周期](modules/hook.md#what-is-hook)
-  - [Framework](modules/framework.md#framework)
-  - [Memory 数据存储](modules/memory.md#memory)
-  - [Preset 角色预设](modules/preset.md#preset-角色预设)
-  - [Provider](modules/provider.md#provider)
-  - [Client 客户端](modules/client.md#client)
-  - [String Template 字符串格式化](modules/other/string_template.md#string-template)
+  - [:notebook_with_decorative_cover: llm 模型](modules/llm/llm.md#llm)
+    - [:closed_book: OpenAI](modules/llm/openai.md#openai)
+    - [:green_book: 百度文心](modules/llm/erniebot.md#百度文心erniebot)
+  - [:robot: Agent 智能代理](modules/agent.md#agent)
+  - [:toolbox: Tool 外部工具扩展](modules/tools.md#简介)
+  - [:probing_cane: Hook&Lifecycle 钩子与生命周期](modules/hook.md#what-is-hook)
+  - [:hiking_boot: Framework](modules/framework.md#framework)
+  - [:department_store: Memory 数据存储](modules/memory.md#memory)
+  - [:man_in_tuxedo: Preset 角色预设](modules/preset.md#preset-角色预设)
+  - [:man_with_probing_cane: Provider](modules/provider.md#provider)
+  - [:muscle: Client 客户端](modules/client.md#client)
+  - [:helicopter: String Template 字符串格式化](modules/other/string_template.md#string-template)
 
 - Other
   - [知识扫盲](other/knowledge.md) 

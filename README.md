@@ -1,5 +1,5 @@
 <h1 align="center">
-    promptulate
+    Promptulate
 </h1>
 
 <p align="center">

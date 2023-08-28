@@ -6,7 +6,7 @@
 
 本文将会介绍对话模型`Conversation`、Prompt框架ReAct、self-ask，tree-of-thoughts的基本使用。
 
-下面，将会介绍`Conversation`和`Chain`两种framework，在[llm](modules/llm.md#llm的类型)的部分我们介绍过文本推理型与对话型llm的区别，事实上，`Chain`就是**文本推理型llm**的增强版，而`Conversation`是**对话型llm**的增强版，这里的增强主要体现在：
+下面，将会介绍`Conversation`和`Chain`两种framework，在[llm](modules/llm/llm.md#llm的类型)的部分我们介绍过文本推理型与对话型llm的区别，事实上，`Chain`就是**文本推理型llm**的增强版，而`Conversation`是**对话型llm**的增强版，这里的增强主要体现在：
 
 - 增加memory进行交互信息的持久化存储
 - 提供provider进行多种mixin能力的集成嵌入，如语言翻译、markdown数据导出、对话总结、标题总结等功能

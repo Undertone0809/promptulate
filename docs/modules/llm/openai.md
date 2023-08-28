@@ -1,18 +1,10 @@
-# LLM
+# OpenAI
 
-### 简介
-
-> 需要注意的是，`promptulate`中会把LLM与llm的意思分开来，LLM表示大语言模型，llm表示`promptulate`中的llm模块。
-
-本文将会介绍llm模块的**基本使用方式，API KEY、KEY池、代理的配置方式**。
-
-LLM指大语言模型，当前市面上常见的大语言模型有GPT3.5, GPT4, LLaMa, InstructGPT等大语言模型。`promptulate`可以支持不同类型的大语言模型调用。
-
-当前`promptulate`重点适配了OpenAI的相关的大语言模型(GPT-3.5, GPT-4.0, text-davinci-003)与百度文心系列大模型，其他模型正在逐步适配中（如ChatGLM适配中），因此下面的示例主要以OpenAI模型为例。如果你有想用的LLM或者更好的想法，欢迎提出你的想法。
+本教程重点介绍OpenAI中GPT-3.5, GPT-4.0, text-davinci-003等模型的使用。
 
 ### KEY配置
 
-在使用`promptulate`之前，你需要先导入你的`OPENAI_API_KEY`
+在使用`OpenAI`的LLM之前，你需要先导入你的`OPENAI_API_KEY`
 
 ```python
 import os
@@ -22,7 +14,7 @@ os.environ['OPENAI_API_KEY'] = "your-key"
 
 在你第一次使用的时候，需要使用`os.environ["OPENAI_API_KEY"]` 导入"OPENAI_API_KEY" 的环境变量，但是在第一运行之后`promptulate` 会进行缓存，即后面再运行就不需要再导入key了。
 
-如果你的key过期了，可以尝试重新按照上面的方法导入key，或者你也可以把`cache` 文件给删除掉，通过以下代码可以获取到缓存文件的位置:
+如果你的key过期了，可以尝试重新按照上面的方法导入key，或者你也可以把 `cache` 文件给删除掉，通过以下代码可以获取到缓存文件的位置:
 
 ```python
 from promptulate.utils import get_default_storage_path
@@ -141,8 +133,7 @@ print(result)
 你好！有什么我可以帮助你的吗？
 ```
 
-如果你想使用`GPT-4.0`，你只需要`ChatOpenAI(model="gpt-4.0")`进行初始化就可以了，默认情况下，使用`gpt-3.5-turbo`模型。同理你想使用国产文心系列模型，只需要 ErnieBot()进行初始化，文心模型虽然与openai模型有较大差异，但是框架提供了尽可能完美的兼容。
-你还可以使用ErnieBot(model="ernie-bot")来具体选择对应的文心模型，目前框架提供了两种文心模型，分别是文心一言（"ernie-bot"）和文心turbo（"ernie-bot-turbo"）,默认为文心turbo模型。
+如果你想使用`GPT-4.0`，你只需要`ChatOpenAI(model="gpt-4.0")`进行初始化就可以了，默认情况下，使用`gpt-3.5-turbo`模型。
 
 事实上，我们推荐你在大多数情况下使用`ChatOpenAI`，如果你是一个初级prompt engineer，那么文本推理型的LLM可能并不是那么适合你，相反，你可以轻松用`gpt-3.5-turbo`来构建复杂应用
 
@@ -152,17 +143,15 @@ print(result)
 对于大语言模型开发者来说，你或许知道OpenAI的GPT API提供了其他参数以便更好地调整GPT的输出特性，下面的示例展示了一个使用GPT4模型自定义参数的OpenAI模型初始化。
 
 ```python
-from promptulate.llms import OpenAI
+from promptulate.llms import ChatOpenAI
 
-llm = OpenAI(model="gpt-4", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)
+llm = ChatOpenAI(model="gpt-4", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)
 llm("请介绍一下引力波的放射与广义相对论的必然关系")
 ```
 
-上面的示例中，使用`OpenAI(model="gpt-4", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)` 进行初始化一个大模型，里面是OpenAI需要传入的一些参数，具体可以查看[https://platform.openai.com/docs/api-reference/chat/create](https://platform.openai.com/docs/api-reference/chat/create) 查看具体含义，这里不做详细讲解，如果你不想理会这些参数，你也可以直接`llm = OpenAI()`就好啦，默认使用`gpt-3.5-turbo` 作为大语言模型，其他参数使用默认的就好了。
+上面的示例中，使用`OpenAI(model="gpt-4", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)` 进行初始化一个大模型，里面是OpenAI需要传入的一些参数，具体可以查看[https://platform.openai.com/docs/api-reference/chat/create](https://platform.openai.com/docs/api-reference/chat/create) 查看具体含义，这里不做详细讲解，如果你不想理会这些参数，你也可以直接`llm = ChatOpenAI()`就好了，默认使用`gpt-3.5-turbo` 作为大语言模型，其他参数使用默认的就好了。
 
-LLM为`promptulate`
-中最基础的组件，为框架提供大语言模型交互能力，如果你想构建更加复杂的大语言模型应用，请跳转[Framework](modules/framework.md#Framework)
-和[Agent](modules/agent.md#Agent)。按照顺序阅读`promptulate`官方文档是一个很好的学习方式。
+LLM为`promptulate`中最基础的组件，为框架提供大语言模型交互能力，如果你想构建更加复杂的大语言模型应用，请跳转[Framework](modules/framework.md#Framework)和[Agent](modules/agent.md#Agent)。按照顺序阅读`promptulate`官方文档是一个很好的学习方式。
 
 ### stop停词
 你也许知道使用OpenAI的LLM的时候，可以进行stop(停词)，什么是stop呢？
@@ -188,7 +177,9 @@ result = llm(prompt, stop=["test"])
 
 llm是否支持stop，要看其LLM模型本身是否支持，当前OpenAI系列的产品支持stop，因此你可以`ChatOpenAI` `OpenAI`都可以使用上面的方式进行调用。
 文心系列模型不支持stop,但是框架本身提供了简易的stop。
+
 ### proxy
+
 我想你可能遇到了无法访问的小问题，It's OK, `promptulate` 提供了三种访问OpenAI的方式，分别是
 
 - `off` 默认的访问方式，不开代理（如果你打开了全局代理工具或者使用国产大模型，可以选择该模式）

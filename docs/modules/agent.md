@@ -2,17 +2,16 @@
 
 Agent是`promptulate`的核心组件之一，其核心思想是使用llm、Tool、Memory、Provider,Output Parser等组件来构建起的一个可以处理复杂能力的代理。
 
+## ToolAgent
+
 下面的示例展示了如何使用`ToolAgent`结合Tool进行使用。
 
 ```python
-from promptulate.utils.logger import enable_log
 from promptulate.tools import (
     DuckDuckGoTool,
     Calculator,
 )
 from promptulate.agents import ToolAgent
-
-# enable_log()
 
 
 def main():
@@ -47,6 +46,32 @@ Agent Start...
 Agent End.
 ```
 
+Agent默认使用OpenAI的`gpt-3.5-turbo-16k`模型，如果你想要切换为其他模型，你可以使用如下方式进行配置：
+
+```python
+from promptulate.tools import (
+    DuckDuckGoTool,
+    Calculator,
+)
+from promptulate.llms import ErnieBot
+from promptulate.agents import ToolAgent
+
+
+def main():
+    llm = ErnieBot(temperature=0.0)
+    tools = [
+        DuckDuckGoTool(),
+        Calculator(),
+    ]
+    agent = ToolAgent(tools=tools,llm=llm)
+    prompt = """Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?"""
+    agent.run(prompt)
+
+
+if __name__ == "__main__":
+    main()
+```
+
 ## Tool
 
 关于Tool的使用以及Promptulate兼容的工具，详情请查看[Tool 外部工具扩展](modules/tools.md#简介)
@@ -54,12 +79,14 @@ Agent End.
 
 ## 其他
 
-控制台输出的内容由`StdOutHook`驱动，你可以使用如下方式关闭：
+控制台带有颜色输出的内容由`StdOutHook`驱动，你可以使用如下方式关闭：
 
 ```python
-from promptulate.config import Config
+from promptulate import turn_off_stdout_hook
 
-...
+turn_off_stdout_hook()
 ```
+
+如果你想要定制自己的独特Print或者对关键步骤进行逻辑处理，跳转 [Hook的使用](modules/hook.md#what-is-hook)
 
 > 如果你当前正处在开发模式，十分推荐你使用enable_log()开启debug模式，从而查看最详细的底层日志信息，以便更好地记录运行过程。
