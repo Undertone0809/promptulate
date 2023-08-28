@@ -1,6 +1,14 @@
 # Client
 
-`promptulate`为大语言模型对话提供了一个简易终端，在你安装了了 `promptulate` 之后，你可以非常方便的使用这个简易终端进行一些对话，使用方式如下：
+`promptulate`为大语言模型对话提供了一个简易终端，在你安装了 `promptulate` 之后，你可以非常方便的使用这个简易终端进行一些对话，具体包括：
+
+- 基于大模型的**简单对话**
+- 选择特定工具进行 **Agent 对话**
+- LLM + WebSearch 进行**基于网络搜索的对话**
+
+![](images/client_result_2.png)
+
+## 快速上手
 
 - 打开终端控制台，输入以下命令，就可以开启一个简易的对话
 
@@ -15,23 +23,23 @@ pne-chat --openai_api_key your_key_here --proxy_mode promptulate
 
 ```
 
-- 当然并不是每次运行都要输入这么长的内容，因为在你第一次运行终端之后 `promptulate`
-  会对你的配置信息进行缓存，因此下一次运行的时候，你只需要输入下面的命令就可以开始一段对话了
+- 当然并不是每次运行都要输入这么长的内容，因为在你第一次运行终端之后 `promptulate` 会对你的配置信息进行缓存，因此下一次运行的时候，你只需要输入下面的命令就可以开始一段对话了。如果你在代码运行中已经配置过相关的key参数，则可以直接使用以下方式运行：
 
 ```shell
 pne-chat
 ```
 
-- 然后你就可以
+- 然后你就可以随着 `pne`的引导进行操作
+
+![](images/client_result_1.png)
 
 ```text
 Hi there, here is promptulate chat terminal.
-[User] 你好
-[output] 你好！有什么我可以帮助你的吗？
-[User] 只因你太美
-[output] 谢谢夸奖，但作为一个语言模型，我没有真正的美丽，只有能力提供信息和帮助。那么，有什么问题或者需求我可以帮你解决 吗？
-[User] 这真是太棒了
-[output] 很高兴你觉得如此，我会尽力为您提供最佳的服务。有任何需要帮助的问题，请尽管问我。
+? Choose a chat terminal: Web Agent Chat
+? Choose a llm model: OpenAI
+[User] 
+上海明天多少度？
+[agent]  The weather forecast for Shanghai tomorrow is expected to be partly cloudy with late night showers or thunderstorms. The temperature is expected to peak
+ at 89 °F. Sun protection is strongly recommended as the UV index will be 8.
 ```
 
-> 需要注意的是，当前client只支持OpenAI的LLM，后续将会开放更多LLM，详情请查看[开发计划](../other/plan.md)
