@@ -20,9 +20,10 @@
 import os
 from typing import Optional
 
+import requests
+
 from promptulate import utils
 from promptulate.hook.stdout_hook import StdOutHook
-from promptulate.utils.ernie_token_pool import ErnieTokenPool
 from promptulate.utils.logger import get_logger
 from promptulate.utils.openai_key_pool import OpenAIKeyPool
 from promptulate.utils.singleton import Singleton
@@ -47,12 +48,10 @@ class Config(metaclass=Singleton):
         self.openai_proxy_url = "https://chatgpt-api.shn.hk/v1/"  # FREE API
         self.ernie_bot_url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions"
         self.ernie_bot_turbo_url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant"
-        self.ernie_bot_token = "https://aip.baidubce.com/oauth/2.0/token"
+        self.ernie_bot_token_url = "https://aip.baidubce.com/oauth/2.0/token"
         self.key_default_retry_times = 5
         """If llm(like OpenAI) unable to obtain data, retry request until the data is obtained."""
         self.enable_stdout_hook = True
-        ernie_token_pool: ErnieTokenPool = ErnieTokenPool()
-        ernie_token_pool.start(self.get_ernie_api_key, self.get_ernie_api_secret)
 
         if self.enable_stdout_hook:
             StdOutHook.registry_stdout_hooks()
@@ -103,13 +102,13 @@ class Config(metaclass=Singleton):
         raise ValueError("ERNIE_API_SECRET is not provided. Please set your secret.")
 
     def get_ernie_token(self) -> str:
-        ernie_token_pool: ErnieTokenPool = ErnieTokenPool()
-        if self.enable_cache:
-            if "ERNIE_TOKEN" in utils.get_cache():
-                return ernie_token_pool.get_token()
-        return ernie_token_pool.nocache_get_token(
-            self.get_ernie_api_key, self.get_ernie_api_secret
-        )
+        url = self.ernie_bot_token_url
+        params = {
+            "grant_type": "client_credentials",
+            "client_id": self.get_ernie_api_key,
+            "client_secret": self.get_ernie_api_secret,
+        }
+        return str(requests.post(url, params=params).json().get("access_token"))
 
     def get_key_retry_times(self, model: str) -> int:
         if self.enable_cache:
