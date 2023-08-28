@@ -22,9 +22,26 @@ import os
 from typing import Optional
 
 import click
+import questionary
 
 from promptulate import Conversation
-from promptulate.utils import set_proxy_mode
+from promptulate.agents import ToolAgent
+from promptulate.llms import ErnieBot, ChatOpenAI, BaseLLM
+from promptulate.tools import (
+    Calculator,
+    DuckDuckGoTool,
+    PythonREPLTool,
+    ArxivQueryTool,
+)
+from promptulate.utils import set_proxy_mode, print_text
+
+MODEL_MAPPING = {"OpenAI": ChatOpenAI, "ErnieBot": ErnieBot}
+TOOL_MAPPING = {
+    "Calculator": Calculator,
+    "WebSearch": DuckDuckGoTool,
+    "Python Script Executor": PythonREPLTool,
+    "Arxiv Query": ArxivQueryTool,
+}
 
 
 def get_user_input() -> Optional[str]:
@@ -36,6 +53,43 @@ def get_user_input() -> Optional[str]:
     if message is not None:
         return message
     return None
+
+
+def simple_chat(llm: BaseLLM):
+    conversation = Conversation(llm=llm)
+
+    while True:
+        print_text("[User] ", "blue")
+        prompt = get_user_input()
+        if not prompt:
+            ValueError("Your prompt is None, please input something.")
+        print_text(prompt, "blue")
+        ret = conversation.predict(prompt)
+        print_text(f"[output] {ret}", "green")
+
+
+def web_chat(llm: BaseLLM):
+    agent = ToolAgent(tools=[DuckDuckGoTool()], llm=llm)
+
+    while True:
+        print_text("[User] ", "blue")
+        prompt = get_user_input()
+        if not prompt:
+            ValueError("Your prompt is None, please input something.")
+        print_text(prompt, "blue")
+        ret = agent.run(prompt)
+        print_text(f"[agent] {ret}", "green")
+
+
+def agent_chat(agent: ToolAgent):
+    while True:
+        print_text("[User] ", "blue")
+        prompt = get_user_input()
+        if not prompt:
+            ValueError("Your prompt is None, please input something.")
+        print_text(prompt, "blue")
+        ret = agent.run(prompt)
+        print_text(f"[agent] {ret}", "green")
 
 
 def chat():
@@ -56,16 +110,33 @@ def chat():
     if args.proxy_mode:
         set_proxy_mode(args.proxy_mode)
 
-    print(f"Hi there, here is promptulate chat terminal.")
-    conversation = Conversation()
-    while True:
-        print("[User] ")
-        prompt = get_user_input()
-        if not prompt:
-            ValueError("Your prompt is None, please input something.")
-        print(prompt)
-        ret = conversation.predict(prompt)
-        print(f"[output] {ret}")
+    print_text(f"Hi there, here is promptulate chat terminal.", "pink")
+
+    terminal_mode = questionary.select(
+        "Choose a chat terminal:",
+        choices=["Simple Chat", "Agent Chat", "Web Agent Chat"],
+    ).ask()
+
+    model = questionary.select(
+        "Choose a llm model:",
+        choices=list(MODEL_MAPPING.keys()),
+    ).ask()
+    # todo check whether exist llm key
+
+    llm = MODEL_MAPPING[model](temperature=0.2)
+    if terminal_mode == "Simple Chat":
+        simple_chat(llm)
+    elif terminal_mode == "Agent Chat":
+        str_tools = questionary.checkbox(
+            "Choose tools you want:", choices=list(TOOL_MAPPING.keys())
+        ).ask()
+        tools = []
+        for str_tool in str_tools:
+            tools.append(TOOL_MAPPING[str_tool]())
+        agent = ToolAgent(tools=tools, llm=llm)
+        agent_chat(agent)
+    elif terminal_mode == "Web Agent Chat":
+        web_chat(llm)
 
 
 def main():

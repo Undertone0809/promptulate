@@ -126,9 +126,17 @@ for i in range(10):
     llm("你好")
 ```
 
-### 简易终端
+### 客户端
 
-`promptulate`为大语言模型对话提供了一个简易终端，在你安装了了 `promptulate` 之后，你可以非常方便的使用这个简易终端进行一些对话，使用方式如下：
+`promptulate`为大语言模型对话提供了一个简易终端，在你安装了 `promptulate` 之后，你可以非常方便的使用这个简易终端进行一些对话，具体包括：
+
+- 基于大模型的**简单对话**
+- 选择特定工具进行 **Agent 对话**
+- LLM + WebSearch 进行**基于网络搜索的对话**
+
+![](images/client_result_2.png)
+
+**快速上手**
 
 - 打开终端控制台，输入以下命令，就可以开启一个简易的对话
 
@@ -143,113 +151,71 @@ pne-chat --openai_api_key your_key_here --proxy_mode promptulate
 
 ```
 
-- 当然并不是每次运行都要输入这么长的内容，因为在你第一次运行终端之后 `promptulate`
-  会对你的配置信息进行缓存，因此下一次运行的时候，你只需要输入下面的命令就可以开始一段对话了
+- 当然并不是每次运行都要输入这么长的内容，因为在你第一次运行终端之后 `promptulate` 会对你的配置信息进行缓存，因此下一次运行的时候，你只需要输入下面的命令就可以开始一段对话了。如果你在代码运行中已经配置过相关的key参数，则可以直接使用以下方式运行：
 
 ```shell
 pne-chat
 ```
 
-- 然后你就可以
+- 然后你就可以随着 `pne`的引导进行操作
+
+![](images/client_result_1.png)
 
 ```text
 Hi there, here is promptulate chat terminal.
-[User] 你好
-[output] 你好！有什么我可以帮助你的吗？
-[User] 只因你太美
-[output] 谢谢夸奖，但作为一个语言模型，我没有真正的美丽，只有能力提供信息和帮助。那么，有什么问题或者需求我可以帮你解决 吗？
-[User] 这真是太棒了
-[output] 很高兴你觉得如此，我会尽力为您提供最佳的服务。有任何需要帮助的问题，请尽管问我。
+? Choose a chat terminal: Web Agent Chat
+? Choose a llm model: OpenAI
+[User] 
+上海明天多少度？
+[agent]  The weather forecast for Shanghai tomorrow is expected to be partly cloudy with late night showers or thunderstorms. The temperature is expected to peak
+ at 89 °F. Sun protection is strongly recommended as the UV index will be 8.
 ```
 
-> 需要注意的是，当前client只支持OpenAI的LLM，后续将会开放更多LLM，详情请查看[开发计划](other/plan.md)
+### Agent
 
-### Conversation
+Agent是`promptulate`的核心组件之一，其核心思想是使用llm、Tool、Memory、Provider,Output Parser等组件来构建起的一个可以处理复杂能力的代理。
 
-上面展示的LLM组件，只提供了最基础的对话生成内容，但是其并不提供上下文对话、文章总结、角色预设等更加复杂的功能，所以接下来我们介绍功能更为强大的`Conversation`。
-
-`Conversation` 是`framework`中最基础的组件，其支持prompt生成、上下文对话、对话存储、角色预设的基本功能，此外，`provider`
-为其提供了语言翻译、markdown数据导出、对话总结、标题总结等扩展功能。
-
-接下来，我们先从对基础的对话开始，使用`Conversation`可以开始一段对话，使用其`predict()`函数可以生成回答。
+下面的示例展示了如何使用`ToolAgent`结合Tool进行使用。
 
 ```python
-from promptulate import Conversation
-
-conversation = Conversation()
-conversation.predict("你知道鸡哥的《只因你太美》吗？")
-```
-
-```text
-'是的，鸡哥的《只因你太美》是这几年非常流行的一首歌曲。'
-```
-
-`Conversation`默认使用`OpenAI GPT3.5`作为LLM，当然，因为其架构设计，`Conversation`
-还可以轻松扩展其他类型的llm（当前暂时只开发了OpenAI，其他大语言模型的扩展正在火速开发中，当然如果你有自己想接入的大语言模型，欢迎你的pr！）
-
-下面是一个更复杂的示例，展示了使用OpenAI作为大语言模型进行对话，使用本地文件进行存储，进行文章总结与标题总结的功能。
-
-```python
-from promptulate import Conversation
-from promptulate.memory import FileChatMemory
-from promptulate.llms import ChatOpenAI
+from promptulate.tools import (
+    DuckDuckGoTool,
+    Calculator,
+)
+from promptulate.agents import ToolAgent
 
 
 def main():
-    memory = FileChatMemory()
-    llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)
-    conversation = Conversation(llm=llm, memory=memory)
-    ret = conversation.predict("你知道鸡哥的著作《只因你太美》吗？")
-    print(f"[predict] {ret}")
-    ret = conversation.predict_by_translate("你知道鸡哥会什么技能吗？", country='America')
-    print(f"[translate output] {ret}")
-    ret = conversation.summary_content()
-    print(f"[summary content] {ret}")
-    ret = conversation.summary_topic()
-    print(f"[summary topic] {ret}")
-    ret = conversation.export_message_to_markdown(output_type="file", file_path="output.md")
-    print(f"[export markdown] {ret}")
+    tools = [
+        DuckDuckGoTool(),
+        Calculator(),
+    ]
+    agent = ToolAgent(tools)
+    prompt = """Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?"""
+    agent.run(prompt)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
 
 ```
 
+运行结果如下：
+
+<img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230828030207.png"/>
+
 ```text
-[predict] 是的，我知道《只因你太美》这本书，是中国知名作家鸡肋（江南）所著的一篇言情小说。这本小说讲述了一个富家千金与一个贫穷男孩之间的爱情故事，情节曲折动人，深受读者喜爱。该小说在出版后得到了很高的评价和反响，并被改编成电影和电视剧等多种形式进行推广。
-[translate output] I'm sorry, I cannot determine what you mean by "鸡哥" or what skills they may possess without additional context. Can you please provide more information or clarify your question?
-[summary content] 在之前的对话中，用户询问我是否知道鸡哥的著作《只因你太美》。我回答了肯定的，解释了该小说的情节大致概括和其受欢迎的原因。我也提到了该小说的广泛影响，包括被改编成电影和电视剧等多种形式进行推广。
-[summary topic] 鸡哥的小说。
+Agent Start...
+[user] Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?
+[Action] ddg-search args: Leo DiCaprio's girlfriend
+[Observation] Sarah Stier // Getty Images March 2021: They enjoy a beachside getaway. DiCaprio and Morrone headed to Malibu with friends for brief holiday. The actress shared photos from their trip to... His last relationship, with actor and model Camila Morrone, ended this past August, shortly after she turned 25. If there are two things people love, it's observing patterns, and having those... Celebrities. Vanessa Bryant remembers late husband, Kobe, on what would have been his 45th birthday Leonardo DiCaprio has once more found love. Aligning with his established preferences, the... Who is Leonardo DiCaprio's girlfriend? It's unknown if Leonardo DiCaprio is dating anyone at this time. However, he was spotted at Coachella dancing with model Irina Shayk. Shayk is Bradley... After more than four years of dating, Leonardo DiCaprio and Camila Morrone are going their separate ways. In August, multiple sources told PEOPLE that the longtime couple has broken up. The...
+[Action] ddg-search args: Camila Morrone age
+[Observation] Camila Morrone: her birthday, what she did before fame, her family life, fun trivia facts, popularity rankings, and more. Fun facts: before fame, family life, popularity rankings, and more. popular trending video trivia random Camila Morrone. Actress: Death Wish. Camila Morrone is an American model and actress. Morrone was born in Los Angeles, California to Argentine parents Lucila Solá and Máximo Morrone. Her mother is a former model and was a companion to actor Al Pacino, who is also her stepfather. Morrone started her career as a model and has appeared on the cover page of Vogue Turkey in 2016. However, Morrone — who is 23 years younger than DiCaprio — did comment on their age difference in December 2019, telling the Los Angeles Times, "I just think anyone should be able to date who... Two months ago she turned 25 and until recently she was in a relationship with Oscar winning actor Leonardo DiCaprio. In December 2017 her name went around the world, when rumors of romance with the actor began and especially because of the age difference between them. DiCaprio tends to date women between the ages of 20 and 25, prompting some to lose their minds over the mere possibility of his next girlfriend being born in the 2000s. "there's no phenomenon on...
+[Action] math-calculator args: 25^0.43
+[Observation] 3.991298452658078
+[Agent Result]  Camila Morrone's current age raised to the 0.43 power is approximately 3.99.
+Agent End.
 ```
-
-上面的示例中，我们使用
-
-- `FileChatMemory()`进行聊天记录的本地化文件存储，文件存储形式默认是以json的形式进行存储的，保存在`cache`中。
-- `ChatOpenAI(model="gpt-3.5-turbo", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)`
-  进行初始化一个大模型，里面是OpenAI需要传入的一些参数，具体可以查看[https://platform.openai.com/docs/api-reference/chat/create](https://platform.openai.com/docs/api-reference/chat/create)
-  查看具体含义，这里不做详细讲解，如果你不想理会这些参数，你也可以直接使用`llm = ChatOpenAI()`，默认使用`gpt-3.5-turbo`
-  作为大语言模型，其他参数使用默认的就好了。
-- `conversation.predict_by_translate("你知道鸡哥会什么技能吗？", country='America')`
-  这个功能为使用特定语言进行预测，`provider`为其提供了`TranslatorMixin`，让`Conversation`
-  得以拥有此功能。对于这个方法，你只需要传入prompt和你需要转换的语言的国家名称就好了。
-- `conversation.summary_content()`这个函数可以直接总结上面的对话内容。
-- `conversation.summary_topic()` 这个函数可以直接总结上面的对话，并提供一个标题。
-- `conversation.export_message_to_markdown(output_type="file", file_path="output.md")`
-  这个函数可以将对话记录导出为markdown文件，如果`output_type="text"`，则只返回markdown对话的内容。
-
-`provider`为`Conversation`提供了 `SummarizerMixin, TranslatorMixin, DeriveHistoryMessageMixin`
-，让其拥有了总结对话、总结标题、翻译、markdown导出的能力，provider提供的函数中一般都提供了一个`enable_embed_message`
-的参数，这个参数的意思是：是否将本次对话保存进历史对话中，下面我们来看一个demo。
-
-```python
-from promptulate import Conversation
-
-conversation = Conversation()
-conversation.predict_by_translate("你知道鸡哥会什么技能吗？", country='America', enable_embed_message=True)
-```
-
-如果你设置了`enable_embed_message=True`, 那么这一次的predict将保存进历史对话中，provider提供的函数默认是不会将预测结果存入对话中的哦，这一点需要注意一下。
 
 ## 更多
 

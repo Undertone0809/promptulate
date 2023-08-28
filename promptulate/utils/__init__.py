@@ -17,6 +17,7 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
+from promptulate.utils.color_print import print_text
 from promptulate.utils.core_utils import (
     get_default_storage_path,
     get_cache,
@@ -39,5 +40,6 @@ __all__ = [
     "Singleton",
     "AbstractSingleton",
     "export_openai_key_pool",
-    "StringTemplate"
+    "StringTemplate",
+    "print_text"
 ]

@@ -21,6 +21,7 @@ import os
 from typing import Optional
 
 from promptulate import utils
+from promptulate.hook.stdout_hook import StdOutHook
 from promptulate.utils.ernie_token_pool import ErnieTokenPool
 from promptulate.utils.logger import get_logger
 from promptulate.utils.openai_key_pool import OpenAIKeyPool
@@ -49,8 +50,17 @@ class Config(metaclass=Singleton):
         self.ernie_bot_token = "https://aip.baidubce.com/oauth/2.0/token"
         self.key_default_retry_times = 5
         """If llm(like OpenAI) unable to obtain data, retry request until the data is obtained."""
+        self.enable_stdout_hook = True
         ernie_token_pool: ErnieTokenPool = ErnieTokenPool()
         ernie_token_pool.start(self.get_ernie_api_key, self.get_ernie_api_secret)
+
+        if self.enable_stdout_hook:
+            StdOutHook.registry_stdout_hooks()
+
+    def turn_off_stdout_hook(self):
+        if self.enable_stdout_hook:
+            self.enable_stdout_hook = False
+            StdOutHook.unregister_stdout_hooks()
 
     @property
     def openai_api_key(self):

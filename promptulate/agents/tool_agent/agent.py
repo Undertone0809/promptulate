@@ -97,7 +97,14 @@ class ToolAgent(BaseAgent):
                 return answer.split("Final Answer:")[-1]
 
             action, action_input = self._find_action(answer)
+            Hook.call_hook(
+                HookTable.ON_AGENT_ACTION,
+                self,
+                action=action,
+                action_input=action_input,
+            )
             tool_result = self.tool_manager.run_tool(action, action_input)
+            Hook.call_hook(HookTable.ON_AGENT_OBSERVATION, self, observation=tool_result)
             self.conversation_prompt += f"Observation: {tool_result}\nThought: "
 
             iterations += 1
