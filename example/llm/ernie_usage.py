@@ -2,8 +2,8 @@ import os
 
 from promptulate.llms import ErnieBot
 
-os.environ["ERNIE_API_KEY"] = "your api key"
-os.environ["ERNIE_API_SECRET"] = "your secret key"
+#os.environ["ERNIE_API_KEY"] = "your api key"
+#os.environ["ERNIE_API_SECRET"] = "your secret key"
 
 
 def main():
