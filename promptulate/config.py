@@ -37,6 +37,10 @@ def set_enable_cache(value: bool):
     Config().enable_cache = value
 
 
+def turn_off_stdout_hook():
+    Config().turn_off_stdout_hook()
+
+
 class Config(metaclass=Singleton):
     def __init__(self):
         logger.info(f"[pne config] Config initialization")

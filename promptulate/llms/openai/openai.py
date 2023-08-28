@@ -171,9 +171,7 @@ class OpenAI(BaseOpenAI):
             self.retry_counter += 1
             return self._predict(prompts, stop)
 
-        logger.error(
-            f"[pne OpenAI] Has retry {self.retry_times}, but all failed."
-        )
+        logger.error(f"[pne OpenAI] Has retry {self.retry_times}, but all failed.")
         raise OpenAIError(json.dumps(response.content))
 
     def _build_api_params_dict(
@@ -198,6 +196,20 @@ class ChatOpenAI(BaseOpenAI):
     """Used to MessageSet data convert"""
     model: str = "gpt-3.5-turbo"
     """Model name to use."""
+    functions: Optional[List[Dict[str, str]]] = None
+    """A list of functions the model may generate JSON inputs for."""
+    api_param_keys: List[str] = [
+        "model",
+        "temperature",
+        "top_p",
+        "stream",
+        "stop",
+        "frequency_penalty",
+        "presence_penalty",
+        "n",
+        "max_tokens",
+    ]
+    """The key of openai api parameters"""
 
     def __call__(
         self, prompt: str, stop: Optional[List[str]] = None, *args, **kwargs
@@ -258,9 +270,7 @@ class ChatOpenAI(BaseOpenAI):
             self.retry_counter += 1
             return self._predict(prompts, stop)
 
-        logger.error(
-            f"[pne OpenAI] Has retry {self.retry_times}, but all failed."
-        )
+        logger.error(f"[pne OpenAI] Has retry {self.retry_times}, but all failed.")
         raise OpenAIError(json.dumps(json.loads(response.content)))
 
     def _build_api_params_dict(
@@ -274,6 +284,6 @@ class ChatOpenAI(BaseOpenAI):
             dic.update({"stop": stop})
 
         for key in self.api_param_keys:
-            if key in self.__dict__:
+            if key in self.__dict__ and self.__dict__[key] is not None:
                 dic.update({key: self.__dict__[key]})
         return dic
