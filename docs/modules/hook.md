@@ -29,6 +29,8 @@
   - `on_tool_start` 在Tool开始运行时触发
   - `on_tool_result` 在Tool返回结果时触发
 
+![](images/hook_1.png)
+
 有了Hook，你可以在上面指定的生命周期中进行Hook挂载，从而执行特定的功能。下面的示例展示了如何监听Tool Calculator的各个生命周期并打印对应日志信息（装饰器定义）。
 
 
