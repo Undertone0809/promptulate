@@ -33,6 +33,7 @@ __all__ = [
     "get_default_storage_path",
     "record_time",
     "generate_conversation_id",
+    "generate_run_id",
     "generate_unique_id",
     "listdict_to_string",
 ]
@@ -63,6 +64,10 @@ def generate_unique_id() -> str:
 
     unique_id = f"pne-{timestamp}-{random_string}"
     return unique_id
+
+
+def generate_run_id() -> str:
+    return generate_unique_id()
 
 
 def generate_conversation_id() -> str:

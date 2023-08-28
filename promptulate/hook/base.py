@@ -9,7 +9,7 @@ from promptulate.utils.core_utils import generate_unique_id
 logger = logging.getLogger(__name__)
 HOOK_TYPE = Literal["component", "instance"]
 # Hook component type
-COMPONENT_TYPE = Literal["Tool", "llm"]
+COMPONENT_TYPE = Literal["Tool", "llm", "Agent"]
 
 
 class HookTable:
@@ -23,14 +23,18 @@ class HookTable:
 
     ON_AGENT_CREATE = ("Agent", "on_agent_create")
     ON_AGENT_START = ("Agent", "on_agent_start")
+    ON_AGENT_ACTION = ("Agent", "on_agent_action")
+    ON_AGENT_OBSERVATION = ("Agent", "on_agent_observation")
     ON_AGENT_RESULT = ("Agent", "on_agent_result")
 
 
 class BaseHookSchema(BaseModel):
     hook_name: str
-    """hook lifecycle"""
+    """Hook lifecycle."""
     callback: Callable
+    """Callback function of hook."""
     component_type: COMPONENT_TYPE
+    """Component type for hook."""
 
     def __str__(self):
         return f"<HookSchema> hook_name: {self.hook_name} callback: {self.callback} component_type: {self.component_type}"
@@ -114,6 +118,20 @@ class AgentHookMixin:
         return decorator
 
     @staticmethod
+    def on_agent_action(hook_type: HOOK_TYPE):
+        def decorator(fn):
+            return _hook_decorator(HookTable.ON_AGENT_ACTION, hook_type, fn)
+
+        return decorator
+
+    @staticmethod
+    def on_agent_observation(hook_type: HOOK_TYPE):
+        def decorator(fn):
+            return _hook_decorator(HookTable.ON_AGENT_OBSERVATION, hook_type, fn)
+
+        return decorator
+
+    @staticmethod
     def on_agent_result(hook_type: HOOK_TYPE):
         def decorator(fn):
             return _hook_decorator(HookTable.ON_AGENT_RESULT, hook_type, fn)
@@ -156,6 +174,7 @@ class Hook(ToolHookMixin, AgentHookMixin, LLMHookMixin):
         callbacks: Union[Callable, List[Callable]],
         hook_type: HOOK_TYPE,
     ):
+        """Registry component or instance hook to the hook center for unified management."""
         if isinstance(callbacks, Callable):
             callbacks = [callbacks]
 
@@ -222,20 +241,42 @@ class Hook(ToolHookMixin, AgentHookMixin, LLMHookMixin):
 
     @classmethod
     def get_hooks(cls, hook_name: str, mounted_obj: object) -> List[BaseHookSchema]:
-        """Get relevant hooks for mounted_obj from hook store."""
+        """Get relevant component hooks and instance hooks for mounted_obj from hook store."""
+        return [
+            *Hook._get_component_hooks(hook_name),
+            *Hook._get_instance_hooks(hook_name, mounted_obj),
+        ]
+
+    @classmethod
+    def unregister_hook(cls, callback: Callable):
+        for hook in cls.component_hook_store:
+            if id(hook.callback) == id(callback):
+                cls.component_hook_store.remove(hook)
+        for hook in cls.instance_hook_store:
+            if id(hook.callback) == id(callback):
+                cls.instance_hook_store.remove(hook)
+
+    @classmethod
+    def _get_component_hooks(cls, hook_name: str) -> List[BaseHookSchema]:
         hooks: List[BaseHookSchema] = []
         for hook in cls.component_hook_store:
             if hook.hook_name == hook_name:
                 hooks.append(hook)
+        return hooks
 
+    @classmethod
+    def _get_instance_hooks(
+        cls, hook_name: str, mounted_obj: object
+    ) -> List[BaseHookSchema]:
+        hooks: List[BaseHookSchema] = []
         for hook in cls.instance_hook_store:
             if hook.hook_name == hook_name and hook.mounted_obj is mounted_obj:
                 hooks.append(hook)
-
         return hooks
 
     @classmethod
     def call_hook(cls, hook_table: Tuple, mounted_obj: object, *args, **kwargs):
+        """Invoke the specified hook when specifying the component lifecycle."""
         hooks = cls.get_hooks(hook_table[1], mounted_obj)
 
         if hooks:

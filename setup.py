@@ -26,7 +26,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setuptools.setup(
     name="promptulate",
-    version="1.4.0",
+    version="1.5.0",
     author="Zeeland",
     author_email="zeeland@foxmail.com",
     description="A powerful LLM Application development framework.",
@@ -43,6 +43,7 @@ setuptools.setup(
         "arxiv",
         "click",
         "numexpr",
+        "questionary~=2.0.0",
         "apscheduler~=3.10.3",
         "backports.zoneinfo~=0.2.1",
         "pytz~=2023.3",
