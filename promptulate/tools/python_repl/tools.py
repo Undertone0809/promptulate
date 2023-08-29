@@ -16,5 +16,5 @@ class PythonREPLTool(BaseTool):
     )
     api_wrapper: PythonREPLAPIWrapper = Field(default_factory=PythonREPLAPIWrapper)
 
-    def run(self, command: str, *args, **kwargs) -> str:
+    def _run(self, command: str, *args, **kwargs) -> str:
         return self.api_wrapper.run(command)

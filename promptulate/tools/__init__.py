@@ -8,6 +8,7 @@ from promptulate.tools.duckduckgo.tools import DuckDuckGoTool, DuckDuckGoReferen
 from promptulate.tools.math.tools import Calculator
 from promptulate.tools.paper.tools import PaperSummaryTool
 from promptulate.tools.python_repl import PythonREPLTool
+from promptulate.tools.sleep import SleepTool
 from promptulate.tools.semantic_scholar import (
     SemanticScholarQueryTool,
     SemanticScholarReferenceTool,
@@ -27,4 +28,7 @@ __all__ = [
     "SemanticScholarQueryTool",
     "PythonREPLTool",
     "Calculator",
+    "SleepTool"
 ]
+
+
