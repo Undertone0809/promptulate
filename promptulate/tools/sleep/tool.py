@@ -9,8 +9,8 @@ class SleepTool(BaseTool):
 
     def _run(
         self,
-        sleep_time: int,
+        sleep_time,
     ) -> str:
         """Use the Sleep tool."""
-        sleep(sleep_time)
+        sleep(int(sleep_time))
         return f"Agent slept for {sleep_time} seconds."
