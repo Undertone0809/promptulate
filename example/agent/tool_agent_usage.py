@@ -1,5 +1,4 @@
 from promptulate.agents import ToolAgent
-from promptulate.llms import ErnieBot
 from promptulate.tools import (
     DuckDuckGoTool,
     Calculator,
@@ -14,8 +13,7 @@ def main():
         DuckDuckGoTool(),
         Calculator(),
     ]
-    llm = ErnieBot()
-    agent = ToolAgent(tools=tools,llm=llm)
+    agent = ToolAgent(tools)
     prompt = """Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?"""
     agent.run(prompt)
 
