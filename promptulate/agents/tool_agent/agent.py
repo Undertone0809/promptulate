@@ -1,9 +1,9 @@
 import logging
 import re
 import time
-from abc import abstractmethod, ABC
 from typing import List, Callable, Optional
 
+from promptulate.agents import BaseAgent
 from promptulate.agents.tool_agent.prompt import REACT_ZERO_SHOT_PROMPT
 from promptulate.hook import Hook, HookTable
 from promptulate.llms.base import BaseLLM
@@ -14,27 +14,6 @@ from promptulate.utils.core_utils import generate_run_id
 from promptulate.utils.string_template import StringTemplate
 
 logger = logging.getLogger(__name__)
-
-
-class BaseAgent(ABC):
-    """Base class of Agent."""
-
-    def __init__(self, hooks: List[Callable] = None, *args, **kwargs):
-        if hooks:
-            for hook in hooks:
-                Hook.mount_instance_hook(hook, self)
-        Hook.call_hook(HookTable.ON_AGENT_CREATE, self, **kwargs)
-
-    def run(self, *args, **kwargs):
-        """run the tool including specified function and hooks"""
-        Hook.call_hook(HookTable.ON_AGENT_START, self, *args, **kwargs)
-        result: str = self._run(*args, **kwargs)
-        Hook.call_hook(HookTable.ON_AGENT_RESULT, self, result=result)
-        return result
-
-    @abstractmethod
-    def _run(self, *args, **kwargs) -> str:
-        """Run the detail agent, implemented by subclass."""
 
 
 class ToolAgent(BaseAgent):
@@ -88,6 +67,8 @@ class ToolAgent(BaseAgent):
 
         while self._should_continue(iterations, used_time):
             answer = self.llm(prompt=self.conversation_prompt, stop=self.stop_sequences)
+            while answer == "":
+                answer = self.llm(prompt=self.conversation_prompt, stop=self.stop_sequences)
             self.conversation_prompt += f"{answer}\n"
             logger.info(
                 f"[pne] tool agent <{iterations}> current prompt: {self.conversation_prompt}"
@@ -104,7 +85,9 @@ class ToolAgent(BaseAgent):
                 action_input=action_input,
             )
             tool_result = self.tool_manager.run_tool(action, action_input)
-            Hook.call_hook(HookTable.ON_AGENT_OBSERVATION, self, observation=tool_result)
+            Hook.call_hook(
+                HookTable.ON_AGENT_OBSERVATION, self, observation=tool_result
+            )
             self.conversation_prompt += f"Observation: {tool_result}\nThought: "
 
             iterations += 1
