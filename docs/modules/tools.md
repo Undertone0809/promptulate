@@ -14,6 +14,7 @@ tools模块为LLM提供了调用外部工具扩展的能力，可以说tools是�
 - Semantic Scholar: Semantic Scholar论文检索工具，可以检索论文、查询论文参考文献、查询引用该论文的文献
 - Python REPL: 可以执行python脚本
 - FileManager: 可以进行文件读写
+- Sleep: 可以进行暂停，以便在agent中控制事件执行的时间间隔，这对有时间控制需求的用户很有帮助
 
 ## 工具的使用
 
