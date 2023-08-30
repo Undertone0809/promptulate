@@ -32,6 +32,7 @@ from promptulate.tools import (
     DuckDuckGoTool,
     PythonREPLTool,
     ArxivQueryTool,
+    SleepTool,
 )
 from promptulate.utils import set_proxy_mode, print_text
 
@@ -41,6 +42,7 @@ TOOL_MAPPING = {
     "WebSearch": DuckDuckGoTool,
     "Python Script Executor": PythonREPLTool,
     "Arxiv Query": ArxivQueryTool,
+    "Sleep Tool": SleepTool,
 }
 
 
