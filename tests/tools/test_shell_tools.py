@@ -7,6 +7,6 @@ class TestPythonReplTool(TestCase):
     def test_run(self):
         tool = ShellTool()
         print(tool.description)
-        command = """apple"""
+        command = """ls"""
         result = tool.run(command)
         print(result)
