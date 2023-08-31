@@ -11,7 +11,7 @@ class BaseAgent(ABC):
         if hooks:
             for hook in hooks:
                 Hook.mount_instance_hook(hook, self)
-        Hook.call_hook(HookTable.ON_AGENT_CREATE, self, **kwargs)
+        Hook.call_hook(HookTable.ON_AGENT_CREATE, self, *args, **kwargs)
 
     def run(self, *args, **kwargs):
         """run the tool including specified function and hooks"""

@@ -25,7 +25,7 @@ def main():
     conversation = Conversation(role="linux-terminal")
     while True:
         prompt = str(input("[User] "))
-        ret = conversation.predict(prompt)
+        ret = conversation.run(prompt)
         print(f"[output] {ret}")
 
 

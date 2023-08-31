@@ -90,3 +90,63 @@ turn_off_stdout_hook()
 如果你想要定制自己的独特Print或者对关键步骤进行逻辑处理，跳转 [Hook的使用](modules/hook.md#what-is-hook)
 
 > 如果你当前正处在开发模式，十分推荐你使用enable_log()开启debug模式，从而查看最详细的底层日志信息，以便更好地记录运行过程。
+
+
+## WebAgent
+
+promptulate封装的WebAgent可以让你轻松的访问搜索引擎，并查询相关的数据，下面展示其使用方式：
+
+```python
+from promptulate.agents import WebAgent
+from promptulate.llms import ErnieBot
+
+
+def main():
+    llm = ErnieBot()
+    agent = WebAgent(llm=llm)
+    agent.run("南昌明天多少度？")
+
+
+if __name__ == "__main__":
+    main()
+
+```
+
+输出结果如下所示：
+
+![](../images/agent_webagent_output.png)
+
+
+## 自定义Agent
+
+通过如下方式可以自定义Agent，Agent的自定义自由度较高，继承BaseAgent你可以得到Hook相关生命周期，让你的自定义Agent天然具有AgentHook的生命周期，下面的示例展示了一个简单的自定义Agent:
+
+```python
+from promptulate.agents import BaseAgent
+from promptulate.llms import BaseLLM, ChatOpenAI
+
+
+class CustomAgent(BaseAgent):
+    def __init__(self, llm: BaseLLM, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.llm = llm
+
+    def _run(self, prompt: str, *args, **kwargs) -> str:
+        return self.llm(prompt)
+
+
+def main():
+    llm = ChatOpenAI()
+    agent = CustomAgent(llm=llm)
+    agent.run("引力波的放射与广义相对论的必然关系")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+运行结果如下：
+
+![](../images/agent_custom_agent_output.png)
+
+> 在实际项目中，你可以根据自己的业务需要随意的扩展Agent的能力与边界。

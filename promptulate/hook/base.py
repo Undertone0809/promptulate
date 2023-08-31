@@ -222,6 +222,15 @@ class Hook(ToolHookMixin, AgentHookMixin, LLMHookMixin):
         cls.unmounted_hook_store.append(hook)
 
     @classmethod
+    def unregister_hook(cls, callback: Callable):
+        for hook in cls.component_hook_store:
+            if id(hook.callback) == id(callback):
+                cls.component_hook_store.remove(hook)
+        for hook in cls.instance_hook_store:
+            if id(hook.callback) == id(callback):
+                cls.instance_hook_store.remove(hook)
+
+    @classmethod
     def mount_instance_hook(cls, hook_callback: Callable, mounted_obj: object):
         for unmounted_hook in Hook.unmounted_hook_store:
             if (
@@ -246,15 +255,6 @@ class Hook(ToolHookMixin, AgentHookMixin, LLMHookMixin):
             *Hook._get_component_hooks(hook_name),
             *Hook._get_instance_hooks(hook_name, mounted_obj),
         ]
-
-    @classmethod
-    def unregister_hook(cls, callback: Callable):
-        for hook in cls.component_hook_store:
-            if id(hook.callback) == id(callback):
-                cls.component_hook_store.remove(hook)
-        for hook in cls.instance_hook_store:
-            if id(hook.callback) == id(callback):
-                cls.instance_hook_store.remove(hook)
 
     @classmethod
     def _get_component_hooks(cls, hook_name: str) -> List[BaseHookSchema]:
