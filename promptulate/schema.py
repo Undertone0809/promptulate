@@ -134,6 +134,9 @@ class MessageSet(BaseModel):
             string_result += f"{message.content}\n"
         return string_result
 
+    def add_message(self, message: BaseMessage) -> None:
+        self.messages.append(message)
+
     def add_completion_message(self, message: str) -> None:
         self.messages.append(CompletionMessage(content=message))
 
@@ -147,7 +150,7 @@ class MessageSet(BaseModel):
         self.messages.append(AssistantMessage(content=message))
 
 
-def init_chat_message_history(system_content, user_content, llm: LLMType) -> MessageSet:
+def init_chat_message_history(system_content: str, user_content: str, llm: LLMType) -> MessageSet:
     if llm == llm.ChatOpenAI or llm == llm.OpenAI:
         messages = [
             SystemMessage(content=system_content),
@@ -156,7 +159,6 @@ def init_chat_message_history(system_content, user_content, llm: LLMType) -> Mes
     else:
         messages = [
             UserMessage(content=system_content),
-            AssistantMessage(content="好的"),
             UserMessage(content=user_content),
         ]
     return MessageSet(messages=messages)

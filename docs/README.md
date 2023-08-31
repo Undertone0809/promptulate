@@ -14,7 +14,7 @@
         <img src="https://bestpractices.coreinfrastructure.org/projects/3018/badge"/>
    </a>
     <a target="_blank" href=''>
-        <img src="https://static.pepy.tech/personalized-badge/cushy-storage?period=month&units=international_system&left_color=grey&right_color=blue&left_text=Downloads/Week"/>
+        <img src="https://static.pepy.tech/personalized-badge/promptulate?period=month&units=international_system&left_color=grey&right_color=blue&left_text=Downloads/Week"/>
    </a>
 </p>
 

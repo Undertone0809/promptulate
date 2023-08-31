@@ -12,6 +12,9 @@
     <a target="_blank" href=''>
         <img src="https://bestpractices.coreinfrastructure.org/projects/3018/badge"/>
    </a>
+    <a target="_blank" href=''>
+        <img src="https://static.pepy.tech/personalized-badge/promptulate?period=month&units=international_system&left_color=grey&right_color=blue&left_text=Downloads/Week"/>
+    </a>
 </p>
 
 <p align="center">
@@ -46,12 +49,33 @@ Modules是一组专门设计用于执行特定任务的模块，例如情感分�
 
 # 快速开始
 
-- [快速上手 [github-pages]](https://undertone0809.github.io/promptulate/#/)
-- [快速上手 [gitee-pages]](https://zeeland.gitee.io/promptulate/#/)
+- [快速上手/官方文档](https://undertone0809.github.io/promptulate/#/)
 - [当前开发计划](https://undertone0809.github.io/promptulate/#/other/plan)
 - [参与贡献/开发者手册](https://undertone0809.github.io/promptulate/#/other/contribution)
 - [常见问题](https://undertone0809.github.io/promptulate/#/other/fqa)
 - [pypi仓库](https://pypi.org/project/promptulate/)
+
+
+- 打开终端，输入以下命令安装框架：
+
+```shell script
+pip install -U promptulate  
+```
+
+- 通过下面这个简单的程序开始你的“HelloWorld”。
+
+```python
+import os
+from promptulate.llms import ChatOpenAI
+
+os.environ['OPENAI_API_KEY'] = "your-key"
+
+llm = ChatOpenAI()
+answer = llm("请解释一下引力波的放射与广义相对论的必然关系")
+print(answer)
+```
+
+更多详细资料，请查看[快速上手/官方文档](https://undertone0809.github.io/promptulate/#/)
 
 # 基础架构
 
