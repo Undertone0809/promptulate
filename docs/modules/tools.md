@@ -15,6 +15,7 @@ tools模块为LLM提供了调用外部工具扩展的能力，可以说tools是�
 - Python REPL: 可以执行python脚本
 - FileManager: 可以进行文件读写
 - Sleep: 可以进行暂停，以便在agent中控制事件执行的时间间隔，这对有时间控制需求的用户很有帮助
+- Shell: 可以执行shell命令（适配windows，mac和linux操作系统）
 
 ## 工具的使用
 
