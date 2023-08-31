@@ -31,7 +31,7 @@ from promptulate.tools import (
     Calculator,
     DuckDuckGoTool,
     PythonREPLTool,
-    ArxivQueryTool,
+    ArxivQueryTool
 )
 from promptulate.utils import set_proxy_mode, print_text
 
