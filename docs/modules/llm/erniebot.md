@@ -2,10 +2,6 @@
 
 本文将会介绍百度文心系列大模型的使用，要使用其能力，你需要前往[百度千帆大模型平台](https://console.bce.baidu.com/qianfan/ais/console/applicationConsole/application)创建大模型应用并获取到对应的`API Key`和`Secret Key`。
 
-同理你想使用国产文心系列模型，只需要 ErnieBot()进行初始化，文心模型虽然与openai模型有较大差异，但是框架提供了尽可能完美的兼容。
-你还可以使用ErnieBot(model="ernie-bot")来具体选择对应的文心模型，目前框架提供了两种文心模型，分别是文心一言（"ernie-bot"）和文心turbo（"ernie-bot-turbo"）,默认为文心turbo模型。
-
-
 ### KEY配置
 
 在使用百度千帆大模型平台系列的LLM之前，你需要先导入你的`API Key`和`Secret Key`
@@ -35,6 +31,10 @@ print(get_default_storage_path())
 `promptulate`的架构设计可以轻松兼容不同的大语言模型扩展，在`promptulate`中，llm负责最基本的内容生成部分，因此为最基础的组件。
 
 下面的示例展示了如何使用百度文心ErnieBot的大语言模型进行交互。
+
+如果你想使用国产文心系列模型，只需要 ErnieBot()进行初始化，文心模型虽然与openai模型有较大差异，但是框架提供了尽可能完美的兼容。
+你还可以使用ErnieBot(model="ernie-bot")来具体选择对应的文心模型，目前框架提供了两种文心模型，分别是文心一言（"ernie-bot"）和文心turbo（"ernie-bot-turbo"）,默认为文心turbo模型。
+
 
 ```python
 from promptulate.llms import ErnieBot
@@ -118,6 +118,3 @@ result = llm(prompt, stop=["test"])
 ```text
 [start] This is a
 ```
-
-llm是否支持stop，要看其LLM模型本身是否支持，当前OpenAI系列的产品支持stop，因此你可以`ChatOpenAI` `OpenAI`都可以使用上面的方式进行调用。
-文心系列模型不支持stop, 但是Promptulate框架本身集成了代码层面的stop能力，因此你可以使用ErnieBot进行stop相关能力的开发。

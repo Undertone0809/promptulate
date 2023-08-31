@@ -14,6 +14,7 @@ from promptulate.schema import (
     AssistantMessage,
     BaseMessage,
 )
+from promptulate.tips import LLMError
 from promptulate.utils import get_logger
 
 CFG = Config()
@@ -77,6 +78,10 @@ class ErnieBot(BaseLLM, ABC):
             #     logger.debug(chunk)
             ret_data = response.json()
             logger.debug(f"[pne ernie response] {json.dumps(ret_data)}")
+
+            if ret_data.get("error_code", None):
+                raise LLMError(ret_data)
+
             content: str = ret_data["result"]
             if stop:
                 length: int = 1000000  # very large integer +inf

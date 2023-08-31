@@ -19,11 +19,16 @@
 
 from typing import Optional
 
-__all__ = ["EmptyMessageSetError", "OpenAIError", "NetWorkError"]
+__all__ = ["EmptyMessageSetError", "LLMError", "OpenAIError", "NetWorkError"]
 
 
 class EmptyMessageSetError(Exception):
     pass
+
+
+class LLMError(Exception):
+    def __init__(self, msg: str):
+        super().__init__(f"<LLM> could not get data correctly, reasons: {msg}")
 
 
 class OpenAIError(Exception):
