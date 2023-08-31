@@ -125,8 +125,8 @@ class ToolAgent(BaseAgent):
         action_input_pattern = r"Action Input:\s*(.+)"
         action_match = re.search(action_pattern, answer)
         action_input_match = re.search(action_input_pattern, answer)
-        action = None
-        action_input = None
+        action: str = ""
+        action_input: str = ""
 
         if action_match:
             action = action_match.group(1)

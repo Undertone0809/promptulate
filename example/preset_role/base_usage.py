@@ -25,7 +25,7 @@ def main():
     print(get_all_preset_roles())
 
     conversation = Conversation(role="mind-map-generator")
-    ret = conversation.predict("请帮我生成一段python的思维导图")
+    ret = conversation.run("请帮我生成一段python的思维导图")
     print(ret)
 
 

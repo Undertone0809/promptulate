@@ -27,12 +27,8 @@ import questionary
 from promptulate import Conversation
 from promptulate.agents import ToolAgent
 from promptulate.llms import ErnieBot, ChatOpenAI, BaseLLM
-from promptulate.tools import (
-    Calculator,
-    DuckDuckGoTool,
-    PythonREPLTool,
-    ArxivQueryTool
-)
+from promptulate.schema import LLMType
+from promptulate.tools import Calculator, DuckDuckGoTool, PythonREPLTool, ArxivQueryTool
 from promptulate.utils import set_proxy_mode, print_text
 
 MODEL_MAPPING = {"OpenAI": ChatOpenAI, "ErnieBot": ErnieBot}
@@ -64,21 +60,31 @@ def simple_chat(llm: BaseLLM):
         if not prompt:
             ValueError("Your prompt is None, please input something.")
         print_text(prompt, "blue")
-        ret = conversation.predict(prompt)
+        ret = conversation.run(prompt)
         print_text(f"[output] {ret}", "green")
 
 
 def web_chat(llm: BaseLLM):
-    agent = ToolAgent(tools=[DuckDuckGoTool()], llm=llm)
+    if llm.llm_type == LLMType.ErnieBot:
+        while True:
+            print_text("[User] ", "blue")
+            prompt = get_user_input()
+            if not prompt:
+                ValueError("Your prompt is None, please input something.")
+            print_text(prompt, "blue")
+            ret = llm(prompt)
+            print_text(f"[agent] {ret}", "green")
 
-    while True:
-        print_text("[User] ", "blue")
-        prompt = get_user_input()
-        if not prompt:
-            ValueError("Your prompt is None, please input something.")
-        print_text(prompt, "blue")
-        ret = agent.run(prompt)
-        print_text(f"[agent] {ret}", "green")
+    else:
+        agent = ToolAgent(tools=[DuckDuckGoTool()], llm=llm)
+        while True:
+            print_text("[User] ", "blue")
+            prompt = get_user_input()
+            if not prompt:
+                ValueError("Your prompt is None, please input something.")
+            print_text(prompt, "blue")
+            ret = agent.run(prompt)
+            print_text(f"[agent] {ret}", "green")
 
 
 def agent_chat(agent: ToolAgent):

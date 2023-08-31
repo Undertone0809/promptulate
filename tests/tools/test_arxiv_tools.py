@@ -18,8 +18,9 @@ class TestArxivApiWrapper(TestCase):
         cls.arxiv_api_wrapper = ArxivAPIWrapper()
 
     def test_query_by_keyword(self):
-        results = self.arxiv_api_wrapper.query("LLM")
-        logger.info(results)
+        results = self.arxiv_api_wrapper.query("Attention Is All You Need")
+        for result in results:
+            logger.info(result["title"])
         self.assertIsNotNone(results)
         self.assertEqual(len(results), self.arxiv_api_wrapper.max_num_of_result)
 
