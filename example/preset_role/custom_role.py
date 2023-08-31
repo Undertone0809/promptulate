@@ -31,7 +31,7 @@ class SpiritualTeacher(CustomPresetRole):
 def main():
     role = SpiritualTeacher()
     conversation = Conversation(role=role)
-    ret = conversation.predict("论文被拒绝了怎么办？")
+    ret = conversation.run("论文被拒绝了怎么办？")
     print(ret)
 
 

@@ -18,7 +18,7 @@
 # Contact Email: zeeland@foxmail.com
 
 from promptulate import Conversation
-from promptulate.llms import OpenAI, ChatOpenAI, ErnieBot
+from promptulate.llms import ChatOpenAI
 from promptulate.memory import FileChatMemory
 
 
@@ -33,7 +33,7 @@ def main():
         n=1,
     )
     conversation = Conversation(llm=llm, memory=memory)
-    ret = conversation.predict("什么是引力波")
+    ret = conversation.run("什么是引力波")
     print(f"[predict] {ret}")
     ret = conversation.predict_by_translate("请介绍一下引力波与广义相对论的必然关系", country="America")
     print(f"[translate output] {ret}")

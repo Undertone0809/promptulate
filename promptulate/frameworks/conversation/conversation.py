@@ -17,6 +17,7 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
+import warnings
 from typing import Optional, Union, Dict, Any
 
 from pydantic import Field, validator
@@ -36,12 +37,12 @@ from promptulate.provider.mixins import (
 )
 from promptulate.schema import (
     MessageSet,
-    AssistantMessage,
+    UserMessage,
+    BaseMessage,
     init_chat_message_history,
     LLMType,
 )
 from promptulate.tips import EmptyMessageSetError
-from promptulate.utils.core_utils import record_time
 
 CFG = Config()
 logger = utils.get_logger()
@@ -55,7 +56,7 @@ class Conversation(
 
     Attributes
         role: preset role. Default is default role.
-        llm: default is OpenAI GPT3.5. You can choose other llm.
+        llm: default is ChatOpenAI GPT3.5. You can choose other llm.
         conversation_id: conversation id. Default is None
         memory: the way you want to store chat data. Default is BufferChatMemory, which is used
             for local file storage.
@@ -64,7 +65,7 @@ class Conversation(
         from promptulate import Conversation
 
         conversation = Conversation()
-        conversation.predict("Hello, Who are you?")
+        conversation.run("Hello, Who are you?")
     """
 
     conversation_id: Optional[str] = None
@@ -103,16 +104,33 @@ class Conversation(
             cls.conversation_id = memory.conversation_id
         return memory
 
-    @record_time()
     def predict(self, prompt: str, **kwargs) -> str:
+        return self.run(prompt, **kwargs)
+
+    def run_by_message_set(self, message_set: MessageSet, *args, **kwargs) -> str:
+        answer: BaseMessage = self.llm.predict(message_set, *args, **kwargs)
+        message_set.add_message(answer)
+        self.memory.save_message_set_to_memory(message_set)
+        return answer.content
+
+    def run(
+        self, prompt: str, custom_system_prompt: bool = False, *args, **kwargs
+    ) -> str:
+        warnings.warn(
+            "Conversation will be deprecated at v1.7.0, please use promptulate.agents.LLMAgent",
+            DeprecationWarning,
+        )
         try:
             messages_history: MessageSet = self.memory.load_message_set_from_memory()
             messages_history.add_user_message(message=prompt)
         except EmptyMessageSetError as e:
-            messages_history = init_chat_message_history(
-                get_preset_role_prompt(self.role), prompt, self.llm.llm_type
-            )
-            self.memory.save_message_set_to_memory(messages_history)
+            if custom_system_prompt:
+                messages_history = MessageSet(messages=[UserMessage(content=prompt)])
+            else:
+                messages_history = init_chat_message_history(
+                    get_preset_role_prompt(self.role), prompt, self.llm.llm_type
+                )
+                self.memory.save_message_set_to_memory(messages_history)
         logger.debug(
             f"[pne Conversation] conversation_id: <{self.conversation_id}> messages: <{messages_history.messages}>"
         )
@@ -120,7 +138,7 @@ class Conversation(
         if "stop" in kwargs:
             prompt_params.update({"stop": kwargs["stop"]})
 
-        answer: AssistantMessage = self.llm.predict(**prompt_params)
+        answer: BaseMessage = self.llm.predict(**prompt_params)
         messages_history.messages.append(answer)
         self.memory.save_message_set_to_memory(messages_history)
         return answer.content
