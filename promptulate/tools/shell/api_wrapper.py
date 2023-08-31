@@ -1,21 +1,17 @@
 import os
 import sys
 from io import StringIO
-from typing import Dict, Optional
-from pydantic import BaseModel, Field
 
 
-class ShellAPIWrapper(BaseModel):
+class ShellAPIWrapper:
     """Simulates a standalone shell"""
+
     @staticmethod
     def run(command: str) -> str:
-        old_stdout = sys.stdout
-        sys.stdout = mystdout = StringIO()
         try:
-            os.system(command)
-            sys.stdout = old_stdout
-            output = mystdout.getvalue()
+            result = os.popen(command)
+            output = result.read()
+            result.close()
         except Exception as e:
-            sys.stdout = old_stdout
             output = repr(e)
         return output
