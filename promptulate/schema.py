@@ -159,6 +159,7 @@ def init_chat_message_history(system_content: str, user_content: str, llm: LLMTy
     else:
         messages = [
             UserMessage(content=system_content),
+            AssistantMessage(content="好的"),
             UserMessage(content=user_content),
         ]
     return MessageSet(messages=messages)
