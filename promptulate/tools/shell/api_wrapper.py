@@ -1,4 +1,5 @@
 import os
+import subprocess
 import sys
 from io import StringIO
 
@@ -8,10 +9,21 @@ class ShellAPIWrapper:
 
     @staticmethod
     def run(command: str) -> str:
+        """
+        Runs a command in a subprocess and returns
+        the output.
+
+        Args:
+            command: The command to run
+        """
         try:
-            result = os.popen(command)
-            output = result.read()
-            result.close()
-        except Exception as e:
+            output = subprocess.run(
+                command,
+                shell=True,
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+            ).stdout.decode()
+        except subprocess.CalledProcessError as e:
             output = repr(e)
         return output

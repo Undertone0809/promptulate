@@ -10,7 +10,7 @@ class TestShellReplAPIWrapper(TestCase):
         command = """echo hello"""
         result = api_wrapper.run(command)
         print(result)
-        self.assertEqual("hello\n", result)
+        self.assertEqual("hello\r\n", result)
 
 
 class TestShellReplTool(TestCase):
