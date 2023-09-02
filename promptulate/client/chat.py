@@ -28,6 +28,7 @@ from promptulate import Conversation
 from promptulate.agents import ToolAgent
 from promptulate.llms import ErnieBot, ChatOpenAI, BaseLLM
 from promptulate.schema import LLMType
+<<<<<<< HEAD
 from promptulate.tools import (
     Calculator,
     DuckDuckGoTool,
@@ -35,6 +36,9 @@ from promptulate.tools import (
     ArxivQueryTool,
     SleepTool,
 )
+=======
+from promptulate.tools import Calculator, DuckDuckGoTool, PythonREPLTool, ArxivQueryTool, SleepTool
+>>>>>>> 7891106879fdda45a55944729db4b82941fd3231
 from promptulate.tools.shell import ShellTool
 from promptulate.utils import set_proxy_mode, print_text
 
@@ -45,7 +49,11 @@ TOOL_MAPPING = {
     "Python Script Executor": PythonREPLTool,
     "Arxiv Query": ArxivQueryTool,
     "Sleep": SleepTool,
+<<<<<<< HEAD
     "Shell Executor": ShellTool,
+=======
+    "Shell Executor": ShellTool
+>>>>>>> 7891106879fdda45a55944729db4b82941fd3231
 }
 
 
