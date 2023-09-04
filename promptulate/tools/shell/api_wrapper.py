@@ -1,7 +1,4 @@
-import os
 import subprocess
-import sys
-from io import StringIO
 
 
 class ShellAPIWrapper:
