@@ -1,3 +1,4 @@
+import re
 from typing import Union
 from time import sleep
 
@@ -13,8 +14,9 @@ class SleepTool(BaseTool):
 
     def _run(
         self,
-        sleep_time: Union[int, float],
+        sleep_time: str,
     ) -> str:
         """Use the Sleep tool."""
-        sleep(int(sleep_time))
-        return f"Agent slept for {sleep_time} seconds."
+        sleep_time = re.findall(r"\d+", sleep_time)
+        sleep(int(sleep_time[0]))
+        return f"Agent slept for {sleep_time[0]} seconds."
