@@ -2,12 +2,11 @@ import re
 from typing import Optional, Dict, List
 
 from pydantic import Field
+import paho.mqtt.client as mqtt
 
 from promptulate.llms import ErnieBot, BaseLLM
 from promptulate.tools import BaseTool
 from promptulate.tools.iot_swith_mqtt.api_wrapper import IotSwitchAPIWrapper
-import paho.mqtt.client as mqtt
-
 from promptulate.tools.iot_swith_mqtt.prompt import prompt_template
 from promptulate.utils import StringTemplate, get_logger
 
@@ -49,7 +48,7 @@ class IotSwitchTool(BaseTool):
     def _process_llm_result(self, llm_output: str) -> str:
         answer = re.findall(r"\d+", llm_output)
         if len(answer) == 0:
-            return "failure information :"+llm_output
+            return "failure information :" + llm_output
         else:
             self.api_wrapper.run(
                 self.client,
