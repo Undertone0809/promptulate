@@ -16,6 +16,7 @@ tools模块为LLM提供了调用外部工具扩展的能力，可以说tools是�
 - FileManager: 可以进行文件读写
 - Sleep: 可以进行暂停，以便在agent中控制事件执行的时间间隔，这对有时间控制需求的用户很有帮助
 - Shell: 可以执行shell命令（适配windows，mac和linux操作系统）
+- IotSwitchMqtt: iot工具，可以发送mqtt信息到iot设备
 
 ## 工具的使用
 
@@ -61,6 +62,7 @@ from promptulate.tools import (
 - ArxivSummaryTool: Arxiv论文总结工具，可以提供该论文的摘要、关键见解、经验教训、参考文献、相关建议
 - PaperSummaryTool: 一个强大的论文总结工具，从Semantic Scholar和Arxiv中检索数据，可以提供该论文的摘要、关键见解、经验教训、参考文献、相关建议
 - EnhancedSearchTool: 增强型搜索引擎总结工具，可以同时调用多种搜索引擎进行数据处理。
+-  IotSwitchMqtt: 可以智能识别输入的自然语言是否符合控制规则表。
 
 ## 单独使用Tool
 
