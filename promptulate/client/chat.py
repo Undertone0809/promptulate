@@ -34,6 +34,7 @@ from promptulate.tools import (
     PythonREPLTool,
     ArxivQueryTool,
     SleepTool,
+    HumanFeedBackTool
 )
 from promptulate.tools.shell import ShellTool
 from promptulate.utils import set_proxy_mode, print_text
@@ -46,6 +47,7 @@ TOOL_MAPPING = {
     "Arxiv Query": ArxivQueryTool,
     "Sleep": SleepTool,
     "Shell Executor": ShellTool,
+    "HumanFeedBackTool": HumanFeedBackTool,
 }
 
 

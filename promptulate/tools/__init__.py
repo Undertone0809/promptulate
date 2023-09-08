@@ -5,6 +5,8 @@ from promptulate.tools.arxiv.tools import (
 )
 from promptulate.tools.base import BaseTool
 from promptulate.tools.duckduckgo.tools import DuckDuckGoTool, DuckDuckGoReferenceTool
+from promptulate.tools.human_feedback import HumanFeedBackTool
+from promptulate.tools.iot_swith_mqtt import IotSwitchTool
 from promptulate.tools.math.tools import Calculator
 from promptulate.tools.paper.tools import PaperSummaryTool
 from promptulate.tools.python_repl import PythonREPLTool
@@ -28,7 +30,9 @@ __all__ = [
     "SemanticScholarQueryTool",
     "PythonREPLTool",
     "Calculator",
-    "SleepTool"
+    "SleepTool",
+    "IotSwitchTool",
+    "HumanFeedBackTool"
 ]
 
 
