@@ -1,8 +1,9 @@
 import logging
+import warnings
 from abc import ABC, abstractmethod
 from typing import List, Any, Callable
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Extra
 
 from promptulate.hook.base import Hook, HookTable
 
@@ -35,6 +36,10 @@ class BaseTool(ABC, BaseModel):
             **kwargs:
                 hooks(List[Callable]): for adding to hook_manager
         """
+        warnings.warn(
+            "BaseTool is deprecated at v1.7.0. promptulate.tools.base.Tool is recommended.",
+            DeprecationWarning,
+        )
         super().__init__(**kwargs)
         if "hooks" in kwargs and kwargs["hooks"]:
             for hook in kwargs["hooks"]:
@@ -43,6 +48,7 @@ class BaseTool(ABC, BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
+        extra = Extra.allow
 
     def run(self, *args, **kwargs):
         """run the tool including specified function and hooks"""
@@ -57,11 +63,66 @@ class BaseTool(ABC, BaseModel):
         """Run detail business, implemented by subclass."""
 
 
-class Tool(BaseTool):
-    func: Callable
+class Tool(ABC):
+    name: str
+    """Tool name"""
+    description: str
+    """Tool description"""
+
+    def __init__(self, **kwargs):
+        self.check_params()
+        if "hooks" in kwargs and kwargs["hooks"]:
+            for hook in kwargs["hooks"]:
+                Hook.mount_instance_hook(hook, self)
+        Hook.call_hook(HookTable.ON_TOOL_CREATE, self, **kwargs)
+
+    def check_params(self):
+        """Check parameters when initialization."""
+        if not getattr(self, "name", None) or not getattr(self, "description", None):
+            raise TypeError(
+                f"{self.__class__.__name__} required parameters 'name' and 'description'."
+            )
+
+    def run(self, *args, **kwargs):
+        """run the tool including specified function and hooks"""
+        Hook.call_hook(HookTable.ON_TOOL_START, self, *args, **kwargs)
+        result: Any = self._run(*args, **kwargs)
+        logger.debug(f"[pne tool result] {result}")
+        Hook.call_hook(HookTable.ON_TOOL_RESULT, self, result=result)
+        return result
+
+    @abstractmethod
+    def _run(self, *args, **kwargs):
+        """Run detail business, implemented by subclass."""
+
+
+class ToolImpl(Tool):
+    def __init__(self, name, description, callback: Callable, **kwargs):
+        self.name = name
+        self.description = description
+        self.callback = callback
+
+        super().__init__(**kwargs)
 
     def _run(self, *args, **kwargs):
-        self.func(*args, **kwargs)
+        return self.callback(*args, **kwargs)
+
+
+def define_tool(name: str, description: str, callback: Callable) -> ToolImpl:
+    """
+    A tool with llm or API wrapper will automatically initialize the llm and API wrapper classes,
+    which can avoid this problem by initializing in this way.
+
+    Args:
+        name: tool name
+        description: tool description
+        callback: tool function when running
+
+    Returns:
+        A ToolImpl class (subclass of Tool).
+    """
+
+    return ToolImpl(name, description, callback)
 
 
 class BaseToolKit:

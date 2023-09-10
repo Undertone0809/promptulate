@@ -3,6 +3,7 @@ There are 2 kinds of model in OpenAI, namely text generative and conversational.
 """
 
 import json
+import logging
 import warnings
 from abc import ABC
 from typing import Optional, Any, Dict, List
@@ -21,10 +22,9 @@ from promptulate.schema import (
     CompletionMessage,
 )
 from promptulate.tips import OpenAIError
-from promptulate.utils.logger import get_logger
 
 CFG = Config()
-logger = get_logger()
+logger = logging.getLogger(__name__)
 
 
 class BaseOpenAI(BaseLLM, ABC):
@@ -81,6 +81,7 @@ class BaseOpenAI(BaseLLM, ABC):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.retry_times = CFG.get_key_retry_times(self.model)
+        print("aaaa", self.retry_times)
 
     @property
     def api_key(self):
@@ -164,7 +165,7 @@ class OpenAI(BaseOpenAI):
             return AssistantMessage(content=content)
 
         logger.error(
-            "[promptulate OpenAI] Failed to get data. Please check your network or api key."
+            f"[pne OpenAI] <key sk-....{api_key[-6:]}>Failed to get data. Please check your network or api key."
         )
         logger.debug("[promptulate OpenAI] retry to get response")
         if self.enable_retry and self.retry_counter < self.retry_times:
@@ -263,7 +264,7 @@ class ChatOpenAI(BaseOpenAI):
             return AssistantMessage(content=content)
 
         logger.error(
-            "[promptulate OpenAI] Failed to get data. Please check your network or api key."
+            f"[pne OpenAI] <key sk-....{api_key[-6:]}>Failed to get data. Please check your network or api key."
         )
         logger.debug("[promptulate OpenAI] retry to get response")
         if self.enable_retry and self.retry_counter < self.retry_times:

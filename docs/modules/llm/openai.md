@@ -278,3 +278,22 @@ for key in keys:
 {'__name__': 'OpenAIKey', '__unique_id__': 'c13b1965-5034-4463-9409-2ad90ba1d260', 'model': 'gpt-3.5-turbo', 'key': 'key4'}
 
 ```
+
+### 指定key
+
+如果你想对某个ChatOpenAI使用指定的key，不使用环境变量、缓存、或者key pool中的key，你可以使用如下方式配置：
+
+```python
+from promptulate.llms import ChatOpenAI
+
+
+def main():
+    llm = ChatOpenAI()
+    llm.set_private_api_key("your key here")
+    print(llm("hello"))
+
+
+if __name__ == '__main__':
+    main()
+
+```

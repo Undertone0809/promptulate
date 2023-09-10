@@ -6,21 +6,29 @@ tools模块为LLM提供了调用外部工具扩展的能力，可以说tools是�
 
 ## 支持的工具
 
-当前`promptulate`支持以下几类工具：
+当前`promptulate`支持以下工具：
 
 - DuckDuckGo Search: DDG搜索引擎
 - Calculator: 计算器
+- Shell: 可以执行shell命令（适配windows，mac和linux操作系统）
+- LangchainTool: 移植Langchain相关的工具，可以完美兼容引入使用
+- HuggingFaceTool: HuggingFace相关的工具，可以完美兼容引入使用
+- IotSwitchMqtt: iot工具，可以发送mqtt信息到iot设备
+- HumanFeedBackTool: 在适当的时候引入人类反馈
 - Arxiv: Arxiv论文检索工具
 - Semantic Scholar: Semantic Scholar论文检索工具，可以检索论文、查询论文参考文献、查询引用该论文的文献
 - Python REPL: 可以执行python脚本
 - FileManager: 可以进行文件读写
 - Sleep: 可以进行暂停，以便在agent中控制事件执行的时间间隔，这对有时间控制需求的用户很有帮助
-- Shell: 可以执行shell命令（适配windows，mac和linux操作系统）
-- IotSwitchMqtt: iot工具，可以发送mqtt信息到iot设备
+
+
+## 在Agent中使用Tool
+
+Tool模块的主要作用就是为Agent提供tool能力支持，详情查看[Agent](modules/agent.md#agent)
 
 ## 工具的使用
 
-下面的示例展示了如何使用一个DuckDuckGo进行外部搜索。
+在大多数情况下，工具用于给Agent使用，而Tool也可以剥离Agent单独进行使用，下面的示例展示了如何使用一个DuckDuckGo进行外部搜索。
 
 ```python
 from promptulate.tools import DuckDuckGoTool
@@ -29,7 +37,9 @@ tool = DuckDuckGoTool()
 tool.run("what is promptulate?")
 ```
 
-相同的导入方式，你还可以导入：
+在promptulate中，所有tool都可以使用tool.run()的方式进行运行。
+
+此外，相同的导入方式，你还可以导入以下工具：
 
 ```python
 from promptulate.tools import (
@@ -42,27 +52,125 @@ from promptulate.tools import (
     PythonREPLTool,
     SemanticScholarQueryTool,
     SemanticScholarCitationTool,
-    SemanticScholarReferenceTool
+    SemanticScholarReferenceTool,
+    HumanFeedBackTool,
+    IotSwitchTool,
+    LangchainTool,
+    HuggingFaceTool
 )
 ```
 
-所有的工具都继承`BaseTool`，因此你可以使用`tool.run(prompt)`的方式进行调用。
+所有的工具都继承`Tool`，因此你可以使用`tool.run(prompt)`的方式进行调用。
 
-## 在Agent中使用Tool
+## Langchain Tool的使用
 
-详情查看[Agent](modules/agent.md#agent)
+promptulate兼容langchain所有的tool，并且完美兼容promptulate的hooks系统，下面的示例展示了如何在promptulate中使用langchain tool。
+
+首先，你需要先安装langchain：
+
+```shell
+pip install langchain
+```
+
+接着，你可以通过如下方式进行调用，下面的示例调用的langchain的DuckDuckGoSearchRun工具。
+
+```python
+from langchain.tools import DuckDuckGoSearchRun
+from promptulate.tools import LangchainTool
+from promptulate.agents import ToolAgent
+
+
+def example():
+    tools = [LangchainTool(DuckDuckGoSearchRun())]
+    agent = ToolAgent(tools)
+    agent.run("Shanghai weather tomorrow")
+
+
+if __name__ == "__main__":
+    example()
+```
+
+## 自定义Tool
+
+promptulate支持自定义tool，其定义方式十分简单，并且提供了函数式和继承式两种方式进行自定义，下面将会展示两种工具定义方式。
+
+### 函数式（推荐）
+
+如果你的tool逻辑较为简单，promptulate提供了方便地函数式工具定义方式，下面的示例展示了一个模拟搜索引擎工具的定义与使用：
+
+```python
+from promptulate.tools import define_tool
+
+
+def web_search(query: str):
+    return f"answer: {query}"
+
+
+def example():
+    tool = define_tool(name="web_search", description="A web search tool", callback=web_search)
+    tool.run("Shanghai weather tomorrow.")
+
+    
+if __name__ == '__main__':
+    example()
+```
+
+如果你的工具逻辑较为复杂，可以使用继承式的定义方式，下面的示例展示了如何自定义一个Tool类，从而构建一个shell工具。
+
+```python
+import warnings
+import sys
+
+from promptulate.tools import Tool
+from promptulate.tools.shell.api_wrapper import ShellAPIWrapper
+
+
+def _get_platform() -> str:
+    """Get platform."""
+    system = sys.platform
+    if system == "Darwin":
+        return "MacOS"
+    return system
+
+
+class ShellTool(Tool):
+    """Tool to run shell commands."""
+
+    name: str = "terminal"
+    description: str = f"Run shell commands on this {_get_platform()} machine."
+    api_wrapper: ShellAPIWrapper = ShellAPIWrapper()
+
+    def _run(self, command: str) -> str:
+        warnings.warn(
+            "The shell tool has no safeguards by default. Use at your own risk."
+        )
+        """Run commands and return final output."""
+        return self.api_wrapper.run(command)
+
+
+def example():
+    tool = ShellTool()
+    tool.run("echo HelloWorld")
+
+    
+if __name__ == '__main__':
+    example()
+```
+
+上面的示例继承了Tool，并且需要实现name和description两个属性，用于给Agent构建system prompt的输入，此外，你还需要实现_run方法，通过_run来运行tool，对于一个复杂的Tool，你可以采用上面的方式进行定义与逻辑处理。
+
 
 ## 有LLM能力的Tool
 
-在`promptulate`
-中，为了构建更加智能的Agent，一些提供给Agent的Tool也是有大语言模型调用权限的，它们一般有一些简单的能力处理功能。如果你有需要，你可以直接使用这些带有LLM的Tool，下一章节会演示如何使用Tool。
+在`promptulate`中，为了构建更加智能的Agent，一些提供给Agent的Tool也是有大语言模型调用权限的，它们一般有一些简单的能力处理功能。如果你有需要，你可以直接使用这些带有LLM的Tool，下一章节会演示如何使用Tool。
 
 下面是一些有`LLM能力`的Tools：
 
 - ArxivSummaryTool: Arxiv论文总结工具，可以提供该论文的摘要、关键见解、经验教训、参考文献、相关建议
 - PaperSummaryTool: 一个强大的论文总结工具，从Semantic Scholar和Arxiv中检索数据，可以提供该论文的摘要、关键见解、经验教训、参考文献、相关建议
 - EnhancedSearchTool: 增强型搜索引擎总结工具，可以同时调用多种搜索引擎进行数据处理。
--  IotSwitchMqtt: 可以智能识别输入的自然语言是否符合控制规则表。
+- IotSwitchMqtt: 可以智能识别输入的自然语言是否符合控制规则表。
+- Calculator: 计算器，主要用于准确识别分析用户输入
 
 ## 单独使用Tool
 
@@ -259,7 +367,3 @@ if __name__ == "__main__":
 Scholar中获取论文、引用等相关数据），但是`prompulate`的事件总线并行机制大大化简了推理总时间，平均推理时间保持在十几秒（具体事件取决于网络环境）。
 
 因为采用并行机制，因此在使用有LLM能力的Tool或者Agent时会在同一时间内快速地多次调用API，如果你的key有限速问题，推荐你使用[key-pool](modules/llm/llm.md#key池)来解决key限速的问题（如果你是5美元的key）。
-
-## 在Agent中使用Tool
-
-详情请查看[Agent](modules/agent.md#agent)文档
