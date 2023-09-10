@@ -12,5 +12,5 @@ class TestErnieBotAdapt(TestCase):
         conversation = Conversation(llm=llm)
         while True:
             prompt = str(input("[User] "))
-            ret = conversation.predict(prompt)
+            ret = conversation.run(prompt)
             print(f"[output] {ret}")

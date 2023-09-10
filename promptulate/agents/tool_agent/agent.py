@@ -1,14 +1,14 @@
 import logging
 import re
 import time
-from typing import List, Callable, Optional
+from typing import List, Callable, Optional, Union
 
 from promptulate.agents import BaseAgent
 from promptulate.agents.tool_agent.prompt import REACT_ZERO_SHOT_PROMPT
 from promptulate.hook import Hook, HookTable
 from promptulate.llms.base import BaseLLM
 from promptulate.llms.openai import ChatOpenAI
-from promptulate.tools import BaseTool
+from promptulate.tools import BaseTool, Tool
 from promptulate.tools.manager import ToolManager
 from promptulate.utils.core_utils import generate_run_id
 from promptulate.utils.string_template import StringTemplate
@@ -21,17 +21,17 @@ class ToolAgent(BaseAgent):
 
     def __init__(
         self,
-        tools: List[BaseTool],
-        llm: BaseLLM = ChatOpenAI(
-            model="gpt-3.5-turbo-16k", temperature=0.2, enable_preset_description=False
-        ),
+        tools: List[Union[BaseTool, Tool]],
+        llm: BaseLLM = None,
         stop_sequences: List[str] = None,
         system_prompt_template: StringTemplate = StringTemplate(REACT_ZERO_SHOT_PROMPT),
         hooks: List[Callable] = None,
     ):
         super().__init__(hooks=hooks)
         self.run_id = generate_run_id()
-        self.llm: BaseLLM = llm
+        self.llm: BaseLLM = llm or ChatOpenAI(
+            model="gpt-3.5-turbo-16k", temperature=0.2, enable_preset_description=False
+        )
         """llm driver"""
         self.stop_sequences: List[str] = stop_sequences
         """llm output will stop when stop sequences is met."""
@@ -68,7 +68,9 @@ class ToolAgent(BaseAgent):
         while self._should_continue(iterations, used_time):
             answer = self.llm(prompt=self.conversation_prompt, stop=self.stop_sequences)
             while answer == "":
-                answer = self.llm(prompt=self.conversation_prompt, stop=self.stop_sequences)
+                answer = self.llm(
+                    prompt=self.conversation_prompt, stop=self.stop_sequences
+                )
             self.conversation_prompt += f"{answer}\n"
             logger.info(
                 f"[pne] tool agent <{iterations}> current prompt: {self.conversation_prompt}"

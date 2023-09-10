@@ -11,3 +11,4 @@ class TestCalculator(TestCase):
         calculator = Calculator()
         result = calculator.run("16.5^0.43")
         print(result)
+        self.assertIsNotNone(result)
