@@ -3,19 +3,18 @@ import time
 from typing import List, Dict, Union
 
 from broadcast_service import broadcast_service
-from pydantic import Field
 
 from promptulate.llms.base import BaseLLM
 from promptulate.llms.openai import ChatOpenAI
 from promptulate.tools.arxiv.api_wrapper import ArxivAPIWrapper
-from promptulate.tools.base import BaseTool
+from promptulate.tools.base import Tool
 from promptulate.utils.core_utils import record_time, listdict_to_string
 from promptulate.utils.logger import get_logger
 
 logger = get_logger()
 
 
-class ArxivQueryTool(BaseTool):
+class ArxivQueryTool(Tool):
     name: str = "arxiv-query"
     description: str = (
         "A query tool around Arxiv.org "
@@ -25,7 +24,7 @@ class ArxivQueryTool(BaseTool):
         "from scientific articles on arxiv.org. "
         "Input should be a search query."
     )
-    api_wrapper: ArxivAPIWrapper = Field(default_factory=ArxivAPIWrapper)
+    api_wrapper: ArxivAPIWrapper = ArxivAPIWrapper()
 
     def _run(self, query: str, **kwargs) -> Union[str, List[Dict]]:
         """Arxiv query tool
@@ -55,16 +54,19 @@ def _init_arxiv_reference_tool_llm():
     return ChatOpenAI(preset_description=preset, temperature=0)
 
 
-class ArxivReferenceTool(BaseTool):
+class ArxivReferenceTool(Tool):
     name: str = "arxiv-reference"
     description: str = (
         "Use this tool to find search related to the field."
         "Your input is a arxiv keyword query."
     )
-    llm: BaseLLM = Field(default_factory=_init_arxiv_reference_tool_llm)
     max_reference_num = 3
     reference_string: str = ""
     reference_counter: int = 0
+
+    def __init__(self, llm: BaseLLM = None, **kwargs):
+        self.llm: BaseLLM = llm or _init_arxiv_reference_tool_llm()
+        super().__init__(**kwargs)
 
     @record_time()
     def _run(self, query: str, *args, **kwargs) -> Union[str, List[Dict]]:
@@ -139,17 +141,20 @@ def _init_arxiv_summary_tool_llm():
     return ChatOpenAI(preset_description=preset, temperature=0)
 
 
-class ArxivSummaryTool(BaseTool):
+class ArxivSummaryTool(Tool):
     name: str = "arxiv-summary"
     description: str = (
         "A summary tool that can be used to obtain a paper summary, listing "
         "key insights and lessons learned in the paper, and references in the paper"
         "Your input is a arxiv keyword query."
     )
-    llm: BaseLLM = Field(default_factory=_init_arxiv_summary_tool_llm)
-    api_wrapper: ArxivAPIWrapper = Field(default_factory=ArxivAPIWrapper)
     summary_string: str = ""
     summary_counter: int = 0
+
+    def __init__(self, llm: BaseLLM = None, **kwargs):
+        self.llm: BaseLLM = llm or _init_arxiv_summary_tool_llm()
+        self.api_wrapper: ArxivAPIWrapper = ArxivAPIWrapper()
+        super().__init__(**kwargs)
 
     def _run(self, query: str, **kwargs) -> str:
         """An arxiv paper summary tool that passes in the article name (or arxiv id) and returns summary results

@@ -2,16 +2,15 @@ import math
 import re
 
 import numexpr
-from pydantic import Field
 
 from promptulate.llms.base import BaseLLM
 from promptulate.llms.openai import ChatOpenAI
-from promptulate.tools.base import BaseTool
+from promptulate.tools.base import Tool
 from promptulate.tools.math.prompt import prompt_template
 from promptulate.utils.string_template import StringTemplate
 
 
-class Calculator(BaseTool):
+class Calculator(Tool):
     """A Math operator"""
 
     name: str = "math-calculator"
@@ -19,10 +18,8 @@ class Calculator(BaseTool):
         "Useful for when you need to answer questions about math.You input is a nature"
         "language of math expression."
     )
-    llm_prompt_template: StringTemplate = Field(default=prompt_template)
-    llm: BaseLLM = Field(
-        default=ChatOpenAI(temperature=0, enable_preset_description=False)
-    )
+    llm_prompt_template: StringTemplate = prompt_template
+    llm: BaseLLM = ChatOpenAI(temperature=0, enable_preset_description=False)
 
     def _run(self, prompt: str) -> str:
         prompt = self.llm_prompt_template.format(question=prompt)

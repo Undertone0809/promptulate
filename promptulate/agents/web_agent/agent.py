@@ -12,16 +12,16 @@ logger = get_logger()
 
 class WebAgent(BaseAgent):
     def __init__(
-            self,
-            llm: BaseLLM = ChatOpenAI(
-                model="gpt-3.5-turbo-16k", temperature=0.0, enable_preset_description=False
-            ),
-            hooks: List[Callable] = None,
-            *args,
-            **kwargs,
+        self,
+        llm: BaseLLM = None,
+        hooks: List[Callable] = None,
+        *args,
+        **kwargs,
     ):
         super().__init__(hooks, *args, **kwargs)
-        self.llm: BaseLLM = llm
+        self.llm: BaseLLM = llm or ChatOpenAI(
+            model="gpt-3.5-turbo-16k", temperature=0.0, enable_preset_description=False
+        )
         self.stop_sequences: List[str] = ["Observation"]
         self.websearch = DuckDuckGoTool()
         self.conversation_prompt: str = ""

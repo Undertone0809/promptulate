@@ -1,11 +1,7 @@
-import warnings
-from ctypes import Union
 import sys
-from typing import List
+import warnings
 
-from pydantic import Field
-
-from promptulate.tools import BaseTool
+from promptulate.tools import Tool
 from promptulate.tools.shell.api_wrapper import ShellAPIWrapper
 
 
@@ -17,21 +13,14 @@ def _get_platform() -> str:
     return system
 
 
-class ShellTool(BaseTool):
+class ShellTool(Tool):
     """Tool to run shell commands."""
 
     name: str = "terminal"
-    """Name of tool."""
-
     description: str = f"Run shell commands on this {_get_platform()} machine."
-    """Description of tool."""
+    api_wrapper: ShellAPIWrapper = ShellAPIWrapper()
 
-    api_wrapper: ShellAPIWrapper = Field(default_factory=ShellAPIWrapper)
-
-    def _run(
-        self,
-        command: str,
-    ) -> str:
+    def _run(self, command: str) -> str:
         warnings.warn(
             "The shell tool has no safeguards by default. Use at your own risk."
         )
