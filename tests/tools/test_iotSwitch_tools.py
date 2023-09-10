@@ -1,5 +1,7 @@
 from unittest import TestCase
+
 import paho.mqtt.client as mqtt
+
 from promptulate import enable_log
 from promptulate.tools.iot_swith_mqtt import IotSwitchTool
 from promptulate.tools.iot_swith_mqtt.api_wrapper import IotSwitchAPIWrapper
@@ -40,8 +42,7 @@ class TestIotSwitchTool(TestCase):
             rule_table=[
                 {"content": "开风扇", "topic": "/123", "ask": "open fan"},
                 {"content": "开加热器", "topic": "/123", "ask": "open heater"},
-                {"content": "开灯","topic": "/123", "ask": "open light"}
-
+                {"content": "开灯", "topic": "/123", "ask": "open light"},
             ],
         )
         result = tool.run("我好冷")
