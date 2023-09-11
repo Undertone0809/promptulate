@@ -19,7 +19,12 @@ class Calculator(Tool):
         "language of math expression."
     )
     llm_prompt_template: StringTemplate = prompt_template
-    llm: BaseLLM = ChatOpenAI(temperature=0, enable_preset_description=False)
+
+    def __init__(self, llm: BaseLLM = None, **kwargs):
+        self.llm: BaseLLM = llm or ChatOpenAI(
+            temperature=0, enable_preset_description=False
+        )
+        super().__init__(**kwargs)
 
     def _run(self, prompt: str) -> str:
         prompt = self.llm_prompt_template.format(question=prompt)

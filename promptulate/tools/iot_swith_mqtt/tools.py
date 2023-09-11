@@ -23,12 +23,20 @@ class IotSwitchTool(Tool):
         "If the operation of the device is successful, an OK will be returned, otherwise a failure will be returned."
     )
     llm_prompt_template: StringTemplate = prompt_template
-    llm: BaseLLM = ChatOpenAI(temperature=0.1)
     client: mqtt.Client
     rule_table: List[Dict]
     api_wrapper: IotSwitchAPIWrapper = IotSwitchAPIWrapper()
 
-    def __init__(self, client: mqtt.Client, rule_table: List[Dict], **kwargs):
+    def __init__(
+        self,
+        llm: BaseLLM = None,
+        client: mqtt.Client = None,
+        rule_table: List[Dict] = None,
+        **kwargs
+    ):
+        self.llm: BaseLLM = llm or ChatOpenAI(
+            temperature=0.1, enable_preset_description=False
+        )
         self.client = client
         self.rule_table = rule_table
 

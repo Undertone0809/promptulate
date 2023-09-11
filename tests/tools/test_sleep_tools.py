@@ -12,7 +12,7 @@ logger = get_logger()
 class TestSleepTool(TestCase):
     def test_run(self):
         tool = SleepTool()
-        seconds = 1
+        seconds = "1s"
         start_time = time.time()
         result = tool.run(seconds)
         duration = time.time() - start_time

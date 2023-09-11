@@ -14,11 +14,11 @@ enable_log()
 
 def main():
     # MQTT broker address and port
-    broker_address = "XXX"
+    broker_address = "xxx"
     broker_port = 1883
     # username and password
-    username = "XXX"
-    password = "XXX"
+    username = "xxx"
+    password = "xxx"
     client = mqtt.Client()
     client.username_pw_set(username, password)
     client.connect(broker_address, broker_port)
@@ -41,7 +41,7 @@ def main():
         ),
     ]
     agent = ToolAgent(tools)
-    prompt = """现在你是一个智能音箱，我现在感觉好暗"""
+    prompt = """现在你是一个智能音箱，你可以控制冷气，加热器和灯的开关，在开关之前请尽量询问人类，我现在感觉好暗。"""
     agent.run(prompt)
 
 
