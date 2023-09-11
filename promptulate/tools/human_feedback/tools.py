@@ -1,8 +1,14 @@
-from promptulate.tools import BaseTool
+from typing import Callable
+
+from promptulate.tools import Tool
 from promptulate.utils.color_print import print_text
 
 
-class HumanFeedBackTool(BaseTool):
+def _print_func(content) -> None:
+    print_text(f"[Agent ask] {content}", "blue")
+
+
+class HumanFeedBackTool(Tool):
     """A tool for running python code in a REPL."""
 
     name: str = "human_feedback"
@@ -14,6 +20,16 @@ class HumanFeedBackTool(BaseTool):
         "humans reason. "
     )
 
+    def __init__(
+        self,
+        prompt_func: Callable[[str], None] = _print_func,
+        input_func: Callable = input,
+        **kwargs,
+    ):
+        super().__init__(**kwargs)
+        self.prompt_func = prompt_func
+        self.input_func = input_func
+
     def _run(self, content: str, *args, **kwargs) -> str:
-        print_text(f"[Agent ask] {content}", "blue")
-        return input()
+        self.prompt_func(content)
+        return self.input_func()
