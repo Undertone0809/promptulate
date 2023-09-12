@@ -24,6 +24,7 @@ class ToolAgent(BaseAgent):
         tools: List[Union[BaseTool, Tool]],
         llm: BaseLLM = None,
         stop_sequences: List[str] = None,
+        prefix_prompt_template: StringTemplate = StringTemplate(PREFIX_TEMPLATE),
         system_prompt_template: StringTemplate = StringTemplate(REACT_ZERO_SHOT_PROMPT),
         hooks: List[Callable] = None,
         role_enable: bool = False,
@@ -42,6 +43,8 @@ class ToolAgent(BaseAgent):
         """llm output will stop when stop sequences is met."""
         self.system_prompt_template: StringTemplate = system_prompt_template
         """Preset system prompt template."""
+        self.prefix_prompt_template: StringTemplate = prefix_prompt_template
+        """Prefix system prompt template."""
         self.tool_manager: ToolManager = ToolManager(tools)
         """Used to manage all tools."""
         self.conversation_prompt: str = ""
@@ -59,9 +62,9 @@ class ToolAgent(BaseAgent):
             self.stop_sequences = ["Observation"]
 
     def _build_preset_prompt(self, prompt) -> str:
+        """Build the system prompt."""
         if self.role_enable:
-            string_template = StringTemplate(PREFIX_TEMPLATE)
-            prefix = string_template.format(
+            prefix = self.prefix_prompt_template.format(
                 [self.profile, self.name, self.goal, self.constraints]
             )
             return prefix + self.system_prompt_template.format(
@@ -69,9 +72,7 @@ class ToolAgent(BaseAgent):
                 tool_descriptions=self.tool_manager.tool_descriptions,
                 tool_names=self.tool_manager.tool_names,
             )
-            pass
         else:
-            """Build the system prompt."""
             return self.system_prompt_template.format(
                 prompt=prompt,
                 tool_descriptions=self.tool_manager.tool_descriptions,
