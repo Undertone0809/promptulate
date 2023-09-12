@@ -4,7 +4,7 @@ import time
 from typing import List, Callable, Optional, Union
 
 from promptulate.agents import BaseAgent
-from promptulate.agents.tool_agent.prompt import REACT_ZERO_SHOT_PROMPT
+from promptulate.agents.tool_agent.prompt import REACT_ZERO_SHOT_PROMPT, PREFIX_TEMPLATE
 from promptulate.hook import Hook, HookTable
 from promptulate.llms.base import BaseLLM
 from promptulate.llms.openai import ChatOpenAI
@@ -26,6 +26,11 @@ class ToolAgent(BaseAgent):
         stop_sequences: List[str] = None,
         system_prompt_template: StringTemplate = StringTemplate(REACT_ZERO_SHOT_PROMPT),
         hooks: List[Callable] = None,
+        role_enable: bool = False,
+        profile: str = "bot",
+        name: str = "pne-bot",
+        goal: str = "provides better assistance and services for humans.",
+        constraints: str = "none",
     ):
         super().__init__(hooks=hooks)
         self.run_id = generate_run_id()
@@ -45,17 +50,33 @@ class ToolAgent(BaseAgent):
         """The maximum number of executions."""
         self.max_execution_time: Optional[float] = None
         """The longest running time. """
-
+        self.role_enable: bool = role_enable
+        self.profile: str = profile
+        self.name: str = name
+        self.goal: str = goal
+        self.constraints: str = constraints
         if not stop_sequences:
             self.stop_sequences = ["Observation"]
 
     def _build_preset_prompt(self, prompt) -> str:
-        """Build the system prompt."""
-        return self.system_prompt_template.format(
-            prompt=prompt,
-            tool_descriptions=self.tool_manager.tool_descriptions,
-            tool_names=self.tool_manager.tool_names,
-        )
+        if self.role_enable:
+            string_template = StringTemplate(PREFIX_TEMPLATE)
+            prefix = string_template.format(
+                [self.profile, self.name, self.goal, self.constraints]
+            )
+            return prefix + self.system_prompt_template.format(
+                prompt=prompt,
+                tool_descriptions=self.tool_manager.tool_descriptions,
+                tool_names=self.tool_manager.tool_names,
+            )
+            pass
+        else:
+            """Build the system prompt."""
+            return self.system_prompt_template.format(
+                prompt=prompt,
+                tool_descriptions=self.tool_manager.tool_descriptions,
+                tool_names=self.tool_manager.tool_names,
+            )
 
     def _run(self, prompt: str) -> str:
         self.conversation_prompt = self._build_preset_prompt(prompt)
