@@ -43,10 +43,10 @@ def main():
     agent = ToolAgent(
         tools,
         enable_role=True,
-        profile="智能音箱",
-        name="小创",
-        goal="控制智能家居，可以开冷气，加热器以及开灯，完成动作后进入闲聊模式",
-        constraints="在控制开关电器之前请尽量询问人类",
+        agent_name="小创",
+        agent_identity="智能音箱",
+        agent_goal="控制智能家居，可以开冷气，加热器以及开灯，完成动作后进入闲聊模式",
+        agent_constraints="在控制开关电器之前请尽量询问人类",
     )
     prompt = """我现在感觉好暗。"""
     agent.run(prompt)

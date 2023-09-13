@@ -28,10 +28,10 @@ class ToolAgent(BaseAgent):
         system_prompt_template: StringTemplate = StringTemplate(REACT_ZERO_SHOT_PROMPT),
         hooks: List[Callable] = None,
         enable_role: bool = False,
-        profile: str = "bot",
-        name: str = "pne-bot",
-        goal: str = "provides better assistance and services for humans.",
-        constraints: str = "none",
+        agent_name: str = "pne-bot",
+        agent_identity: str = "bot",
+        agent_goal: str = "provides better assistance and services for humans.",
+        agent_constraints: str = "none",
     ):
         super().__init__(hooks=hooks)
         self.run_id = generate_run_id()
@@ -54,10 +54,10 @@ class ToolAgent(BaseAgent):
         self.max_execution_time: Optional[float] = None
         """The longest running time. """
         self.enable_role: bool = enable_role
-        self.profile: str = profile
-        self.name: str = name
-        self.goal: str = goal
-        self.constraints: str = constraints
+        self.agent_identity: str = agent_identity
+        self.agent_name: str = agent_name
+        self.agent_goal: str = agent_goal
+        self.agent_constraints: str = agent_constraints
         if not stop_sequences:
             self.stop_sequences = ["Observation"]
 
@@ -65,7 +65,7 @@ class ToolAgent(BaseAgent):
         """Build the system prompt."""
         if self.enable_role:
             prefix = self.prefix_prompt_template.format(
-                [self.profile, self.name, self.goal, self.constraints]
+                [self.agent_identity, self.agent_name, self.agent_goal, self.agent_constraints]
             )
             return prefix + self.system_prompt_template.format(
                 prompt=prompt,

@@ -17,7 +17,7 @@ Begin!
 Question: {prompt}
 Thought:
 """
-PREFIX_TEMPLATE = """You are a {profile}, named {name}, your goal is {goal}, and the constraint is {constraints}. """
+PREFIX_TEMPLATE = """You are a {agent_identity}, named {agent_name}, your goal is {agent_goal}, and the constraint is {agent_constraints}. """
 
 STATE_TEMPLATE = """Here are your conversation records. You can decide which stage you should enter or stay in based 
 on these records. Please note that only the text between the first and second "===" is information about completing 
