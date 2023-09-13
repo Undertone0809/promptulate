@@ -54,8 +54,8 @@ class ToolAgent(BaseAgent):
         self.max_execution_time: Optional[float] = None
         """The longest running time. """
         self.enable_role: bool = enable_role
-        self.agent_identity: str = agent_identity
         self.agent_name: str = agent_name
+        self.agent_identity: str = agent_identity
         self.agent_goal: str = agent_goal
         self.agent_constraints: str = agent_constraints
         if not stop_sequences:
