@@ -4,7 +4,7 @@ import time
 from typing import List, Callable, Optional, Union
 
 from promptulate.agents import BaseAgent
-from promptulate.agents.tool_agent.prompt import REACT_ZERO_SHOT_PROMPT
+from promptulate.agents.tool_agent.prompt import REACT_ZERO_SHOT_PROMPT, PREFIX_TEMPLATE
 from promptulate.hook import Hook, HookTable
 from promptulate.llms.base import BaseLLM
 from promptulate.llms.openai import ChatOpenAI
@@ -24,8 +24,14 @@ class ToolAgent(BaseAgent):
         tools: List[Union[BaseTool, Tool]],
         llm: BaseLLM = None,
         stop_sequences: List[str] = None,
+        prefix_prompt_template: StringTemplate = StringTemplate(PREFIX_TEMPLATE),
         system_prompt_template: StringTemplate = StringTemplate(REACT_ZERO_SHOT_PROMPT),
         hooks: List[Callable] = None,
+        enable_role: bool = False,
+        agent_name: str = "pne-bot",
+        agent_identity: str = "bot",
+        agent_goal: str = "provides better assistance and services for humans.",
+        agent_constraints: str = "none",
     ):
         super().__init__(hooks=hooks)
         self.run_id = generate_run_id()
@@ -37,6 +43,8 @@ class ToolAgent(BaseAgent):
         """llm output will stop when stop sequences is met."""
         self.system_prompt_template: StringTemplate = system_prompt_template
         """Preset system prompt template."""
+        self.prefix_prompt_template: StringTemplate = prefix_prompt_template
+        """Prefix system prompt template."""
         self.tool_manager: ToolManager = ToolManager(tools)
         """Used to manage all tools."""
         self.conversation_prompt: str = ""
@@ -45,17 +53,31 @@ class ToolAgent(BaseAgent):
         """The maximum number of executions."""
         self.max_execution_time: Optional[float] = None
         """The longest running time. """
-
+        self.enable_role: bool = enable_role
+        self.agent_name: str = agent_name
+        self.agent_identity: str = agent_identity
+        self.agent_goal: str = agent_goal
+        self.agent_constraints: str = agent_constraints
         if not stop_sequences:
             self.stop_sequences = ["Observation"]
 
     def _build_preset_prompt(self, prompt) -> str:
         """Build the system prompt."""
-        return self.system_prompt_template.format(
-            prompt=prompt,
-            tool_descriptions=self.tool_manager.tool_descriptions,
-            tool_names=self.tool_manager.tool_names,
-        )
+        if self.enable_role:
+            prefix = self.prefix_prompt_template.format(
+                [self.agent_identity, self.agent_name, self.agent_goal, self.agent_constraints]
+            )
+            return prefix + self.system_prompt_template.format(
+                prompt=prompt,
+                tool_descriptions=self.tool_manager.tool_descriptions,
+                tool_names=self.tool_manager.tool_names,
+            )
+        else:
+            return self.system_prompt_template.format(
+                prompt=prompt,
+                tool_descriptions=self.tool_manager.tool_descriptions,
+                tool_names=self.tool_manager.tool_names,
+            )
 
     def _run(self, prompt: str) -> str:
         self.conversation_prompt = self._build_preset_prompt(prompt)

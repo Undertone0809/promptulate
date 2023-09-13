@@ -9,7 +9,7 @@ def _print_func(content) -> None:
 
 
 class HumanFeedBackTool(Tool):
-    """A tool for running python code in a REPL."""
+    """A tool for human feedback"""
 
     name: str = "human_feedback"
     description: str = (
