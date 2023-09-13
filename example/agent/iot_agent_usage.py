@@ -42,7 +42,7 @@ def main():
     ]
     agent = ToolAgent(
         tools,
-        role_enable=True,
+        enable_role=True,
         profile="智能音箱",
         name="小创",
         goal="控制智能家居，可以开冷气，加热器以及开灯，完成动作后进入闲聊模式",

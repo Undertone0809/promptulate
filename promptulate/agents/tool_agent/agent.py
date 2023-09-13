@@ -27,7 +27,7 @@ class ToolAgent(BaseAgent):
         prefix_prompt_template: StringTemplate = StringTemplate(PREFIX_TEMPLATE),
         system_prompt_template: StringTemplate = StringTemplate(REACT_ZERO_SHOT_PROMPT),
         hooks: List[Callable] = None,
-        role_enable: bool = False,
+        enable_role: bool = False,
         profile: str = "bot",
         name: str = "pne-bot",
         goal: str = "provides better assistance and services for humans.",
@@ -53,7 +53,7 @@ class ToolAgent(BaseAgent):
         """The maximum number of executions."""
         self.max_execution_time: Optional[float] = None
         """The longest running time. """
-        self.role_enable: bool = role_enable
+        self.enable_role: bool = enable_role
         self.profile: str = profile
         self.name: str = name
         self.goal: str = goal
@@ -63,7 +63,7 @@ class ToolAgent(BaseAgent):
 
     def _build_preset_prompt(self, prompt) -> str:
         """Build the system prompt."""
-        if self.role_enable:
+        if self.enable_role:
             prefix = self.prefix_prompt_template.format(
                 [self.profile, self.name, self.goal, self.constraints]
             )
