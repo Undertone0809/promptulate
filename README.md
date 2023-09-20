@@ -17,52 +17,48 @@
     </a>
 </p>
 
+[English](/README.md) [中文](/README_zh.md)
+
 <p align="center">
   <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/promptulate_logo_new.png"/>
 </p>
 
-`Promptulate AI` 专注于构建大语言模型应用的开发者平台，致力于为开发者和企业提供构建、扩展、评估大语言模型应用的能力。`Promptulate` 是 `Promptulate AI` 旗下的大语言模型自动化与应用开发框架，旨在帮助开发者通过更小的成本构建行业级的大模型应用，其包含了LLM领域应用层开发的大部分常用组件，如外部工具组件、模型组件、Agent智能代理、外部数据源接入模块、数据存储模块、生命周期模块等。 通过 `Promptulate`，你可以轻松构建起属于自己的LLM应用程序。
 
-更多地，为构建一个强大而灵活的LLM应用开发平台，以创建能够自动化各种任务和应用程序的自主代理，`Promptulate` 通过Core
-AI Engine、Agent System、APIs and Tools Provider、Multimodal Processing、Knowledge Base和Task-specific Modules
-6个组件实现自动化AI平台。 Core AI Engine是该框架的核心组件，负责处理和理解各种输入，生成输出和作出决策。Agent
-System是提供高级指导和控制AI代理行为的模块；APIs and Tools Provider提供工具和服务交互的API和集成库；Multimodal
-Processing是一组处理和理解不同数据类型（如文本、图像、音频和视频）的模块，使用深度学习模型从不同数据模式中提取有意义的信息；Knowledge
-Base是一个存储和组织世界信息的大型结构化知识库，使AI代理能够访问和推理大量的知识；Task-specific
-Modules是一组专门设计用于执行特定任务的模块，例如情感分析、机器翻译或目标检测等。通过这些组件的组合，框架提供了一个全面、灵活和强大的平台，能够实现各种复杂任务和应用程序的自动化。
+`Promptulate AI` focuses on building a developer platform for large language model applications, dedicated to providing developers and businesses with the ability to build, extend, and evaluate large language model applications. `Promptulate` is a large language model automation and application development framework under `Promptulate AI`, designed to help developers build industry-level large model applications at a lower cost. It includes most of the common components for application layer development in the LLM field, such as external tool components, model components, Agent intelligent agents, external data source integration modules, data storage modules, and lifecycle modules. With `Promptulate`, you can easily build your own LLM applications.
+
+Furthermore, to create a powerful and flexible LLM application development platform for creating autonomous agents that can automate various tasks and applications, `Promptulate` implements an automated AI platform through six components: Core AI Engine, Agent System, APIs and Tools Provider, Multimodal Processing, Knowledge Base, and Task-specific Modules. The Core AI Engine is the core component of the framework, responsible for processing and understanding various inputs, generating outputs, and making decisions. The Agent System is a module that provides high-level guidance and control over AI agent behavior. The APIs and Tools Provider offers APIs and integration libraries for interacting with tools and services. Multimodal Processing is a set of modules for processing and understanding different data types, such as text, images, audio, and video, using deep learning models to extract meaningful information from different data modalities. The Knowledge Base is a large structured knowledge repository for storing and organizing world information, enabling AI agents to access and reason about a vast amount of knowledge. The Task-specific Modules are a set of modules specifically designed to perform specific tasks, such as sentiment analysis, machine translation, or object detection. By combining these components, the framework provides a comprehensive, flexible, and powerful platform for automating various complex tasks and applications.
 
 
-# 特性
+# Features
 
-- 大语言模型支持：支持不同类型的大语言模型的扩展接口
-- 对话终端：提供简易对话终端，直接体验与大语言模型的对话
-- 角色预设：提供预设角色，以不同的角度调用GPT
-- 长对话模式：支持长对话聊天，支持多种方式的对话持久化
-- 外部工具：集成外部工具能力，可以进行网络搜索、执行Python代码等强大的功能
-- KEY池：提供API key池，彻底解决key限速的问题
-- 智能代理：集成ReAct，self-ask等高级Agent，结合外部工具赋能LLM
-- 自治代理模式：支持调用API官方接口、自治代理或使用promptulate提供的代理
-- 中文优化：针对中文语境进行特别优化，更适合中文场景
-- 数据导出：支持markdowm等格式的对话导出
-- Hook与生命周期：提供Agent，Tool，llm的生命周期及Hook系统
-- 高级抽象：支持插件扩展、存储扩展、大语言模型扩展
+- Large language model support: Support for various types of large language models through extensible interfaces.
+- Dialogue terminal: Provides a simple dialogue terminal for direct interaction with large language models.
+- Role presets: Provides preset roles for invoking GPT from different perspectives.
+- Long conversation mode: Supports long conversation chat and persistence in multiple ways.
+- External tools: Integrated external tool capabilities for powerful functions such as web search and executing Python code.
+- KEY pool: Provides an API key pool to completely solve the key rate limiting problem.
+- Intelligent agent: Integrates advanced agents such as ReAct and self-ask, empowering LLM with external tools.
+- Autonomous agent mode: Supports calling official API interfaces, autonomous agents, or using agents provided by Promptulate.
+- Chinese optimization: Specifically optimized for the Chinese context, more suitable for Chinese scenarios.
+- Data export: Supports dialogue export in formats such as markdown.
+- Hooks and lifecycles: Provides Agent, Tool, and LLM lifecycles and hook systems.
+- Advanced abstraction: Supports plugin extensions, storage extensions, and large language model extensions.
 
-# 快速开始
+# Quick Start
 
-- [快速上手/官方文档](https://undertone0809.github.io/promptulate/#/)
-- [当前开发计划](https://undertone0809.github.io/promptulate/#/other/plan)
-- [参与贡献/开发者手册](https://undertone0809.github.io/promptulate/#/other/contribution)
-- [常见问题](https://undertone0809.github.io/promptulate/#/other/fqa)
-- [pypi仓库](https://pypi.org/project/promptulate/)
+- [Quick Start/Official Documentation](https://undertone0809.github.io/promptulate/#/)
+- [Current Development Plan](https://undertone0809.github.io/promptulate/#/other/plan)
+- [Contribution/Developer's Guide](https://undertone0809.github.io/promptulate/#/other/contribution)
+- [FAQ](https://undertone0809.github.io/promptulate/#/other/fqa)
+- [PyPI Repository](https://pypi.org/project/promptulate/)
 
-
-- 打开终端，输入以下命令安装框架：
+To install the framework, open the terminal and run the following command:
 
 ```shell script
 pip install -U promptulate  
 ```
 
-- 通过下面这个简单的程序开始你的“HelloWorld”。
+Get started with your "HelloWorld" using the simple program below:
 
 ```python
 import os
@@ -71,52 +67,52 @@ from promptulate.llms import ChatOpenAI
 os.environ['OPENAI_API_KEY'] = "your-key"
 
 llm = ChatOpenAI()
-answer = llm("请解释一下引力波的放射与广义相对论的必然关系")
+answer
+= llm("请解释一下引力波的放射与广义相对论的必然关系")
 print(answer)
 ```
 
-更多详细资料，请查看[快速上手/官方文档](https://undertone0809.github.io/promptulate/#/)
+For more detailed information, please refer to the [Quick Start/Official Documentation](https://undertone0809.github.io/promptulate/#/).
 
-# 基础架构
+# Architecture
 
-当前`promptulate`正处于快速开发阶段，仍有许多内容需要完善与讨论，十分欢迎大家的讨论与参与，而其作为一个大语言模型自动化与应用开发框架，主要由以下几部分组成：
+Currently, `promptulate` is in the rapid development stage and there are still many aspects that need to be improved and discussed. Your participation and discussions are highly welcome. As a large language model automation and application development framework, `promptulate` mainly consists of the following components:
 
-- `Agent` 更高级的执行器，负责复杂任务的调度和分发
-- `llm` 大语言模型，负责生成回答，可以支持不同类型的大语言模型
-- `Memory` 负责对话的存储，支持不同的存储方式及其扩展，如文件存储、数据库存储等
-- `Framework` 框架层，实现不同类型的prompt框架，包括最基础的`Conversation`模型，还有`self-ask`和`ReAct`等模型。
-- `Tool` 提供外部工具扩展调用，如搜索引擎、计算器等
-- `Hook&Lifecycle` Hook系统与生命周期系统，开发者可以进行定制化的生命周期逻辑控制
-- `Rreset roles` 提供预设角色，进行定制化对话
-- `Provider` 为系统提供更多数据源或执行自主操作，如数据库的连接
+- `Agent`: More advanced execution units responsible for task scheduling and distribution.
+- `llm`: Large language model responsible for generating answers, supporting different types of large language models.
+- `Memory`: Responsible for storing conversations, supporting different storage methods and extensions such as file storage and database storage.
+- `Framework`: Framework layer that implements different prompt frameworks, including the basic `Conversation` model and models such as `self-ask` and `ReAct`.
+- `Tool`: Provides external tool extensions for search engines, calculators, etc.
+- `Hook&Lifecycle`: Hook system and lifecycle system that allows developers to customize lifecycle logic control.
+- `Role presets`: Provides preset roles for customized conversations.
+- `Provider`: Provides more data sources or autonomous operations for the system, such as connecting to databases.
 
 <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230704180202.png"/>
 
-# 设计原则
+# Design Principles
 
-promptulate框架的设计原则包括：模块化、可扩展性、互操作性、鲁棒性、可维护性、安全性、效率和可用性。
+The design principles of the `promptulate` framework include modularity, scalability, interoperability, robustness, maintainability, security, efficiency, and usability.
 
-- 模块化是指以模块为基本单位，允许方便地集成新的组件、模型和工具。
-- 可扩展性是指框架能够处理大量数据、复杂任务和高并发的能力。
-- 互操作性是指该框架与各种外部系统、工具和服务兼容，并且能够实现无缝集成和通信。
-- 鲁棒性是指框架具备强大的错误处理、容错和恢复机制，以确保在各种条件下可靠地运行。
-- 安全性是指框架采用了严格的安全措施，以保护框架、其数据和用户免受未经授权访问和恶意行为的侵害。
-- 效率是指优化框架的性能、资源使用和响应时间，以确保流畅和敏锐的用户体验。
-- 可用性是指该框架采用用户友好的界面和清晰的文档，使其易于使用和理解。
+- Modularity refers to the ability to integrate new components, models, and tools conveniently, using modules as the basic unit.
+- Scalability refers to the framework's capability to handle large amounts of data, complex tasks, and high concurrency.
+- Interoperability means that the framework is compatible with various external systems, tools, and services, allowing seamless integration and communication.
+- Robustness refers to the framework's ability to handle errors, faults, and recovery mechanisms to ensure reliable operation under different conditions.
+- Security involves strict security measures to protect the framework, its data, and users from unauthorized access and malicious behavior.
+- Efficiency focuses on optimizing the framework's performance, resource utilization, and response time to ensure a smooth and responsive user experience.
+- Usability involves providing a user-friendly interface and clear documentation to make the framework easy to use and understand.
 
-以上原则的遵循，以及最新的人工智能技术的应用，`promptulate`旨在为创建自动化代理提供强大而灵活的大语言模型应用开发框架。
+By following these principles and incorporating the latest advancements in artificial intelligence technology, `promptulate` aims to provide a powerful and flexible application development framework for creating automated agents.
 
-# 交流群
+# Community
 
-欢迎加入群聊一起交流讨论有关LLM相关的话题，链接过期了可以issue或email提醒一下作者。
+Feel free to join the group chat to discuss topics related to large language models (LLM). If the link is expired, you can notify the author through an issue or email.
 
 <div style="width: 250px;margin: 0 auto;">
-    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230912004353.png"/>
+    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230918125550.png"/>
 </div>
 
+# Contributions
 
-# 贡献
+I am currently exploring more comprehensive abstraction patterns to improve compatibility with the framework and the extended use of external tools. If you have any suggestions, I welcome discussions and exchanges.
 
-本人正在尝试一些更加完善的抽象模式，以更好地兼容该框架，以及外部工具的扩展使用，如果你有更好的建议，欢迎一起讨论交流。
-如果你想为这个项目做贡献，请先查看[当前开发计划](https://undertone0809.github.io/promptulate/#/other/plan)
-和[参与贡献/开发者手册](https://undertone0809.github.io/promptulate/#/other/contribution)。我很高兴看到更多的人参与并优化它。
+If you would like to contribute to this project, please refer to the [current development plan](https://undertone0809.github.io/promptulate/#/other/plan) and [contribution/developer's guide](https://undertone0809.github.io/promptulate/#/other/contribution). I'm excited to see more people getting involved and optimizing it.

@@ -4,8 +4,8 @@
 ，email，以及[交流群](README.md#交流群)进行交流。
 
 
-## v1.4.0 发展计划
-- [v1.4.0开发计划](https://github.com/Undertone0809/promptulate/issues/20)
+## v2.0.0 发展计划
+- [v2.0.0开发计划](https://github.com/Undertone0809/promptulate/issues/20)
 
 ## 其他发展计划
 

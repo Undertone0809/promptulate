@@ -2,10 +2,9 @@
     Promptulate
 </h1>
 
-
 <p align="center">
     <a target="_blank" href="">
-        <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg?label=license" />
+        <img src="https://img.shields.io/github/license/Undertone0809/promptulate.svg?style=flat-square" />
     </a>
     <a target="_blank" href=''>
         <img src="https://img.shields.io/github/release/Undertone0809/promptulate/all.svg?style=flat-square"/>
@@ -15,14 +14,12 @@
    </a>
     <a target="_blank" href=''>
         <img src="https://static.pepy.tech/personalized-badge/promptulate?period=month&units=international_system&left_color=grey&right_color=blue&left_text=Downloads/Week"/>
-   </a>
+    </a>
 </p>
-
 
 <p align="center">
   <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/promptulate_logo_new.png"/>
 </p>
-
 
 `Promptulate AI` 专注于构建大语言模型应用的开发者平台，致力于为开发者和企业提供构建、扩展、评估大语言模型应用的能力。`Promptulate` 是 `Promptulate AI` 旗下的大语言模型自动化与应用开发框架，旨在帮助开发者通过更小的成本构建行业级的大模型应用，其包含了LLM领域应用层开发的大部分常用组件，如外部工具组件、模型组件、Agent智能代理、外部数据源接入模块、数据存储模块、生命周期模块等。 通过 `Promptulate`，你可以轻松构建起属于自己的LLM应用程序。
 
@@ -39,25 +36,46 @@ Modules是一组专门设计用于执行特定任务的模块，例如情感分�
 
 - 大语言模型支持：支持不同类型的大语言模型的扩展接口
 - 对话终端：提供简易对话终端，直接体验与大语言模型的对话
-- 角色预设：提供预设角色，以不同的角度调用LLM
+- 角色预设：提供预设角色，以不同的角度调用GPT
 - 长对话模式：支持长对话聊天，支持多种方式的对话持久化
 - 外部工具：集成外部工具能力，可以进行网络搜索、执行Python代码等强大的功能
 - KEY池：提供API key池，彻底解决key限速的问题
 - 智能代理：集成ReAct，self-ask等高级Agent，结合外部工具赋能LLM
 - 自治代理模式：支持调用API官方接口、自治代理或使用promptulate提供的代理
 - 中文优化：针对中文语境进行特别优化，更适合中文场景
-- 数据导出：支持markdown等格式的对话导出
-- 高级抽象：支持插件扩展、存储扩展、大语言模型扩展
+- 数据导出：支持markdowm等格式的对话导出
 - Hook与生命周期：提供Agent，Tool，llm的生命周期及Hook系统
-- 物联网能力：框架为物联网应用开发提供了多种工具，方便物联网开发者使用大模型能力。
+- 高级抽象：支持插件扩展、存储扩展、大语言模型扩展
 
 # 快速开始
 
-- [快速上手](get_started/quick_start.md#快速开始)
-- [当前开发计划](other/plan.md#开发计划)
-- [参与贡献/开发者手册](other/contribution.md#contribution)
-- [常见问题](other/fqa.md#fqa)
+- [快速上手/官方文档](https://undertone0809.github.io/promptulate/#/)
+- [当前开发计划](https://undertone0809.github.io/promptulate/#/other/plan)
+- [参与贡献/开发者手册](https://undertone0809.github.io/promptulate/#/other/contribution)
+- [常见问题](https://undertone0809.github.io/promptulate/#/other/fqa)
 - [pypi仓库](https://pypi.org/project/promptulate/)
+
+
+- 打开终端，输入以下命令安装框架：
+
+```shell script
+pip install -U promptulate  
+```
+
+- 通过下面这个简单的程序开始你的“HelloWorld”。
+
+```python
+import os
+from promptulate.llms import ChatOpenAI
+
+os.environ['OPENAI_API_KEY'] = "your-key"
+
+llm = ChatOpenAI()
+answer = llm("请解释一下引力波的放射与广义相对论的必然关系")
+print(answer)
+```
+
+更多详细资料，请查看[快速上手/官方文档](https://undertone0809.github.io/promptulate/#/)
 
 # 基础架构
 
@@ -76,7 +94,7 @@ Modules是一组专门设计用于执行特定任务的模块，例如情感分�
 
 # 设计原则
 
-`promptulate`框架的设计原则包括：模块化、可扩展性、互操作性、鲁棒性、可维护性、安全性、效率和可用性。
+promptulate框架的设计原则包括：模块化、可扩展性、互操作性、鲁棒性、可维护性、安全性、效率和可用性。
 
 - 模块化是指以模块为基本单位，允许方便地集成新的组件、模型和工具。
 - 可扩展性是指框架能够处理大量数据、复杂任务和高并发的能力。
@@ -96,8 +114,9 @@ Modules是一组专门设计用于执行特定任务的模块，例如情感分�
     <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230918125550.png"/>
 </div>
 
+
 # 贡献
 
 本人正在尝试一些更加完善的抽象模式，以更好地兼容该框架，以及外部工具的扩展使用，如果你有更好的建议，欢迎一起讨论交流。
-如果你想为这个项目做贡献，请先查看[当前开发计划](other/plan.md#开发计划)
-和[参与贡献/开发者手册](other/contribution.md#contribution)。我很高兴看到更多的人参与并优化它。
+如果你想为这个项目做贡献，请先查看[当前开发计划](https://undertone0809.github.io/promptulate/#/other/plan)
+和[参与贡献/开发者手册](https://undertone0809.github.io/promptulate/#/other/contribution)。我很高兴看到更多的人参与并优化它。
