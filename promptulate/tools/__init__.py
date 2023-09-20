@@ -17,6 +17,8 @@ from promptulate.tools.semantic_scholar import (
     SemanticScholarReferenceTool,
     SemanticScholarCitationTool,
 )
+from promptulate.tools.shell import ShellTool
+
 from promptulate.tools.sleep import SleepTool
 
 __all__ = [
@@ -33,10 +35,11 @@ __all__ = [
     "ArxivQueryTool",
     "SemanticScholarReferenceTool",
     "SemanticScholarCitationTool",
+    "IotSwitchTool",
     "SemanticScholarQueryTool",
     "PythonREPLTool",
+    "ShellTool",
     "Calculator",
     "SleepTool",
-    "IotSwitchTool",
     "HumanFeedBackTool",
 ]

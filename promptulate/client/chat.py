@@ -37,6 +37,7 @@ from promptulate.tools import (
     HumanFeedBackTool
 )
 from promptulate.tools.shell import ShellTool
+
 from promptulate.utils import set_proxy_mode, print_text
 
 MODEL_MAPPING = {"OpenAI": ChatOpenAI, "ErnieBot": ErnieBot}
