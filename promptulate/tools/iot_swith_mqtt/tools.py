@@ -35,9 +35,8 @@ class IotSwitchTool(Tool):
         Args:
             llm: BaseLLM
             client: mqtt.Client
-             rule_table: List[Dict]
-             api_wrapper: IotSwitchAPIWrapper
-             **kwargs
+            rule_table: List[Dict]
+            api_wrapper: IotSwitchAPIWrapper
         """
         self.api_wrapper = api_wrapper
         self.llm: BaseLLM = llm or ChatOpenAI(

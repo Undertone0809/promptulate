@@ -150,7 +150,9 @@ class PaperSummaryTool(BaseTool):
                     paper_info["abstract"] = paper_info["summary"]
 
         if not paper_info:
-            return "semantic scholar query tool and arxiv query tool query result is None."
+            return (
+                "semantic scholar query tool and arxiv query tool query result is None."
+            )
 
         paper_summary = (
             f"""title: {paper_info["title"]}\nabstract: {paper_info["abstract"]}"""

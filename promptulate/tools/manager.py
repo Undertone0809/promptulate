@@ -10,6 +10,7 @@ cfg = Config()
 
 class ToolManager:
     """ToolManager helps ToolAgent manage tools"""
+
     def __init__(self, tools: List[BaseTool]):
         self.tools: List[BaseTool] = tools
 

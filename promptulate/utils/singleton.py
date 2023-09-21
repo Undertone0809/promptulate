@@ -36,15 +36,14 @@ class SingletonPool(metaclass=Singleton):
 
 def singleton():
     """singleton decorator"""
+
     def decorator(cls):
         singleton_pool = SingletonPool()
 
         def get_instance():
             if cls not in singleton_pool.instances:
                 singleton_pool.instances[cls] = cls()
-                logger.debug(
-                    f"[pne config] class <{cls.__name__}> initialization"
-                )
+                logger.debug(f"[pne config] class <{cls.__name__}> initialization")
             return singleton_pool.instances[cls]
 
         return get_instance

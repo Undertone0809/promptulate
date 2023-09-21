@@ -21,7 +21,7 @@ from typing import Optional
 
 from promptulate.config import Config
 
-PROXY_MODE = ['off', 'custom', 'promptulate']
+PROXY_MODE = ["off", "custom", "promptulate"]
 
 
 def set_proxy_mode(mode: str, proxies: Optional[dict] = None):

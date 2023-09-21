@@ -20,7 +20,4 @@
 from promptulate.memory.buffer import BufferChatMemory
 from promptulate.memory.file import FileChatMemory
 
-__all__ = [
-    'BufferChatMemory',
-    'FileChatMemory'
-]
+__all__ = ["BufferChatMemory", "FileChatMemory"]

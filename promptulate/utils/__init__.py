@@ -41,5 +41,5 @@ __all__ = [
     "AbstractSingleton",
     "export_openai_key_pool",
     "StringTemplate",
-    "print_text"
+    "print_text",
 ]

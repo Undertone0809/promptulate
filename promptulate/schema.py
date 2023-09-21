@@ -150,7 +150,9 @@ class MessageSet(BaseModel):
         self.messages.append(AssistantMessage(content=message))
 
 
-def init_chat_message_history(system_content: str, user_content: str, llm: LLMType) -> MessageSet:
+def init_chat_message_history(
+    system_content: str, user_content: str, llm: LLMType
+) -> MessageSet:
     if llm == llm.ChatOpenAI or llm == llm.OpenAI:
         messages = [
             SystemMessage(content=system_content),

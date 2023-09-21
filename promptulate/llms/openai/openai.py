@@ -81,7 +81,6 @@ class BaseOpenAI(BaseLLM, ABC):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.retry_times = CFG.get_key_retry_times(self.model)
-        print("aaaa", self.retry_times)
 
     @property
     def api_key(self):

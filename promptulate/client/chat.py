@@ -34,10 +34,9 @@ from promptulate.tools import (
     PythonREPLTool,
     ArxivQueryTool,
     SleepTool,
-    HumanFeedBackTool
+    HumanFeedBackTool,
 )
 from promptulate.tools.shell import ShellTool
-
 from promptulate.utils import set_proxy_mode, print_text
 
 MODEL_MAPPING = {"OpenAI": ChatOpenAI, "ErnieBot": ErnieBot}

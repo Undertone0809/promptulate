@@ -21,12 +21,12 @@ from promptulate.provider.mixins import (
     SummarizerMixin,
     TranslatorMixin,
     DeriveHistoryMessageMixin,
-    StorageHistoryMessageMixin
+    StorageHistoryMessageMixin,
 )
 
 __all__ = [
-    'SummarizerMixin',
-    'TranslatorMixin',
-    'DeriveHistoryMessageMixin',
-    'StorageHistoryMessageMixin'
+    "SummarizerMixin",
+    "TranslatorMixin",
+    "DeriveHistoryMessageMixin",
+    "StorageHistoryMessageMixin",
 ]

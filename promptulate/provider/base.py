@@ -18,7 +18,7 @@ class BaseMixin(BaseModel):
         arbitrary_types_allowed = True
 
     def embed_message(
-            self, cur_message: BaseMessage, message_history: MessageSet
+        self, cur_message: BaseMessage, message_history: MessageSet
     ) -> None:
         message_history.messages.append(cur_message)
         self.memory.save_message_set_to_memory(message_history)

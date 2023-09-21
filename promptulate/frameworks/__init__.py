@@ -20,6 +20,4 @@
 
 from promptulate.frameworks.conversation import Conversation
 
-__all__ = [
-    'Conversation',
-]
+__all__ = ["Conversation"]

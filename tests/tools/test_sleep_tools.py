@@ -17,4 +17,3 @@ class TestSleepTool(TestCase):
         result = tool.run(seconds)
         duration = time.time() - start_time
         self.assertAlmostEqual(1, duration, delta=0.1)
-

@@ -31,6 +31,7 @@ class BaseLLM(BaseModel, ABC):
 
     class Config:
         """Configuration for this pydantic object."""
+
         arbitrary_types_allowed = True
 
     def __init__(self, *args, **kwargs):

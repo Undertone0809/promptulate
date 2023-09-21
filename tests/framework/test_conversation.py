@@ -40,5 +40,7 @@ class TestConversation(TestCase):
         prompt = """给我想5个公司的名字"""
         conversation.run(prompt)
         conversation_id = conversation.conversation_id
-        new_conversation = Conversation(conversation_id=conversation_id, memory=FileChatMemory())
+        new_conversation = Conversation(
+            conversation_id=conversation_id, memory=FileChatMemory()
+        )
         new_conversation.predict("再给我五个")

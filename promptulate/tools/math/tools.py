@@ -28,10 +28,7 @@ class Calculator(Tool):
 
     def _run(self, prompt: str) -> str:
         prompt = self.llm_prompt_template.format(question=prompt)
-        llm_output = self.llm(
-            prompt,
-            stop=["```output"],
-        )
+        llm_output = self.llm(prompt, stop=["```output"])
 
         return self._process_llm_result(llm_output)
 
@@ -41,19 +38,17 @@ class Calculator(Tool):
         if text_match:
             expression = text_match.group(1)
             output = self._evaluate_expression(expression)
-            # answer = "Answer: " + output
             answer = output
         elif llm_output.startswith("Answer:"):
-            # answer = llm_output
             answer = llm_output.split("Answer:")[-1]
         elif "Answer:" in llm_output:
-            # answer = "Answer: " + llm_output.split("Answer:")[-1]
             answer = llm_output.split("Answer:")[-1]
         else:
             raise ValueError(f"unknown format from LLM: {llm_output}")
         return answer
 
     def _evaluate_expression(self, expression: str) -> str:
+        """Parse numexpr expression."""
         try:
             local_dict = {"pi": math.pi, "e": math.e}
             output = str(

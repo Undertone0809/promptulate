@@ -65,7 +65,12 @@ class ToolAgent(BaseAgent):
         """Build the system prompt."""
         if self.enable_role:
             prefix = self.prefix_prompt_template.format(
-                [self.agent_identity, self.agent_name, self.agent_goal, self.agent_constraints]
+                [
+                    self.agent_identity,
+                    self.agent_name,
+                    self.agent_goal,
+                    self.agent_constraints,
+                ]
             )
             return prefix + self.system_prompt_template.format(
                 prompt=prompt,

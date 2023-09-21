@@ -38,7 +38,7 @@ class BufferChatMemory(BaseChatMemory):
     """Chat message will be stored in the buffer cache."""
 
     def load_message_set_from_memory(
-            self, recently_n: Optional[int] = None
+        self, recently_n: Optional[int] = None
     ) -> MessageSet:
         """Load message from buffer memory
 
@@ -50,12 +50,10 @@ class BufferChatMemory(BaseChatMemory):
         """
         if not buffer:
             raise EmptyMessageSetError
-        recently_n = (
-            recently_n if recently_n else len(buffer[self.conversation_id])
-        )
+        recently_n = recently_n if recently_n else len(buffer[self.conversation_id])
         num_messages = len(buffer[self.conversation_id])
         return MessageSet.from_listdict_data(
-            buffer[self.conversation_id][num_messages - recently_n:]
+            buffer[self.conversation_id][num_messages - recently_n :]
         )
 
     def save_message_set_to_memory(self, message_set: MessageSet) -> None:

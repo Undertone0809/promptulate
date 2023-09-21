@@ -30,7 +30,7 @@ class DuckDuckGoSearchAPIWrapper(BaseModel):
         return values
 
     def query(
-            self, keyword: str, num_results: Optional[int] = None, **kwargs
+        self, keyword: str, num_results: Optional[int] = None, **kwargs
     ) -> List[str]:
         """Run query through DuckDuckGo and return concatenated results."""
         from duckduckgo_search import DDGS
@@ -56,7 +56,7 @@ class DuckDuckGoSearchAPIWrapper(BaseModel):
             return snippets
 
     def query_by_formatted_results(
-            self, query: str, num_results: Optional[int] = None, **kwargs
+        self, query: str, num_results: Optional[int] = None, **kwargs
     ) -> List[Dict[str, str]]:
         """Run query through DuckDuckGo and return metadata.
 

@@ -19,7 +19,4 @@
 
 from promptulate.preset_roles.roles import get_all_preset_roles, CustomPresetRole
 
-__all__ = [
-    'get_all_preset_roles',
-    'CustomPresetRole'
-]
+__all__ = ["get_all_preset_roles", "CustomPresetRole"]

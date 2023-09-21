@@ -24,6 +24,7 @@ import string
 import tempfile
 import time
 from functools import wraps
+from importlib import import_module
 from typing import Callable, Dict, List, Optional
 
 from cushy_storage import CushyOrmCache
@@ -38,6 +39,33 @@ __all__ = [
     "listdict_to_string",
 ]
 logger = logging.getLogger(__name__)
+
+
+def import_string(dotted_path):
+    """
+    Import a dotted module path and return the attribute/class designated by the
+    last name in the path. Raise ImportError if the import failed.
+
+    Args:
+        dotted_path: eg promptulate.schema.MessageSet
+
+    Returns:
+        Class corresponding to dotted path.
+    """
+    try:
+        module_path, class_name = dotted_path.rsplit(".", 1)
+    except ValueError as err:
+        raise ImportError("%s doesn't look like a module path" % dotted_path) from err
+
+    module = import_module(module_path)
+
+    try:
+        return getattr(module, class_name)
+    except AttributeError as err:
+        raise ImportError(
+            'Module "%s" does not define a "%s" attribute/class'
+            % (module_path, class_name)
+        ) from err
 
 
 def listdict_to_string(

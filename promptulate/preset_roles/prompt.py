@@ -41,4 +41,3 @@ PRESET_SYSTEM_PROMPT_CONVERSATION_ZH = """
 
 用户的问题如下所示：
 """
-
