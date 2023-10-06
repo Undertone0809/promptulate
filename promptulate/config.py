@@ -21,15 +21,18 @@ import os
 from typing import Optional
 
 import requests
+from dotenv import load_dotenv
 
 from promptulate.hook.stdout_hook import StdOutHook
-from promptulate.utils.core_utils import get_cache
+from promptulate.tips import MissingAttributionError
+from promptulate.utils.core_utils import PneCache
 from promptulate.utils.logger import get_logger
 from promptulate.utils.openai_key_pool import OpenAIKeyPool
 from promptulate.utils.singleton import Singleton
 
 PROXY_MODE = ["off", "custom", "promptulate"]
 logger = get_logger()
+load_dotenv()
 
 
 def set_enable_cache(value: bool):
@@ -47,13 +50,16 @@ class Config(metaclass=Singleton):
         self.enable_cache: bool = True
         self._proxy_mode: str = PROXY_MODE[0]
         self._proxies: Optional[dict] = None
+
         self.openai_chat_api_url = "https://api.openai.com/v1/chat/completions"
         self.openai_completion_api_url = "https://api.openai.com/v1/completions"
         self.openai_proxy_url = "https://chatgpt-api.shn.hk/v1/"  # FREE API
+
         self.ernie_bot_url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions"
         self.ernie_bot_turbo_url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant"
         self.ernie_bot_token_url = "https://aip.baidubce.com/oauth/2.0/token"
         self.ernie_embedding_v1_url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/embeddings/embedding-v1"
+
         self.key_default_retry_times = 5
         """If llm(like OpenAI) unable to obtain data, retry request until the data is obtained."""
         self.enable_stdout_hook = True

@@ -36,6 +36,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         "cushy-storage",
+        "dotenv~=1.0.0",
         "pydantic~=1.10.0",
         "requests",
         "duckduckgo_search",
