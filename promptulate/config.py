@@ -24,8 +24,7 @@ import requests
 from dotenv import load_dotenv
 
 from promptulate.hook.stdout_hook import StdOutHook
-from promptulate.tips import MissingAttributionError
-from promptulate.utils.core_utils import PneCache
+from promptulate.utils.core_utils import get_cache
 from promptulate.utils.logger import get_logger
 from promptulate.utils.openai_key_pool import OpenAIKeyPool
 from promptulate.utils.singleton import Singleton
