@@ -38,4 +38,13 @@ def set_proxy_mode(mode: str, proxies: Optional[dict] = None):
     """
     if mode not in PROXY_MODE:
         raise ValueError("proxy mode must in ['off', 'custom', 'promptulate']")
+
+    if mode == "promptulate":
+        raise ValueError(
+            "Current promptulate free proxy mode is not supported yet. A better solution will be provided soon."
+        )
+
+    if mode == "custom" and not proxies:
+        raise ValueError("proxies must be passed when proxy mode is custom")
+
     Config().set_proxy_mode(mode, proxies)
