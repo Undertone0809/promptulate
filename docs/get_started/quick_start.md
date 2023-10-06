@@ -28,10 +28,18 @@ import os
 os.environ['OPENAI_API_KEY'] = "your-key"
 ```
 
-在你第一次使用的时候，需要使用`os.environ["OPENAI_API_KEY"]` 导入"OPENAI_API_KEY"
-的环境变量，但是在第一运行之后`promptulate`
-会进行缓存，即后面再运行就不需要再导入key了。如果你的key过期了，可以尝试重新按照上面的方法导入key，或者你也可以把`cache`
-文件给删除掉，Windows的`cache`在当前目录下，linux的`cache`在`/tmp`下。
+在你第一次使用的时候，需要使用`os.environ["OPENAI_API_KEY"]` 导入"OPENAI_API_KEY"的环境变量，但是在第一运行之后`promptulate`会进行缓存，即后面再运行就不需要再导入key了。
+
+如果你的key过期了，可以尝试重新按照上面的方法导入key，或者你也可以把 `cache` 文件给删除掉，通过以下代码可以获取到缓存文件的位置:
+
+```python
+from promptulate.utils import get_default_storage_path
+
+print(get_default_storage_path())
+```
+
+> 此外，你也可以通过创建 `.env` 的方式来导入 key，与上面的配置效果是等价的。 [env 的使用方式](https://github.com/theskumar/python-dotenv)
+
 
 ### LLM
 
@@ -62,14 +70,18 @@ print(answer)
 
 ### proxy
 
-我想你可能遇到了无法访问的小问题，It's OK, `promptulate` 提供了三种访问OpenAI的方式，分别是
+我想你可能遇到了网络无法访问的小问题，在大多数的情况下，有许多服务需要科学上网，如 google, duckduckgo, openai 等相关的服务，因此，`promptulate` 提供了三种代理配置方式，分别是
 
 - `off` 默认的访问方式，不开代理
 - `custom` 自定义代理方式
 - `promptulate` promptulate提供的免费代理服务器
 
-`promptulate` 提供了免费的代理服务器，感谢 [ayaka14732](https://github.com/ayaka14732/)
-，你可以在不用科学上网的情况下直接调用OpenAI的相关接口，下面是三种代理的设置方式：
+当你配置了代理之后， promptulate 将会使用你的代理端口进行服务访问。
+
+~~`promptulate` 提供了免费的代理服务器，感谢 [ayaka14732](https://github.com/ayaka14732/)
+，你可以在不用科学上网的情况下直接调用OpenAI的相关接口，下面是三种代理的设置方式：~~
+
+> 当前，Promptulate 暂时废弃免费代理服务器的选项，后续将提供更优化的体验，因此， 在 v1.7.3 版本已经禁用配置 `promptulate`模式的代理。
 
 ```python
 from promptulate.llms import ChatOpenAI
@@ -81,7 +93,10 @@ def set_free_proxy():
 
 
 def set_custom_proxy():
-    proxies = {'http': 'http://127.0.0.1:7890'}
+    proxies = {
+        'http': 'http://127.0.0.1:7890',
+        'https': 'http://127.0.0.1:7890'
+    }
     set_proxy_mode("custom", proxies=proxies)
 
 
