@@ -24,7 +24,7 @@ from promptulate.utils import get_default_storage_path
 print(get_default_storage_path())
 ```
 
-
+> 此外，你也可以通过创建 `.env` 的方式来导入 key，与上面的配置效果是等价的。[env 的使用方式](https://github.com/theskumar/python-dotenv)
 
 ### LLM快速上手
 
