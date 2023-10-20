@@ -1,0 +1,20 @@
+name: Greetings
+
+on:
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/first-interaction@v1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        pr-message:  'Hello @${{ github.actor }}, thanks for opening your first pull request 😊! We really appreciate your work. Happy Coding 🎉🎊 !'
+        issue-message: |
+          Hello @${{ github.actor }}, thanks for your first issue and interest in our work 😊!
+
+          If this is a bug report, please provide screenshots, relevant logs and **minimum viable code to reproduce your issue**, which will help us debug the problem.
