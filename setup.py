@@ -40,7 +40,7 @@ setuptools.setup(
         "pydantic~=1.10.0",
         "requests",
         "duckduckgo_search",
-        "broadcast-service==1.3.2",
+        "broadcast-service==2.1.0",
         "arxiv",
         "click",
         "numexpr",
