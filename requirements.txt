@@ -1,6 +1,6 @@
 cushy-storage
 python-dotenv~=1.0.0
-pydantic~=1.10.9
+pydantic~=2.4.2
 requests~=2.31.0
 duckduckgo_search~=3.8.3
 arxiv~=1.4.7
