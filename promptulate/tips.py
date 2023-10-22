@@ -19,11 +19,23 @@
 
 from typing import Optional
 
-__all__ = ["EmptyMessageSetError", "LLMError", "OpenAIError", "NetWorkError"]
+__all__ = [
+    "EmptyMessageSetError",
+    "MissingAttributionError",
+    "LLMError",
+    "OpenAIError",
+    "NetWorkError",
+    "OutputParserError",
+]
 
 
 class EmptyMessageSetError(Exception):
     pass
+
+
+class MissingAttributionError(Exception):
+    def __init__(self, key_type: str):
+        super().__init__(f"<{key_type}> is not provided. Please set it correctly.")
 
 
 class LLMError(Exception):
@@ -41,4 +53,10 @@ class NetWorkError(Exception):
         msg = f"<{origin}> could not get data"
         if reason:
             msg += f", reason: {reason}"
+        super().__init__(msg)
+
+
+class OutputParserError(Exception):
+    def __init__(self, reason: str, llm_output: str):
+        msg = f"{reason}\n[llm_output]: {llm_output}"
         super().__init__(msg)

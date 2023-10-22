@@ -1,4 +1,4 @@
-# FQA
+# FAQ
 
 ## OpenAI key遇到限速问题怎么办？
 
