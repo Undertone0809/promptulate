@@ -36,7 +36,7 @@ class ToolAgent(BaseAgent):
         super().__init__(hooks=hooks)
         self.run_id = generate_run_id()
         self.llm: BaseLLM = llm or ChatOpenAI(
-            model="gpt-3.5-turbo-16k", temperature=0.2, enable_preset_description=False
+            model="gpt-3.5-turbo-16k", temperature=0.2, enable_default_system_prompt=False
         )
         """llm driver"""
         self.stop_sequences: List[str] = stop_sequences

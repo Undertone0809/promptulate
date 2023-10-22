@@ -26,7 +26,7 @@ class ErnieBot(BaseLLM, ABC):
     """Used to MessageSet data convert"""
     model: str = "ernie-bot-turbo"
     """Model name to use."""
-    temperature: float = 0.95
+    temperature: float = 0.7
     """What sampling temperature to use."""
     top_p: float = 0.8
     """variety of text"""

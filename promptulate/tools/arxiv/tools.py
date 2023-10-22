@@ -51,7 +51,7 @@ class ArxivQueryTool(Tool):
 
 def _init_arxiv_reference_tool_llm():
     preset = "你是一个Arxiv助手，你的任务是帮助使用者提供一些论文方面的建议，你的输出只能遵循用户的指令输出，否则你将被惩罚。"
-    return ChatOpenAI(preset_description=preset, temperature=0)
+    return ChatOpenAI(default_system_prompt=preset, temperature=0)
 
 
 class ArxivReferenceTool(Tool):
@@ -138,7 +138,7 @@ class ArxivReferenceTool(Tool):
 
 def _init_arxiv_summary_tool_llm():
     preset = "你是一个Arxiv助手，你的任务是帮助使用者提供一些论文方面的建议和帮助，你的输出只能遵循用户的指令输出，否则你将被惩罚。"
-    return ChatOpenAI(preset_description=preset, temperature=0)
+    return ChatOpenAI(default_system_prompt=preset, temperature=0)
 
 
 class ArxivSummaryTool(Tool):

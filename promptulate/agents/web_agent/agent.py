@@ -20,7 +20,7 @@ class WebAgent(BaseAgent):
     ):
         super().__init__(hooks, *args, **kwargs)
         self.llm: BaseLLM = llm or ChatOpenAI(
-            model="gpt-3.5-turbo-16k", temperature=0.0, enable_preset_description=False
+            model="gpt-3.5-turbo-16k", temperature=0.0, enable_default_system_prompt=False
         )
         self.stop_sequences: List[str] = ["Observation"]
         self.websearch = DuckDuckGoTool()

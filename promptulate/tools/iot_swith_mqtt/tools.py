@@ -40,7 +40,7 @@ class IotSwitchTool(Tool):
         """
         self.api_wrapper = api_wrapper
         self.llm: BaseLLM = llm or ChatOpenAI(
-            temperature=0.1, enable_preset_description=False
+            temperature=0.1, enable_default_system_prompt=False
         )
         self.client = client
         self.rule_table = rule_table
@@ -57,7 +57,7 @@ class IotSwitchTool(Tool):
                 "Please install it with `pip install paho-mqtt`."
             )
         if len(self.rule_table) == 0:
-            raise Exception("rule_table is empty")
+            raise ValueError("rule_table is empty")
         else:
             index = 1
             key = ""

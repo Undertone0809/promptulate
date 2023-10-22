@@ -62,9 +62,9 @@ class BaseOpenAI(BaseLLM, ABC):
         "max_tokens",
     ]
     """The key of openai api parameters"""
-    preset_description: str = ""
+    default_system_prompt: str = ""
     """OpenAI system message"""
-    enable_preset_description: bool = True
+    enable_default_system_prompt: bool = True
     """enable use preset description"""
     enable_private_api_key: bool = False
     """Enable to provide a separate api for openai llm """
@@ -110,11 +110,11 @@ class OpenAI(BaseOpenAI):
         self, prompt: str, stop: Optional[List[str]] = None, *args, **kwargs
     ) -> str:
         preset = (
-            self.preset_description
-            if self.preset_description != ""
+            self.default_system_prompt
+            if self.default_system_prompt != ""
             else PRESET_SYSTEM_PROMPT
         )
-        if not self.enable_preset_description:
+        if not self.enable_default_system_prompt:
             preset = ""
         message_set = MessageSet(
             messages=[
@@ -215,11 +215,11 @@ class ChatOpenAI(BaseOpenAI):
         self, prompt: str, stop: Optional[List[str]] = None, *args, **kwargs
     ) -> str:
         system_message = (
-            self.preset_description
-            if self.preset_description != ""
+            self.default_system_prompt
+            if self.default_system_prompt != ""
             else PRESET_SYSTEM_PROMPT
         )
-        if not self.enable_preset_description:
+        if not self.enable_default_system_prompt:
             system_message = ""
 
         message_set = MessageSet(
