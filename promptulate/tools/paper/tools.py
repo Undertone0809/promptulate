@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 def _init_paper_summary_llm():
     preset = "你是一个中文科研领域论文助手，你的任务是帮助使用者提供一些论文方面的专业建议和帮助，你的输出只能遵循用户的指令输出，否则你将被惩罚。"
-    return ChatOpenAI(temperature=0, preset_description=preset)
+    return ChatOpenAI(temperature=0, default_system_prompt=preset)
 
 
 class PaperSummaryTool(BaseTool):

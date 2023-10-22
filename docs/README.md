@@ -35,7 +35,58 @@ Base是一个存储和组织世界信息的大型结构化知识库，使AI代�
 Modules是一组专门设计用于执行特定任务的模块，例如情感分析、机器翻译或目标检测等。通过这些组件的组合，框架提供了一个全面、灵活和强大的平台，能够实现各种复杂任务和应用程序的自动化。
 
 
-# 特性
+## 特性
+
+- 大语言模型支持：支持不同类型的大语言模型的扩展接口
+- 对话终端：提供简易对话终端，直接体验与大语言模型的对话
+- AgentGroup：提供WebAgent、ToolAgent、CodeAgent等不同的Agent，进行复杂能力处理
+- 长对话模式：支持长对话聊天，支持多种方式的对话持久化
+- 外部工具：集成外部工具能力，可以进行网络搜索、执行Python代码等强大的功能
+- KEY池：提供API key池，彻底解决key限速的问题
+- 智能代理：集成ReAct，self-ask等高级Agent，结合外部工具赋能LLM
+- 中文优化：针对中文语境进行特别优化，更适合中文场景
+- 数据导出：支持markdowm等格式的对话导出
+- Hook与生命周期：提供Agent，Tool，llm的生命周期及Hook系统
+- 高级抽象：支持插件扩展、存储扩展、大语言模型扩展
+
+## 快速开始
+
+- [快速上手/官方文档](https://undertone0809.github.io/promptulate/#/)
+- [当前开发计划](https://undertone0809.github.io/promptulate/#/other/plan)
+- [参与贡献/开发者手册](https://undertone0809.github.io/promptulate/#/other/contribution)
+- [常见问题](https://undertone0809.github.io/promptulate/#/other/fqa)
+- [pypi仓库](https://pypi.org/project/promptulate/)
+
+
+- 打开终端，输入以下命令安装框架：
+
+```shell script
+pip install -U promptulate  
+```
+
+- 通过下面这个简单的程序开始你的 “HelloWorld”。
+
+```python
+import os
+from promptulate.agents import WebAgent
+
+os.environ['OPENAI_API_KEY'] = "your-key"
+
+agent = WebAgent()
+answer = agent.run("What is the temperature tomorrow in Shanghai")
+print(answer)
+```
+
+```
+The temperature tomorrow in Shanghai is expected to be 23°C.
+```
+
+
+更多详细资料，请查看[快速上手/官方文档](https://undertone0809.github.io/promptulate/#/)
+
+## 基础架构
+
+当前`promptulate`正处于快速开发阶段，仍有许多内容需要完善与讨论，十分欢迎大家的讨论与参与，而其作为一个大语言模型自动化与应用开发框架，主要由以下几部分组成：
 
 - 大语言模型支持：支持不同类型的大语言模型的扩展接口
 - 对话终端：提供简易对话终端，直接体验与大语言模型的对话
@@ -44,10 +95,10 @@ Modules是一组专门设计用于执行特定任务的模块，例如情感分�
 - 外部工具：集成外部工具能力，可以进行网络搜索、执行Python代码等强大的功能
 - KEY池：提供API key池，彻底解决key限速的问题
 - 智能代理：集成ReAct，self-ask等高级Agent，结合外部工具赋能LLM
-- 自治代理模式：支持调用API官方接口、自治代理或使用promptulate提供的代理
 - 中文优化：针对中文语境进行特别优化，更适合中文场景
 - 数据导出：支持markdown等格式的对话导出
 - 高级抽象：支持插件扩展、存储扩展、大语言模型扩展
+- 格式化输出：支持大模型输出指定格式的数据
 - Hook与生命周期：提供Agent，Tool，llm的生命周期及Hook系统
 - 物联网能力：框架为物联网应用开发提供了多种工具，方便物联网开发者使用大模型能力。
 
@@ -74,9 +125,9 @@ Modules是一组专门设计用于执行特定任务的模块，例如情感分�
 
 <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230704180202.png"/>
 
-# 设计原则
+## 设计原则
 
-`promptulate`框架的设计原则包括：模块化、可扩展性、互操作性、鲁棒性、可维护性、安全性、效率和可用性。
+promptulate框架的设计原则包括：模块化、可扩展性、互操作性、鲁棒性、可维护性、安全性、效率和可用性。
 
 - 模块化是指以模块为基本单位，允许方便地集成新的组件、模型和工具。
 - 可扩展性是指框架能够处理大量数据、复杂任务和高并发的能力。
@@ -88,16 +139,17 @@ Modules是一组专门设计用于执行特定任务的模块，例如情感分�
 
 以上原则的遵循，以及最新的人工智能技术的应用，`promptulate`旨在为创建自动化代理提供强大而灵活的大语言模型应用开发框架。
 
-# 交流群
+## 交流群
 
 欢迎加入群聊一起交流讨论有关LLM相关的话题，链接过期了可以issue或email提醒一下作者。
 
 <div style="width: 250px;margin: 0 auto;">
-    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20231007020407.png"/>
+    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20231023035739.png"/>
 </div>
 
-# 贡献
+
+## 贡献
 
 本人正在尝试一些更加完善的抽象模式，以更好地兼容该框架，以及外部工具的扩展使用，如果你有更好的建议，欢迎一起讨论交流。
-如果你想为这个项目做贡献，请先查看[当前开发计划](other/plan.md#开发计划)
-和[参与贡献/开发者手册](other/contribution.md#contribution)。我很高兴看到更多的人参与并优化它。
+如果你想为这个项目做贡献，请先查看[当前开发计划](https://undertone0809.github.io/promptulate/#/other/plan)
+和[参与贡献/开发者手册](https://undertone0809.github.io/promptulate/#/other/contribution)。我很高兴看到更多的人参与并优化它。

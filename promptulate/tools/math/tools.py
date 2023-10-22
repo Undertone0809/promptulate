@@ -22,7 +22,7 @@ class Calculator(Tool):
 
     def __init__(self, llm: BaseLLM = None, **kwargs):
         self.llm: BaseLLM = llm or ChatOpenAI(
-            temperature=0, enable_preset_description=False
+            temperature=0, enable_default_system_prompt=False
         )
         super().__init__(**kwargs)
 

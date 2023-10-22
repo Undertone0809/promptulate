@@ -69,8 +69,7 @@ from promptulate.llms import ChatOpenAI
 os.environ['OPENAI_API_KEY'] = "your-key"
 
 llm = ChatOpenAI()
-answer
-= llm("请解释一下引力波的放射与广义相对论的必然关系")
+answer = llm("Hello, how is everything going?")
 print(answer)
 ```
 

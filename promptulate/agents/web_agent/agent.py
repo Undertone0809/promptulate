@@ -20,13 +20,13 @@ class WebAgent(BaseAgent):
     ):
         super().__init__(hooks, *args, **kwargs)
         self.llm: BaseLLM = llm or ChatOpenAI(
-            model="gpt-3.5-turbo-16k", temperature=0.0, enable_preset_description=False
+            model="gpt-3.5-turbo-16k", temperature=0.0, enable_default_system_prompt=False
         )
         self.stop_sequences: List[str] = ["Observation"]
         self.websearch = DuckDuckGoTool()
         self.conversation_prompt: str = ""
 
-    def _build_preset_prompt(self, prompt) -> str:
+    def _build_system_prompt(self, prompt) -> str:
         """Build the system prompt."""
         return SYSTEM_PROMPT_TEMPLATE.format(prompt=prompt)
 
@@ -34,7 +34,7 @@ class WebAgent(BaseAgent):
         if self.llm.llm_type == "ErnieBot":
             return self.llm(prompt)
 
-        self.conversation_prompt = self._build_preset_prompt(prompt)
+        self.conversation_prompt = self._build_system_prompt(prompt)
         iterations = 0
 
         while True:

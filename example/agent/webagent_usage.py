@@ -1,11 +1,10 @@
 from promptulate.agents import WebAgent
-from promptulate.llms import ErnieBot
 
 
 def main():
-    llm = ErnieBot()
-    agent = WebAgent(llm=llm)
-    agent.run("南昌明天多少度？")
+    agent = WebAgent()
+    response = agent.run("What is the temperature tomorrow in Shanghai")
+    print(response)
 
 
 if __name__ == "__main__":
