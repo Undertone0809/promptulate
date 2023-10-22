@@ -36,7 +36,9 @@ class ToolAgent(BaseAgent):
         super().__init__(hooks=hooks)
         self.run_id = generate_run_id()
         self.llm: BaseLLM = llm or ChatOpenAI(
-            model="gpt-3.5-turbo-16k", temperature=0.2, enable_default_system_prompt=False
+            model="gpt-3.5-turbo-16k",
+            temperature=0.2,
+            enable_default_system_prompt=False,
         )
         """llm driver"""
         self.stop_sequences: List[str] = stop_sequences
@@ -61,31 +63,30 @@ class ToolAgent(BaseAgent):
         if not stop_sequences:
             self.stop_sequences = ["Observation"]
 
-    def _build_preset_prompt(self, prompt) -> str:
+    def get_llm(self) -> BaseLLM:
+        return self.llm
+
+    def _build_system_prompt(self, prompt) -> str:
         """Build the system prompt."""
-        if self.enable_role:
-            prefix = self.prefix_prompt_template.format(
-                [
-                    self.agent_identity,
-                    self.agent_name,
-                    self.agent_goal,
-                    self.agent_constraints,
-                ]
+        prefix = (
+            self.prefix_prompt_template.format(
+                agent_identity=self.agent_identity,
+                agent_name=self.agent_name,
+                agent_goal=self.agent_goal,
+                agent_constraints=self.agent_constraints,
             )
-            return prefix + self.system_prompt_template.format(
-                prompt=prompt,
-                tool_descriptions=self.tool_manager.tool_descriptions,
-                tool_names=self.tool_manager.tool_names,
-            )
-        else:
-            return self.system_prompt_template.format(
-                prompt=prompt,
-                tool_descriptions=self.tool_manager.tool_descriptions,
-                tool_names=self.tool_manager.tool_names,
-            )
+            if self.enable_role
+            else ""
+        )
+
+        return prefix + self.system_prompt_template.format(
+            prompt=prompt,
+            tool_descriptions=self.tool_manager.tool_descriptions,
+            tool_names=self.tool_manager.tool_names,
+        )
 
     def _run(self, prompt: str) -> str:
-        self.conversation_prompt = self._build_preset_prompt(prompt)
+        self.conversation_prompt = self._build_system_prompt(prompt)
         logger.info(f"[pne] tool agent system prompt: {self.conversation_prompt}")
 
         iterations = 0
