@@ -7,12 +7,8 @@
 ## v2.0.0 发展计划
 - [v2.0.0开发计划](https://github.com/Undertone0809/promptulate/issues/20)
 
-## 其他发展计划
 
-### Tool
-- image_generate
-
-### Other
+### 其他开发计划
 - ~~添加角色预设~~
 - 为预设角色提供LLM的参数配置
 - ~~提供prompt模板与prompt结构化~~
