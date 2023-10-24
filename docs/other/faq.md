@@ -1,5 +1,9 @@
 # FAQ
 
+## SSLError 等网络问题
+
+OpenAI 的访问需要科学上网，遇到网络问题可以通过[配置 proxy](modules/llm/openai.md#proxy)的方式解决，如没有解决你的问题，可以查看[相关 issue](https://github.com/Undertone0809/promptulate/issues/5)
+
 ## OpenAI key遇到限速问题怎么办？
 
 `promptulate`为OpenAI进行特别优化，构建了Key池，如果你使用的是`GPT3.5`
