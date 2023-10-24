@@ -20,7 +20,7 @@
 
 <div class="title">Promptulate</div>
 
-> 一个强大的大语言模型自动化与应用开发框架
+> All you need is an elegant LLM development framework.
 
 
 <p align="center">
