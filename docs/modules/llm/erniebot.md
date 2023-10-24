@@ -6,15 +6,16 @@
 
 在使用百度千帆大模型平台系列的LLM之前，你需要先导入你的`API Key`和`Secret Key`
 
+**方法一（不推荐）**
+
 ```python
 import os
 
 os.environ["ERNIE_API_KEY"] = "your api key"
 os.environ["ERNIE_API_SECRET"] = "your secret key"
-
 ```
 
-在你第一次使用的时候，需要使用上述代码导入环境变量，但是在第一运行之后`promptulate` 会进行缓存，即后面再运行就不需要再导入key了。
+在你第一次使用的时候，需要使用`os.environ["OPENAI_API_KEY"]` 导入"OPENAI_API_KEY"的环境变量，但是在第一运行之后`promptulate`会进行缓存，即后面再运行就不需要再导入key了。
 
 如果你的key过期了，可以尝试重新按照上面的方法导入key，或者你也可以把 `cache` 文件给删除掉，通过以下代码可以获取到缓存文件的位置:
 
@@ -24,7 +25,16 @@ from promptulate.utils import get_default_storage_path
 print(get_default_storage_path())
 ```
 
-> 此外，你也可以通过创建 `.env` 的方式来导入 key，与上面的配置效果是等价的。[env 的使用方式](https://github.com/theskumar/python-dotenv)
+**方法二（推荐）**
+
+方法二是 promptulate 官方推荐的最佳实践，你可以通过创建 `.env` 的方式来导入 key，与上面的配置效果是等价的。 [env 的使用方式](https://github.com/theskumar/python-dotenv)
+
+在项目根目录下创建 `.env` 文件，然后填入你的 key:
+
+```text
+ERNIE_API_KEY=xxx
+ERNIE_API_SECRET=xxx
+```
 
 ### LLM快速上手
 

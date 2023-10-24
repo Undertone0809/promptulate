@@ -4,7 +4,9 @@
 
 ### KEY配置
 
-在使用`OpenAI`的LLM之前，你需要先导入你的`OPENAI_API_KEY`
+在使用`promptulate`之前，你需要先导入你的`OPENAI_API_KEY`，你可以使用两种方式进行导入。
+
+**方法一（不推荐）**
 
 ```python
 import os
@@ -12,7 +14,7 @@ import os
 os.environ['OPENAI_API_KEY'] = "your-key"
 ```
 
-在你第一次使用的时候，需要使用`os.environ["OPENAI_API_KEY"]` 导入"OPENAI_API_KEY" 的环境变量，但是在第一运行之后`promptulate` 会进行缓存，即后面再运行就不需要再导入key了。
+在你第一次使用的时候，需要使用`os.environ["OPENAI_API_KEY"]` 导入"OPENAI_API_KEY"的环境变量，但是在第一运行之后`promptulate`会进行缓存，即后面再运行就不需要再导入key了。
 
 如果你的key过期了，可以尝试重新按照上面的方法导入key，或者你也可以把 `cache` 文件给删除掉，通过以下代码可以获取到缓存文件的位置:
 
@@ -22,7 +24,15 @@ from promptulate.utils import get_default_storage_path
 print(get_default_storage_path())
 ```
 
-> 此外，你也可以通过创建 `.env` 的方式来导入 key，与上面的配置效果是等价的。 [env 的使用方式](https://github.com/theskumar/python-dotenv)
+**方法二（推荐）**
+
+方法二是 promptulate 官方推荐的最佳实践，你可以通过创建 `.env` 的方式来导入 key，与上面的配置效果是等价的。 [env 的使用方式](https://github.com/theskumar/python-dotenv)
+
+在项目根目录下创建 `.env` 文件，然后填入你的 key:
+
+```text
+OPENAI_API_KEY=sk-xxx
+```
 
 ### LLM快速上手
 
@@ -183,20 +193,21 @@ llm是否支持stop，要看其LLM模型本身是否支持，当前OpenAI系列�
 
 ### proxy
 
-我想你可能遇到了无法访问的小问题， `promptulate` 提供了三种访问 OpenAI 的方式，分别是
+我想你可能遇到了网络无法访问的小问题，在大多数的情况下，有许多服务需要科学上网，如 google, duckduckgo, openai 等相关的服务，因此，`promptulate` 提供了三种代理配置方式，分别是
 
-- `off` 默认的访问方式，不开代理（如果你打开了全局代理工具或者使用国产大模型，可以选择该模式）
+- `off` 默认的访问方式，不开代理
 - `custom` 自定义代理方式
-- ~~`promptulate` promptulate提供的免费代理服务器~~
+- `promptulate` promptulate提供的免费代理服务器
 
 当你配置了代理之后， promptulate 将会使用你的代理端口进行服务访问。
 
-> Promptulate免费代理服务器暂时不再维护，请不要使用set_free_proxy配置代理，后续版本将会构建更好的解决方案。
+~~`promptulate` 提供了免费的代理服务器，感谢 [ayaka14732](https://github.com/ayaka14732/)
+，你可以在不用科学上网的情况下直接调用OpenAI的相关接口，下面是三种代理的设置方式：~~
 
-`Promptulate` 提供了免费的代理服务器，感谢 [ayaka14732](https://github.com/ayaka14732/)，你可以在不用科学上网的情况下直接调用OpenAI的相关接口，下面是三种代理的设置方式：
+> 当前，Promptulate 暂时废弃免费代理服务器的选项，后续将提供更优化的体验，因此， 在 v1.7.3 版本已经禁用配置 `promptulate`模式的代理。
 
 ```python
-from promptulate.llms import OpenAI
+from promptulate.llms import ChatOpenAI
 from promptulate.utils import set_proxy_mode
 
 
@@ -218,7 +229,7 @@ def turn_off_proxy():
 
 def main():
     set_free_proxy()
-    llm = OpenAI()
+    llm = ChatOpenAI()
     answer = llm("请解释一下引力波的放射与广义相对论的必然关系")
     print(answer)
 
@@ -228,7 +239,7 @@ if __name__ == '__main__':
 ```
 
 > 和OPENAI_API_KEY一样，关于代理的配置也设置了缓存，这意味着你只需要配置一次代理即可。事实上`promptulate`
-> 提供了关闭全局配置项缓存的功能，但默认开启，不推荐关闭，所以我不告诉你怎么关闭，关闭了下面key池的重磅功能你将无法使用。
+> 提供了关闭全局配置项缓存的功能，但默认开启，不推荐关闭，因为在关闭了之后会影响一些特性的使用。
 
 ### Key池
 

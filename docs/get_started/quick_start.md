@@ -1,5 +1,7 @@
 # 快速开始
 
+通过该部分教学，你可以快速对 promptulate 有一个整体的认知，一些常用模块的基本使用方式，在阅读完该部分之后，你可以继续阅读 [User Cases](modules/usercases/intro.md#user-cases) 来了解 promptulate 的一些最佳实践，在遇到问题的时候，可以查看每个模块的具体使用方式，也欢迎你在 [issue](https://github.com/Undertone0809/promptulate/issues) 中为 promptulate 提供更好的建议。
+
 ## 安装最新版
 
 打开终端，输入下面命令下载`promptulate`最新版，`-U`表示更新到最新版，如果你已经下载`promptulate`
@@ -20,7 +22,9 @@ pip install -U promptulate
 
 ### KEY配置
 
-在使用`promptulate`之前，你需要先导入你的`OPENAI_API_KEY`
+在使用`promptulate`之前，你需要先导入你的`OPENAI_API_KEY`，你可以使用两种方式进行导入。
+
+**方法一（不推荐）**
 
 ```python
 import os
@@ -38,8 +42,15 @@ from promptulate.utils import get_default_storage_path
 print(get_default_storage_path())
 ```
 
-> 此外，你也可以通过创建 `.env` 的方式来导入 key，与上面的配置效果是等价的。 [env 的使用方式](https://github.com/theskumar/python-dotenv)
+**方法二（推荐）**
 
+方法二是 promptulate 官方推荐的最佳实践，你可以通过创建 `.env` 的方式来导入 key，与上面的配置效果是等价的。 [env 的使用方式](https://github.com/theskumar/python-dotenv)
+
+在项目根目录下创建 `.env` 文件，然后填入你的 key:
+
+```text
+OPENAI_API_KEY=sk-xxx
+```
 
 ### LLM
 
@@ -68,79 +79,6 @@ print(answer)
 此，引力波的放射与广义相对论必然关系紧密。通过引力波，我们可以更加深入地了解时空的性质，并进一步验证这个理论。
 ```
 
-### proxy
-
-我想你可能遇到了网络无法访问的小问题，在大多数的情况下，有许多服务需要科学上网，如 google, duckduckgo, openai 等相关的服务，因此，`promptulate` 提供了三种代理配置方式，分别是
-
-- `off` 默认的访问方式，不开代理
-- `custom` 自定义代理方式
-- `promptulate` promptulate提供的免费代理服务器
-
-当你配置了代理之后， promptulate 将会使用你的代理端口进行服务访问。
-
-~~`promptulate` 提供了免费的代理服务器，感谢 [ayaka14732](https://github.com/ayaka14732/)
-，你可以在不用科学上网的情况下直接调用OpenAI的相关接口，下面是三种代理的设置方式：~~
-
-> 当前，Promptulate 暂时废弃免费代理服务器的选项，后续将提供更优化的体验，因此， 在 v1.7.3 版本已经禁用配置 `promptulate`模式的代理。
-
-```python
-from promptulate.llms import ChatOpenAI
-from promptulate.utils import set_proxy_mode
-
-
-def set_free_proxy():
-    set_proxy_mode("promptulate")
-
-
-def set_custom_proxy():
-    proxies = {
-        'http': 'http://127.0.0.1:7890',
-        'https': 'http://127.0.0.1:7890'
-    }
-    set_proxy_mode("custom", proxies=proxies)
-
-
-def turn_off_proxy():
-    set_proxy_mode("off")
-
-
-def main():
-    set_free_proxy()
-    llm = ChatOpenAI()
-    answer = llm("请解释一下引力波的放射与广义相对论的必然关系")
-    print(answer)
-
-
-if __name__ == '__main__':
-    main()
-```
-
-> 和OPENAI_API_KEY一样，关于代理的配置我也设置了缓存，这意味着你只需要配置一次代理即可。事实上`promptulate`
-> 提供了关闭全局配置项缓存的功能，但默认开启，不推荐关闭，所以我不告诉你怎么关闭，关闭了下面key池的功能你将无法使用。
-
-### Key池
-
-`promptulate`为OpenAI进行特别优化，构建了Key池，如果你使用的是`GPT3.5`
-5美元的账号，一定会遇到限速的问题，这个时候，如果你有一堆Key，就可以很好的解决这个问题。`promptulate`的LRU
-KEY轮询机制巧妙的解决了限速的问题，你可以使用LLM随意地进行提问（前提是你有够多的key）。此外，如果你既有`GPT4`和`GPT3.5`
-的KEY，KEY池也可以不同模型的KEY调度，你可以按照下面的方式将key导入到你的key池中。
-
-```python
-from promptulate.llms import ChatOpenAI
-from promptulate.utils import export_openai_key_pool
-
-keys = [
-    {"model": "gpt-3.5-turbo", "keys": "key1,key2,key3"},
-    {"model": "gpt-4", "keys": "xxxxx"},
-]
-
-export_openai_key_pool(keys)
-
-llm = ChatOpenAI()
-for i in range(10):
-    llm("你好")
-```
-
 ### 客户端
 
 `promptulate`为大语言模型对话提供了一个简易终端，在你安装了 `promptulate` 之后，你可以非常方便的使用这个简易终端进行一些对话，具体包括：
@@ -154,19 +92,6 @@ for i in range(10):
 **快速上手**
 
 - 打开终端控制台，输入以下命令，就可以开启一个简易的对话
-
-```shell
-pne-chat --openai_api_key your_key_here --proxy_mode promptulate
-```
-
-```text
-
---openai_api_key 你的openai_api_key
---proxy_mode 代理模式，当前暂时只支持off和promptulate模式，如果你选择promptulate模式，你会发现你不用科学の上网也能访问，这是因为promptulate内置了代理。（后面会详细介绍）
-
-```
-
-- 当然并不是每次运行都要输入这么长的内容，因为在你第一次运行终端之后 `promptulate` 会对你的配置信息进行缓存，因此下一次运行的时候，你只需要输入下面的命令就可以开始一段对话了。如果你在代码运行中已经配置过相关的key参数，则可以直接使用以下方式运行：
 
 ```shell
 pne-chat
@@ -231,6 +156,36 @@ Agent Start...
 [Agent Result]  Camila Morrone's current age raised to the 0.43 power is approximately 3.99.
 Agent End.
 ```
+
+### Output Formatter
+
+很多时候，LLM 的输出具有很强的不可控性，promptulate 通过 JSON schema 为 LLM 的输出构建了一个输出格式化器，简单来说，你可以用这种方式制定 LLM 的输出内容，并转换成一个 python 对象。
+
+下面的示例展示了在 WebAgent 中使用格式化输出的最佳实践：
+
+```python
+from pydantic import BaseModel, Field
+
+from promptulate.agents import WebAgent
+
+
+class Response(BaseModel):
+    city: str = Field(description="City name")
+    temperature: float = Field(description="Temperature in Celsius")
+
+
+def main():
+    agent = WebAgent()
+    prompt = f"What is the temperature in Shanghai tomorrow?"
+    response: Response = agent.run(prompt=prompt, output_schema=Response)
+    print(response.city, response.temperature)
+
+
+if __name__ == "__main__":
+    main()
+```
+
+![img.png](../images/output_formatter_webagent_output.png)
 
 ## 更多
 
