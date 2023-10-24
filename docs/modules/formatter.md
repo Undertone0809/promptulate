@@ -1,6 +1,6 @@
 # 简介
 
-在某些时候，你可能想要让 LLM 输出指令类型格式的数据，如 JSON， Promptulate 为 LLM 的输出提供了输出格式化器（OutputFormatter），你可以轻易让 LLM 返回指定格式的数据。
+在某些时候，你可能想要让 LLM 输出指令类型格式的数据，如 JSON 类型的数据， Promptulate 为 LLM 的输出提供了输出格式化器（OutputFormatter），你可以轻易让 LLM 返回指定格式的数据。
 
 ## llm with OutputFormatter
 
@@ -100,7 +100,7 @@ class Response(BaseModel):
 def main():
     agent = WebAgent()
     prompt = f"What is the temperature in Shanghai tomorrow?"
-    response: Response = agent.run(prompt=prompt, output_schema=JSONResponse)
+    response: Response = agent.run(prompt=prompt, output_schema=Response)
     print(response)
 
 

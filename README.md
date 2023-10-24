@@ -109,7 +109,7 @@ By following these principles and incorporating the latest advancements in artif
 Feel free to join the group chat to discuss topics related to large language models (LLM). If the link is expired, you can notify the author through an issue or email.
 
 <div style="width: 250px;margin: 0 auto;">
-    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20231007020407.png"/>
+    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20231025003811.png"/>
 </div>
 
 # Contributions

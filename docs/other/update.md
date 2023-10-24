@@ -8,6 +8,13 @@ Please update the latest version.
 pip install -U promptulate
 ```
 
+## 1.8.0 2023-10-23
+- `feat` 构建输出格式化器，让 LLM 可以根据指定格式进行输出
+
+## 1.7.0 2023-10-25
+- `feat` 兼容所有 langchain tool
+- `feat` 兼容 huggingface
+
 ## 1.4.0 2023-08-28
 - `feat` 提供百度文心大模型模型支持 [https://github.com/Undertone0809/promptulate/pull/27](https://github.com/Undertone0809/promptulate/pull/27)
 - `fix` 修复ToolAgent经常遇到None Tool的问题 
