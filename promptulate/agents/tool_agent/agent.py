@@ -85,7 +85,7 @@ class ToolAgent(BaseAgent):
             tool_names=self.tool_manager.tool_names,
         )
 
-    def _run(self, prompt: str) -> str:
+    def _run(self, prompt: str, *args, **kwargs) -> str:
         self.conversation_prompt = self._build_system_prompt(prompt)
         logger.info(f"[pne] tool agent system prompt: {self.conversation_prompt}")
 
