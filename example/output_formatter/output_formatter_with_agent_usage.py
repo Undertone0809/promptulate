@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 from promptulate.agents import WebAgent
 
 
-class JSONResponse(BaseModel):
+class Response(BaseModel):
     city: str = Field(description="City name")
     temperature: float = Field(description="Temperature in Celsius")
 
@@ -12,8 +12,8 @@ class JSONResponse(BaseModel):
 def main():
     agent = WebAgent()
     prompt = f"What is the temperature in Shanghai tomorrow?"
-    response: JSONResponse = agent.run(prompt=prompt, output_schema=JSONResponse)
-    print(response)
+    response: Response = agent.run(prompt=prompt, output_schema=Response)
+    print(response.city, response.temperature)
 
 
 if __name__ == "__main__":
