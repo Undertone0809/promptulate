@@ -10,6 +10,11 @@ from promptulate.utils.logger import get_logger
 logger = get_logger()
 
 
+def _build_system_prompt(prompt) -> str:
+    """Build the system prompt."""
+    return SYSTEM_PROMPT_TEMPLATE.format(prompt=prompt)
+
+
 class WebAgent(BaseAgent):
     def __init__(
         self,
@@ -20,23 +25,26 @@ class WebAgent(BaseAgent):
     ):
         super().__init__(hooks, *args, **kwargs)
         self.llm: BaseLLM = llm or ChatOpenAI(
-            model="gpt-3.5-turbo-16k", temperature=0.0, enable_default_system_prompt=False
+            model="gpt-3.5-turbo-16k",
+            temperature=0.0,
+            enable_default_system_prompt=False,
         )
         self.stop_sequences: List[str] = ["Observation"]
         self.websearch = DuckDuckGoTool()
         self.conversation_prompt: str = ""
 
-    def _build_system_prompt(self, prompt) -> str:
-        """Build the system prompt."""
-        return SYSTEM_PROMPT_TEMPLATE.format(prompt=prompt)
+    def get_llm(self) -> BaseLLM:
+        return self.llm
 
     def _run(self, prompt: str, *args, **kwargs) -> str:
+        # ErnieBot built-in network search
         if self.llm.llm_type == "ErnieBot":
             return self.llm(prompt)
 
-        self.conversation_prompt = self._build_system_prompt(prompt)
+        self.conversation_prompt = _build_system_prompt(prompt)
         iterations = 0
 
+        # Loop search until find the answer
         while True:
             answer: str = self.llm(self.conversation_prompt, stop=self.stop_sequences)
             logger.info(

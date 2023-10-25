@@ -1,7 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import List, Callable
+from typing import List, Callable, Any
+
+from pydantic import BaseModel
 
 from promptulate.hook import Hook, HookTable
+from promptulate.llms import BaseLLM
+from promptulate.output_formatter import OutputFormatter
 
 
 class BaseAgent(ABC):
@@ -13,13 +17,29 @@ class BaseAgent(ABC):
                 Hook.mount_instance_hook(hook, self)
         Hook.call_hook(HookTable.ON_AGENT_CREATE, self, *args, **kwargs)
 
-    def run(self, *args, **kwargs):
+    def run(
+        self, prompt: str, output_schema: type(BaseModel) = None, *args, **kwargs
+    ) -> Any:
         """run the tool including specified function and hooks"""
-        Hook.call_hook(HookTable.ON_AGENT_START, self, *args, **kwargs)
-        result: str = self._run(*args, **kwargs)
+        Hook.call_hook(HookTable.ON_AGENT_START, self, prompt, *args, **kwargs)
+        result: str = self._run(prompt, *args, **kwargs)
+
+        # Return Pydantic instance if output_schema is specified
+        if output_schema:
+            formatter = OutputFormatter(output_schema)
+            prompt = (
+                f"{formatter.get_formatted_instructions()}\n##User input:\n{result}"
+            )
+            json_response = self.get_llm()(prompt)
+            return formatter.formatting_result(json_response)
+
         Hook.call_hook(HookTable.ON_AGENT_RESULT, self, result=result)
         return result
 
     @abstractmethod
-    def _run(self, *args, **kwargs) -> str:
+    def _run(self, prompt: str, *args, **kwargs) -> str:
         """Run the detail agent, implemented by subclass."""
+
+    @abstractmethod
+    def get_llm(self) -> BaseLLM:
+        """Get the llm when necessary."""
