@@ -26,7 +26,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setuptools.setup(
     name="promptulate",
-    version="1.8.0",
+    version="1.8.1",
     author="Zeeland",
     author_email="zeeland@foxmail.com",
     description="A powerful LLM Application development framework.",
@@ -36,7 +36,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         "cushy-storage",
-        "dotenv~=1.0.0",
+        "python-dotenv~=1.0.0",
         "pydantic~=1.10.0",
         "requests",
         "duckduckgo_search",
