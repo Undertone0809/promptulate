@@ -1,16 +1,15 @@
 import logging
 import re
 import time
-from typing import List, Callable, Optional, Union
+from typing import Callable, List, Optional, Union
 
 from promptulate.agents import BaseAgent
-from promptulate.agents.tool_agent.prompt import REACT_ZERO_SHOT_PROMPT, PREFIX_TEMPLATE
+from promptulate.agents.tool_agent.prompt import PREFIX_TEMPLATE, REACT_ZERO_SHOT_PROMPT
 from promptulate.hook import Hook, HookTable
 from promptulate.llms.base import BaseLLM
 from promptulate.llms.openai import ChatOpenAI
 from promptulate.tools import BaseTool, Tool
 from promptulate.tools.manager import ToolManager
-from promptulate.utils.core_utils import generate_run_id
 from promptulate.utils.string_template import StringTemplate
 
 logger = logging.getLogger(__name__)
@@ -34,7 +33,6 @@ class ToolAgent(BaseAgent):
         agent_constraints: str = "none",
     ):
         super().__init__(hooks=hooks)
-        self.run_id = generate_run_id()
         self.llm: BaseLLM = llm or ChatOpenAI(
             model="gpt-3.5-turbo-16k",
             temperature=0.2,

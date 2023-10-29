@@ -1,6 +1,6 @@
 import json
 import re
-from typing import TypeVar, List, Dict
+from typing import Dict, List, TypeVar
 
 from pydantic import BaseModel
 
@@ -36,6 +36,7 @@ class OutputFormatter:
 
     def formatting_result(self, llm_output: str) -> T:
         return formatting_result(self.pydantic_obj, llm_output)
+
 
 def get_formatted_instructions(
     pydantic_obj: type(BaseModel), examples: List[BaseModel] = None

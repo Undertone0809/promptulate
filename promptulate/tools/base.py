@@ -1,7 +1,7 @@
 import logging
 import warnings
 from abc import ABC, abstractmethod
-from typing import List, Any, Callable
+from typing import Any, Callable, List
 
 from pydantic import BaseModel, Extra
 

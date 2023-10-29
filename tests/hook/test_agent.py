@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from promptulate.agents import ToolAgent
 from promptulate.hook import Hook
-from promptulate.tools import DuckDuckGoTool, Calculator
+from promptulate.tools import Calculator, DuckDuckGoTool
 
 
 class TestToolHook(TestCase):

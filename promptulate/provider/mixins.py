@@ -26,7 +26,7 @@ from promptulate.frameworks.prompt import (
     SUMMARY_TOPIC_PROMPT_ZH,
 )
 from promptulate.provider.base import BaseMixin
-from promptulate.schema import MessageSet, UserMessage, BaseMessage
+from promptulate.schema import BaseMessage, MessageSet, UserMessage
 
 
 class SummarizerMixin(BaseMixin):

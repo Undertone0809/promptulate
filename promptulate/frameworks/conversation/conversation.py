@@ -18,7 +18,7 @@
 # Contact Email: zeeland@foxmail.com
 
 import warnings
-from typing import Optional, Union, Dict, Any
+from typing import Any, Dict, Optional, Union
 
 from pydantic import Field, validator
 
@@ -31,16 +31,16 @@ from promptulate.memory import BufferChatMemory
 from promptulate.memory.base import BaseChatMemory
 from promptulate.preset_roles.roles import CustomPresetRole, get_preset_role_prompt
 from promptulate.provider.mixins import (
+    DeriveHistoryMessageMixin,
     SummarizerMixin,
     TranslatorMixin,
-    DeriveHistoryMessageMixin,
 )
 from promptulate.schema import (
+    BaseMessage,
+    LLMType,
     MessageSet,
     UserMessage,
-    BaseMessage,
     init_chat_message_history,
-    LLMType,
 )
 from promptulate.tips import EmptyMessageSetError
 

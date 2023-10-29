@@ -1,7 +1,7 @@
 from promptulate.tools.semantic_scholar.tools import (
-    SemanticScholarReferenceTool,
-    SemanticScholarQueryTool,
     SemanticScholarCitationTool,
+    SemanticScholarQueryTool,
+    SemanticScholarReferenceTool,
 )
 
 __all__ = [

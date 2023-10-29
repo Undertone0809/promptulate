@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from promptulate.frameworks.conversation import Conversation
 from promptulate.memory import FileChatMemory
-from promptulate.utils.logger import get_logger, enable_log
+from promptulate.utils.logger import enable_log, get_logger
 
 enable_log()
 logger = get_logger()

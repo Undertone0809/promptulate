@@ -1,10 +1,7 @@
 import paho.mqtt.client as mqtt
+
 from promptulate.agents import ToolAgent
-from promptulate.tools import (
-    DuckDuckGoTool,
-    Calculator,
-    SleepTool,
-)
+from promptulate.tools import Calculator, DuckDuckGoTool, SleepTool
 from promptulate.tools.human_feedback import HumanFeedBackTool
 from promptulate.tools.iot_swith_mqtt import IotSwitchTool
 from promptulate.utils.logger import enable_log

@@ -18,9 +18,9 @@
 # Contact Email: zeeland@foxmail.com
 
 import logging
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
 
-from cushy_storage.orm import CushyOrmCache, BaseORMModel
+from cushy_storage.orm import BaseORMModel, CushyOrmCache
 from pydantic import BaseModel, Field
 
 from promptulate.utils.core_utils import get_cache

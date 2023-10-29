@@ -18,10 +18,10 @@
 # Contact Email: zeeland@foxmail.com
 
 from promptulate.provider.mixins import (
-    SummarizerMixin,
-    TranslatorMixin,
     DeriveHistoryMessageMixin,
     StorageHistoryMessageMixin,
+    SummarizerMixin,
+    TranslatorMixin,
 )
 
 __all__ = [

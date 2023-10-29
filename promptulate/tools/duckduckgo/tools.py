@@ -1,4 +1,4 @@
-from typing import List, Union, Dict
+from typing import Dict, List, Union
 
 from promptulate.tools.base import Tool
 from promptulate.tools.duckduckgo.api_wrapper import DuckDuckGoSearchAPIWrapper

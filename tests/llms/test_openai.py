@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from promptulate.llms.openai import OpenAI, ChatOpenAI
+from promptulate.llms.openai import ChatOpenAI, OpenAI
 from promptulate.schema import MessageSet, UserMessage
-from promptulate.utils.logger import get_logger, enable_log
+from promptulate.utils.logger import enable_log, get_logger
 
 enable_log()
 logger = get_logger()

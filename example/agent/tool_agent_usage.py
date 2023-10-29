@@ -1,8 +1,5 @@
 from promptulate.agents import ToolAgent
-from promptulate.tools import (
-    DuckDuckGoTool,
-    Calculator,
-)
+from promptulate.tools import Calculator, DuckDuckGoTool
 from promptulate.utils.logger import enable_log
 
 enable_log()

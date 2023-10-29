@@ -3,8 +3,8 @@ from unittest import TestCase
 from promptulate.utils.openai_key_pool import (
     OpenAIKey,
     OpenAIKeyPool,
-    export_openai_key_pool,
     add_key_to_key_pool,
+    export_openai_key_pool,
 )
 
 

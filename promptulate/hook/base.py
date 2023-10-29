@@ -1,5 +1,5 @@
 import logging
-from typing import List, Callable, Tuple, Optional, Union
+from typing import Callable, List, Optional, Tuple, Union
 
 from pydantic import BaseModel
 from typing_extensions import Literal
