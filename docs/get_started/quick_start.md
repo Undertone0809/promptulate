@@ -187,6 +187,34 @@ if __name__ == "__main__":
 
 ![img.png](../images/output_formatter_webagent_output.png)
 
+## 本地开发
+
+**环境要求**
+- Python >= 3.8
+- make
+
+> make 不是必须的，但是利用 makefile 的能力轻松集成运行 test、lint 等模块。
+
+运行以下命令：
+
+```shell
+git clone https://github.com/Undertone0809/promptulate 
+```
+
+下载到本地之后，安装第三方库
+
+```shell
+pip install poetry
+make install
+```
+
+如果你没有安装 make，也可以使用如下方式安装：
+
+```shell
+pip install poetry
+poetry install
+```
+
 ## 更多
 
 本文仅展示了`promtptulate`的一些简单使用，具体功能详情请查看文档查看具体实现。
