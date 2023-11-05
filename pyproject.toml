@@ -1,0 +1,83 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "promptulate"
+version = "1.9.0"
+description = "A powerful LLM Application development framework."
+authors = ["Zeeland <zeeland@foxmail.com>"]
+readme = "README.md"
+repository = "https://github.com/Undertone0809/promptulate"
+
+[tool.poetry.dependencies]
+python = ">=3.8.1,<4.0"
+click = "^8.1.7"
+pydantic = "^1.10.0"
+questionary = "^2.0.1"
+python-dotenv = "^1.0.0"
+cushy-storage = "^1.2.5"
+requests = "^2.31.0"
+arxiv = "^1.4.7"
+duckduckgo_search = "^3.8.3"
+numexpr = "^2.8.4"
+litellm = "^0.12.5"
+
+[tool.poetry.dev-dependencies]
+black = "^22.12"
+isort = {extras = ["colors"], version = "^5.10.1"}
+pytest = "^6.2.5"
+pytest-html = "^3.1.1"
+pytest-cov = "^3.0.0"
+coverage = "^6.1.2"
+pre-commit = "^3.5.0"
+
+[tool.poetry.scripts]
+pne-chat = "promptulate.client.chat:main"
+
+[[tool.poetry.source]]
+name = "tsinghua"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+priority = "default"
+
+[tool.black]
+# https://github.com/psf/black
+target-version = ["py310"]
+line-length = 88
+color = true
+
+exclude = '''
+/(
+    \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+    | env
+    | venv
+)/
+'''
+
+[tool.isort]
+# https://github.com/timothycrosley/isort/
+py_version = 37
+line_length = 88
+
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+profile = "black"
+include_trailing_comma = true
+multi_line_output = 3
+indent = 4
+color_output = true
+
+[tool.coverage.run]
+source = ["tests"]
+
+[coverage.report]
+fail_under = 50
+show_missing = true
+
