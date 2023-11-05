@@ -24,10 +24,10 @@ from typing import Optional
 import click
 import questionary
 
-from promptulate import Conversation
 from promptulate.agents import ToolAgent
+from promptulate.config import Config
 from promptulate.llms import BaseLLM, ChatOpenAI, ErnieBot
-from promptulate.schema import LLMType
+from promptulate.schema import LLMType, MessageSet, SystemMessage
 from promptulate.tools import (
     ArxivQueryTool,
     Calculator,
@@ -37,8 +37,10 @@ from promptulate.tools import (
     SleepTool,
 )
 from promptulate.tools.shell import ShellTool
-from promptulate.utils import print_text, set_proxy_mode
+from promptulate.utils.color_print import print_text
+from promptulate.utils.proxy import set_proxy_mode
 
+CFG = Config()
 MODEL_MAPPING = {"OpenAI": ChatOpenAI, "ErnieBot": ErnieBot}
 TOOL_MAPPING = {
     "Calculator": Calculator,
@@ -51,28 +53,56 @@ TOOL_MAPPING = {
 }
 
 
+def check_key(model_type: str):
+    model_key_mapping = {
+        "OpenAI": CFG.get_openai_api_key,
+        "ErnieBot": CFG.get_ernie_api_key,
+    }
+    model_key_mapping[model_type]()
+
+
 def get_user_input() -> Optional[str]:
     marker = (
         "# You input are here (please delete this line)\n"
         "You should save it and close the notebook after writing the prompt. (please delete this line)\n"
+        "Reply 'exit' to exit the chat.\n"
     )
     message = click.edit(marker)
-    if message is not None:
-        return message
-    return None
+
+    if message == "exit":
+        exit()
+
+    return message
+
+
+def get_user_openai_api_key():
+    import os
+
+    api_key = questionary.password("Please enter your OpenAI API Key: ").ask()
+    os.environ["OPENAI_API_KEY"] = api_key
 
 
 def simple_chat(llm: BaseLLM):
-    conversation = Conversation(llm=llm)
+    messages = MessageSet(
+        messages=[
+            SystemMessage(content="You are a helpful assistant."),
+        ]
+    )
 
     while True:
         print_text("[User] ", "blue")
         prompt = get_user_input()
+
         if not prompt:
             ValueError("Your prompt is None, please input something.")
+
         print_text(prompt, "blue")
-        ret = conversation.run(prompt)
-        print_text(f"[output] {ret}", "green")
+        messages.add_user_message(prompt)
+
+        answer = llm.predict(messages)
+        messages.add_message(answer)
+
+        print_text(f"[output] {answer.content}", "green")
 
 
 def web_chat(llm: BaseLLM):
@@ -110,6 +140,7 @@ def agent_chat(agent: ToolAgent):
 
 
 def chat():
+    # get parameters
     parser = argparse.ArgumentParser(
         description="Welcome to Promptulate Chat - The best chat terminal ever!"
     )
@@ -131,14 +162,18 @@ def chat():
 
     terminal_mode = questionary.select(
         "Choose a chat terminal:",
-        choices=["Simple Chat", "Agent Chat", "Web Agent Chat"],
+        choices=["Simple Chat", "Agent Chat", "Web Agent Chat", "exit"],
     ).ask()
+
+    if terminal_mode == "exit":
+        exit(0)
 
     model = questionary.select(
         "Choose a llm model:",
         choices=list(MODEL_MAPPING.keys()),
     ).ask()
-    # todo check whether exist llm key
+
+    check_key(model)
 
     llm = MODEL_MAPPING[model](temperature=0.2)
     if terminal_mode == "Simple Chat":

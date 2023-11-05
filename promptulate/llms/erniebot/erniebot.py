@@ -56,7 +56,7 @@ class ErnieBot(BaseLLM, ABC):
 
     def _predict(
         self, prompts: MessageSet, stop: Optional[List[str]] = None, *args, **kwargs
-    ) -> BaseMessage:
+    ) -> AssistantMessage:
         """llm generate prompt"""
         headers = {"Content-Type": "application/json"}
         if self.model == "ernie-bot-turbo":

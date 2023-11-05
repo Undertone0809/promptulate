@@ -1,4 +1,13 @@
+SHELL := /usr/bin/env bash
 OS := $(shell python -c "import sys; print(sys.platform)")
+
+ifeq ($(OS),win32)
+	PYTHONPATH := $(shell python -c "import os; print(os.getcwd())")
+    TEST_COMMAND := set PYTHONPATH=$(PYTHONPATH) && poetry run pytest -c pyproject.toml --cov-report=html --cov=promptulate ./tests/test_chat.py ./tests/output_formatter
+else
+	PYTHONPATH := `pwd`
+    TEST_COMMAND := PYTHONPATH=$(PYTHONPATH) poetry run pytest -c pyproject.toml --cov-report=html --cov=promptulate ./tests/test_chat.py ./tests/output_formatter
+endif
 
 #* Poetry
 .PHONY: poetry-download
@@ -24,13 +33,7 @@ polish-codestyle:
 .PHONY: formatting
 formatting: polish-codestyle
 
-ifeq ($(OS),win32)
-	PYTHONPATH := $(shell python -c "import os; print(os.getcwd())")
-    TEST_COMMAND := set PYTHONPATH=$(PYTHONPATH) && poetry run pytest -c pyproject.toml --cov-report=html --cov=promptulate ./tests/test_chat.py ./tests/output_formatter
-else
-	PYTHONPATH := `pwd`
-    TEST_COMMAND := PYTHONPATH=$(PYTHONPATH) poetry run pytest -c pyproject.toml --cov-report=html --cov=promptulate ./tests/test_chat.py ./tests/output_formatter
-endif
+
 
 #* Linting
 .PHONY: test
