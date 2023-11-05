@@ -26,7 +26,7 @@ import questionary
 
 from promptulate import Conversation
 from promptulate.agents import ToolAgent
-from promptulate.llms import ErnieBot, ChatOpenAI, BaseLLM
+from promptulate.llms import BaseLLM, ChatOpenAI, ErnieBot
 from promptulate.schema import LLMType
 from promptulate.tools import (
     ArxivQueryTool,
