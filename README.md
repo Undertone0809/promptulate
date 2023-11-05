@@ -15,6 +15,9 @@
     <a target="_blank" href=''>
         <img src="https://static.pepy.tech/personalized-badge/promptulate?period=month&units=international_system&left_color=grey&right_color=blue&left_text=Downloads/Week"/>
     </a>
+    <a target="_blank" href=''>
+        <img src="docs/images/coverage.svg"/>
+    </a>
 </p>
 
 [English](/README.md) [中文](/README_zh.md)
