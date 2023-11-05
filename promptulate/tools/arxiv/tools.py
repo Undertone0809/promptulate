@@ -9,9 +9,6 @@ from promptulate.llms.openai import ChatOpenAI
 from promptulate.tools.arxiv.api_wrapper import ArxivAPIWrapper
 from promptulate.tools.base import Tool
 from promptulate.utils.core_utils import listdict_to_string, record_time
-from promptulate.utils.logger import get_logger
-
-logger = get_logger()
 
 
 class ArxivQueryTool(Tool):
@@ -130,7 +127,6 @@ class ArxivReferenceTool(Tool):
         )
         # todo If there is a problem with the returned format and an error is reported, then ask LLM to format the data
         result = self.llm(prompt)
-        logger.debug(f"[pne ArxivReferenceTool response] {result}")
         if "return_type" in kwargs and kwargs["return_type"] == "original":
             return analyze_reference_string(result)
         return result
