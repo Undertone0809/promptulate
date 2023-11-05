@@ -81,8 +81,7 @@ print(answer)
 The temperature tomorrow in Shanghai is expected to be 23°C.
 ```
 
-
-更多详细资料，请查看[快速上手/官方文档](https://undertone0809.github.io/promptulate/#/)
+更多详细资料，请查看[快速上手/官方文档](./get_started/quick_start.md#快速开始)
 
 ## 基础架构
 
@@ -102,28 +101,9 @@ The temperature tomorrow in Shanghai is expected to be 23°C.
 - Hook与生命周期：提供Agent，Tool，llm的生命周期及Hook系统
 - 物联网能力：框架为物联网应用开发提供了多种工具，方便物联网开发者使用大模型能力。
 
-# 快速开始
-
-- [快速上手](get_started/quick_start.md#快速开始)
-- [当前开发计划](other/plan.md#开发计划)
-- [参与贡献/开发者手册](other/contribution.md#contribution)
-- [常见问题](other/fqa.md#fqa)
-- [pypi仓库](https://pypi.org/project/promptulate/)
-
-# 基础架构
-
-当前`promptulate`正处于快速开发阶段，仍有许多内容需要完善与讨论，十分欢迎大家的讨论与参与，而其作为一个大语言模型自动化与应用开发框架，主要由以下几部分组成：
-
-- `Agent` 更高级的执行器，负责复杂任务的调度和分发
-- `llm` 大语言模型，负责生成回答，可以支持不同类型的大语言模型
-- `Memory` 负责对话的存储，支持不同的存储方式及其扩展，如文件存储、数据库存储等
-- `Framework` 框架层，实现不同类型的prompt框架，包括最基础的`Conversation`模型，还有`self-ask`和`ReAct`等模型。
-- `Tool` 提供外部工具扩展调用，如搜索引擎、计算器等
-- `Hook&Lifecycle` Hook系统与生命周期系统，开发者可以进行定制化的生命周期逻辑控制
-- `Rreset roles` 提供预设角色，进行定制化对话
-- `Provider` 为系统提供更多数据源或执行自主操作，如数据库的连接
 
 <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230704180202.png"/>
+
 
 ## 设计原则
 
@@ -144,7 +124,7 @@ promptulate框架的设计原则包括：模块化、可扩展性、互操作性
 欢迎加入群聊一起交流讨论有关LLM相关的话题，链接过期了可以issue或email提醒一下作者。
 
 <div style="width: 250px;margin: 0 auto;">
-    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20231030050944.png"/>
+    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20231105165950.png"/>
 </div>
 
 
