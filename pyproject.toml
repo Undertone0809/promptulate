@@ -22,6 +22,7 @@ arxiv = "^1.4.7"
 duckduckgo_search = "^3.8.3"
 numexpr = "^2.8.4"
 litellm = "^0.12.5"
+broadcast-service = "1.3.2"
 
 [tool.poetry.dev-dependencies]
 black = "^22.12"
