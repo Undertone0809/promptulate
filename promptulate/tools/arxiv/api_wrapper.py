@@ -1,4 +1,4 @@
-from typing import List, Dict, Optional, Union
+from typing import Dict, List, Optional, Union
 
 import arxiv
 from pydantic import BaseModel, root_validator

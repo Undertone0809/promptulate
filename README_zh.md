@@ -31,7 +31,6 @@ Processing是一组处理和理解不同数据类型（如文本、图像、音�
 Base是一个存储和组织世界信息的大型结构化知识库，使AI代理能够访问和推理大量的知识；Task-specific
 Modules是一组专门设计用于执行特定任务的模块，例如情感分析、机器翻译或目标检测等。通过这些组件的组合，框架提供了一个全面、灵活和强大的平台，能够实现各种复杂任务和应用程序的自动化。
 
-
 ## 特性
 
 - 大语言模型支持：支持不同类型的大语言模型的扩展接口
@@ -120,7 +119,7 @@ promptulate框架的设计原则包括：模块化、可扩展性、互操作性
 欢迎加入群聊一起交流讨论有关LLM相关的话题，链接过期了可以issue或email提醒一下作者。
 
 <div style="width: 250px;margin: 0 auto;">
-    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20231025003811.png"/>
+    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20231105165950.png"/>
 </div>
 
 

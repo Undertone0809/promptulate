@@ -29,15 +29,15 @@ from promptulate.agents import ToolAgent
 from promptulate.llms import ErnieBot, ChatOpenAI, BaseLLM
 from promptulate.schema import LLMType
 from promptulate.tools import (
+    ArxivQueryTool,
     Calculator,
     DuckDuckGoTool,
-    PythonREPLTool,
-    ArxivQueryTool,
-    SleepTool,
     HumanFeedBackTool,
+    PythonREPLTool,
+    SleepTool,
 )
 from promptulate.tools.shell import ShellTool
-from promptulate.utils import set_proxy_mode, print_text
+from promptulate.utils import print_text, set_proxy_mode
 
 MODEL_MAPPING = {"OpenAI": ChatOpenAI, "ErnieBot": ErnieBot}
 TOOL_MAPPING = {

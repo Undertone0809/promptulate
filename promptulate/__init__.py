@@ -19,8 +19,9 @@
 
 import warnings
 
+from promptulate.chat import chat
 from promptulate.frameworks import Conversation
-from promptulate.schema import UserMessage, AssistantMessage, SystemMessage
+from promptulate.schema import AssistantMessage, SystemMessage, UserMessage
 from promptulate.utils import enable_log, enable_log_no_file
 
 __all__ = [
@@ -30,6 +31,7 @@ __all__ = [
     "SystemMessage",
     "UserMessage",
     "AssistantMessage",
+    "chat",
 ]
 
 warnings.filterwarnings("always", category=DeprecationWarning)

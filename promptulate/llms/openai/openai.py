@@ -6,7 +6,7 @@ import json
 import logging
 import warnings
 from abc import ABC
-from typing import Optional, Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import requests
 
@@ -14,12 +14,12 @@ from promptulate.config import Config
 from promptulate.llms.base import BaseLLM
 from promptulate.preset_roles.prompt import PRESET_SYSTEM_PROMPT
 from promptulate.schema import (
-    LLMType,
-    MessageSet,
-    UserMessage,
-    SystemMessage,
     AssistantMessage,
     CompletionMessage,
+    LLMType,
+    MessageSet,
+    SystemMessage,
+    UserMessage,
 )
 from promptulate.tips import OpenAIError
 

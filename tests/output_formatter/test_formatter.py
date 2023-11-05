@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 from promptulate.agents import BaseAgent
 from promptulate.llms import BaseLLM
 from promptulate.output_formatter import OutputFormatter
-from promptulate.schema import MessageSet, BaseMessage
+from promptulate.schema import BaseMessage, MessageSet
 
 
 class LLMForTest(BaseLLM):

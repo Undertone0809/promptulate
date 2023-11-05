@@ -1,5 +1,4 @@
 import re
-from typing import Union
 from time import sleep
 
 from promptulate.tools import BaseTool

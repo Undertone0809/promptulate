@@ -17,7 +17,7 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from typing import Optional, List, Dict
+from typing import Dict, List, Optional
 
 from promptulate import utils
 from promptulate.memory.base import BaseChatMemory

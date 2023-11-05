@@ -17,6 +17,6 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from promptulate.preset_roles.roles import get_all_preset_roles, CustomPresetRole
+from promptulate.preset_roles.roles import CustomPresetRole, get_all_preset_roles
 
 __all__ = ["get_all_preset_roles", "CustomPresetRole"]

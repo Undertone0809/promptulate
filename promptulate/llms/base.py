@@ -18,16 +18,16 @@
 # Contact Email: zeeland@foxmail.com
 
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Optional, Union
 
 from pydantic import BaseModel
 
 from promptulate.hook import Hook, HookTable
-from promptulate.schema import MessageSet, LLMType, BaseMessage
+from promptulate.schema import BaseMessage, LLMType, MessageSet
 
 
 class BaseLLM(BaseModel, ABC):
-    llm_type: LLMType
+    llm_type: Union[str, LLMType]
 
     class Config:
         """Configuration for this pydantic object."""

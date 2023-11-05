@@ -1,10 +1,10 @@
 import logging
 import re
 import time
-from typing import List, Dict
+from typing import Dict, List
 
 from broadcast_service import broadcast_service
-from pydantic import Field, Extra
+from pydantic import Extra, Field
 
 from promptulate.llms.base import BaseLLM
 from promptulate.llms.openai import ChatOpenAI

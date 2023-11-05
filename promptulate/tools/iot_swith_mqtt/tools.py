@@ -1,7 +1,7 @@
 import re
 from typing import Dict, List
 
-from promptulate.llms import ChatOpenAI, BaseLLM
+from promptulate.llms import BaseLLM, ChatOpenAI
 from promptulate.tools import Tool
 from promptulate.tools.iot_swith_mqtt.api_wrapper import IotSwitchAPIWrapper
 from promptulate.tools.iot_swith_mqtt.prompt import prompt_template

@@ -1,4 +1,4 @@
-from promptulate.tools.duckduckgo.tools import DuckDuckGoTool, DuckDuckGoReferenceTool
+from promptulate.tools.duckduckgo.tools import DuckDuckGoReferenceTool, DuckDuckGoTool
 
 __all__ = [
     "DuckDuckGoTool",

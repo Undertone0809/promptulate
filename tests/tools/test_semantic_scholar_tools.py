@@ -2,11 +2,11 @@ from unittest import TestCase
 
 from promptulate.tools.semantic_scholar.api_wrapper import SemanticScholarAPIWrapper
 from promptulate.tools.semantic_scholar.tools import (
-    SemanticScholarReferenceTool,
-    SemanticScholarQueryTool,
     SemanticScholarCitationTool,
+    SemanticScholarQueryTool,
+    SemanticScholarReferenceTool,
 )
-from promptulate.utils.logger import get_logger, enable_log
+from promptulate.utils.logger import enable_log, get_logger
 
 enable_log()
 logger = get_logger()

@@ -1,6 +1,6 @@
 import re
 import time
-from typing import List, Dict, Union
+from typing import Dict, List, Union
 
 from broadcast_service import broadcast_service
 
@@ -8,7 +8,7 @@ from promptulate.llms.base import BaseLLM
 from promptulate.llms.openai import ChatOpenAI
 from promptulate.tools.arxiv.api_wrapper import ArxivAPIWrapper
 from promptulate.tools.base import Tool
-from promptulate.utils.core_utils import record_time, listdict_to_string
+from promptulate.utils.core_utils import listdict_to_string, record_time
 from promptulate.utils.logger import get_logger
 
 logger = get_logger()

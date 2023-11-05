@@ -1,9 +1,9 @@
-from typing import List, Callable
+from typing import Callable, List
 
 from promptulate.agents import BaseAgent
 from promptulate.agents.web_agent.prompt import SYSTEM_PROMPT_TEMPLATE
 from promptulate.hook import Hook, HookTable
-from promptulate.llms import ChatOpenAI, BaseLLM
+from promptulate.llms import BaseLLM, ChatOpenAI
 from promptulate.tools import DuckDuckGoTool
 from promptulate.utils.logger import get_logger
 

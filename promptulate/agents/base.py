@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Callable, Any
+from typing import Any, Callable, List, Optional
 
 from pydantic import BaseModel
 
@@ -18,15 +18,24 @@ class BaseAgent(ABC):
         Hook.call_hook(HookTable.ON_AGENT_CREATE, self, *args, **kwargs)
 
     def run(
-        self, prompt: str, output_schema: type(BaseModel) = None, *args, **kwargs
+        self,
+        prompt: str,
+        output_schema: Optional[type(BaseModel)] = None,
+        examples: Optional[List[BaseModel]] = None,
+        *args,
+        **kwargs,
     ) -> Any:
         """run the tool including specified function and hooks"""
-        Hook.call_hook(HookTable.ON_AGENT_START, self, prompt, *args, **kwargs)
+        Hook.call_hook(
+            HookTable.ON_AGENT_START, self, prompt, output_schema, *args, **kwargs
+        )
+
+        # get original response from LLM
         result: str = self._run(prompt, *args, **kwargs)
 
         # Return Pydantic instance if output_schema is specified
         if output_schema:
-            formatter = OutputFormatter(output_schema)
+            formatter = OutputFormatter(output_schema, examples)
             prompt = (
                 f"{formatter.get_formatted_instructions()}\n##User input:\n{result}"
             )

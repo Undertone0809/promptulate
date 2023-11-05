@@ -1,8 +1,8 @@
 from unittest import TestCase
 
 from promptulate.tools.duckduckgo.api_wrapper import DuckDuckGoSearchAPIWrapper
-from promptulate.tools.duckduckgo.tools import DuckDuckGoTool, DuckDuckGoReferenceTool
-from promptulate.utils.logger import get_logger, enable_log
+from promptulate.tools.duckduckgo.tools import DuckDuckGoReferenceTool, DuckDuckGoTool
+from promptulate.utils.logger import enable_log, get_logger
 
 enable_log()
 logger = get_logger()

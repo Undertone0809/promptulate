@@ -1,5 +1,5 @@
 import logging
-from typing import List, Any, Optional
+from typing import Any, List, Optional
 
 from promptulate.config import Config
 from promptulate.tools.base import BaseTool

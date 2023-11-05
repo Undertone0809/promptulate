@@ -1,6 +1,6 @@
 # 快速开始
 
-通过该部分教学，你可以快速对 promptulate 有一个整体的认知，一些常用模块的基本使用方式，在阅读完该部分之后，你可以继续阅读 [User Cases](modules/usercases/intro.md#user-cases) 来了解 promptulate 的一些最佳实践，在遇到问题的时候，可以查看每个模块的具体使用方式，也欢迎你在 [issue](https://github.com/Undertone0809/promptulate/issues) 中为 promptulate 提供更好的建议。
+通过该部分教学，你可以快速对 promptulate 有一个整体的认知，了解一些常用模块的基本使用方式，在阅读完该部分之后，你可以继续阅读 [User Cases](modules/usercases/intro.md#user-cases) 来了解 promptulate 的一些最佳实践，在遇到问题的时候，可以查看每个模块的具体使用方式，也欢迎你在 [issue](https://github.com/Undertone0809/promptulate/issues) 中为 promptulate 提供更好的建议。
 
 ## 安装最新版
 
@@ -11,7 +11,7 @@
 pip install -U promptulate  
 ```
 
-> 有的时候我们会将promptulate称之为`pne`,其中p和e表示promptulate开头和结尾的单词，而n表示9，即p和e中间的九个单词的简写。
+> 大多数时候我们会将promptulate称之为`pne`,其中p和e表示promptulate开头和结尾的单词，而n表示9，即p和e中间的九个单词的简写。
 
 ## 基本使用
 
@@ -186,6 +186,34 @@ if __name__ == "__main__":
 ```
 
 ![img.png](../images/output_formatter_webagent_output.png)
+
+## 本地开发
+
+**环境要求**
+- Python >= 3.8
+- make
+
+> make 不是必须的，但是利用 makefile 的能力轻松集成运行 test、lint 等模块。
+
+运行以下命令：
+
+```shell
+git clone https://github.com/Undertone0809/promptulate 
+```
+
+下载到本地之后，安装第三方库
+
+```shell
+pip install poetry
+make install
+```
+
+如果你没有安装 make，也可以使用如下方式安装：
+
+```shell
+pip install poetry
+poetry install
+```
 
 ## 更多
 
