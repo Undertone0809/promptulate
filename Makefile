@@ -25,7 +25,7 @@ formatting: polish-codestyle
 #* Linting
 .PHONY: test
 test:
-	poetry run pytest -c pyproject.toml --cov-report=html --cov=promptulate .\tests\test_chat.py .\tests\output_formatter\
+	poetry run pytest -c pyproject.toml --cov-report=html --cov=promptulate ./tests/test_chat.py ./tests/output_formatter
 
 .PHONY: check-codestyle
 check-codestyle:
