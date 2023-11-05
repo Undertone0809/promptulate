@@ -51,7 +51,7 @@ To create a powerful and flexible LLM application development platform for creat
 - [Quick Start/Official Documentation](https://undertone0809.github.io/promptulate/#/)
 - [Current Development Plan](https://undertone0809.github.io/promptulate/#/other/plan)
 - [Contribution/Developer's Guide](https://undertone0809.github.io/promptulate/#/other/contribution)
-- [FAQ](https://undertone0809.github.io/promptulate/#/other/fqa)
+- [FAQ](https://undertone0809.github.io/promptulate/#/other/faq)
 - [PyPI Repository](https://pypi.org/project/promptulate/)
 
 To install the framework, open the terminal and run the following command:
