@@ -50,9 +50,8 @@ Modules是一组专门设计用于执行特定任务的模块，例如情感分�
 - [快速上手/官方文档](https://undertone0809.github.io/promptulate/#/)
 - [当前开发计划](https://undertone0809.github.io/promptulate/#/other/plan)
 - [参与贡献/开发者手册](https://undertone0809.github.io/promptulate/#/other/contribution)
-- [常见问题](https://undertone0809.github.io/promptulate/#/other/fqa)
+- [常见问题](https://undertone0809.github.io/promptulate/#/other/faq)
 - [pypi仓库](https://pypi.org/project/promptulate/)
-
 
 - 打开终端，输入以下命令安装框架：
 

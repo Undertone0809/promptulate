@@ -16,5 +16,23 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
+    - name: Install poetry
+      run: pip install poetry
+
+    - name: Set up cache
+      uses: actions/cache@v2.1.6
+      with:
+        path: .venv
+        key: venv-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('poetry.lock') }}
     - name: Install dependencies
-      run: pip install -r requirements.txt
+      run: |
+        poetry config virtualenvs.in-project true
+        poetry install
+
+    - name: Run tests
+      run: |
+        make test
+
+    - name: Run style checks
+      run: |
+        make check-codestyle

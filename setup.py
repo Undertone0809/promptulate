@@ -26,7 +26,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setuptools.setup(
     name="promptulate",
-    version="1.8.3",
+    version="1.9.0",
     author="Zeeland",
     author_email="zeeland@foxmail.com",
     description="A powerful LLM Application development framework.",
@@ -45,6 +45,7 @@ setuptools.setup(
         "click",
         "numexpr",
         "questionary~=2.0.0",
+        "litellm~=0.12.5",
     ],
     license="Apache 2.0",
     python_requires=">=3.8",

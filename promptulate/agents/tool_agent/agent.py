@@ -8,7 +8,7 @@ from promptulate.agents.tool_agent.prompt import PREFIX_TEMPLATE, REACT_ZERO_SHO
 from promptulate.hook import Hook, HookTable
 from promptulate.llms.base import BaseLLM
 from promptulate.llms.openai import ChatOpenAI
-from promptulate.tools import BaseTool, Tool
+from promptulate.tools.base import BaseTool, Tool
 from promptulate.tools.manager import ToolManager
 from promptulate.utils.string_template import StringTemplate
 

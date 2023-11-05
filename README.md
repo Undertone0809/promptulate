@@ -15,6 +15,9 @@
     <a target="_blank" href=''>
         <img src="https://static.pepy.tech/personalized-badge/promptulate?period=month&units=international_system&left_color=grey&right_color=blue&left_text=Downloads/Week"/>
     </a>
+    <a target="_blank" href=''>
+        <img src="docs/images/coverage.svg"/>
+    </a>
 </p>
 
 [English](/README.md) [中文](/README_zh.md)
@@ -51,7 +54,7 @@ To create a powerful and flexible LLM application development platform for creat
 - [Quick Start/Official Documentation](https://undertone0809.github.io/promptulate/#/)
 - [Current Development Plan](https://undertone0809.github.io/promptulate/#/other/plan)
 - [Contribution/Developer's Guide](https://undertone0809.github.io/promptulate/#/other/contribution)
-- [FAQ](https://undertone0809.github.io/promptulate/#/other/fqa)
+- [FAQ](https://undertone0809.github.io/promptulate/#/other/faq)
 - [PyPI Repository](https://pypi.org/project/promptulate/)
 
 To install the framework, open the terminal and run the following command:
