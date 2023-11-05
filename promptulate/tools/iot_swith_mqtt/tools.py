@@ -29,7 +29,7 @@ class IotSwitchTool(Tool):
         llm: BaseLLM = None,
         rule_table: List[Dict] = None,
         api_wrapper: IotSwitchAPIWrapper = IotSwitchAPIWrapper(),
-        **kwargs
+        **kwargs,
     ):
         """
         Args:
