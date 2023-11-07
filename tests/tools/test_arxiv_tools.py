@@ -1,7 +1,10 @@
-import pytest
 from unittest.mock import patch
+
+import pytest
 from pydantic import ValidationError
-from promptulate.tools.arxiv.api_wrapper import ArxivAPIWrapper, ArxivQuerySet  # Assumes your code is in "your_module.py"
+
+from promptulate.tools.arxiv.api_wrapper import ArxivAPIWrapper
+
 
 @pytest.fixture
 def mock_search():
@@ -30,7 +33,7 @@ def test_validate_environment_with_installed_package(arxiv_api_wrapper):
 
 def test_validate_environment_with_no_installed_package():
     with pytest.raises(ValidationError):
-        ArxivAPIWrapper(max_num_of_result='invalid')
+        ArxivAPIWrapper(max_num_of_result="invalid")
 
 
 @patch("promptulate.tools.arxiv.api_wrapper.ArxivAPIWrapper._query")
@@ -41,7 +44,11 @@ def test_query_with_specified_fields(mock_query, arxiv_api_wrapper, mock_search)
     )
 
     assert len(result) == 1
-    assert result[0] == {"entry_id": "1", "title": "Test Title", "summary": "Test Summary"}
+    assert result[0] == {
+        "entry_id": "1",
+        "title": "Test Title",
+        "summary": "Test Summary",
+    }
 
 
 @patch("promptulate.tools.arxiv.api_wrapper.ArxivAPIWrapper._query")
@@ -50,5 +57,8 @@ def test_query_with_no_specified_fields(mock_query, arxiv_api_wrapper, mock_sear
     result = arxiv_api_wrapper.query("test keyword")
 
     assert len(result) == 1
-    assert result[0] == {"entry_id": "1", "title": "Test Title", "summary": "Test Summary"}
-
+    assert result[0] == {
+        "entry_id": "1",
+        "title": "Test Title",
+        "summary": "Test Summary",
+    }
