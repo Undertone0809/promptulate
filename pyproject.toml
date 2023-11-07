@@ -33,6 +33,7 @@ pytest-cov = "^3.0.0"
 coverage = "^6.1.2"
 pre-commit = "^3.5.0"
 coverage-badge = "^1.1.0"
+langchain = "^0.0.324"
 
 [tool.poetry.scripts]
 pne-chat = "promptulate.client.chat:main"

@@ -59,7 +59,7 @@ class ArxivAPIWrapper(BaseModel):
     def validate_environment(cls, values: Dict) -> Dict:
         """Validate that python package exists in environment."""
         try:
-            import arxiv
+            import arxiv # noqa
         except ImportError:
             raise ValueError(
                 "Could not import arxiv python package. "
@@ -83,10 +83,13 @@ class ArxivAPIWrapper(BaseModel):
         """
         if not keyword:
             keyword = ""
+        
         if not id_list:
             id_list = []
+        
         if not num_results:
             num_results = self.max_num_of_result
+        
         if isinstance(id_list, str):
             id_list = [id_list]
 

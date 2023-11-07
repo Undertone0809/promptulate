@@ -141,7 +141,7 @@ class PaperSummaryTool(BaseTool):
                 if paper_info:
                     paper_info = paper_info[0]
 
-            except NetWorkError as e:
+            except NetWorkError:
                 paper_info = self.arxiv_apiwrapper.query(
                     keyword=query, num_results=1, specified_fields=["title", "summary"]
                 )

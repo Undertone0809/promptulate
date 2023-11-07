@@ -193,7 +193,10 @@ if __name__ == "__main__":
 - Python >= 3.8
 - make
 
-> make 不是必须的，但是利用 makefile 的能力轻松集成运行 test、lint 等模块。
+> 本项目使用 make 进行项目配套设施的构建，通过 makefile 的能力轻松集成运行 test、lint 等模块，请确保你的电脑已经安装了 make。
+> 
+> [how to install and use make in windows?](https://stackoverflow.com/questions/32127524/how-to-install-and-use-make-in-windows)
+
 
 运行以下命令：
 
@@ -208,12 +211,8 @@ pip install poetry
 make install
 ```
 
-如果你没有安装 make，也可以使用如下方式安装：
 
-```shell
-pip install poetry
-poetry install
-```
+本项目使用配备代码语法检查工具，如果你想提交 pr，则需要在 commit 之前运行 `make polish-codestyle` 进行代码规范格式化，并且运行 `make lint` 通过语法与单元测试的检查。
 
 ## 更多
 

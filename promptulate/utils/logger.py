@@ -21,7 +21,7 @@ import datetime
 import logging
 import os
 
-from promptulate import utils
+from promptulate.utils.core_utils import get_default_storage_path
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +31,7 @@ def get_logger():
 
 
 def get_default_log_path():
-    return utils.get_default_storage_path("log")
+    return get_default_storage_path("log")
 
 
 def get_log_name() -> str:

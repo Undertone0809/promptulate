@@ -1,13 +1,20 @@
-from unittest import TestCase
+import os
+from tempfile import TemporaryDirectory
 
-from langchain.tools.shell.tool import ShellTool
+from langchain.agents.agent_toolkits import FileManagementToolkit
 
 from promptulate.tools.langchain.tools import LangchainTool
 
 
-class TestLangchainTool(TestCase):
-    def test_shell_run(self):
-        tool = LangchainTool(ShellTool())
-        result = tool._run("echo HelloWorld")
-        print(result)
-        self.assertIsNotNone(result)
+def test_read_file():
+    working_directory = TemporaryDirectory()
+
+    lc_write_tool = FileManagementToolkit(
+        root_dir=str(working_directory.name),
+        selected_tools=["write_file"],
+    ).get_tools()[0]
+
+    tool = LangchainTool(lc_write_tool)
+    tool.run({"file_path": "example.txt", "text": "Hello World!"})
+
+    assert os.path.exists(os.path.join(working_directory.name, "example.txt"))
