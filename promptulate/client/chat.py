@@ -158,7 +158,7 @@ def chat():
     if args.proxy_mode:
         set_proxy_mode(args.proxy_mode)
 
-    print_text(f"Hi there, here is promptulate chat terminal.", "pink")
+    print_text("Hi there, here is promptulate chat terminal.", "pink")
 
     terminal_mode = questionary.select(
         "Choose a chat terminal:",

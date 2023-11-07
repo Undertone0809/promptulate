@@ -7,13 +7,7 @@ import requests
 
 from promptulate.config import Config
 from promptulate.llms import BaseLLM
-from promptulate.schema import (
-    AssistantMessage,
-    BaseMessage,
-    LLMType,
-    MessageSet,
-    UserMessage,
-)
+from promptulate.schema import AssistantMessage, LLMType, MessageSet, UserMessage
 from promptulate.tips import LLMError
 from promptulate.utils import get_logger
 

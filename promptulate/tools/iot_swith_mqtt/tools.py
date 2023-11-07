@@ -41,7 +41,7 @@ class IotSwitchTool(Tool):
 
     def _run(self, question: str, *args, **kwargs) -> str:
         try:
-            import paho.mqtt.client as mqtt # noqa
+            import paho.mqtt.client as mqtt  # noqa
         except ImportError:
             raise ImportError(
                 "Could not import paho python package. "
