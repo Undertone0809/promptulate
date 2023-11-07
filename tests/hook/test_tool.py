@@ -33,7 +33,7 @@ class TestToolHook(TestCase):
             self.assertIsNotNone(result)
             print(f"<instance> result: {result}")
 
-        hooks = [handle_result, handle_start, handle_result]
+        hooks = [handle_create, handle_start, handle_result]
         tool = DuckDuckGoTool(hooks=hooks)
         tool.run("What is LLM?")
 

@@ -69,7 +69,7 @@ class Tool(ABC):
     description: str
     """Tool description"""
 
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         self.check_params()
         if "hooks" in kwargs and kwargs["hooks"]:
             for hook in kwargs["hooks"]:

@@ -90,7 +90,7 @@ class SemanticScholarAPIWrapper(BaseModel):
             self.current_result = response.json()["matches"]
 
             if len(self.current_result) == 0:
-                logger.debug(f"[pne] semantic scholar return none")
+                logger.debug("[pne] semantic scholar return none")
                 return []
 
             for item in self.current_result:

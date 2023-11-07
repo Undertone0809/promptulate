@@ -34,7 +34,7 @@ class TestToolHook(TestCase):
             self.assertIsNotNone(result)
             print(f"<instance> result: {result}")
 
-        hooks = [handle_result, handle_start, handle_result]
+        hooks = [handle_create, handle_start, handle_result]
         tools = [DuckDuckGoTool(), Calculator()]
         agent = ToolAgent(tools=tools, hooks=hooks)
         agent.run("What is promptulate?")
@@ -71,8 +71,9 @@ class TestToolHook(TestCase):
             self.assertIsNotNone(result)
             print(f"<component> result: {result}")
 
-        tool = DuckDuckGoTool()
-        tool.run("What is promptulate?")
+        tools = [DuckDuckGoTool(), Calculator()]
+        agent = ToolAgent(tools=tools)
+        agent.run("What is promptulate?")
 
         self.assertTrue(create_flag)
         self.assertTrue(start_flag)

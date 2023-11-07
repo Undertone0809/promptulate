@@ -20,7 +20,7 @@
 
 <div class="title">Promptulate</div>
 
-> All you need is an elegant LLM development framework.
+> All you need is an elegant LLM Agent development framework.
 
 
 <p align="center">
