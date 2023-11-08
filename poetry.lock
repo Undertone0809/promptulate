@@ -1483,13 +1483,13 @@ reference = "tsinghua"
 
 [[package]]
 name = "langsmith"
-version = "0.0.57"
+version = "0.0.60"
 description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform."
 optional = false
 python-versions = ">=3.8.1,<4.0"
 files = [
-    {file = "langsmith-0.0.57-py3-none-any.whl", hash = "sha256:d9d466cc45ce5224096ffb820d019b6f83678fc1f1021076ed75728aba60ec2b"},
-    {file = "langsmith-0.0.57.tar.gz", hash = "sha256:34929afd84cbfd46a8469229e3befc14c7e89186a0bee8ce9d084c7b8b271005"},
+    {file = "langsmith-0.0.60-py3-none-any.whl", hash = "sha256:94f9ef9898fa5fb5afed72538bb3ccca9a92a841b37654d699c732a76c623379"},
+    {file = "langsmith-0.0.60.tar.gz", hash = "sha256:f63513398d8d4530e3aa552926924c8443ac9d21c3812f303fa20fa2c44a9a42"},
 ]
 
 [package.dependencies]
