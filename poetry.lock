@@ -1503,13 +1503,13 @@ reference = "tsinghua"
 
 [[package]]
 name = "litellm"
-version = "0.12.12"
+version = "0.13.2"
 description = "Library to easily interface with LLM API providers"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "litellm-0.12.12-py3-none-any.whl", hash = "sha256:356a041228a27ed07ce44eb825ba8d92c22bf596e3ccc047a260167f146c145c"},
-    {file = "litellm-0.12.12.tar.gz", hash = "sha256:b66475629c5ad03c2cc7a6d2c8b78fa44c44b59b8efb52d27c402474556910a6"},
+    {file = "litellm-0.13.2-py3-none-any.whl", hash = "sha256:d8b4f6ef4cb9d07dcdc7384844cd398ee25f7e93114000d29f513fd47c5c0e67"},
+    {file = "litellm-0.13.2.tar.gz", hash = "sha256:31907b4f4014d6e442371cd112cccad953788958881e4421ed7b087d282c03a4"},
 ]
 
 [package.dependencies]
@@ -3123,4 +3123,4 @@ reference = "tsinghua"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<4.0"
-content-hash = "11eff5eb4427380f3472900e4cc81df835ddfda1354bdd772e456864177beaa8"
+content-hash = "a897331e1b052e7d50ed084261281e4a77a11eb08ef04c359c4e41f12ac4d97a"
