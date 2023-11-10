@@ -1438,13 +1438,13 @@ reference = "tsinghua"
 
 [[package]]
 name = "langchain"
-version = "0.0.332"
+version = "0.0.333"
 description = "Building applications with LLMs through composability"
 optional = false
 python-versions = ">=3.8.1,<4.0"
 files = [
-    {file = "langchain-0.0.332-py3-none-any.whl", hash = "sha256:4cbf183b8a385483907192efea2f55d34c0f0c441b0a02f41af1eeec4526677c"},
-    {file = "langchain-0.0.332.tar.gz", hash = "sha256:8356b6c0073680d66d5ee2d9e54c23c90198ee74ab2431a0256934a69a511c1f"},
+    {file = "langchain-0.0.333-py3-none-any.whl", hash = "sha256:7ee619bbdccfe15bcc4e255a30b5f2e75f9d230cdbaf572f4063dc59d4b03af6"},
+    {file = "langchain-0.0.333.tar.gz", hash = "sha256:64e00ecee3dd316a97f825429e286a1b207315a0cc753bcc1cd5cfcb92abbc39"},
 ]
 
 [package.dependencies]
@@ -1453,7 +1453,7 @@ anyio = "<4.0"
 async-timeout = {version = ">=4.0.0,<5.0.0", markers = "python_version < \"3.11\""}
 dataclasses-json = ">=0.5.7,<0.7"
 jsonpatch = ">=1.33,<2.0"
-langsmith = ">=0.0.52,<0.1.0"
+langsmith = ">=0.0.62,<0.1.0"
 numpy = ">=1,<2"
 pydantic = ">=1,<3"
 PyYAML = ">=5.3"
@@ -1483,13 +1483,13 @@ reference = "tsinghua"
 
 [[package]]
 name = "langsmith"
-version = "0.0.57"
+version = "0.0.63"
 description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform."
 optional = false
 python-versions = ">=3.8.1,<4.0"
 files = [
-    {file = "langsmith-0.0.57-py3-none-any.whl", hash = "sha256:d9d466cc45ce5224096ffb820d019b6f83678fc1f1021076ed75728aba60ec2b"},
-    {file = "langsmith-0.0.57.tar.gz", hash = "sha256:34929afd84cbfd46a8469229e3befc14c7e89186a0bee8ce9d084c7b8b271005"},
+    {file = "langsmith-0.0.63-py3-none-any.whl", hash = "sha256:43a521dd10d8405ac21a0b959e3de33e2270e4abe6c73cc4036232a6990a0793"},
+    {file = "langsmith-0.0.63.tar.gz", hash = "sha256:ddb2dfadfad3e05151ed8ba1643d1c516024b80fbd0c6263024400ced06a3768"},
 ]
 
 [package.dependencies]
@@ -3123,4 +3123,4 @@ reference = "tsinghua"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<4.0"
-content-hash = "11eff5eb4427380f3472900e4cc81df835ddfda1354bdd772e456864177beaa8"
+content-hash = "2daffc3003318592f2a995f9703c30d9c9154c883c413c25fe932d4fa6742981"
