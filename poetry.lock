@@ -842,19 +842,19 @@ reference = "tsinghua"
 
 [[package]]
 name = "duckduckgo-search"
-version = "3.9.4"
+version = "3.9.5"
 description = "Search for words, documents, images, news, maps and text translation using the DuckDuckGo.com search engine."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "duckduckgo_search-3.9.4-py3-none-any.whl", hash = "sha256:06004982952feb2c65927840ebf3d186498bce2390f208be7726f5f82675f3db"},
-    {file = "duckduckgo_search-3.9.4.tar.gz", hash = "sha256:ce140bf005ff147b5f7f02ef893e575527487db8f689dfccc86c7d4519b95a9b"},
+    {file = "duckduckgo_search-3.9.5-py3-none-any.whl", hash = "sha256:d96e97beeaa89da04ac84f425319a89ece625e834913953fa56a64c6295d1ad6"},
+    {file = "duckduckgo_search-3.9.5.tar.gz", hash = "sha256:63eb56e544f2e9812d09f37b2d7851f9cb00948acba4892241f976358813bd2e"},
 ]
 
 [package.dependencies]
 aiofiles = ">=23.2.1"
 click = ">=8.1.7"
-httpx = {version = ">=0.25.0", extras = ["brotli", "http2", "socks"]}
+httpx = {version = ">=0.25.1", extras = ["brotli", "http2", "socks"]}
 lxml = ">=4.9.3"
 
 [package.extras]
