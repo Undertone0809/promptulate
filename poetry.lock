@@ -1503,22 +1503,23 @@ reference = "tsinghua"
 
 [[package]]
 name = "litellm"
-version = "0.12.12"
+version = "0.14.1"
 description = "Library to easily interface with LLM API providers"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "litellm-0.12.12-py3-none-any.whl", hash = "sha256:356a041228a27ed07ce44eb825ba8d92c22bf596e3ccc047a260167f146c145c"},
-    {file = "litellm-0.12.12.tar.gz", hash = "sha256:b66475629c5ad03c2cc7a6d2c8b78fa44c44b59b8efb52d27c402474556910a6"},
+    {file = "litellm-0.14.1-py3-none-any.whl", hash = "sha256:d2c9114495bb2a6a8a9d1992b0c259379a0811d9fc0bade9e759aaaa1e528199"},
+    {file = "litellm-0.14.1.tar.gz", hash = "sha256:4d6d9a3745c9a1f194c2952b092fe86c741b00b47f92a853c84f0171543f4e9d"},
 ]
 
 [package.dependencies]
+aiohttp = "*"
 appdirs = ">=1.4.4,<2.0.0"
 certifi = ">=2023.7.22,<2024.0.0"
 click = "*"
 importlib-metadata = ">=6.8.0"
 jinja2 = ">=3.1.2,<4.0.0"
-openai = ">=0.27.0,<0.29.0"
+openai = "*"
 python-dotenv = ">=0.2.0"
 tiktoken = ">=0.4.0"
 tokenizers = "*"
@@ -3123,4 +3124,4 @@ reference = "tsinghua"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<4.0"
-content-hash = "11eff5eb4427380f3472900e4cc81df835ddfda1354bdd772e456864177beaa8"
+content-hash = "a9f627fdd5ccd34e69e37c78af76767cfcc87eefb576e3e01e91c3b5559aea75"
