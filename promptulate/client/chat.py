@@ -41,7 +41,6 @@ from promptulate.utils.color_print import print_text
 from promptulate.utils.proxy import set_proxy_mode
 
 CFG = Config()
-MODEL_MAPPING = {"OpenAI": ChatOpenAI, "ErnieBot": ErnieBot}
 TOOL_MAPPING = {
     "Calculator": Calculator,
     "WebSearch": DuckDuckGoTool,
@@ -51,14 +50,6 @@ TOOL_MAPPING = {
     "Shell Executor": ShellTool,
     "HumanFeedBackTool": HumanFeedBackTool,
 }
-
-
-def check_key(model_type: str):
-    model_key_mapping = {
-        "OpenAI": CFG.get_openai_api_key,
-        "ErnieBot": CFG.get_ernie_api_key,
-    }
-    model_key_mapping[model_type]()
 
 
 def get_user_input() -> Optional[str]:
@@ -170,12 +161,21 @@ def chat():
 
     model = questionary.select(
         "Choose a llm model:",
-        choices=list(MODEL_MAPPING.keys()),
+        choices=[
+            "gpt-3.5-turbo",
+            "gpt-4",
+            "gpt-3.5-turbo-16k",
+            "ernie-bot-turbo",
+            "ernie-bot",
+        ],
     ).ask()
 
-    check_key(model)
+    # init model
+    if "gpt" in model:
+        llm = ChatOpenAI(model=model, temperature=0.0)
+    elif "ernie" in model:
+        llm = ErnieBot(model=model, temperature=0.0)
 
-    llm = MODEL_MAPPING[model](temperature=0.2)
     if terminal_mode == "Simple Chat":
         simple_chat(llm)
     elif terminal_mode == "Agent Chat":

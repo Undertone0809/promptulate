@@ -45,7 +45,7 @@ def turn_off_stdout_hook():
 
 class Config(metaclass=Singleton):
     def __init__(self):
-        logger.info(f"[pne config] Config initialization")
+        logger.info("[pne config] Config initialization")
         self.enable_cache: bool = True
         self._proxy_mode: str = PROXY_MODE[0]
         self._proxies: Optional[dict] = None
@@ -71,27 +71,25 @@ class Config(metaclass=Singleton):
             self.enable_stdout_hook = False
             StdOutHook.unregister_stdout_hooks()
 
-    @property
-    def openai_api_key(self):
-        """This attribution has deprecated to use. Using `get_openai_api_key`"""
+    def get_openai_api_key(self, model: str = "gpt-3.5-turbo") -> str:
+        """Get openai key from KeyPool and environment variable. The priority of obtaining the key:
+        environment variable, cache of OpenAIKeyPool, cache of OEPNAI_API_KEY,"""
         if "OPENAI_API_KEY" in os.environ.keys():
             if self.enable_cache:
                 get_cache()["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
             return os.getenv("OPENAI_API_KEY")
-        if self.enable_cache and "OPENAI_API_KEY" in get_cache():
-            return get_cache()["OPENAI_API_KEY"]
-        raise ValueError("OPENAI API key is not provided. Please set your key.")
 
-    def get_openai_api_key(self, model: str) -> str:
-        """Get openai key from KeyPool and environ"""
         if self.enable_cache:
             openai_key_pool: OpenAIKeyPool = OpenAIKeyPool()
             key = openai_key_pool.get(model)
             if key:
                 return key
-        return self.openai_api_key
 
-    @property
+        if self.enable_cache and "OPENAI_API_KEY" in get_cache():
+            return get_cache()["OPENAI_API_KEY"]
+
+        raise ValueError("OPENAI API key is not provided. Please set your key.")
+
     def get_ernie_api_key(self) -> str:
         if "ERNIE_API_KEY" in os.environ.keys():
             if self.enable_cache:
@@ -115,7 +113,7 @@ class Config(metaclass=Singleton):
         url = self.ernie_bot_token_url
         params = {
             "grant_type": "client_credentials",
-            "client_id": self.get_ernie_api_key,
+            "client_id": self.get_ernie_api_key(),
             "client_secret": self.get_ernie_api_secret,
         }
         return str(requests.post(url, params=params).json().get("access_token"))
