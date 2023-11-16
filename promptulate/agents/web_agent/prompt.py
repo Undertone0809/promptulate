@@ -5,7 +5,7 @@ Answer the following questions as best you can. You have access use web search.
 After the user enters a question, you need to generate keywords for web search,
 and then summarize until you think you can answer the user's answer.
 
-Use the following format:
+Your output format is as follows:
 Question: the input question you must answer
 Thought: The next you should do
 Query: web search query words
