@@ -46,7 +46,9 @@ class WebAgent(BaseAgent):
 
         # Loop search until find the answer
         while True:
-            llm_output: str = self.llm(self.conversation_prompt, stop=self.stop_sequences)
+            llm_output: str = self.llm(
+                self.conversation_prompt, stop=self.stop_sequences
+            )
             logger.info(
                 f"[pne] tool agent <{iterations}> current prompt: {self.conversation_prompt}"
             )
@@ -69,7 +71,7 @@ class WebAgent(BaseAgent):
             Hook.call_hook(
                 HookTable.ON_AGENT_OBSERVATION, self, observation=query_result
             )
-            
+
             self.conversation_prompt += f"Observation: {query_result}\nThought: "
             iterations += 1
 
