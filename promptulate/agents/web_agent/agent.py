@@ -46,15 +46,20 @@ class WebAgent(BaseAgent):
 
         # Loop search until find the answer
         while True:
-            answer: str = self.llm(self.conversation_prompt, stop=self.stop_sequences)
+            llm_output: str = self.llm(
+                self.conversation_prompt, stop=self.stop_sequences
+            )
             logger.info(
                 f"[pne] tool agent <{iterations}> current prompt: {self.conversation_prompt}"
             )
 
-            if "Final Answer" in answer:
-                return answer.split("Final Answer:")[-1]
+            if "Final Answer" in llm_output:
+                return llm_output.split("Final Answer:")[-1]
 
-            query_words: str = self._find_query_words(answer)
+            self.conversation_prompt += llm_output
+
+            # get keywords and query by websearch
+            query_words: str = self._find_query_words(llm_output)
             Hook.call_hook(
                 HookTable.ON_AGENT_ACTION,
                 self,
@@ -66,6 +71,7 @@ class WebAgent(BaseAgent):
             Hook.call_hook(
                 HookTable.ON_AGENT_OBSERVATION, self, observation=query_result
             )
+
             self.conversation_prompt += f"Observation: {query_result}\nThought: "
             iterations += 1
 
