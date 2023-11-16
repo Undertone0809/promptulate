@@ -45,9 +45,6 @@ class ErnieBot(BaseLLM, ABC):
         )
         return self.predict(message_set, stop).content
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     def _predict(
         self, prompts: MessageSet, stop: Optional[List[str]] = None, *args, **kwargs
     ) -> AssistantMessage:
