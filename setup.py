@@ -45,7 +45,7 @@ setuptools.setup(
         "click",
         "numexpr",
         "questionary~=2.0.0",
-        "litellm~=0.12.5",
+        "litellm~=1.1.1",
     ],
     license="Apache 2.0",
     python_requires=">=3.8",
