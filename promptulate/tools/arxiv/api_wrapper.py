@@ -117,7 +117,8 @@ class ArxivAPIWrapper(BaseModel):
             id_list: arxiv id, you can input multiple id or single
             kwargs:
                 specified_fields(Optional[List[str]]): filter specified field to return.
-                For example, you can return the ["title", "summary"] fields from each arxiv query result
+                For example, you can return the ["title", "summary"] fields from each
+                arxiv query result.
         Returns:
             List[Dict] type result
         Examples:
@@ -128,7 +129,7 @@ class ArxivAPIWrapper(BaseModel):
 
             All fields you can see in: https://github.com/lukasschwab/arxiv.py
             Common fields are: ["entry_id", "title", "authors", "summary", "published"]
-        """
+        """  # noqa
         search = self._query(keyword, id_list, num_results)
         if "specified_fields" in kwargs:
             return ArxivQuerySet.from_filter_result(

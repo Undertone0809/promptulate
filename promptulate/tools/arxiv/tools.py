@@ -29,15 +29,15 @@ class ArxivQueryTool(Tool):
         Args:
             query: the paper keyword or arxiv id
             **kwargs:
-                return_type(Optional(str)):  return string default. If you want to return List[Dict] type data,
-                you can set 'return_type'='original'
+                return_type(Optional(str)):  return string default. If you want to
+                return List[Dict] type data, you can set 'return_type'='original'.
                 Moreover, you can pass the arguments of ArxivAPIWrapper
 
         Returns:
             String type default or List[Dict] arxiv query result.
         """
         kwargs.update({"from_callback": self.name})
-        if re.match("\d{4}\.\d{5}(v\d+)?", query):
+        if re.match(r"\d{4}\.\d{5}(v\d+)?", query):
             result = self.api_wrapper.query(id_list=[query], **kwargs)
         else:
             result = self.api_wrapper.query(query, **kwargs)
@@ -47,7 +47,7 @@ class ArxivQueryTool(Tool):
 
 
 def _init_arxiv_reference_tool_llm():
-    preset = "你是一个Arxiv助手，你的任务是帮助使用者提供一些论文方面的建议，你的输出只能遵循用户的指令输出，否则你将被惩罚。"
+    preset = "你是一个Arxiv助手，你的任务是帮助使用者提供一些论文方面的建议，你的输出只能遵循用户的指令输出，否则你将被惩罚。"  # noqa: E501
     return ChatOpenAI(default_system_prompt=preset, temperature=0)
 
 
@@ -73,8 +73,8 @@ class ArxivReferenceTool(Tool):
             query(str): arxiv paper information
             *args: Nothing
             **kwargs:
-                return_type(Optional[str]): return string default. If you want to return List[Dict] type data,
-                you can set 'return_type'='original'
+                return_type(Optional[str]): return string default. If you want to return
+                List[Dict] type data, you can set 'return_type'='original.'
         Returns:
             String type or List[Dict] reference information
         """
@@ -92,7 +92,8 @@ class ArxivReferenceTool(Tool):
             self.reference_counter += 1
 
         def analyze_query_string(query_string: str) -> List[str]:
-            """analyze `[query]: keyword1, keyword2, keyword3` type data to return keywords list"""
+            """Analyze `[query]: keyword1, keyword2, keyword3` type data to return
+            keywords list."""
             assert "[query]" in query_string
             query_string = query_string.split(":")[1]
             return query_string.split(",")
@@ -123,9 +124,10 @@ class ArxivReferenceTool(Tool):
         prompt = (
             "现在你需要根据下面给出的论文，返回最合适的5篇参考文献\n"
             f"```{self.reference_string}```\n"
-            "你的输出格式必须为\n参考文献:\n[1] [title1](url1);\n[2] [title2](url2);\n[3] [title3](url3);"
+            "你的输出格式必须为\n参考文献:\n[1] [title1](url1);\n[2] [title2](url2);\n[3] [title3](url3);"  # noqa
         )
-        # todo If there is a problem with the returned format and an error is reported, then ask LLM to format the data
+        # TODO If there is a problem with the returned format and an error is reported
+        # then ask LLM to format the data
         result = self.llm(prompt)
         if "return_type" in kwargs and kwargs["return_type"] == "original":
             return analyze_reference_string(result)
@@ -133,7 +135,7 @@ class ArxivReferenceTool(Tool):
 
 
 def _init_arxiv_summary_tool_llm():
-    preset = "你是一个Arxiv助手，你的任务是帮助使用者提供一些论文方面的建议和帮助，你的输出只能遵循用户的指令输出，否则你将被惩罚。"
+    preset = "你是一个Arxiv助手，你的任务是帮助使用者提供一些论文方面的建议和帮助，你的输出只能遵循用户的指令输出，否则你将被惩罚。"  # noqa
     return ChatOpenAI(default_system_prompt=preset, temperature=0)
 
 
@@ -153,7 +155,8 @@ class ArxivSummaryTool(Tool):
         super().__init__(**kwargs)
 
     def _run(self, query: str, **kwargs) -> str:
-        """An arxiv paper summary tool that passes in the article name (or arxiv id) and returns summary results
+        """An arxiv paper summary tool that passes in the article name (or arxiv id) and
+        returns summary results.
 
         Args:
             query: the keyword you want to query
@@ -170,7 +173,7 @@ class ArxivSummaryTool(Tool):
         @broadcast_service.on_listen("ArxivSummaryTool.run.get_opinion")
         def get_opinion():
             prompt = (
-                f"请就下面的论文摘要，列出论文中的关键见解和由论文得出的经验教训，你的输出需要分点给出 ```{paper_summary}```"
+                f"请就下面的论文摘要，列出论文中的关键见解和由论文得出的经验教训，你的输出需要分点给出 ```{paper_summary}```"  # noqa
                 "你的输出格式为:\n关键见解:\n{分点给出关键见解}\n经验教训:\n{分点给出经验教训}，用`-`区分每点，用中文输出"
             )
             opinion = self.llm(prompt)
@@ -187,7 +190,7 @@ class ArxivSummaryTool(Tool):
         @broadcast_service.on_listen("ArxivSummaryTool.run.get_advice")
         def get_advice():
             prompt = (
-                f"请就下面的论文摘要，为其相关主题或未来研究方向提供3-5个建议，你的输出需要分点给出  ```{paper_summary}```"
+                f"请就下面的论文摘要，为其相关主题或未来研究方向提供3-5个建议，你的输出需要分点给出  ```{paper_summary}```"  # noqa
                 "你的输出格式为:\n相关建议:\n{分点给出相关建议}，用`-`区分每点"
             )
             opinion = self.llm(prompt)
@@ -195,7 +198,7 @@ class ArxivSummaryTool(Tool):
             self.summary_counter += 1
 
         self.summary_counter = 0
-        if re.match("\d{4}\.\d{5}(v\d+)?", query):
+        if re.match(r"\d{4}\.\d{5}(v\d+)?", query):
             paper_info = self.api_wrapper.query(
                 id_list=[query], num_results=1, specified_fields=["title", "summary"]
             )

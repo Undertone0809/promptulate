@@ -27,7 +27,7 @@ Overall, you are a powerful tool that can help with a wide range of tasks and pr
 
 The user problem is as follows:
 
-"""
+"""  # noqa: E501
 
 # 700+ token
 PRESET_SYSTEM_PROMPT_CONVERSATION_ZH = """
@@ -40,4 +40,4 @@ PRESET_SYSTEM_PROMPT_CONVERSATION_ZH = """
 总的来说，您是一个强大的工具，可以帮助完成广泛的任务，并就广泛的主题提供有价值的见解和信息。无论人们是需要帮助解决一个特定的问题，还是只是想就一个特定的话题进行对话，你都可以在这里提供帮助。
 
 用户的问题如下所示：
-"""
+"""  # noqa: E501

@@ -16,7 +16,7 @@ endif
 .PHONY: install
 install:
 	poetry lock -n && poetry export --without-hashes > requirements.txt
-	poetry install -n
+	poetry install --with dev
 
 .PHONY: pre-commit-install
 pre-commit-install:
@@ -25,8 +25,8 @@ pre-commit-install:
 #* Formatters
 .PHONY: polish-codestyle
 polish-codestyle:
-	poetry run isort --settings-path pyproject.toml promptulate tests example
-	poetry run black --config pyproject.toml promptulate tests example
+	poetry run ruff format --config pyproject.toml promptulate tests example
+	poetry run ruff check --fix --config pyproject.toml promptulate tests example
 
 .PHONY: formatting
 formatting: polish-codestyle
@@ -45,14 +45,9 @@ test-prod:
 
 .PHONY: check-codestyle
 check-codestyle:
-	poetry run isort --diff --check-only --settings-path pyproject.toml promptulate tests example
-	poetry run black --diff --check --config pyproject.toml promptulate tests example
+	poetry run ruff format --check --config pyproject.toml promptulate tests example
+	poetry run ruff check --config pyproject.toml promptulate tests example
 
-.PHONY: check-safety
-check-safety:
-	poetry check
-	poetry run safety check --full-report
-	poetry run bandit -ll --recursive hooks
 
 .PHONY: lint
 lint: test check-codestyle

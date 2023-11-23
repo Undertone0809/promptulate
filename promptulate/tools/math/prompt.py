@@ -35,6 +35,6 @@ Question: 37593^(1/5)
 Answer: 8.222831614237718
 
 Question: {question}
-"""
+"""  # noqa
 
 prompt_template = StringTemplate(PROMPT_TEMPLATE)

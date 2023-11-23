@@ -35,7 +35,9 @@ def main():
     conversation = Conversation(llm=llm, memory=memory)
     ret = conversation.run("什么是引力波")
     print(f"[predict] {ret}")
-    ret = conversation.predict_by_translate("请介绍一下引力波与广义相对论的必然关系", country="America")
+    ret = conversation.predict_by_translate(
+        "请介绍一下引力波与广义相对论的必然关系", country="America"
+    )
     print(f"[translate output] {ret}")
     ret = conversation.summary_content()
     print(f"[summary content] {ret}")

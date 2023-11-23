@@ -7,4 +7,4 @@ the object {{"foo": ["bar", "baz"]}} is a well-formatted instance of the schema.
 Here is the output schema:
 ```
 {schema}
-```"""
+```"""  # noqa: E501

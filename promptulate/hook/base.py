@@ -37,7 +37,7 @@ class BaseHookSchema(BaseModel):
     """Component type for hook."""
 
     def __str__(self):
-        return f"<HookSchema> hook_name: {self.hook_name} callback: {self.callback} component_type: {self.component_type}"
+        return f"<HookSchema> hook_name: {self.hook_name} callback: {self.callback} component_type: {self.component_type}"  # noqa
 
 
 ComponentHookSchema = BaseHookSchema
@@ -45,13 +45,13 @@ ComponentHookSchema = BaseHookSchema
 
 class InstanceHookSchema(BaseHookSchema):
     mounted_obj: Optional[object]
-    """Mounted obj call hooks. When hook is registered as None, it will only be assigned a
-    value when the component is instantiated."""
+    """Mounted obj call hooks. When hook is registered as None, it will only be assigned
+    a value when the component is instantiated."""
     unique_id: str
 
     def __str__(self):
         return (
-            f"<HookSchema> hook_name: {self.hook_name} callback: {self.callback} component_type: "
+            f"<HookSchema> hook_name: {self.hook_name} callback: {self.callback} component_type: "  # noqa
             f"{self.component_type} mounted_obj: {self.mounted_obj.__class__.__name__}"
         )
 
@@ -174,7 +174,8 @@ class Hook(ToolHookMixin, AgentHookMixin, LLMHookMixin):
         callbacks: Union[Callable, List[Callable]],
         hook_type: HOOK_TYPE,
     ):
-        """Registry component or instance hook to the hook center for unified management."""
+        """Registry component or instance hook to the hook center for unified
+        management."""
         if isinstance(callbacks, Callable):
             callbacks = [callbacks]
 
@@ -201,7 +202,8 @@ class Hook(ToolHookMixin, AgentHookMixin, LLMHookMixin):
         callback: Callable,
         unique_id: Optional[str] = None,
     ):
-        """Registry instance hook firstly, it still needs to be mounted by `mount_instance_hook`
+        """Registry instance hook firstly, it still needs to be mounted by
+        `mount_instance_hook`
 
         Args:
             hook_table: hook table
@@ -244,13 +246,14 @@ class Hook(ToolHookMixin, AgentHookMixin, LLMHookMixin):
                 logger.debug(f"[pne hook mount] {hook}")
                 return
         raise ValueError(
-            f"Could not mount function <{hook_callback}> to {mounted_obj.__class__.__name__}. "
-            "You may have used component Hook, but component Hook cannot be mounted to an instance."
+            f"Could not mount function <{hook_callback}> to {mounted_obj.__class__.__name__}. "  # noqa
+            "You may have used component Hook, but component Hook cannot be mounted to an instance."  # noqa
         )
 
     @classmethod
     def get_hooks(cls, hook_name: str, mounted_obj: object) -> List[BaseHookSchema]:
-        """Get relevant component hooks and instance hooks for mounted_obj from hook store."""
+        """Get relevant component hooks and instance hooks for mounted_obj from hook
+        store."""
         return [
             *Hook._get_component_hooks(hook_name),
             *Hook._get_instance_hooks(hook_name, mounted_obj),
@@ -281,7 +284,7 @@ class Hook(ToolHookMixin, AgentHookMixin, LLMHookMixin):
 
         if hooks:
             logger.debug(
-                f"[pne hook] hooks <{hook_table}> mounted_obj <{mounted_obj.__class__.__name__}> call hook: <{hooks}>"
+                f"[pne hook] hooks <{hook_table}> mounted_obj <{mounted_obj.__class__.__name__}> call hook: <{hooks}>"  # noqa
             )
             for hook in hooks:
                 hook.callback(*args, **kwargs)

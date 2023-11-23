@@ -25,7 +25,8 @@ class StdOutHook:
 
     @staticmethod
     def registry_stdout_hooks():
-        """Registry and enable stdout hooks. StdoutHook can print colorful information."""
+        """Registry and enable stdout hooks. StdoutHook can print colorful
+        information."""
         Hook.registry_hook(
             HookTable.ON_AGENT_START, StdOutHook.handle_agent_start, "component"
         )

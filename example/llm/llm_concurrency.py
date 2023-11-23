@@ -11,7 +11,7 @@ counter = 0
 
 
 @broadcast_service.on_listen("create_llm")
-def create_agent_and_ask():
+def create_01():
     print("handle 1")
     llm = OpenAI()
     print(llm("给我一段冒泡排序的python代码"))
@@ -21,7 +21,7 @@ def create_agent_and_ask():
 
 
 @broadcast_service.on_listen("create_llm")
-def create_agent_and_ask():
+def create_02():
     print("handle 2")
     llm = OpenAI()
     print(llm("给我一段桶排序的python代码"))
@@ -31,7 +31,7 @@ def create_agent_and_ask():
 
 
 @broadcast_service.on_listen("create_llm")
-def create_agent_and_ask():
+def create_03():
     llm = OpenAI()
     print(llm("给我一段堆的python代码"))
     global counter
@@ -40,7 +40,7 @@ def create_agent_and_ask():
 
 
 @broadcast_service.on_listen("create_llm")
-def create_agent_and_ask():
+def create_04():
     llm = OpenAI()
     print(llm("给我一段希尔排序的python代码"))
     global counter

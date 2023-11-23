@@ -92,8 +92,8 @@ class OpenAIKeyPool(BaseModel):
         arbitrary_types_allowed = True
 
     def get(self, model: str) -> Optional[str]:
-        """Obtain the openai key from the queue header and return it, then place the key at the end of queue.
-        Use gpt4 key if the gpt3.5 key does not exist.
+        """Obtain the openai key from the queue header and return it, then place the key
+        at the end of queue. Use gpt4 key if the gpt3.5 key does not exist.
 
         Args:
             model: openai model, the option is as follows:
@@ -122,12 +122,14 @@ class OpenAIKeyPool(BaseModel):
         return openai_key.key
 
     def set(self, keys: List[Dict[str, str]]):
-        """Set list of key to cache, you can see parameter description from `_parse_openai_keys()`"""
+        """Set list of key to cache, you can see parameter description from
+        `_parse_openai_keys()`"""
         self.cache.set(_parse_openai_keys(keys))
         logger.info("[promptulate] OpenAIKeyPool set key successfully.")
 
     def add(self, keys: List[Dict[str, str]]):
-        """add list of keys to cache, you can see parameter description from `_parse_openai_keys()`"""
+        """add list of keys to cache, you can see parameter description from
+        `_parse_openai_keys()`"""
         self.cache.add(_parse_openai_keys(keys))
 
     def delete(self, key: str, model: Optional[str] = None):

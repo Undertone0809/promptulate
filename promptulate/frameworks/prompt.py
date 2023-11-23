@@ -35,9 +35,9 @@ SUMMARY_TOPIC_PROMPT_ZH = """
 
 SUMMARY_CONTENT_PROMPT_EN = """
 Give a quick summary of your conversation with the user and use it as a follow-up context prompt, no more than 200 words
-"""
+"""  # noqa
 
 SUMMARY_TOPIC_PROMPT_EN = """
-As the previous feed, please use four or five words to return directly to the brief topic of the sentence, 
+As the previous feed, please use four or five words to return directly to the brief topic of the sentence,
 no explanation, no punctuation, no particles, no extra text, or if there is no topic, just return to "small talk".
-"""
+"""  # noqa

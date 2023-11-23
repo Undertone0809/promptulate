@@ -22,11 +22,13 @@ class DuckDuckGoTool(Tool):
         Args:
             keyword: query keyword
             **kwargs:
-                result_type(Optional[str]) - default return string type data. Return List[str] type data
+                result_type(Optional[str]) - default return string type data. Return
+                List[str] type data.
                 if you pass result_type="original"
 
         Returns:
-            default is string. Return List[str] type data if you pass result_type="original"
+            default is string. Return List[str] type data if you pass
+            result_type="original"
         """
         result = self.api_wrapper.query(keyword, **kwargs)
         if "return_type" in kwargs and kwargs["result_type"] == "original":
@@ -35,8 +37,8 @@ class DuckDuckGoTool(Tool):
 
 
 class DuckDuckGoReferenceTool(Tool):
-    """Tool that adds the capability to query the DuckDuckGo search API. Compared to DuckDuckGoTool, this
-    tool can return references information like href, title.
+    """Tool that adds the capability to query the DuckDuckGo search API. Compared to
+    DuckDuckGoTool, this tool can return references information like href, title.
     """
 
     name: str = "ddg-search-with-references"
@@ -53,11 +55,13 @@ class DuckDuckGoReferenceTool(Tool):
         Args:
             keyword: query keyword
             **kwargs:
-                result_type(Optional[str]) - default return string type data. Return List[str] type data
+                result_type(Optional[str]) - default return string type data. Return
+                List[str] type data.
                 if you pass result_type="original"
 
         Returns:
-            default is string. Return List[Dict[str, str]] type data if you pass result_type="original"
+            default is string. Return List[Dict[str, str]] type data if you pass
+            result_type="original"
         """
         result = self.api_wrapper.query_by_formatted_results(keyword, **kwargs)
         if "return_type" in kwargs and kwargs["return_type"] == "original":

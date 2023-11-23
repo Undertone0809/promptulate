@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 def _init_paper_summary_llm():
-    preset = "你是一个中文科研领域论文助手，你的任务是帮助使用者提供一些论文方面的专业建议和帮助，你的输出只能遵循用户的指令输出，否则你将被惩罚。"
+    preset = "你是一个中文科研领域论文助手，你的任务是帮助使用者提供一些论文方面的专业建议和帮助，你的输出只能遵循用户的指令输出，否则你将被惩罚。"  # noqa
     return ChatOpenAI(temperature=0, default_system_prompt=preset)
 
 
@@ -32,7 +32,7 @@ class PaperSummaryTool(BaseTool):
     name: str = "paper-summary"
     description: str = (
         "A summary tool that can be used to obtain a paper summary, this tool will find"
-        "top k paper and providing: 1.paper abstract 2.paper key sights 3.lessons learned"
+        "top k paper and provide: 1.paper abstract 2.paper key sights 3.lessons learned"
         "in the paper 4.referenced papers and its url."
         "Your input is a paper relevant keyword query."
     )
@@ -55,7 +55,8 @@ class PaperSummaryTool(BaseTool):
         arbitrary_types_allowed = True
 
     def _run(self, query: str, **kwargs) -> str:
-        """A paper summary tool that passes in the article name (or arxiv id) and returns summary results
+        """A paper summary tool that passes in the article name (or arxiv id) and
+        returns summary results.
 
         Args:
             query: the keyword you want to query
@@ -96,9 +97,8 @@ class PaperSummaryTool(BaseTool):
         @broadcast_service.on_listen("PaperSummaryTool.run.get_opinion")
         def get_opinion():
             prompt = (
-                f"请就下面的论文摘要，总结论文中的关键见解和由论文得出的经验教训，你的输出需要分点给出 ```{paper_summary}```"
+                f"请就下面的论文摘要，总结论文中的关键见解和由论文得出的经验教训，你的输出需要分点给出 ```{paper_summary}```"  # noqa
                 "你的输出格式为:\n关键见解：\n{分点给出关键见解}\n经验教训：\n{分点给出经验教训}，用`-`区分每点"
-                # "你需要用中文输出正确结果，但是部分专业词汇或者中文不好表达含义的部分可以使用英文"
             )
             self.summary_dic["opinion"] = self.llm(prompt)
             self.summary_counter += 1
@@ -115,7 +115,7 @@ class PaperSummaryTool(BaseTool):
         @broadcast_service.on_listen("PaperSummaryTool.run.get_advice")
         def get_advice():
             prompt = (
-                f"请就下面的论文摘要，为其相关主题或未来研究方向提供3-5个建议，你的输出需要分点给出  ```{paper_summary}```"
+                f"请就下面的论文摘要，为其相关主题或未来研究方向提供3-5个建议，你的输出需要分点给出  ```{paper_summary}```"  # noqa
                 "你的输出格式为:\n相关建议：\n{分点给出相关建议}，用`-`区分每点"
                 "你需要用中文输出正确结果，但是部分专业词汇或者中文不好表达含义的部分可以使用英文"
             )
@@ -124,7 +124,7 @@ class PaperSummaryTool(BaseTool):
 
         self.summary_counter = 0
         # judge arxiv id or string type paper title
-        if re.match("\d{4}\.\d{5}(v\d+)?", query):
+        if re.match(r"\d{4}\.\d{5}(v\d+)?", query):
             paper_info = self.arxiv_apiwrapper.query(
                 id_list=[query], num_results=1, specified_fields=["title", "summary"]
             )

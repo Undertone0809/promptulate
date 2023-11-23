@@ -28,7 +28,8 @@ class AbstractSingleton(abc.ABC, metaclass=Singleton):
 
 
 class SingletonPool(metaclass=Singleton):
-    """Storing classes which cannot use metaclass=Singleton due to implement BaseModel"""
+    """Storing classes which cannot use metaclass=Singleton due to implement
+    BaseModel."""
 
     def __init__(self):
         self.instances = {}

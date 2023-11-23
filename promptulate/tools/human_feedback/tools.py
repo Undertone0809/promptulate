@@ -16,8 +16,8 @@ class HumanFeedBackTool(Tool):
     description: str = (
         "Human feedback tools are used to collect human feedback information."
         "Please only use this tool in situations where relevant contextual information"
-        "is lacking or reasoning cannot continue. Please enter the content you wish for "
-        "human feedback and interaction, but do not ask for knowledge or let humans reason."
+        "is lacking or reasoning cannot continue. Please enter the content you wish for"
+        "human feedback and interaction, but do not ask for knowledge or let humans reason."  # noqa
     )
 
     def __init__(

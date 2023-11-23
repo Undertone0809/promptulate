@@ -99,7 +99,7 @@ class ToolAgent(BaseAgent):
                 )
             self.conversation_prompt += f"{answer}\n"
             logger.info(
-                f"[pne] tool agent <{iterations}> current prompt: {self.conversation_prompt}"
+                f"[pne] tool agent <{iterations}> current prompt: {self.conversation_prompt}"  # noqa
             )
 
             if "Final Answer" in answer:

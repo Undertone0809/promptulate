@@ -10,22 +10,24 @@ from promptulate.schema import AssistantMessage, BaseMessage, MessageSet
 
 def chat(
     messages: Union[List, MessageSet, str],
+    *,
     model: str = "gpt-3.5-turbo",
     output_schema: Optional[type(BaseModel)] = None,
     examples: Optional[List[BaseModel]] = None,
     is_message_return_type: bool = False,
     custom_llm: Optional[BaseLLM] = None,
-    *args,
     **kwargs,
 ) -> Union[str, BaseMessage]:
     """A universal chat method, you can chat any model like OpenAI completion.
     It should be noted that chat() is only support chat model currently.
 
     Args:
-        messages: chat messages. OpenAI API completion, str or MessageSet type is optional.
+        messages: chat messages. OpenAI API completion, str or MessageSet type is
+            optional.
         model(str): LLM model. Currently only support chat model.
         output_schema(BaseModel): specified return type. See detail on: OutputFormatter.
-        examples(List[BaseModel]): examples for output_schema. See detail on: OutputFormatter.
+        examples(List[BaseModel]): examples for output_schema. See detail
+            on: OutputFormatter.
         is_message_return_type(bool): return OpenAI completion result if true, otherwise
             return string type data.
         custom_llm(BaseLLM): You can use custom LLM if you have.
@@ -52,12 +54,12 @@ def chat(
     # chat by custom LLM and get response
     if custom_llm:
         response: BaseMessage = custom_llm.predict(
-            MessageSet.from_listdict_data(messages), *args, **kwargs
+            MessageSet.from_listdict_data(messages), **kwargs
         )
 
     # chat by universal llm get response
     else:
-        temp_response: Dict = completion(model, messages, *args, **kwargs)
+        temp_response: Dict = completion(model, messages, **kwargs)
         response: BaseMessage = AssistantMessage(
             content=temp_response["choices"][0]["message"]["content"],
             additional_kwargs=temp_response,

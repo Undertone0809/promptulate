@@ -11,7 +11,7 @@ class Response(BaseModel):
 
 def main():
     agent = WebAgent()
-    prompt = f"What is the temperature in Shanghai tomorrow?"
+    prompt = "What is the temperature in Shanghai tomorrow?"
     response: Response = agent.run(prompt=prompt, output_schema=Response)
     print(response.city, response.temperature)
 

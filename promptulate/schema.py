@@ -122,13 +122,14 @@ class MessageSet(BaseModel):
         """Convert the MessageSet messages to specified llm prompt"""
         if not llm_type:
             ValueError(
-                "Missing llm_type, you should pass a llm_type if you want to use llm_prompt"
+                "Missing llm_type, llm_type is needed if you want to use llm_prompt."
             )
         return _to_llm_prompt[llm_type](self)
 
     @property
     def string_messages(self) -> str:
-        """Convert the message to a string type, it can be used as a prompt for OpenAI completion."""
+        """Convert the message to a string type, it can be used as a prompt for OpenAI
+        completion."""
         string_result = ""
         for message in self.messages:
             string_result += f"{message.content}\n"

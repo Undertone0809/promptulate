@@ -10,7 +10,7 @@ Question: the input question you must answer
 Thought: The next you should do
 Query: web search query words
 Observation: the result of query
-... (this Thought/Query/Observation can repeat N times) 
+... (this Thought/Query/Observation can repeat N times)
 Thought: I know the final answer
 Final Answer: the final answer to the original input question
 

@@ -71,10 +71,11 @@ class BaseOpenAI(BaseLLM, ABC):
     private_api_key: str = ""
     """Store private api key"""
     enable_retry: bool = True
-    """Retry if API failed to get response. You can enable retry when you have a rate limited API."""
+    """Retry if API failed to get response. You can enable retry when you have a rate
+    limited API."""
     retry_times: int = 5
-    """If llm(like OpenAI) unable to obtain data, retry request until the data is obtained. You should
-    enable retry if you want to use retry times."""
+    """If llm(like OpenAI) unable to obtain data, retry request until the data is
+    obtained. You should enable retry if you want to use retry times."""
     retry_counter: int = 0
     """Used in conjunction with retry_times. Refresh when get data successfully."""
 
@@ -84,7 +85,8 @@ class BaseOpenAI(BaseLLM, ABC):
 
     @property
     def api_key(self):
-        """Select api key to use. private_api_key, openai_api_key, key_pool key is optional."""
+        """Select api key to use. private_api_key, openai_api_key, key_pool key is
+        optional."""
         if self.enable_private_api_key and self.private_api_key != "":
             return self.private_api_key
         return CFG.get_openai_api_key(self.model)
@@ -130,7 +132,7 @@ class OpenAI(BaseOpenAI):
         """Run openai llm with custom message context."""
         if self.model == "text-davinci-003":
             warnings.warn(
-                "This model(text-davinci-003) version is deprecated. Migrate before January 4, 2024 to "
+                "This model(text-davinci-003) version is deprecated. Migrate before January 4, 2024 to "  # noqa
                 "avoid disruption of service. gpt-3.5-turbo is recommended.",
                 DeprecationWarning,
             )
@@ -144,7 +146,7 @@ class OpenAI(BaseOpenAI):
 
         logger.debug(f"[pne openai params] body {json.dumps(body)}")
         logger.debug(
-            f"[pne openai request] url: {CFG.openai_completion_request_url} proxies: {CFG.proxies}"
+            f"[pne openai request] url: {CFG.openai_completion_request_url} proxies: {CFG.proxies}"  # noqa
         )
         response = requests.post(
             url=CFG.openai_completion_request_url,
@@ -164,7 +166,7 @@ class OpenAI(BaseOpenAI):
             return AssistantMessage(content=content)
 
         logger.error(
-            f"[pne OpenAI] <key sk-....{api_key[-6:]}>Failed to get data. Please check your network or api key."
+            f"[pne OpenAI] <key sk-....{api_key[-6:]}>Failed to get data. Please check your network or api key."  # noqa: E501
         )
         logger.debug("[promptulate OpenAI] retry to get response")
         if self.enable_retry and self.retry_counter < self.retry_times:
@@ -243,7 +245,7 @@ class ChatOpenAI(BaseOpenAI):
 
         logger.debug(f"[pne openai params] body {json.dumps(body)}")
         logger.debug(
-            f"[pne openai request] url: {CFG.openai_chat_request_url} proxies: {CFG.proxies}"
+            f"[pne openai request] url: {CFG.openai_chat_request_url} proxies: {CFG.proxies}"  # noqa: E501
         )
         response = requests.post(
             url=CFG.openai_chat_request_url,
@@ -263,7 +265,7 @@ class ChatOpenAI(BaseOpenAI):
             return AssistantMessage(content=content)
 
         logger.error(
-            f"[pne OpenAI] <key sk-....{api_key[-6:]}>Failed to get data. Please check your network or api key."
+            f"[pne OpenAI] <key sk-....{api_key[-6:]}>Failed to get data. Please check your network or api key."  # noqa: E501
         )
         logger.debug("[promptulate OpenAI] retry to get response")
         if self.enable_retry and self.retry_counter < self.retry_times:

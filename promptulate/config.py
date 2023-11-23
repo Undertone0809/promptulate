@@ -60,7 +60,7 @@ class Config(metaclass=Singleton):
         self.ernie_embedding_v1_url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/embeddings/embedding-v1"
 
         self.key_default_retry_times = 5
-        """If llm(like OpenAI) unable to obtain data, retry request until the data is obtained."""
+        """If llm(like OpenAI) unable to obtain data, retry request until the data is obtained."""  # noqa: E501
         self.enable_stdout_hook = True
 
         if self.enable_stdout_hook:
@@ -72,8 +72,9 @@ class Config(metaclass=Singleton):
             StdOutHook.unregister_stdout_hooks()
 
     def get_openai_api_key(self, model: str = "gpt-3.5-turbo") -> str:
-        """Get openai key from KeyPool and environment variable. The priority of obtaining the key:
-        environment variable, cache of OpenAIKeyPool, cache of OEPNAI_API_KEY,"""
+        """Get openai key from KeyPool and environment variable. The priority of
+        obtaining the key: environment variable, cache of OpenAIKeyPool, cache of
+        OEPNAI_API_KEY."""
         if "OPENAI_API_KEY" in os.environ.keys():
             if self.enable_cache:
                 get_cache()["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")

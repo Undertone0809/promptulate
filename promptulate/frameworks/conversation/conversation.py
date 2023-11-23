@@ -50,14 +50,15 @@ class Conversation(
     BasePromptFramework, SummarizerMixin, TranslatorMixin, DeriveHistoryMessageMixin
 ):
     """
-    You can use Conversation start a conversation. Moreover, you can pass some parameters to enhance it.
+    You can use Conversation start a conversation. Moreover, you can pass some
+    parameters to enhance it.
 
     Attributes
         role: preset role. Default is default role.
         llm: default is ChatOpenAI GPT3.5. You can choose other llm.
         conversation_id: conversation id. Default is None
-        memory: the way you want to store chat data. Default is BufferChatMemory, which is used
-            for local file storage.
+        memory: the way you want to store chat data. Default is BufferChatMemory, which
+            is used for local file storage.
 
     Examples
         from promptulate import Conversation
@@ -115,13 +116,13 @@ class Conversation(
         self, prompt: str, custom_system_prompt: bool = False, *args, **kwargs
     ) -> str:
         warnings.warn(
-            "Conversation will be deprecated at v1.7.0, please use promptulate.agents.LLMAgent",
+            "Conversation will be deprecated at v1.7.0, please use promptulate.agents.LLMAgent",  # noqa
             DeprecationWarning,
         )
         try:
             messages_history: MessageSet = self.memory.load_message_set_from_memory()
             messages_history.add_user_message(message=prompt)
-        except EmptyMessageSetError as e:
+        except EmptyMessageSetError:
             if custom_system_prompt:
                 messages_history = MessageSet(messages=[UserMessage(content=prompt)])
             else:
@@ -130,7 +131,7 @@ class Conversation(
                 )
                 self.memory.save_message_set_to_memory(messages_history)
         logger.debug(
-            f"[pne Conversation] conversation_id: <{self.conversation_id}> messages: <{messages_history.messages}>"
+            f"[pne Conversation] conversation_id: <{self.conversation_id}> messages: <{messages_history.messages}>"  # noqa
         )
         prompt_params = {"prompts": messages_history}
         if "stop" in kwargs:

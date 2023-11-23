@@ -77,7 +77,7 @@ class TranslatorMixin(BaseMixin):
         message_history: MessageSet = self.memory.load_message_set_from_memory()
         message_history.messages.append(
             UserMessage(
-                content=f"{prompt}. Please answer question using {country} official language. "
+                content=f"{prompt}. Please answer question using {country} official language. "  # noqa: E501
             )
         )
         assistant_answer: BaseMessage = self.llm.predict(message_history)
@@ -123,7 +123,7 @@ class DeriveHistoryMessageMixin(BaseMixin):
                 f.write(ret)
         else:
             raise ValueError(
-                "Invalid output destination specified. Please choose either 'text' or 'file'."
+                "Invalid output destination specified. Please choose either 'text' or 'file'."  # noqa: E501
             )
         return ret
 

@@ -45,8 +45,8 @@ class BaseMemory(BaseModel):
 class BaseChatMemory(BaseModel):
     """
     Base class for store chat message. By implementing this class, you can implement
-    message storage on different storage media. Actually, every Chat Memory is a singleton
-    class. It's means there are utils class to read and write chat data.
+    message storage on different storage media. Actually, every Chat Memory is a
+    singleton class. It's means there are utils class to read and write chat data.
     """
 
     summary: str = ""

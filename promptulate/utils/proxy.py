@@ -41,7 +41,7 @@ def set_proxy_mode(mode: str, proxies: Optional[dict] = None):
 
     if mode == "promptulate":
         raise ValueError(
-            "Current promptulate free proxy mode is not supported yet. A better solution will be provided soon."
+            "Current promptulate free proxy mode is not supported yet. A better solution will be provided soon."  # noqa
         )
 
     if mode == "custom" and not proxies:

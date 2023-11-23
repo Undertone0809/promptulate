@@ -11,7 +11,7 @@ def main():
         Calculator(),
     ]
     agent = ToolAgent(tools)
-    prompt = """Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?"""
+    prompt = """Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?"""  # noqa
     agent.run(prompt)
 
 

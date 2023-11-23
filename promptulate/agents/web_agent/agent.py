@@ -50,7 +50,7 @@ class WebAgent(BaseAgent):
                 self.conversation_prompt, stop=self.stop_sequences
             )
             logger.info(
-                f"[pne] tool agent <{iterations}> current prompt: {self.conversation_prompt}"
+                f"[pne] tool agent <{iterations}> current prompt: {self.conversation_prompt}"  # noqa
             )
 
             if "Final Answer" in llm_output:

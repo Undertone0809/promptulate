@@ -15,7 +15,10 @@ def main():
     llm = ChatOpenAI()
     formatter = OutputFormatter(Response)
 
-    prompt = f"Please tell me the names of provinces in China.\n{formatter.get_formatted_instructions()}"
+    prompt = (
+        f"Please tell me the names of provinces in China.\n"
+        f"{formatter.get_formatted_instructions()}"
+    )
     llm_output = llm(prompt)
     response: Response = formatter.formatting_result(llm_output)
     print(response)

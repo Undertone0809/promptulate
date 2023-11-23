@@ -26,7 +26,7 @@ from promptulate.tips import EmptyMessageSetError
 
 logger = utils.get_logger()
 buffer: Dict[str, List[Dict]] = {}
-"""global message buffer, here is a buffer example: 
+"""global message buffer, here is a buffer example:
 {
     "conversation_id1": [message...],
     "conversation_id2": [message...],

@@ -33,7 +33,8 @@ class SemanticScholarAPIWrapper(BaseModel):
             query: the papers you want to query
             **kwargs:
                 specified_fields(Optional[List[str]]): filter specified field to return.
-                For example, you can return the ["title", "url", "abstract"] fields from each arxiv query result.
+                For example, you can return the ["title", "url", "abstract"] fields from
+                each arxiv query result.
                 You can see the detail fields as follows:
                 https://api.semanticscholar.org/api-docs/graph#tag/Paper-Data/operation/post_graph_get_papers
 
@@ -127,7 +128,7 @@ class SemanticScholarAPIWrapper(BaseModel):
             return []
 
         paper_id: str = papers[0]["id"]
-        url = f"{self.BASE_API_URL}/paper/{paper_id}/references?offset=1&limit={max_result}"
+        url = f"{self.BASE_API_URL}/paper/{paper_id}/references?offset=1&limit={max_result}"  # noqa
         response = requests.get(url)
         if response.status_code == 200:
             res_data = response.json()["data"]
@@ -166,7 +167,7 @@ class SemanticScholarAPIWrapper(BaseModel):
             max_result = self.max_result
 
         paper_id: str = papers[0]["id"]
-        url = f"{self.BASE_API_URL}/paper/{paper_id}/citations?{self._get_string_fields()}offset=1&limit={max_result}"
+        url = f"{self.BASE_API_URL}/paper/{paper_id}/citations?{self._get_string_fields()}offset=1&limit={max_result}"  # noqa
 
         response = requests.get(url)
         if response.status_code == 200:

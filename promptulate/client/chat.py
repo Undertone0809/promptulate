@@ -55,7 +55,7 @@ TOOL_MAPPING = {
 def get_user_input() -> Optional[str]:
     marker = (
         "# You input are here (please delete this line)\n"
-        "You should save it and close the notebook after writing the prompt. (please delete this line)\n"
+        "You should save it and close the notebook after writing the prompt. (please delete this line)\n"  # noqa
         "Reply 'exit' to exit the chat.\n"
     )
     message = click.edit(marker)

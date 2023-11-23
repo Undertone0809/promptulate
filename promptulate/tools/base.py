@@ -20,11 +20,11 @@ class BaseTool(ABC, BaseModel):
     You can provide few-shot examples as a part of the description."""
     few_shot_example: List[str] = None
     """Show how to use this tool. This is few shot for agent. You few shot may like:
-    
+
     example1 = "Question: What is 37593 * 67?\n```\n37593 * 67\n```\nnumexpr.evaluate("37593 * 67")\nAnswer:2518731"
     example2 = "Question: What is 37593^(1/5)?\n```\n37593**(1/5)\n```\nnumexpr.evaluate("37593**(1/5)")\nAnswer:8.222831614237718"
     few_shot_example = [example1, example2]
-    """
+    """  # noqa
 
     # hook_manager: Optional[HookManager] = Field(default=HookManager())
     # """Hook manager will call hook function at the specified lifecycle."""
@@ -37,7 +37,7 @@ class BaseTool(ABC, BaseModel):
                 hooks(List[Callable]): for adding to hook_manager
         """
         warnings.warn(
-            "BaseTool is deprecated at v1.7.0. promptulate.tools.base.Tool is recommended.",
+            "BaseTool is deprecated at v1.7.0. promptulate.tools.base.Tool is recommended.",  # noqa: E501
             DeprecationWarning,
         )
         super().__init__(**kwargs)
@@ -80,7 +80,7 @@ class Tool(ABC):
         """Check parameters when initialization."""
         if not getattr(self, "name", None) or not getattr(self, "description", None):
             raise TypeError(
-                f"{self.__class__.__name__} required parameters 'name' and 'description'."
+                f"{self.__class__.__name__} required parameters 'name' and 'description'."  # noqa: E501
             )
 
     def run(self, *args, **kwargs):
@@ -110,8 +110,8 @@ class ToolImpl(Tool):
 
 def define_tool(name: str, description: str, callback: Callable) -> ToolImpl:
     """
-    A tool with llm or API wrapper will automatically initialize the llm and API wrapper classes,
-    which can avoid this problem by initializing in this way.
+    A tool with llm or API wrapper will automatically initialize the llm and API wrapper
+    classes, which can avoid this problem by initializing in this way.
 
     Args:
         name: tool name
