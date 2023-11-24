@@ -43,7 +43,7 @@ ERNIE_API_SECRET=xxx
 下面的示例展示了如何使用百度文心ErnieBot的大语言模型进行交互。
 
 如果你想使用国产文心系列模型，只需要 ErnieBot()进行初始化，文心模型虽然与openai模型有较大差异，但是框架提供了尽可能完美的兼容。
-你还可以使用ErnieBot(model="ernie-bot")来具体选择对应的文心模型，目前框架提供了两种文心模型，分别是文心一言（"ernie-bot"）和文心turbo（"ernie-bot-turbo"）,默认为文心turbo模型。
+你还可以使用ErnieBot(model="ernie-bot")来具体选择对应的文心模型，目前框架提供了三种文心模型，分别是文心一言（"ernie-bot"），文心turbo（"ernie-bot-turbo"）以及新一代强大的文心4.0模型（"ernie-bot-4"）,默认为文心turbo模型。
 
 
 ```python
@@ -69,7 +69,7 @@ print(answer)
 
 ### 切换模型
 
-文心提供了 "ernie-bot"与"ernie-bot-turbo"，详情介绍查看[官方文档](https://cloud.baidu.com/doc/WENXINWORKSHOP/s/Jlfmc9dit)与[API文档](https://cloud.baidu.com/doc/WENXINWORKSHOP/s/Nlks5zkzu)
+文心提供了 "ernie-bot","ernie-bot-turbo"和"ernie-bot-4",详情介绍查看[官方文档](https://cloud.baidu.com/doc/WENXINWORKSHOP/s/Jlfmc9dit)与[API文档](https://cloud.baidu.com/doc/WENXINWORKSHOP/s/Nlks5zkzu)
 
 **ERNIE-Bot-turbo**
 
@@ -88,7 +88,7 @@ ERNIE-Bot 4.0是百度自行研发的大语言模型，覆盖海量中文数据�
 ```python
 from promptulate.llms import ErnieBot
 
-llm = ErnieBot(model="ernie-bot") 
+llm = ErnieBot(model="ernie-bot-4") 
 answer = llm("请解释一下引力波的放射与广义相对论的必然关系")
 print(answer)
 ```

@@ -167,6 +167,7 @@ def chat():
             "gpt-3.5-turbo-16k",
             "ernie-bot-turbo",
             "ernie-bot",
+            "ernie-bot-4"
         ],
     ).ask()
 
@@ -174,7 +175,7 @@ def chat():
     if "gpt" in model:
         llm = ChatOpenAI(model=model, temperature=0.0)
     elif "ernie" in model:
-        llm = ErnieBot(model=model, temperature=0.0)
+        llm = ErnieBot(model=model, temperature=0.1)
 
     if terminal_mode == "Simple Chat":
         simple_chat(llm)
