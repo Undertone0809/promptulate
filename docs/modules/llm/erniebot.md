@@ -43,7 +43,15 @@ ERNIE_API_SECRET=xxx
 下面的示例展示了如何使用百度文心ErnieBot的大语言模型进行交互。
 
 如果你想使用国产文心系列模型，只需要 ErnieBot()进行初始化，文心模型虽然与openai模型有较大差异，但是框架提供了尽可能完美的兼容。
-你还可以使用ErnieBot(model="ernie-bot")来具体选择对应的文心模型，目前框架提供了三种文心模型，分别是文心一言（"ernie-bot"），文心turbo（"ernie-bot-turbo"）以及新一代强大的文心4.0模型（"ernie-bot-4"）,默认为文心turbo模型。
+你还可以使用ErnieBot(model="ernie-bot")来具体选择对应的文心模型，目前框架提供了三种文心模型，分别是
+
+***1.文心一言（"ernie-bot"）***
+
+***2.文心turbo（"ernie-bot-turbo"）***
+
+***3.文心4.0模型（"ernie-bot-4"）***
+
+本框架默认为经济性更好的文心turbo模型。
 
 
 ```python

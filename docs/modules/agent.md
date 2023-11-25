@@ -58,7 +58,7 @@ from promptulate.agents import ToolAgent
 
 
 def main():
-    llm = ErnieBot(temperature=0.0)
+    llm = ErnieBot(temperature=0.1)
     tools = [
         DuckDuckGoTool(),
         Calculator(),

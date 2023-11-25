@@ -167,7 +167,7 @@ def chat():
             "gpt-3.5-turbo-16k",
             "ernie-bot-turbo",
             "ernie-bot",
-            "ernie-bot-4"
+            "ernie-bot-4",
         ],
     ).ask()
 
