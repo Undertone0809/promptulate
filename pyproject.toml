@@ -26,7 +26,7 @@ requests = "^2.31.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.12"
-coverage = "^6.1.2"
+coverage = ">=6.1.2,<8.0.0"
 coverage-badge = "^1.1.0"
 isort = {extras = ["colors"], version = "^5.10.1"}
 langchain = "^0.0.338"
