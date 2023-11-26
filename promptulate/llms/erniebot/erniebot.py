@@ -33,7 +33,7 @@ class ErnieBot(BaseLLM, ABC):
         "stream",
         "penalty_score",
     ]
-    url: str = CFG.ernie_bot_url
+    url: str = CFG.ernie_bot_turbo_url
 
     def __call__(
         self, prompt: str, stop: Optional[List[str]] = None, *args, **kwargs
@@ -52,9 +52,14 @@ class ErnieBot(BaseLLM, ABC):
         headers = {"Content-Type": "application/json"}
         if self.model == "ernie-bot-turbo":
             logging.debug("[pne use ernie-bot-turbo]")
+        elif self.model == "ernie-bot-4":
+            self.url = CFG.ernie_bot_4_url
+            logging.debug("[pne use ernie-bot-4]")
         elif self.model == "ernie-bot":
             self.url = CFG.ernie_bot_url
             logging.debug("[pne use ernie-bot]")
+        else:
+            raise ValueError("pne not found this model")
         body: Dict[str, Any] = self._build_api_params_dict(prompts)
         response = requests.post(
             url=self.url + "?access_token=" + CFG.get_ernie_token(),
