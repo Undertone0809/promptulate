@@ -7,6 +7,7 @@ import requests
 
 from promptulate.config import Config
 from promptulate.llms import BaseLLM
+from promptulate.preset_roles.prompt import PRESET_SYSTEM_PROMPT_ERNIE
 from promptulate.schema import AssistantMessage, LLMType, MessageSet, UserMessage
 from promptulate.tips import LLMError
 from promptulate.utils import get_logger
@@ -18,7 +19,7 @@ logger = get_logger()
 class ErnieBot(BaseLLM, ABC):
     llm_type: LLMType = LLMType.ErnieBot
     """Used to MessageSet data convert"""
-    model: str = "ernie-bot-turbo"
+    model: str = "ernie-bot-4"
     """Model name to use."""
     temperature: float = 0.7
     """What sampling temperature to use."""
@@ -26,18 +27,36 @@ class ErnieBot(BaseLLM, ABC):
     """variety of text"""
     stream: bool = False
     """Whether to stream the results or not."""
+    disable_search: bool = True
+    """disable baidu search"""
+    default_system_prompt: str = ""
+    """ernie-bot system message"""
+    enable_default_system_prompt: bool = True
+    """enable use preset description"""
     penalty_score: float = 1.0
+    system: str = ""
     api_param_keys: List[str] = [
         "temperature",
         "top_p",
         "stream",
+        "stop",
+        "system",
+        "disable_search",
         "penalty_score",
     ]
-    url: str = CFG.ernie_bot_turbo_url
+    url: str = CFG.ernie_bot_4_url
 
     def __call__(
         self, prompt: str, stop: Optional[List[str]] = None, *args, **kwargs
     ) -> str:
+        preset = (
+            self.default_system_prompt
+            if self.default_system_prompt != ""
+            else PRESET_SYSTEM_PROMPT_ERNIE
+        )
+        if not self.enable_default_system_prompt:
+            preset = ""
+        self.system = preset
         message_set = MessageSet(
             messages=[
                 UserMessage(content=prompt),
@@ -51,6 +70,7 @@ class ErnieBot(BaseLLM, ABC):
         """llm generate prompt"""
         headers = {"Content-Type": "application/json"}
         if self.model == "ernie-bot-turbo":
+            self.url = CFG.ernie_bot_turbo_url
             logging.debug("[pne use ernie-bot-turbo]")
         elif self.model == "ernie-bot-4":
             self.url = CFG.ernie_bot_4_url
@@ -60,7 +80,7 @@ class ErnieBot(BaseLLM, ABC):
             logging.debug("[pne use ernie-bot]")
         else:
             raise ValueError("pne not found this model")
-        body: Dict[str, Any] = self._build_api_params_dict(prompts)
+        body: Dict[str, Any] = self._build_api_params_dict(prompts, stop)
         response = requests.post(
             url=self.url + "?access_token=" + CFG.get_ernie_token(),
             headers=headers,
@@ -79,7 +99,8 @@ class ErnieBot(BaseLLM, ABC):
                 raise LLMError(ret_data)
 
             content: str = ret_data["result"]
-            if stop:
+            """ernie-bot official support stop,deprecated"""
+            """if stop:
                 length: int = 1000000  # very large integer +inf
                 temp: str = ""
                 for s in stop:
@@ -87,15 +108,24 @@ class ErnieBot(BaseLLM, ABC):
                     if temp_len < length:
                         temp = content.split(s)[0]
                         length = temp_len
-                content = temp
+                content = temp"""
             logger.debug(f"[pne ernie answer] {content}")
             return AssistantMessage(content=content)
 
-    def _build_api_params_dict(self, prompts: MessageSet) -> Dict[str, Any]:
+    def _build_api_params_dict(
+        self,
+        prompts: MessageSet,
+        stop: Optional[List[str]] = None,
+    ) -> Dict[str, Any]:
         """Build api parameters to put it inside the body."""
+        # print(prompts.type_)
         dic = {
             "messages": prompts.to_llm_prompt(self.llm_type),
         }
+
+        if stop:
+            dic.update({"stop": stop})
+
         for key in self.api_param_keys:
             if key in self.__dict__:
                 dic.update({key: self.__dict__[key]})

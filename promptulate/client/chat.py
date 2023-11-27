@@ -27,7 +27,13 @@ import questionary
 from promptulate.agents import ToolAgent
 from promptulate.config import Config
 from promptulate.llms import BaseLLM, ChatOpenAI, ErnieBot
-from promptulate.schema import LLMType, MessageSet, SystemMessage
+from promptulate.schema import (
+    AssistantMessage,
+    LLMType,
+    MessageSet,
+    SystemMessage,
+    UserMessage,
+)
 from promptulate.tools import (
     ArxivQueryTool,
     Calculator,
@@ -74,11 +80,7 @@ def get_user_openai_api_key():
 
 
 def simple_chat(llm: BaseLLM):
-    messages = MessageSet(
-        messages=[
-            SystemMessage(content="You are a helpful assistant."),
-        ]
-    )
+    messages = MessageSet(messages=[])
 
     while True:
         print_text("[User] ", "blue")
@@ -96,8 +98,9 @@ def simple_chat(llm: BaseLLM):
         print_text(f"[output] {answer.content}", "green")
 
 
-def web_chat(llm: BaseLLM):
+def web_chat(llm: BaseLLM, model: str):
     if llm.llm_type == LLMType.ErnieBot:
+        llm = ErnieBot(model=model, temperature=0.1, disable_search=False)
         while True:
             print_text("[User] ", "blue")
             prompt = get_user_input()
@@ -189,7 +192,7 @@ def chat():
         agent = ToolAgent(tools=tools, llm=llm)
         agent_chat(agent)
     elif terminal_mode == "Web Agent Chat":
-        web_chat(llm)
+        web_chat(llm, model)
 
 
 def main():
