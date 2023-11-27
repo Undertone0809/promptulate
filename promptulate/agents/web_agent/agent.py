@@ -3,7 +3,7 @@ from typing import Callable, List
 from promptulate.agents import BaseAgent
 from promptulate.agents.web_agent.prompt import SYSTEM_PROMPT_TEMPLATE
 from promptulate.hook import Hook, HookTable
-from promptulate.llms import BaseLLM, ChatOpenAI
+from promptulate.llms import BaseLLM, ChatOpenAI, ErnieBot
 from promptulate.tools import DuckDuckGoTool
 from promptulate.utils.logger import get_logger
 
@@ -39,6 +39,9 @@ class WebAgent(BaseAgent):
     def _run(self, prompt: str, *args, **kwargs) -> str:
         # ErnieBot built-in network search
         if self.llm.llm_type == "ErnieBot":
+            self.llm = ErnieBot(
+                model=self.llm.model, temperature=0.1, disable_search=False
+            )
             return self.llm(prompt)
 
         self.conversation_prompt = _build_system_prompt(prompt)

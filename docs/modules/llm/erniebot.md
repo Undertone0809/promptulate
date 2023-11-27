@@ -15,7 +15,7 @@ os.environ["ERNIE_API_KEY"] = "your api key"
 os.environ["ERNIE_API_SECRET"] = "your secret key"
 ```
 
-在你第一次使用的时候，需要使用`os.environ["OPENAI_API_KEY"]` 导入"OPENAI_API_KEY"的环境变量，但是在第一运行之后`promptulate`会进行缓存，即后面再运行就不需要再导入key了。
+在你第一次使用的时候，需要使用`os.environ["ERNIE_API_KEY"]` 导入"ERNIE_API_KEY"的环境变量，但是在第一运行之后`promptulate`会进行缓存，即后面再运行就不需要再导入key了。同理ERNIE_API_SECRET也有上述特性。
 
 如果你的key过期了，可以尝试重新按照上面的方法导入key，或者你也可以把 `cache` 文件给删除掉，通过以下代码可以获取到缓存文件的位置:
 
@@ -51,7 +51,7 @@ ERNIE_API_SECRET=xxx
 
 ***3.文心4.0模型（"ernie-bot-4"）***
 
-本框架默认为经济性更好的文心turbo模型。
+本框架默认为性能更加强大的文心4.0模型。
 
 
 ```python
@@ -63,7 +63,7 @@ print(answer)
 
 ```
 
-> 上述ErnieBot默认使用`ernie-bot-turbo`模型
+> 上述ErnieBot默认使用`ernie-bot-4`模型
 
 输出结果如下：
 
@@ -121,22 +121,27 @@ print(answer)
 
 什么是Stop停词？事实上，stop是一个字符串数组，如`["action", "observation"]`，在LLM生成文本的过程中，如果检测到LLM当前生成本文为stop数组里的内容，则LLM就会停止文本生成，该功能一般用于一些复杂应用程序的开发上，下面的示例展示了stop的使用。
 
-> 文心本身不具有Stop停词功能，Promptulate对该模型做了特别优化，让ErnieBot可以支持与OpenAI相同的停词功能。
+> 文心4.0已经完美支持停词功能，因此框架提供的兼容性停词被废弃。
+> 当模型生成结果以stop中某个元素结尾时，停止文本生成。官方说明如下：
 
+**（1）每个元素长度不超过20字符**
+
+**（2）最多4个元素**
 
 ```python
 from promptulate.llms import ErnieBot
 
-llm = ErnieBot(temperature=0)
+llm = ErnieBot(temperature=0.1)
 prompt = """
 Please strictly output the following content.
 [start] This is a test [end]
 """
-result = llm(prompt, stop=["test"])
+result = llm(prompt, stop=["a"])
+print(result)
 ```
 
 输出结果如下：
 
 ```text
-[start] This is a
+[start] This is 
 ```
