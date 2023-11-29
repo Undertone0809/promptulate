@@ -25,12 +25,11 @@ from dotenv import load_dotenv
 
 from promptulate.hook.stdout_hook import StdOutHook
 from promptulate.utils.core_utils import get_cache
-from promptulate.utils.logger import get_logger
+from promptulate.utils.logger import logger
 from promptulate.utils.openai_key_pool import OpenAIKeyPool
 from promptulate.utils.singleton import Singleton
 
 PROXY_MODE = ["off", "custom", "promptulate"]
-logger = get_logger()
 load_dotenv()
 
 
@@ -168,3 +167,6 @@ class Config(metaclass=Singleton):
         self.proxy_mode = mode
         self.proxies = proxies
         logger.info(f"[pne] proxy mode: {mode}, proxies: {proxies}")
+
+
+pne_config = Config()

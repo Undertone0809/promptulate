@@ -17,13 +17,13 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from promptulate.llms import OpenAI
+from promptulate.llms import ChatOpenAI
 
 
 def main():
-    llm = OpenAI()
+    llm = ChatOpenAI()
 
-    print(llm("请解释一下引力波的放射与广义相对论的必然关系"))
+    print(llm("What's LLM?"))
 
 
 if __name__ == "__main__":

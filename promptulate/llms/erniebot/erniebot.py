@@ -10,10 +10,9 @@ from promptulate.llms import BaseLLM
 from promptulate.preset_roles.prompt import PRESET_SYSTEM_PROMPT_ERNIE
 from promptulate.schema import AssistantMessage, LLMType, MessageSet, UserMessage
 from promptulate.tips import LLMError
-from promptulate.utils import get_logger
+from promptulate.utils.logger import logger
 
 CFG = Config()
-logger = get_logger()
 
 
 class ErnieBot(BaseLLM, ABC):

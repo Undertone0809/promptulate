@@ -2,10 +2,9 @@ from unittest import TestCase
 
 from promptulate.tools.python_repl.api_wrapper import PythonREPLAPIWrapper
 from promptulate.tools.python_repl.tools import PythonREPLTool
-from promptulate.utils.logger import enable_log, get_logger
+from promptulate.utils.logger import enable_log
 
 enable_log()
-logger = get_logger()
 
 
 class TestPythonReplAPIWrapper(TestCase):

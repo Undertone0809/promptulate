@@ -18,46 +18,35 @@
 # Contact Email: zeeland@foxmail.com
 
 import datetime
-import logging
-import os
+import sys
+
+from loguru import logger as _logger
 
 from promptulate.utils.core_utils import get_default_storage_path
-
-logger = logging.getLogger(__name__)
-
-
-def get_logger():
-    return logger
+from promptulate.utils.singleton import Singleton
 
 
-def get_default_log_path():
-    return get_default_storage_path("log")
+def get_log_path() -> str:
+    log_directory = get_default_storage_path("logs")
+    current_time = datetime.datetime.now().strftime("%Y%m%d")
+    return f"{log_directory}/{current_time}.log"
 
 
-def get_log_name() -> str:
-    log_path = get_default_log_path()
-    if not os.path.exists(log_path):
-        os.makedirs(log_path)
+def enable_log():
+    logger.remove()
 
-    cur_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    return f"{log_path}/log_{cur_time}.log"
+    logger.add(get_log_path(), level="DEBUG")
+    logger.add(sys.stderr, level="DEBUG")
 
 
-def enable_log(level=logging.DEBUG):
-    logging.basicConfig(
-        level=level,
-        format="[%(levelname)s] %(asctime)s %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-        handlers=[
-            logging.FileHandler(f"{get_log_name()}", mode="w", encoding="utf-8"),
-            logging.StreamHandler(),
-        ],
-    )
+class Logger(metaclass=Singleton):
+    def __init__(self) -> None:
+        self.logger = _logger
+
+        self.logger.remove()
+
+        self.logger.add(get_log_path(), level="DEBUG")
+        self.logger.add(sys.stderr, level="WARNING")
 
 
-def enable_log_no_file():
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format="[%(levelname)s] %(asctime)s %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-    )
+logger = Logger().logger

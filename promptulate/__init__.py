@@ -22,12 +22,11 @@ import warnings
 from promptulate.chat import chat
 from promptulate.frameworks import Conversation
 from promptulate.schema import AssistantMessage, SystemMessage, UserMessage
-from promptulate.utils import enable_log, enable_log_no_file
+from promptulate.utils import enable_log
 
 __all__ = [
     "Conversation",
     "enable_log",
-    "enable_log_no_file",
     "SystemMessage",
     "UserMessage",
     "AssistantMessage",

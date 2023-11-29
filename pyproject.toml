@@ -35,6 +35,7 @@ python = ">=3.8.1,<4.0"
 python-dotenv = "^1.0.0"
 questionary = "^2.0.1"
 requests = "^2.31.0"
+loguru = "^0.7.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.12"

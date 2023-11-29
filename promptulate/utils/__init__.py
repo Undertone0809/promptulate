@@ -18,16 +18,15 @@
 # Contact Email: zeeland@foxmail.com
 
 from promptulate.utils.color_print import print_text
-from promptulate.utils.logger import enable_log, enable_log_no_file, get_logger
+from promptulate.utils.logger import enable_log, logger
 from promptulate.utils.openai_key_pool import export_openai_key_pool
 from promptulate.utils.singleton import AbstractSingleton, Singleton
 from promptulate.utils.string_template import StringTemplate
 
 __all__ = [
     "generate_conversation_id",
-    "get_logger",
+    "logger",
     "enable_log",
-    "enable_log_no_file",
     "get_cache",
     "get_default_storage_path",
     "Singleton",

@@ -5,9 +5,7 @@ from promptulate.agents.web_agent.prompt import SYSTEM_PROMPT_TEMPLATE
 from promptulate.hook import Hook, HookTable
 from promptulate.llms import BaseLLM, ChatOpenAI, ErnieBot
 from promptulate.tools import DuckDuckGoTool
-from promptulate.utils.logger import get_logger
-
-logger = get_logger()
+from promptulate.utils.logger import logger
 
 
 def _build_system_prompt(prompt) -> str:
