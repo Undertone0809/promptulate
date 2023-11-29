@@ -5,7 +5,7 @@ from typing import Dict, List, Optional
 import requests
 from pydantic import BaseModel
 
-from promptulate.tips import NetWorkError
+from promptulate.error import NetWorkError
 from promptulate.utils.logger import logger
 
 

@@ -6,10 +6,10 @@ from typing import Any, Dict, List, Optional
 import requests
 
 from promptulate.config import Config
+from promptulate.error import LLMError
 from promptulate.llms import BaseLLM
 from promptulate.preset_roles.prompt import PRESET_SYSTEM_PROMPT_ERNIE
 from promptulate.schema import AssistantMessage, LLMType, MessageSet, UserMessage
-from promptulate.tips import LLMError
 from promptulate.utils.logger import logger
 
 CFG = Config()

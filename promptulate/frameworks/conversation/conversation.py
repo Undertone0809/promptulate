@@ -22,6 +22,7 @@ from typing import Any, Dict, Optional, Union
 
 from pydantic import Field, validator
 
+from promptulate.error import EmptyMessageSetError
 from promptulate.frameworks.schema import BasePromptFramework
 from promptulate.llms import ChatOpenAI
 from promptulate.llms.base import BaseLLM
@@ -40,7 +41,6 @@ from promptulate.schema import (
     UserMessage,
     init_chat_message_history,
 )
-from promptulate.tips import EmptyMessageSetError
 from promptulate.utils.logger import logger
 
 

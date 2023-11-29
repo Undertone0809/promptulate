@@ -19,9 +19,9 @@
 
 from typing import Dict, List, Optional
 
+from promptulate.error import EmptyMessageSetError
 from promptulate.memory.base import BaseChatMemory
 from promptulate.schema import MessageSet
-from promptulate.tips import EmptyMessageSetError
 
 buffer: Dict[str, List[Dict]] = {}
 """global message buffer, here is a buffer example:

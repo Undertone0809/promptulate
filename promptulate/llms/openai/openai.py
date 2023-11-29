@@ -3,7 +3,6 @@ There are 2 kinds of model in OpenAI, namely text generative and conversational.
 """
 
 import json
-import logging
 import warnings
 from abc import ABC
 from typing import Any, Dict, List, Optional
@@ -11,6 +10,7 @@ from typing import Any, Dict, List, Optional
 import requests
 
 from promptulate.config import Config
+from promptulate.error import OpenAIError
 from promptulate.llms.base import BaseLLM
 from promptulate.preset_roles.prompt import PRESET_SYSTEM_PROMPT
 from promptulate.schema import (
@@ -21,10 +21,9 @@ from promptulate.schema import (
     SystemMessage,
     UserMessage,
 )
-from promptulate.tips import OpenAIError
+from promptulate.utils.logger import logger
 
 CFG = Config()
-logger = logging.getLogger(__name__)
 
 
 class BaseOpenAI(BaseLLM, ABC):
