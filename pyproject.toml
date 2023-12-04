@@ -29,7 +29,7 @@ black = "^22.12"
 coverage = "^6.1.2"
 coverage-badge = "^1.1.0"
 isort = {extras = ["colors"], version = "^5.10.1"}
-langchain = "^0.0.338"
+langchain = ">=0.0.338,<0.0.346"
 pre-commit = "^3.5.0"
 pytest = "^6.2.5"
 pytest-cov = "^3.0.0"
