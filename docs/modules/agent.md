@@ -1,3 +1,5 @@
+from promptulate import BaseLLM
+
 # Agent
 
 Agent是`promptulate`的核心组件之一，其核心思想是使用llm、Tool、Memory、Provider,Output Formatter等组件来构建起的一个可以处理复杂能力的代理。
@@ -7,11 +9,11 @@ Agent是`promptulate`的核心组件之一，其核心思想是使用llm、Tool�
 下面的示例展示了如何使用`ToolAgent`结合Tool进行使用。
 
 ```python
+import promptulate as pne
 from promptulate.tools import (
     DuckDuckGoTool,
     Calculator,
 )
-from promptulate.agents import ToolAgent
 
 
 def main():
@@ -19,7 +21,7 @@ def main():
         DuckDuckGoTool(),
         Calculator(),
     ]
-    agent = ToolAgent(tools)
+    agent = pne.ToolAgent(tools)
     prompt = """Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?"""
     agent.run(prompt)
 
@@ -49,21 +51,20 @@ Agent End.
 Agent默认使用OpenAI的`gpt-3.5-turbo-16k`模型，如果你想要切换为其他模型，你可以使用如下方式进行配置：
 
 ```python
+import promptulate as pne
 from promptulate.tools import (
     DuckDuckGoTool,
     Calculator,
 )
-from promptulate.llms import ErnieBot
-from promptulate.agents import ToolAgent
 
 
 def main():
-    llm = ErnieBot(temperature=0.1)
+    llm = pne.llms.ErnieBot(temperature=0.1)
     tools = [
         DuckDuckGoTool(),
         Calculator(),
     ]
-    agent = ToolAgent(tools=tools,llm=llm)
+    agent = pne.ToolAgent(tools=tools,llm=llm)
     prompt = """Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?"""
     agent.run(prompt)
 
@@ -97,14 +98,12 @@ turn_off_stdout_hook()
 promptulate封装的WebAgent可以让你轻松的访问搜索引擎，并查询相关的数据，下面展示其使用方式：
 
 ```python
-from promptulate.agents import WebAgent
-from promptulate.llms import ErnieBot
+import promptulate as pne
 
 
 def main():
-    llm = ErnieBot()
-    agent = WebAgent(llm=llm)
-    agent.run("南昌明天多少度？")
+    agent = pne.WebAgent()
+    agent.run("What's the temperature tomorrow in Shanghai?")
 
 
 if __name__ == "__main__":
@@ -122,21 +121,22 @@ if __name__ == "__main__":
 通过如下方式可以自定义Agent，Agent的自定义自由度较高，继承BaseAgent你可以得到Hook相关生命周期，让你的自定义Agent天然具有AgentHook的生命周期，下面的示例展示了一个简单的自定义Agent:
 
 ```python
-from promptulate.agents import BaseAgent
-from promptulate.llms import BaseLLM, ChatOpenAI
+import promptulate as pne
 
-
-class CustomAgent(BaseAgent):
-    def __init__(self, llm: BaseLLM, *args, **kwargs):
+class CustomAgent(pne.BaseAgent):
+    def __init__(self, llm: pne.BaseLLM, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.llm = llm
 
+    def get_llm(self) -> pne.BaseLLM:
+        return self.llm
+        
     def _run(self, prompt: str, *args, **kwargs) -> str:
         return self.llm(prompt)
 
 
 def main():
-    llm = ChatOpenAI()
+    llm = pne.ChatOpenAI()
     agent = CustomAgent(llm=llm)
     agent.run("引力波的放射与广义相对论的必然关系")
 
@@ -144,6 +144,8 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+在继承 BaseAgent 之后，还需要实现 get_llm() 和 _run() 方法，其中 get_llm() 方法返回一个 LLM 对象，_run() 方法接收一个 prompt 字符串，为 agent.run() 运行时用户输入的 prompt，返回值为最终 Agent 输出给用户的结果。
 
 运行结果如下：
 

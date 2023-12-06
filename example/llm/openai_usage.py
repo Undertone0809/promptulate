@@ -17,11 +17,11 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from promptulate.llms import ChatOpenAI
+import promptulate as pne
 
 
 def main():
-    llm = ChatOpenAI()
+    llm = pne.ChatOpenAI()
 
     print(llm("What's LLM?"))
 
