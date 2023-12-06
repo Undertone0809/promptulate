@@ -19,6 +19,7 @@
 
 import datetime
 import sys
+import traceback
 
 from loguru import logger as _logger
 
@@ -33,6 +34,14 @@ def get_log_path() -> str:
 
 
 def enable_log():
+    """
+    Enables the logging system to see log information.
+
+    This function configures the logging system to write logs to a file and stderr.
+    The log file is located at the path returned by the get_log_path function, and the
+    log level for the file is set to DEBUG. The log level for stderr is also set to
+    DEBUG.
+    """
     logger.remove()
 
     logger.add(get_log_path(), level="DEBUG")
@@ -40,6 +49,19 @@ def enable_log():
 
 
 class Logger(metaclass=Singleton):
+    """
+    Logger class that uses the Singleton design pattern.
+
+    This class is responsible for managing the application's logging system. It uses
+    the loguru library for logging. The logger is configured to write logs to a file
+    and stderr. The log file is located at the path returned by the get_log_path
+    function, and the log level for the file is set to DEBUG. The log level for
+    stderr is set to WARNING.
+
+    Attributes:
+        logger: An instance of the loguru logger.
+    """
+
     def __init__(self) -> None:
         self.logger = _logger
 
@@ -49,4 +71,31 @@ class Logger(metaclass=Singleton):
         self.logger.add(sys.stderr, level="WARNING")
 
 
+def exception_handler(exc_type, exc_value, exc_traceback):
+    """
+    Handles uncaught exceptions in the program.
+
+    This function is designed to be used as a custom exception handler. It logs the
+    details of uncaught exceptions and allows the program to continue running.
+    Exceptions derived from KeyboardInterrupt are not handled by this function and are
+    instead passed to the default Python exception handler.
+
+    Args:
+        exc_type: The type of the exception.
+        exc_value: The instance of the exception.
+        exc_traceback: A traceback object encapsulating the call stack at
+        the point where the exception originally occurred.
+
+    Returns:
+        None
+    """
+    if issubclass(exc_type, KeyboardInterrupt):
+        sys.__excepthook__(exc_type, exc_value, exc_traceback)
+        return
+
+    tb_info = "".join(traceback.format_exception(exc_type, exc_value, exc_traceback))
+    logger.error(f"Uncaught exception: {tb_info}")
+
+
 logger = Logger().logger
+sys.excepthook = exception_handler

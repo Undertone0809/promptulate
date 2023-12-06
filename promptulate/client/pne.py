@@ -1,11 +1,8 @@
 from importlib.metadata import version
 
-import click
-
 from promptulate.utils.color_print import print_text
 
 
-@click.command()
 def main():
     print_text("🌟 Welcome to Promptulate! 😀", "green")
     print_text(f"Version: {version('promptulate')}", "blue")
