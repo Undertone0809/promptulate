@@ -831,13 +831,13 @@ reference = "tsinghua"
 
 [[package]]
 name = "duckduckgo-search"
-version = "3.9.9"
+version = "3.9.11"
 description = "Search for words, documents, images, news, maps and text translation using the DuckDuckGo.com search engine."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "duckduckgo_search-3.9.9-py3-none-any.whl", hash = "sha256:03f040ee7bd1a298e363bc578b14f9fea73777a09398d01ef75fc624ec2e8bf3"},
-    {file = "duckduckgo_search-3.9.9.tar.gz", hash = "sha256:e4c4a1de246baf2ae9e5651b4aa362381573e9540d9e5829fa17ab7500f9a1f6"},
+    {file = "duckduckgo_search-3.9.11-py3-none-any.whl", hash = "sha256:3636df4c5eec383c1c02f89c9693b6c5bbaeda38952e467a2fa930132f632ed4"},
+    {file = "duckduckgo_search-3.9.11.tar.gz", hash = "sha256:4d07a02647da58f1e46e35f11719265f0ce06eed60e2c9c2b00b1105b9084d07"},
 ]
 
 [package.dependencies]
