@@ -48,9 +48,13 @@ check-codestyle:
 	poetry run ruff format --check --config pyproject.toml promptulate tests example
 	poetry run ruff check --config pyproject.toml promptulate tests example
 
-
 .PHONY: lint
 lint: test check-codestyle
+
+#* https://github.com/Maxlinn/linn-jupyter-site-template/blob/main/.github/workflows/linn-jupyter-site-template-deploy.yml
+.PHONY: build-docs
+build-docs:
+	jupyter nbconvert ./docs/modules/chat_usage.ipynb --to markdown
 
 #* Cleaning
 .PHONY: pycache-remove
