@@ -18,46 +18,84 @@
 # Contact Email: zeeland@foxmail.com
 
 import datetime
-import logging
-import os
+import sys
+import traceback
+
+from loguru import logger as _logger
 
 from promptulate.utils.core_utils import get_default_storage_path
-
-logger = logging.getLogger(__name__)
-
-
-def get_logger():
-    return logger
+from promptulate.utils.singleton import Singleton
 
 
-def get_default_log_path():
-    return get_default_storage_path("log")
+def get_log_path() -> str:
+    log_directory = get_default_storage_path("logs")
+    current_time = datetime.datetime.now().strftime("%Y%m%d")
+    return f"{log_directory}/{current_time}.log"
 
 
-def get_log_name() -> str:
-    log_path = get_default_log_path()
-    if not os.path.exists(log_path):
-        os.makedirs(log_path)
+def enable_log():
+    """
+    Enables the logging system to see log information.
 
-    cur_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    return f"{log_path}/log_{cur_time}.log"
+    This function configures the logging system to write logs to a file and stderr.
+    The log file is located at the path returned by the get_log_path function, and the
+    log level for the file is set to DEBUG. The log level for stderr is also set to
+    DEBUG.
+    """
+    logger.remove()
 
-
-def enable_log(level=logging.DEBUG):
-    logging.basicConfig(
-        level=level,
-        format="[%(levelname)s] %(asctime)s %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-        handlers=[
-            logging.FileHandler(f"{get_log_name()}", mode="w", encoding="utf-8"),
-            logging.StreamHandler(),
-        ],
-    )
+    logger.add(get_log_path(), level="DEBUG")
+    logger.add(sys.stderr, level="DEBUG")
 
 
-def enable_log_no_file():
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format="[%(levelname)s] %(asctime)s %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-    )
+class Logger(metaclass=Singleton):
+    """
+    Logger class that uses the Singleton design pattern.
+
+    This class is responsible for managing the application's logging system. It uses
+    the loguru library for logging. The logger is configured to write logs to a file
+    and stderr. The log file is located at the path returned by the get_log_path
+    function, and the log level for the file is set to DEBUG. The log level for
+    stderr is set to WARNING.
+
+    Attributes:
+        logger: An instance of the loguru logger.
+    """
+
+    def __init__(self) -> None:
+        self.logger = _logger
+
+        self.logger.remove()
+
+        self.logger.add(get_log_path(), level="DEBUG")
+        self.logger.add(sys.stderr, level="WARNING")
+
+
+def exception_handler(exc_type, exc_value, exc_traceback):
+    """
+    Handles uncaught exceptions in the program.
+
+    This function is designed to be used as a custom exception handler. It logs the
+    details of uncaught exceptions and allows the program to continue running.
+    Exceptions derived from KeyboardInterrupt are not handled by this function and are
+    instead passed to the default Python exception handler.
+
+    Args:
+        exc_type: The type of the exception.
+        exc_value: The instance of the exception.
+        exc_traceback: A traceback object encapsulating the call stack at
+        the point where the exception originally occurred.
+
+    Returns:
+        None
+    """
+    if issubclass(exc_type, KeyboardInterrupt):
+        sys.__excepthook__(exc_type, exc_value, exc_traceback)
+        return
+
+    tb_info = "".join(traceback.format_exception(exc_type, exc_value, exc_traceback))
+    logger.error(f"Uncaught exception: {tb_info}")
+
+
+logger = Logger().logger
+sys.excepthook = exception_handler

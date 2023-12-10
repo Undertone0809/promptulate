@@ -1,19 +1,15 @@
 import json
-import logging
 from abc import ABC
 from typing import Any, Dict, List, Optional
 
 import requests
 
-from promptulate.config import Config
+from promptulate.config import pne_config
+from promptulate.error import LLMError
 from promptulate.llms import BaseLLM
 from promptulate.preset_roles.prompt import PRESET_SYSTEM_PROMPT_ERNIE
 from promptulate.schema import AssistantMessage, LLMType, MessageSet, UserMessage
-from promptulate.tips import LLMError
-from promptulate.utils import get_logger
-
-CFG = Config()
-logger = get_logger()
+from promptulate.utils.logger import logger
 
 
 class ErnieBot(BaseLLM, ABC):
@@ -44,7 +40,7 @@ class ErnieBot(BaseLLM, ABC):
         "disable_search",
         "penalty_score",
     ]
-    url: str = CFG.ernie_bot_4_url
+    url: str = pne_config.ernie_bot_4_url
 
     def __call__(
         self, prompt: str, stop: Optional[List[str]] = None, *args, **kwargs
@@ -67,25 +63,35 @@ class ErnieBot(BaseLLM, ABC):
     def _predict(
         self, prompts: MessageSet, stop: Optional[List[str]] = None, *args, **kwargs
     ) -> AssistantMessage:
-        """llm generate prompt"""
+        """
+        Predicts the response using the ERNIE model.
+
+        Args:
+            prompts (MessageSet): The set of prompts to generate a response.
+            stop (Optional[List[str]], optional): List of stop words to stop the
+            generation. Defaults to None.
+
+        Returns:
+            AssistantMessage: The generated response.
+        """
+
         headers = {"Content-Type": "application/json"}
+
         if self.model == "ernie-bot-turbo":
-            self.url = CFG.ernie_bot_turbo_url
-            logging.debug("[pne use ernie-bot-turbo]")
+            self.url = pne_config.ernie_bot_turbo_url
         elif self.model == "ernie-bot-4":
-            self.url = CFG.ernie_bot_4_url
-            logging.debug("[pne use ernie-bot-4]")
+            self.url = pne_config.ernie_bot_4_url
         elif self.model == "ernie-bot":
-            self.url = CFG.ernie_bot_url
-            logging.debug("[pne use ernie-bot]")
+            self.url = pne_config.ernie_bot_url
         else:
             raise ValueError("pne not found this model")
+
         body: Dict[str, Any] = self._build_api_params_dict(prompts, stop)
         response = requests.post(
-            url=self.url + "?access_token=" + CFG.get_ernie_token(),
+            url=self.url + "?access_token=" + pne_config.get_ernie_token(),
             headers=headers,
             json=body,
-            proxies=CFG.proxies,
+            proxies=pne_config.proxies,
         )
         logger.debug(f"[pne ernie body] {body}")
         if response.status_code == 200:
@@ -101,14 +107,14 @@ class ErnieBot(BaseLLM, ABC):
             content: str = ret_data["result"]
             """ernie-bot official support stop,deprecated"""
             """if stop:
-                length: int = 1000000  # very large integer +inf
-                temp: str = ""
-                for s in stop:
-                    temp_len = len(content.split(s)[0])
-                    if temp_len < length:
-                        temp = content.split(s)[0]
-                        length = temp_len
-                content = temp"""
+                    length: int = 1000000  # very large integer +inf
+                    temp: str = ""
+                    for s in stop:
+                        temp_len = len(content.split(s)[0])
+                        if temp_len < length:
+                            temp = content.split(s)[0]
+                            length = temp_len
+                    content = temp"""
             logger.debug(f"[pne ernie answer] {content}")
             return AssistantMessage(content=content)
 

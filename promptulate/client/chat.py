@@ -27,13 +27,7 @@ import questionary
 from promptulate.agents import ToolAgent
 from promptulate.config import Config
 from promptulate.llms import BaseLLM, ChatOpenAI, ErnieBot
-from promptulate.schema import (
-    AssistantMessage,
-    LLMType,
-    MessageSet,
-    SystemMessage,
-    UserMessage,
-)
+from promptulate.schema import LLMType, MessageSet
 from promptulate.tools import (
     ArxivQueryTool,
     Calculator,

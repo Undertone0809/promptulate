@@ -25,12 +25,11 @@ from dotenv import load_dotenv
 
 from promptulate.hook.stdout_hook import StdOutHook
 from promptulate.utils.core_utils import get_cache
-from promptulate.utils.logger import get_logger
+from promptulate.utils.logger import logger
 from promptulate.utils.openai_key_pool import OpenAIKeyPool
 from promptulate.utils.singleton import Singleton
 
 PROXY_MODE = ["off", "custom", "promptulate"]
-logger = get_logger()
 load_dotenv()
 
 
@@ -44,6 +43,25 @@ def turn_off_stdout_hook():
 
 
 class Config(metaclass=Singleton):
+    """
+    Configuration class for managing application settings.
+
+    Attributes:
+        enable_cache (bool): Flag indicating whether caching is enabled.
+        _proxy_mode (str): The current proxy mode.
+        _proxies (Optional[dict]): Dictionary of proxy settings.
+        openai_chat_api_url (str): URL for OpenAI chat API.
+        openai_completion_api_url (str): URL for OpenAI completion API.
+        openai_proxy_url (str): URL for OpenAI proxy.
+        ernie_bot_url (str): URL for Ernie bot API.
+        ernie_bot_turbo_url (str): URL for Ernie bot turbo API.
+        ernie_bot_token_url (str): URL for Ernie bot token API.
+        ernie_bot_4_url (str): URL for Ernie bot 4 API.
+        ernie_embedding_v1_url (str): URL for Ernie embedding v1 API.
+        key_default_retry_times (int): Default number of key retry times.
+        enable_stdout_hook (bool): Flag indicating whether stdout hook is enabled.
+    """
+
     def __init__(self):
         logger.info("[pne config] Config initialization")
         self.enable_cache: bool = True
@@ -168,3 +186,6 @@ class Config(metaclass=Singleton):
         self.proxy_mode = mode
         self.proxies = proxies
         logger.info(f"[pne] proxy mode: {mode}, proxies: {proxies}")
+
+
+pne_config = Config()

@@ -22,12 +22,9 @@ from typing import Optional
 from cushy_storage import CushyOrmCache
 from pydantic import Field, validator
 
-from promptulate import utils
+from promptulate.error import EmptyMessageSetError
 from promptulate.memory.base import BaseChatMemory
 from promptulate.schema import MessageSet
-from promptulate.tips import EmptyMessageSetError
-
-logger = utils.get_logger()
 
 
 class FileChatMemory(BaseChatMemory):

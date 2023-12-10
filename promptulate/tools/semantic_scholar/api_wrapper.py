@@ -5,10 +5,8 @@ from typing import Dict, List, Optional
 import requests
 from pydantic import BaseModel
 
-from promptulate.tips import NetWorkError
-from promptulate.utils.logger import get_logger
-
-logger = get_logger()
+from promptulate.error import NetWorkError
+from promptulate.utils.logger import logger
 
 
 class SemanticScholarAPIWrapper(BaseModel):

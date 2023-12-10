@@ -18,6 +18,7 @@
 # Contact Email: zeeland@foxmail.com
 
 import logging
+import os
 import random
 import shutil
 import string
@@ -111,13 +112,21 @@ def set_openai_api_key(value: str):
     cache["OPENAI_API_KEY"] = value
 
 
-def convert_backslashes(path):
+def convert_backslashes(path: str):
     """Convert all \\ to / of file path."""
     return path.replace("\\", "/")
 
 
 def get_default_storage_path(module_name: str = "") -> str:
-    return convert_backslashes(f"{tempfile.gettempdir()}/promptulate/{module_name}")
+    pne_storage_path = os.path.expanduser("~/.pne")
+
+    if not os.path.exists(pne_storage_path):
+        try:
+            os.makedirs(pne_storage_path)
+        except PermissionError:
+            pne_storage_path = f"{tempfile.gettempdir()}/pne"
+
+    return convert_backslashes(f"{pne_storage_path}/{module_name}")
 
 
 def hint(fn):

@@ -19,19 +19,51 @@
 
 import warnings
 
+from promptulate.agents.base import BaseAgent
+from promptulate.agents.tool_agent.agent import ToolAgent
+from promptulate.agents.web_agent.agent import WebAgent
 from promptulate.chat import chat
-from promptulate.frameworks import Conversation
-from promptulate.schema import AssistantMessage, SystemMessage, UserMessage
-from promptulate.utils import enable_log, enable_log_no_file
+from promptulate.llms.base import BaseLLM
+from promptulate.llms.openai.openai import ChatOpenAI
+from promptulate.schema import AssistantMessage, BaseMessage, MessageSet, SystemMessage
+from promptulate.tools.base import BaseTool, Tool, define_tool
+from promptulate.utils import enable_log
+
+_util_fields = [
+    "enable_log",
+]
+
+_schema_fields = [
+    "AssistantMessage",
+    "SystemMessage",
+    "BaseMessage",
+    "MessageSet",
+]
+
+_llm_fields = [
+    "chat",
+    "BaseLLM",
+    "ChatOpenAI",
+]
+
+_tool_fields = [
+    "Tool",
+    "define_tool",
+    "BaseTool",
+]
+
+_agent_fields = [
+    "BaseAgent",
+    "WebAgent",
+    "ToolAgent",
+]
 
 __all__ = [
-    "Conversation",
-    "enable_log",
-    "enable_log_no_file",
-    "SystemMessage",
-    "UserMessage",
-    "AssistantMessage",
-    "chat",
+    *_util_fields,
+    *_schema_fields,
+    *_llm_fields,
+    *_tool_fields,
+    *_agent_fields,
 ]
 
 warnings.filterwarnings("always", category=DeprecationWarning)

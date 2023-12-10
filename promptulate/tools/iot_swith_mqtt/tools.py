@@ -4,9 +4,7 @@ from typing import Dict, List
 from promptulate.llms import BaseLLM, ChatOpenAI
 from promptulate.tools import Tool
 from promptulate.tools.iot_swith_mqtt.prompt import prompt_template
-from promptulate.utils import StringTemplate, get_logger
-
-logger = get_logger()
+from promptulate.utils import StringTemplate
 
 
 class IotSwitchTool(Tool):

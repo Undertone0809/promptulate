@@ -3,14 +3,14 @@ There are 2 kinds of model in OpenAI, namely text generative and conversational.
 """
 
 import json
-import logging
 import warnings
 from abc import ABC
 from typing import Any, Dict, List, Optional
 
 import requests
 
-from promptulate.config import Config
+from promptulate.config import pne_config
+from promptulate.error import OpenAIError
 from promptulate.llms.base import BaseLLM
 from promptulate.preset_roles.prompt import PRESET_SYSTEM_PROMPT
 from promptulate.schema import (
@@ -21,10 +21,7 @@ from promptulate.schema import (
     SystemMessage,
     UserMessage,
 )
-from promptulate.tips import OpenAIError
-
-CFG = Config()
-logger = logging.getLogger(__name__)
+from promptulate.utils.logger import logger
 
 
 class BaseOpenAI(BaseLLM, ABC):
@@ -81,7 +78,7 @@ class BaseOpenAI(BaseLLM, ABC):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.retry_times = CFG.get_key_retry_times(self.model)
+        self.retry_times = pne_config.get_key_retry_times(self.model)
 
     @property
     def api_key(self):
@@ -89,7 +86,7 @@ class BaseOpenAI(BaseLLM, ABC):
         optional."""
         if self.enable_private_api_key and self.private_api_key != "":
             return self.private_api_key
-        return CFG.get_openai_api_key(self.model)
+        return pne_config.get_openai_api_key(self.model)
 
     def set_private_api_key(self, value: str):
         self.enable_private_api_key = True
@@ -146,13 +143,13 @@ class OpenAI(BaseOpenAI):
 
         logger.debug(f"[pne openai params] body {json.dumps(body)}")
         logger.debug(
-            f"[pne openai request] url: {CFG.openai_completion_request_url} proxies: {CFG.proxies}"  # noqa
+            f"[pne openai request] url: {pne_config.openai_completion_request_url} proxies: {pne_config.proxies}"  # noqa
         )
         response = requests.post(
-            url=CFG.openai_completion_request_url,
+            url=pne_config.openai_completion_request_url,
             headers=headers,
             json=body,
-            proxies=CFG.proxies,
+            proxies=pne_config.proxies,
         )
         if response.status_code == 200:
             # todo enable stream mode
@@ -245,13 +242,13 @@ class ChatOpenAI(BaseOpenAI):
 
         logger.debug(f"[pne openai params] body {json.dumps(body)}")
         logger.debug(
-            f"[pne openai request] url: {CFG.openai_chat_request_url} proxies: {CFG.proxies}"  # noqa: E501
+            f"[pne openai request] url: {pne_config.openai_chat_request_url} proxies: {pne_config.proxies}"  # noqa: E501
         )
         response = requests.post(
-            url=CFG.openai_chat_request_url,
+            url=pne_config.openai_chat_request_url,
             headers=headers,
             json=body,
-            proxies=CFG.proxies,
+            proxies=pne_config.proxies,
         )
         if response.status_code == 200:
             # todo enable stream mode
@@ -262,6 +259,9 @@ class ChatOpenAI(BaseOpenAI):
             logger.debug(f"[pne openai response] {json.dumps(ret_data)}")
             content = ret_data["choices"][0]["message"]["content"]
             logger.debug(f"[pne openai answer] {content}")
+
+            response.close()
+
             return AssistantMessage(content=content)
 
         logger.error(

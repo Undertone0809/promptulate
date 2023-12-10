@@ -67,14 +67,20 @@ Get started with your "HelloWorld" using the simple program below:
 
 ```python
 import os
-from promptulate.llms import ChatOpenAI
+import promptulate as pne
 
 os.environ['OPENAI_API_KEY'] = "your-key"
 
-llm = ChatOpenAI()
-answer = llm("Hello, how is everything going?")
+agent = pne.WebAgent()
+answer = agent.run("What is the temperature tomorrow in Shanghai")
 print(answer)
 ```
+
+```
+The temperature tomorrow in Shanghai is expected to be 23°C.
+```
+
+> Most of the time, we refer to template as pne, where p and e represent the words that start and end template, and n represents 9, which is the abbreviation of the nine words between p and e.
 
 For more detailed information, please refer to the [Quick Start/Official Documentation](https://undertone0809.github.io/promptulate/#/).
 

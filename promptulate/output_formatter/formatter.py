@@ -4,8 +4,8 @@ from typing import Dict, List, TypeVar
 
 from pydantic import BaseModel
 
+from promptulate.error import OutputParserError
 from promptulate.output_formatter.prompt import OUTPUT_FORMAT
-from promptulate.tips import OutputParserError
 
 T = TypeVar("T", bound=BaseModel)
 

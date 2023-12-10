@@ -5,7 +5,7 @@ This mode show how to run llm at the same time
 from broadcast_service import broadcast_service
 
 from promptulate.llms import OpenAI
-from promptulate.utils import set_proxy_mode
+from promptulate.utils.proxy import set_proxy_mode
 
 counter = 0
 

@@ -61,9 +61,9 @@ OPENAI_API_KEY=sk-xxx
 下面的示例展示了如何使用OpenAI进行交互。
 
 ```python
-from promptulate.llms import ChatOpenAI
+import promptulate as pne
 
-llm = ChatOpenAI()
+llm = pne.ChatOpenAI()
 answer = llm("请解释一下引力波的放射与广义相对论的必然关系")
 print(answer)
 
@@ -118,11 +118,11 @@ Agent是`promptulate`的核心组件之一，其核心思想是使用llm、Tool�
 下面的示例展示了如何使用`ToolAgent`结合Tool进行使用。
 
 ```python
+import promptulate as pne
 from promptulate.tools import (
     DuckDuckGoTool,
     Calculator,
 )
-from promptulate.agents import ToolAgent
 
 
 def main():
@@ -130,7 +130,7 @@ def main():
         DuckDuckGoTool(),
         Calculator(),
     ]
-    agent = ToolAgent(tools)
+    agent = pne.ToolAgent(tools)
     prompt = """Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?"""
     agent.run(prompt)
 
@@ -166,7 +166,7 @@ Agent End.
 ```python
 from pydantic import BaseModel, Field
 
-from promptulate.agents import WebAgent
+import promptulate as pne
 
 
 class Response(BaseModel):
@@ -175,7 +175,7 @@ class Response(BaseModel):
 
 
 def main():
-    agent = WebAgent()
+    agent = pne.WebAgent()
     prompt = f"What is the temperature in Shanghai tomorrow?"
     response: Response = agent.run(prompt=prompt, output_schema=Response)
     print(response.city, response.temperature)

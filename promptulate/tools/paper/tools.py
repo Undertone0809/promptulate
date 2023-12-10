@@ -6,9 +6,9 @@ from typing import Dict, List
 from broadcast_service import broadcast_service
 from pydantic import Extra, Field
 
+from promptulate.error import NetWorkError
 from promptulate.llms.base import BaseLLM
 from promptulate.llms.openai import ChatOpenAI
-from promptulate.tips import NetWorkError
 from promptulate.tools.arxiv.api_wrapper import ArxivAPIWrapper
 from promptulate.tools.arxiv.tools import ArxivQueryTool
 from promptulate.tools.base import BaseTool

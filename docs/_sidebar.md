@@ -2,8 +2,9 @@
   - [:bookmark_tabs: 介绍](README.md)
   - [:bookmark: 快速开始](get_started/quick_start.md#快速开始)
 
-- User Cases
+- Use Cases
   - [🌟 最佳实践](modules/usercases/intro.md#user-cases)
+  - [:bookmark_tabs: Awesome Chat](modules/chat_usage.md#chat)
 
 - Modules
   - [:notebook_with_decorative_cover: llm 模型](modules/llm/llm.md#llm)
@@ -25,4 +26,4 @@
   - [FAQ](other/faq.md)
   - [更新日志](other/update.md)
   - [开发计划](other/plan.md)
-  - [参与贡献](other/contribution.md)
+  - [参与贡献](other/contribution.md#contributing-to-promptulate)
