@@ -1,5 +1,12 @@
+"""
+TODO add test: test_stream, test pne's llm, test litellm llm
+"""
+from typing import Optional
+
+import pytest
 from pydantic import BaseModel, Field
 
+import promptulate as pne
 from promptulate import chat
 from promptulate.llms import BaseLLM
 from promptulate.schema import AssistantMessage, BaseMessage, MessageSet, UserMessage
@@ -28,7 +35,7 @@ class Response(BaseModel):
     temperature: float = Field(description="temperature")
 
 
-def test_general_chat():
+def test_custom_llm_chat():
     llm = FakeLLM()
 
     # test general chat
@@ -48,11 +55,11 @@ def test_general_chat():
     assert answer == "fake response"
 
 
-def test_chat_response():
+def test_custom_llm_chat_response():
     llm = FakeLLM()
 
     # test original response
-    answer = chat("hello", model="fake", custom_llm=llm, is_message_return_type=True)
+    answer = chat("hello", model="fake", custom_llm=llm, return_raw_response=True)
     assert isinstance(answer, BaseMessage)
     assert answer.content == "fake response"
 
@@ -84,7 +91,10 @@ def test_chat_response():
     assert getattr(answer, "temperature", None) == 25
 
 
-# def test_chat_with_gpt():
-#     # test gpt-3.5
-#     answer = chat("hello")
-#     assert isinstance(answer, str)
+def test_stream():
+    class LLMResponse(BaseModel):
+        data: Optional[str] = None
+
+    # stream and output_schema and not exist at the same time.
+    with pytest.raises(ValueError):
+        pne.chat("hello", stream=True, output_schema=LLMResponse)
