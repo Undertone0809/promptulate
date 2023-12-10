@@ -19,6 +19,8 @@ categories:
     labels: [dependencies]
 
 template: |
+  👋Hi there, this is promptulate v$NEXT_PATCH_VERSION release notes. We have updated some interesting features and look forward to your experience.
+  
   ## What’s Changed
 
   $CHANGES
