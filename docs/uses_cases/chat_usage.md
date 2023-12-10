@@ -43,6 +43,9 @@ print(response)
 If you want to do more complex thing, metadata is important. You can use `return_raw_response=True` to get the raw response wrapped by `pne.AssistantMessage`. Metadata will store in `pne.AssistantMessage.additional_kwargs`.
 
 
+> About `pne.AssistantMessage`, you can see [here](modules/schema.md).
+
+
 ```python
 import promptulate as pne
 

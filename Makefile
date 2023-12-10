@@ -58,7 +58,7 @@ lint: test check-codestyle
 #* https://github.com/Maxlinn/linn-jupyter-site-template/blob/main/.github/workflows/linn-jupyter-site-template-deploy.yml
 .PHONY: build-docs
 build-docs:
-	jupyter nbconvert ./docs/modules/chat_usage.ipynb --to markdown
+	jupyter nbconvert ./docs/uses_cases/chat_usage.ipynb --to markdown
 
 .PHONY: start-docs
 start-docs:
