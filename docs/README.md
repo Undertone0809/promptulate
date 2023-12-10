@@ -121,9 +121,8 @@ promptulate框架的设计原则包括：模块化、可扩展性、互操作性
 欢迎加入群聊一起交流讨论有关LLM相关的话题，链接过期了可以issue或email提醒一下作者。
 
 <div style="width: 250px;margin: 0 auto;">
-    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20231105165950.png"/>
+    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20231211045023.png"/>
 </div>
-
 
 ## 贡献
 
