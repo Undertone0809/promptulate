@@ -160,7 +160,7 @@ class OpenAI(BaseOpenAI):
             logger.debug(f"[pne openai response] {json.dumps(ret_data)}")
             content = ret_data["choices"][0]["text"]
             logger.debug(f"[pne openai answer] {content}")
-            return AssistantMessage(content=content)
+            return AssistantMessage(content=content, additional_kwargs=ret_data)
 
         logger.error(
             f"[pne OpenAI] <key sk-....{api_key[-6:]}>Failed to get data. Please check your network or api key."  # noqa: E501
@@ -262,7 +262,7 @@ class ChatOpenAI(BaseOpenAI):
 
             response.close()
 
-            return AssistantMessage(content=content)
+            return AssistantMessage(content=content, additional_kwargs=ret_data)
 
         logger.error(
             f"[pne OpenAI] <key sk-....{api_key[-6:]}>Failed to get data. Please check your network or api key."  # noqa: E501

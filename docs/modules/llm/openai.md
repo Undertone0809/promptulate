@@ -208,7 +208,7 @@ llm是否支持stop，要看其LLM模型本身是否支持，当前OpenAI系列�
 
 ```python
 from promptulate.llms import ChatOpenAI
-from promptulate.utils import set_proxy_mode
+from promptulate.utils.proxy import set_proxy_mode
 
 
 def set_free_proxy():

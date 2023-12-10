@@ -116,7 +116,7 @@ class ErnieBot(BaseLLM, ABC):
                             length = temp_len
                     content = temp"""
             logger.debug(f"[pne ernie answer] {content}")
-            return AssistantMessage(content=content)
+            return AssistantMessage(content=content, additional_kwargs=ret_data)
 
     def _build_api_params_dict(
         self,

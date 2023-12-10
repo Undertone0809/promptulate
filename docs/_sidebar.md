@@ -3,8 +3,8 @@
   - [:bookmark: 快速开始](get_started/quick_start.md#快速开始)
 
 - Use Cases
-  - [🌟 最佳实践](modules/usercases/intro.md#user-cases)
-  - [:bookmark_tabs: Awesome Chat](modules/chat_usage.md#chat)
+  - [🌟 最佳实践](uses_cases/intro.md#user-cases)
+  - [:bookmark_tabs: Awesome Chat](uses_cases/chat_usage.md#chat)
 
 - Modules
   - [:notebook_with_decorative_cover: llm 模型](modules/llm/llm.md#llm)
@@ -18,6 +18,7 @@
   - [:man_with_probing_cane: Provider](modules/provider.md#provider)
   - [:muscle: Client 客户端](modules/client.md#client)
   - [:helicopter: String Template 字符串格式化](modules/other/string_template.md#string-template)
+  - [🏫 Schema](modules/schema.md#Schema)
   - [:hiking_boot: Framework](modules/framework.md#framework)
   - [:man_in_tuxedo: Preset 角色预设](modules/preset.md#preset-角色预设)
 
