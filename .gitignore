@@ -3,6 +3,7 @@ command
 log
 gpt_output.md
 private
+litellm_uuid.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,5 +1,3 @@
-from promptulate import BaseLLM
-
 # Agent
 
 Agent是`promptulate`的核心组件之一，其核心思想是使用llm、Tool、Memory、Provider,Output Formatter等组件来构建起的一个可以处理复杂能力的代理。

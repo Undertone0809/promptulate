@@ -41,7 +41,7 @@
 
 
 <p align="center">
-  <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/promptulate_logo_new.png"/>
+  <img src="images/logo_transparent.png">
 </p>
 
 

@@ -10,6 +10,22 @@
 
 ## 快速上手
 
+- 打开终端控制台，输入以下命令，可以查询当前项目的基本信息
+
+```bash
+pne
+```
+
+**output**
+
+```
+🌟 Welcome to Promptulate! 😀
+Version: 1.9.1
+Github repo: https://github.com/Undertone0809/promptulate
+Official document: https://undertone0809.github.io/promptulate/#/
+```
+
+
 - 打开终端控制台，输入以下命令，就可以开启一个简易的对话
 
 ```shell

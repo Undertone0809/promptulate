@@ -18,6 +18,10 @@ install:
 	poetry lock -n && poetry export --without-hashes > requirements.txt
 	poetry install --with dev
 
+.PHONY: install-docs
+install-docs:
+	npm i docsify-cli -g
+
 .PHONY: pre-commit-install
 pre-commit-install:
 	poetry run pre-commit install
@@ -55,6 +59,10 @@ lint: test check-codestyle
 .PHONY: build-docs
 build-docs:
 	jupyter nbconvert ./docs/modules/chat_usage.ipynb --to markdown
+
+.PHONY: start-docs
+start-docs:
+	docsify serve docs
 
 #* Cleaning
 .PHONY: pycache-remove
