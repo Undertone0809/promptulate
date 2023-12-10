@@ -46,6 +46,7 @@ setuptools.setup(
         "numexpr",
         "questionary~=2.0.0",
         "litellm~=^1.7.9",
+        "loguru~=0.7.2",
     ],
     license="Apache 2.0",
     python_requires=">=3.8",
