@@ -108,6 +108,10 @@ class OpenAI(BaseOpenAI):
     def __call__(
         self, prompt: str, stop: Optional[List[str]] = None, *args, **kwargs
     ) -> str:
+        for key in self.api_param_keys:
+            if key in kwargs:
+                setattr(self, key, kwargs[key])
+
         preset = (
             self.default_system_prompt
             if self.default_system_prompt != ""
@@ -133,6 +137,11 @@ class OpenAI(BaseOpenAI):
                 "avoid disruption of service. gpt-3.5-turbo is recommended.",
                 DeprecationWarning,
             )
+
+        for key in self.api_param_keys:
+            if key in kwargs:
+                setattr(self, key, kwargs[key])
+
         api_key = self.api_key
         logger.debug(f"[pne openai key] sk-....{api_key[-6:]}")
         headers = {
@@ -143,7 +152,7 @@ class OpenAI(BaseOpenAI):
 
         logger.debug(f"[pne openai params] body {json.dumps(body)}")
         logger.debug(
-            f"[pne openai request] url: {pne_config.openai_completion_request_url} proxies: {pne_config.proxies}"  # noqa
+            f"[pne openai request] url: {pne_config.openai_completion_request_url} proxies: {pne_config.proxies}"  # noqa: E501
         )
         response = requests.post(
             url=pne_config.openai_completion_request_url,
@@ -195,6 +204,39 @@ class ChatOpenAI(BaseOpenAI):
     """Used to MessageSet data convert"""
     model: str = "gpt-3.5-turbo"
     """Model name to use."""
+    seed: Optional[int] = None
+    """This feature is in Beta. If specified, our system will make a best effort to
+    sample deterministically, such that repeated requests with the same seed and
+    parameters should return the same result. Determinism is not guaranteed, and you
+    should refer to the system_fingerprint response parameter to monitor changes in
+    the backend."""
+    response_format: Optional[dict] = None
+    """An object specifying the format that the model must output. Compatible with
+    gpt-4-1106-preview and gpt-3.5-turbo-1106. Setting to { "type": "json_object" }
+    enables JSON mode, which guarantees the message the model generates is valid JSON.
+
+    Important: when using JSON mode, you must also instruct the model to produce JSON
+    yourself via a system or user message. Without this, the model may generate an
+    unending stream of whitespace until the generation reaches the token limit,
+    resulting in a long-running and seemingly "stuck" request. Also note that the
+    message content may be partially cut off if finish_reason="length", which indicates
+    the generation exceeded max_tokens or the conversation exceeded the max context
+    length.
+
+    type must be text or json_object.
+    """
+    tools: Optional[List[Dict[str, str]]] = None
+    """A list of tools the model may call. Currently, only functions are supported as a
+    tool. Use this to provide a list of functions the model may generate JSON inputs
+    for."""
+    function_call: Optional[int] = None
+    """Controls which (if any) function is called by the model. none means the model
+    will not call a function and instead generates a message. auto means the model can
+    pick between generating a message or calling a function. Specifying a particular
+    function via {"name": "my_function"} forces the model to call that function.
+
+    none is the default when no functions are present. auto is the default if functions
+    are present."""
     functions: Optional[List[Dict[str, str]]] = None
     """A list of functions the model may generate JSON inputs for."""
     api_param_keys: List[str] = [
@@ -207,12 +249,21 @@ class ChatOpenAI(BaseOpenAI):
         "presence_penalty",
         "n",
         "max_tokens",
+        "seed",
+        "response_format",
+        "tools",
+        "function_call",
+        "function",
     ]
-    """The key of openai api parameters"""
+    """The key of openai api parameters."""
 
     def __call__(
         self, prompt: str, stop: Optional[List[str]] = None, *args, **kwargs
     ) -> str:
+        for key in self.api_param_keys:
+            if key in kwargs:
+                setattr(self, key, kwargs[key])
+
         system_message = (
             self.default_system_prompt
             if self.default_system_prompt != ""
@@ -232,6 +283,10 @@ class ChatOpenAI(BaseOpenAI):
     def _predict(
         self, prompts: MessageSet, stop: Optional[List[str]] = None, *args, **kwargs
     ) -> Optional[AssistantMessage]:
+        for key in self.api_param_keys:
+            if key in kwargs:
+                setattr(self, key, kwargs[key])
+
         api_key = self.api_key
         logger.debug(f"[pne openai key] sk-....{api_key[-6:]}")
         headers = {
