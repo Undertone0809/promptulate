@@ -43,7 +43,7 @@ class BaseOpenAI(BaseLLM, ABC):
     """Penalizes repeated tokens."""
     n: int = 1
     """How many completions to generate for each prompt."""
-    max_tokens: int = -1
+    max_tokens: Optional[int] = None
     """The maximum number of tokens to generate in the completion.
     -1 returns as many tokens as possible given the prompt and
     the models maximal context size."""
@@ -100,7 +100,7 @@ class OpenAI(BaseOpenAI):
     """Used to MessageSet data convert"""
     model: str = "text-davinci-003"
     """Model name to use."""
-    max_tokens: int = -1
+    max_tokens: Optional[int] = None
     """The maximum number of tokens to generate in the completion.
     -1 returns as many tokens as possible given the prompt and
     the models maximal context size."""
