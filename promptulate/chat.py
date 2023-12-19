@@ -165,7 +165,7 @@ def chat(
     else:
         import litellm
 
-        logger.debug("[pne chat] chat by litellm.")
+        logger.info("[pne chat] chat by litellm.")
         temp_response = litellm.completion(model, messages, **kwargs)
 
         # return stream
@@ -179,9 +179,11 @@ def chat(
                 additional_kwargs=json.loads(temp_response.json()),
             )
 
+    logger.debug(f"[pne chat] response: {response}")
+
     # return output format if provide
     if output_schema:
-        logger.debug("[pne chat] return output format.")
+        logger.info("[pne chat] return output format.")
         return formatting_result(
             pydantic_obj=output_schema, llm_output=response.content
         )

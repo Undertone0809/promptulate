@@ -44,8 +44,26 @@ def enable_log():
     """
     logger.remove()
 
-    logger.add(get_log_path(), level="DEBUG")
+    logger.add(get_log_path(), level="DEBUG", rotation="1 day", filter=pne_log_filter)
     logger.add(sys.stderr, level="DEBUG")
+
+
+def pne_log_filter(record) -> bool:
+    """
+    Filter function for the logging system.
+
+    This function is used to filter out log records based on their name.
+    Only records whose name starts with "promptulate" are allowed through the filter.
+
+    Args:
+        record (dict): A log record, which is a dictionary that the logging system
+        uses to store information about the event being logged. The 'name' key in the
+        record dictionary contains the name of the logger that created the record.
+
+    Returns:
+        bool: True if the record's name starts with "promptulate", False otherwise.
+    """
+    return record["name"].startswith("promptulate")
 
 
 class Logger(metaclass=Singleton):
@@ -67,7 +85,9 @@ class Logger(metaclass=Singleton):
 
         self.logger.remove()
 
-        self.logger.add(get_log_path(), level="DEBUG")
+        self.logger.add(
+            get_log_path(), level="DEBUG", rotation="1 day", filter=pne_log_filter
+        )
         self.logger.add(sys.stderr, level="WARNING")
 
 

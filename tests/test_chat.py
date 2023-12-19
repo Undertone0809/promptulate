@@ -30,7 +30,7 @@ class FakeLLM(BaseLLM):
         return AssistantMessage(content=content)
 
 
-class Response(BaseModel):
+class LLMResponse(BaseModel):
     city: str = Field(description="city name")
     temperature: float = Field(description="temperature")
 
@@ -67,26 +67,26 @@ def test_custom_llm_chat_response():
     answer = chat(
         "what's weather tomorrow in shanghai?",
         model="fake",
-        output_schema=Response,
+        output_schema=LLMResponse,
         custom_llm=llm,
     )
-    assert isinstance(answer, Response)
+    assert isinstance(answer, LLMResponse)
     assert getattr(answer, "city", None) == "Shanghai"
     assert getattr(answer, "temperature", None) == 25
 
     # test formatter response with examples
     examples = [
-        Response(city="Shanghai", temperature=25),
-        Response(city="Beijing", temperature=30),
+        LLMResponse(city="Shanghai", temperature=25),
+        LLMResponse(city="Beijing", temperature=30),
     ]
     answer = chat(
         "what's weather tomorrow in shanghai?",
         model="fake",
-        output_schema=Response,
+        output_schema=LLMResponse,
         examples=examples,
         custom_llm=llm,
     )
-    assert isinstance(answer, Response)
+    assert isinstance(answer, LLMResponse)
     assert getattr(answer, "city", None) == "Shanghai"
     assert getattr(answer, "temperature", None) == 25
 
