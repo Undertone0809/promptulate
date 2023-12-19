@@ -42,6 +42,11 @@ class OutputFormatter:
             pydantic_obj (type(BaseModel)): The Pydantic object to format.
             examples (List[BaseModel], optional): Examples of the Pydantic object.
         """
+        if not isinstance(pydantic_obj, type(BaseModel)):
+            raise ValueError(
+                f"pydantic_obj must be a Pydantic object. Got: {pydantic_obj}"
+            )
+
         self.pydantic_obj = pydantic_obj
         self.examples = examples
 
