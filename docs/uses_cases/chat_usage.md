@@ -43,15 +43,15 @@ print(response)
 If you want to do more complex thing, metadata is important. You can use `return_raw_response=True` to get the raw response wrapped by `pne.AssistantMessage`. Metadata will store in `pne.AssistantMessage.additional_kwargs`.
 
 
-> About `pne.AssistantMessage`, you can see [here](modules/schema.md).
+> About `pne.AssistantMessage`, you can see [here](modules/schema.md#Schema).
 
 
 ```python
 import promptulate as pne
 
 response: pne.AssistantMessage = pne.chat("Who are you?", return_raw_response=True)
-print(response.content) # response string
-print(response.additional_kwargs) # metadata
+print(response.content)  # response string
+print(response.additional_kwargs)  # metadata
 ```
 
     I am an AI assistant here to help you with any questions or tasks you may have. How can I assist you today?
@@ -173,16 +173,47 @@ from pydantic import BaseModel, Field
 
 
 class LLMResponse(BaseModel):
-    provinces: List[str]= Field(description="All provinces in China")
+    provinces: List[str] = Field(description="All provinces in China")
 
-response: LLMResponse = pne.chat("Please tell me all provinces in China.", output_schema=LLMResponse)
+
+response: LLMResponse = pne.chat(
+    messages="Please tell me all provinces in China.",
+    output_schema=LLMResponse
+)
 print(response.provinces)
 ```
 
     ['Anhui', 'Beijing', 'Chongqing', 'Fujian', 'Gansu', 'Guangdong', 'Guangxi', 'Guizhou', 'Hainan', 'Hebei', 'Heilongjiang', 'Henan', 'Hubei', 'Hunan', 'Jiangsu', 'Jiangxi', 'Jilin', 'Liaoning', 'Ningxia', 'Qinghai', 'Shaanxi', 'Shandong', 'Shanghai', 'Shanxi', 'Sichuan', 'Tianjin', 'Tibet', 'Xinjiang', 'Yunnan', 'Zhejiang']
     
 
-As you can see, `pne.chat()` return a LLMResponse object. The value of provinces is all provinces in China. If you are building a complex Agent project, formatting output is a necessary measure to improve system robustness.
+As you can see, `pne.chat()` return a LLMResponse object. The value of provinces is all provinces in China. If you are building a complex Agent project, formatting output is a necessary measure to improve system robustness. The follow example show how to use `pne.chat()` to get the weather in Shanghai tomorrow.
+
+
+```python
+from datetime import datetime
+import promptulate as pne
+from pydantic import BaseModel, Field
+
+
+class LLMResponse(BaseModel):
+    city_name: str = Field(description="city name")
+    queried_date: datetime = Field(description="date of timestamp")
+
+
+current_time = datetime.now()
+response: LLMResponse = pne.chat(
+    messages=f"What's the temperature in Shanghai tomorrow? {current_time}",
+    output_schema=LLMResponse
+)
+print(response)
+print(response.city_name)
+print(response.queried_date)
+```
+
+    city_name='Shanghai' queried_date=datetime.datetime(2023, 12, 11, 13, 2, 35, 722348, tzinfo=datetime.timezone.utc)
+    Shanghai
+    2023-12-11 13:02:35.722348+00:00
+    
 
 ## Using tool
 You can use `pne.tools` to add some tools to chat. Now we have `pne.tools.duckduckgo.DuckDuckGoTool()`, it can help you to get the answer from DuckDuckGo.

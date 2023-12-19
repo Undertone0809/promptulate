@@ -145,13 +145,16 @@ def chat(
             {"content": messages, "role": "user"},
         ]
 
-    # output formatter if provide
+    # add output format into system prompt if provide
     if output_schema:
         instruction = get_formatted_instructions(
-            pydantic_obj=output_schema, examples=examples
+            json_schema=output_schema, examples=examples
         )
         messages[-1]["content"] += f"\n{instruction}"
 
+    logger.debug(f"[pne chat] messages: {messages}")
+
+    # TODO add assistant Agent
     # TODO add BaseLLM support
     # chat by custom LLM and get response
     if custom_llm:
