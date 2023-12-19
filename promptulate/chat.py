@@ -145,13 +145,16 @@ def chat(
             {"content": messages, "role": "user"},
         ]
 
-    # output formatter if provide
+    # add output format into system prompt if provide
     if output_schema:
         instruction = get_formatted_instructions(
-            pydantic_obj=output_schema, examples=examples
+            json_schema=output_schema, examples=examples
         )
         messages[-1]["content"] += f"\n{instruction}"
 
+    logger.debug(f"[pne chat] messages: {messages}")
+
+    # TODO add assistant Agent
     # TODO add BaseLLM support
     # chat by custom LLM and get response
     if custom_llm:
@@ -162,7 +165,7 @@ def chat(
     else:
         import litellm
 
-        logger.debug("[pne chat] chat by litellm.")
+        logger.info("[pne chat] chat by litellm.")
         temp_response = litellm.completion(model, messages, **kwargs)
 
         # return stream
@@ -176,9 +179,11 @@ def chat(
                 additional_kwargs=json.loads(temp_response.json()),
             )
 
+    logger.debug(f"[pne chat] response: {response}")
+
     # return output format if provide
     if output_schema:
-        logger.debug("[pne chat] return output format.")
+        logger.info("[pne chat] return output format.")
         return formatting_result(
             pydantic_obj=output_schema, llm_output=response.content
         )

@@ -1,6 +1,6 @@
 import json
 import re
-from typing import Dict, List, TypeVar
+from typing import Dict, List, TypeVar, Union
 
 from pydantic import BaseModel
 
@@ -27,7 +27,21 @@ def _get_schema(pydantic_obj: type(BaseModel)) -> Dict:
 
 
 class OutputFormatter:
+    """
+    Class for formatting the output of a Pydantic object.
+
+    This class provides methods for getting formatted instructions and formatting the
+    result of a Pydantic object.
+    """
+
     def __init__(self, pydantic_obj: type(BaseModel), examples: List[BaseModel] = None):
+        """
+        Initialize the OutputFormatter class.
+
+        Args:
+            pydantic_obj (type(BaseModel)): The Pydantic object to format.
+            examples (List[BaseModel], optional): Examples of the Pydantic object.
+        """
         self.pydantic_obj = pydantic_obj
         self.examples = examples
 
@@ -39,10 +53,26 @@ class OutputFormatter:
 
 
 def get_formatted_instructions(
-    pydantic_obj: type(BaseModel), examples: List[BaseModel] = None
+    json_schema: Union[Dict, type(BaseModel)], examples: List[BaseModel] = None
 ) -> str:
+    """
+    Get formatted instructions for a JSON schema or Pydantic object.
+
+    Args:
+        json_schema (Union[Dict, type(BaseModel)]): The JSON schema or Pydantic object
+            to get instructions for.
+        examples (List[BaseModel], optional): Examples of the JSON schema or Pydantic
+            object. Defaults to None.
+
+    Returns:
+        str: The formatted instructions.
+    """
+    # If a Pydantic model is passed, extract the schema from it.
+    if isinstance(json_schema, type(BaseModel)):
+        json_schema = _get_schema(json_schema)
+
     # Ensure json with double quotes.
-    schema_str = json.dumps(_get_schema(pydantic_obj))
+    schema_str = json.dumps(json_schema)
 
     instructions: str = OUTPUT_FORMAT.format(schema=schema_str)
     if examples:
@@ -54,7 +84,20 @@ def get_formatted_instructions(
 
 
 def formatting_result(pydantic_obj: type(BaseModel), llm_output: str) -> T:
-    """Parse llm_output and instantiate the result as provided pydantic_obj."""
+    """
+    Parse llm_output and instantiate the result as provided pydantic_obj.
+
+    Args:
+        pydantic_obj (type(BaseModel)): The Pydantic object to instantiate the result
+            as.
+        llm_output (str): The output to parse.
+
+    Returns:
+        T: The instantiated result.
+
+    Raises:
+        OutputParserError: If the output cannot be parsed.
+    """
     try:
         match = re.search(
             r"\{.*\}", llm_output.strip(), re.MULTILINE | re.IGNORECASE | re.DOTALL
