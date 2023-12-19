@@ -128,7 +128,6 @@ def chat(
         Return BaseMessage if enable_original_return is True.
         Return List[BaseMessage] if stream is True.
         Return T if output_schema is provided.
-
     """
     if kwargs.get("stream", None) and output_schema:
         raise ValueError(
@@ -176,7 +175,9 @@ def chat(
         else:
             response: BaseMessage = AssistantMessage(
                 content=temp_response.choices[0].message.content,
-                additional_kwargs=json.loads(temp_response.json()),
+                additional_kwargs=temp_response.json()
+                if isinstance(temp_response.json(), dict)
+                else json.loads(temp_response.json()),
             )
 
     logger.debug(f"[pne chat] response: {response}")
