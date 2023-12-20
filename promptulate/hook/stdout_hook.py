@@ -10,6 +10,7 @@ class StdOutHook:
 
     @staticmethod
     def handle_agent_action(*args, **kwargs):
+        print_text(f"[Thought] {kwargs['thought']}", "yellow")
         print_text(
             f"[Action] {kwargs['action']} args: {kwargs['action_input']}", "yellow"
         )

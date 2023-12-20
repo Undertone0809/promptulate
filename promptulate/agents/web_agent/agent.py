@@ -66,6 +66,7 @@ class WebAgent(BaseAgent):
                 self,
                 action="websearch",
                 action_input=query_words,
+                thought=llm_output.split("\n")[0],
             )
 
             query_result: str = self.websearch.run(query_words)
