@@ -38,7 +38,7 @@ requests = "^2.31.0"
 loguru = "^0.7.2"
 
 [tool.poetry.group.dev.dependencies]
-coverage = "^6.1.2"
+coverage = ">=6.1.2,<8.0.0"
 coverage-badge = "^1.1.0"
 langchain = "^0.0.338"
 pre-commit = "^3.5.0"
