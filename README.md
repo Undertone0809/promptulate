@@ -26,7 +26,6 @@
   <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/promptulate_logo_new.png"/>
 </p>
 
-
 # What is Promptulate?
 `Promptulate AI` focuses on building a developer platform for large language model applications, dedicated to providing developers and businesses with the ability to build, extend, and evaluate large language model applications. `Promptulate` is a large language model automation and application development framework under `Promptulate AI`, designed to help developers build industry-level large model applications at a lower cost. It includes most of the common components for application layer development in the LLM field, such as external tool components, model components, Agent intelligent agents, external data source integration modules, data storage modules, and lifecycle modules. With `Promptulate`, you can easily build your own LLM applications.
 
@@ -118,7 +117,7 @@ By following these principles and incorporating the latest advancements in artif
 Feel free to join the group chat to discuss topics related to large language models (LLM). If the link is expired, you can notify the author through an issue or email.
 
 <div style="width: 250px;margin: 0 auto;">
-    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20231211045023.png"/>
+    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20231219175857.png"/>
 </div>
 
 # Contributions

@@ -73,3 +73,45 @@ Begin!
 Question: Tell me a funny joke about chickens.
 Thought:
 ```
+
+## Jinja2
+In some cases, you will get error when you use single curly braces. For example, the following code will raise an error.
+
+```python
+from promptulate.utils import StringTemplate
+
+data = "test"
+prompt = "This is a {data} {'key': 'value'}"
+
+resp: str = StringTemplate(prompt).format(data=data)
+print(resp)
+```
+
+Output:
+
+```text
+Traceback (most recent call last):
+  File "/Users/xxx/PycharmProjects/promptulate/venv/lib/python3.8/site-packages/promptulate/utils/string_template.py", line 31, in format
+    return self.template.format(*args, **kwargs)
+KeyError: "'key'"
+```
+
+StringTemplate use f-string default, it will get error when facing `{'key':'value'}`. The follow example show how to use Jinja2 to avoid this error.
+
+```python
+from promptulate.utils import StringTemplate
+
+data = "test"
+prompt = """This is a {{data}} {'key': 'value'}"""
+
+resp: str = StringTemplate(prompt, template_format="jinja2").format(data=data)
+print(resp)
+```
+
+Output:
+
+```text
+This is a test {'key': 'value'}
+```
+
+**Therefore, you can use `{{variable}}` to avoid some potential problems by jinja2.**
