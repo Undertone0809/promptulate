@@ -16,7 +16,29 @@ logger = logging.getLogger(__name__)
 
 
 class ToolAgent(BaseAgent):
-    """An agent who is good at using tool."""
+    """
+    An agent who is good at using tool. ref ReAct.
+
+    Attributes:
+        llm (BaseLLM): The language model driver. Default is ChatOpenAI with model
+            "gpt-3.5-turbo-16k".
+        stop_sequences (List[str]): The sequences that, when met, will stop the output
+            of the llm.
+        system_prompt_template (StringTemplate): The preset system prompt template.
+        prefix_prompt_template (StringTemplate): The prefix system prompt template.
+        tool_manager (ToolManager): Used to manage all tools.
+        conversation_prompt (str): Stores all conversation messages during a
+            conversation.
+        max_iterations (Optional[int]): The maximum number of executions. Default is 15.
+        max_execution_time (Optional[float]): The longest running time. No default
+            value.
+        enable_role (bool): Flag to enable role. Default is False.
+        agent_name (str): The name of the agent. Default is "pne-bot".
+        agent_identity (str): The identity of the agent. Default is "bot".
+        agent_goal (str): The goal of the agent. Default is "provides better assistance
+            and services for humans.".
+        agent_constraints (str): The constraints of the agent. Default is "none".
+    """
 
     def __init__(
         self,
