@@ -41,18 +41,18 @@ class ToolAgent(BaseAgent):
     """
 
     def __init__(
-            self,
-            tools: List[Union[BaseTool, Tool]],
-            llm: BaseLLM = None,
-            stop_sequences: List[str] = None,
-            prefix_prompt_template: StringTemplate = StringTemplate(PREFIX_TEMPLATE),
-            system_prompt_template: StringTemplate = StringTemplate(REACT_ZERO_SHOT_PROMPT),
-            hooks: List[Callable] = None,
-            enable_role: bool = False,
-            agent_name: str = "pne-bot",
-            agent_identity: str = "bot",
-            agent_goal: str = "provides better assistance and services for humans.",
-            agent_constraints: str = "none",
+        self,
+        tools: List[Union[BaseTool, Tool]],
+        llm: BaseLLM = None,
+        stop_sequences: List[str] = None,
+        prefix_prompt_template: StringTemplate = StringTemplate(PREFIX_TEMPLATE),
+        system_prompt_template: StringTemplate = StringTemplate(REACT_ZERO_SHOT_PROMPT),
+        hooks: List[Callable] = None,
+        enable_role: bool = False,
+        agent_name: str = "pne-bot",
+        agent_identity: str = "bot",
+        agent_goal: str = "provides better assistance and services for humans.",
+        agent_constraints: str = "none",
     ):
         super().__init__(hooks=hooks)
         self.llm: BaseLLM = llm or ChatOpenAI(
