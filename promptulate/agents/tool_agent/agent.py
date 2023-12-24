@@ -41,18 +41,18 @@ class ToolAgent(BaseAgent):
     """
 
     def __init__(
-        self,
-        tools: List[Union[BaseTool, Tool]],
-        llm: BaseLLM = None,
-        stop_sequences: List[str] = None,
-        prefix_prompt_template: StringTemplate = StringTemplate(PREFIX_TEMPLATE),
-        system_prompt_template: StringTemplate = StringTemplate(REACT_ZERO_SHOT_PROMPT),
-        hooks: List[Callable] = None,
-        enable_role: bool = False,
-        agent_name: str = "pne-bot",
-        agent_identity: str = "bot",
-        agent_goal: str = "provides better assistance and services for humans.",
-        agent_constraints: str = "none",
+            self,
+            tools: List[Union[BaseTool, Tool]],
+            llm: BaseLLM = None,
+            stop_sequences: List[str] = None,
+            prefix_prompt_template: StringTemplate = StringTemplate(PREFIX_TEMPLATE),
+            system_prompt_template: StringTemplate = StringTemplate(REACT_ZERO_SHOT_PROMPT),
+            hooks: List[Callable] = None,
+            enable_role: bool = False,
+            agent_name: str = "pne-bot",
+            agent_identity: str = "bot",
+            agent_goal: str = "provides better assistance and services for humans.",
+            agent_constraints: str = "none",
     ):
         super().__init__(hooks=hooks)
         self.llm: BaseLLM = llm or ChatOpenAI(
@@ -127,11 +127,12 @@ class ToolAgent(BaseAgent):
             if "Final Answer" in answer:
                 return answer.split("Final Answer:")[-1]
 
-            action, action_input = self._find_action(answer)
+            action, thought, action_input = self._find_action(answer)
             Hook.call_hook(
                 HookTable.ON_AGENT_ACTION,
                 self,
                 action=action,
+                thought=thought,
                 action_input=action_input,
             )
             tool_result = self.tool_manager.run_tool(action, action_input)
@@ -167,25 +168,30 @@ class ToolAgent(BaseAgent):
             answer(str): output of LLM
 
         Returns:
-            Return a tuple, (action, action input)
+            Return a tuple, (action, thought,action input)
             action(str): tool name
             action_input(str): tool parameters
         """
         action_pattern = r"Action:\s*([\w-]+)"
+        thought_pattern = r"Thought:\s*([\w-]+)"
         action_input_pattern = r"Action Input:\s*(.+)"
         action_match = re.search(action_pattern, answer)
+        thought_match = re.search(thought_pattern, answer)
         action_input_match = re.search(action_input_pattern, answer)
         action: str = ""
+        thought: str = ""
         action_input: str = ""
 
         if action_match:
             action = action_match.group(1)
             logger.info(f"[pne] tool agent get Action <{action}>")
-
+        if thought_match:
+            thought = thought_match.group(1)
+            logger.info(f"[pne] tool agent get Thought <{thought}>")
         if action_input_match:
             action_input = action_input_match.group(1)
             if action_input.startswith('"'):
                 action_input = action_input[1:-1]
             logger.info(f"[pne] tool agent get Action Input <{action_input}>")
 
-        return action, action_input
+        return action, thought, action_input
