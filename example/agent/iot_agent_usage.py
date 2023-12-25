@@ -41,9 +41,12 @@ def main():
         tools,
         enable_role=True,
         agent_name="小创",
-        agent_identity="智能音箱",
-        agent_goal="控制智能家居，可以开冷气，加热器以及开灯，完成动作后进入闲聊模式",
-        agent_constraints="在控制开关电器之前请尽量询问人类",
+        agent_identity="Smart speaker.",
+        agent_goal="Control smart home, can turn on the "
+        "air conditioner, heater, and lights, and enter into chat mode "
+        "after completing the action.",
+        agent_constraints="Please try to ask humans before controlling "
+        "or switching on electrical appliances.",
     )
     prompt = """我现在感觉好暗。"""
     agent.run(prompt)
