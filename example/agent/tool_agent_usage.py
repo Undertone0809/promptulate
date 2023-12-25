@@ -2,7 +2,7 @@ from promptulate.agents import ToolAgent
 from promptulate.tools import Calculator, DuckDuckGoTool
 from promptulate.utils.logger import enable_log
 
-enable_log()
+# enable_log()
 
 
 def main():
