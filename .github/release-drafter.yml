@@ -19,7 +19,11 @@ categories:
     labels: [dependencies]
 
 template: |
-  👋Hi there, this is promptulate v$NEXT_PATCH_VERSION release notes. We have updated some interesting features and look forward to your experience.
+  👋 Hello and welcome to the release notes for Promptulate v$NEXT_PATCH_VERSION! We're excited to share some new updates that we believe will enhance your experience with Promptulate.
+  
+  For detailed information, please visit our official documentation: [Promptulate Documentation](https://undertone0809.github.io/promptulate/#/)
+
+  To see the code, report issues, or contribute, check out our GitHub repository: [Promptulate on GitHub](https://github.com/Undertone0809/promptulate)
   
   ## What’s Changed
 
