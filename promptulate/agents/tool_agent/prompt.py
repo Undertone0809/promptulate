@@ -13,7 +13,7 @@ Thought: I now know the final answer
 Final Answer: the final answer to the original input question
 
 **Attention**
-- let's take a deep breathe and think it step by step
+- let's take a deep breathe and think things through one step at a time.
 - You can only output one behavior in one step
 - Minimize the number of websearch, but ensure that all necessary online searches are aimed at answering user questions.
 - Your final answer output language should be consistent with the language used by the user. Middle step output is English.
