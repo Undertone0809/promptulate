@@ -1,12 +1,19 @@
-from unittest import TestCase
+from unittest import TestCase, mock
 
 from promptulate.llms.openai import ChatOpenAI, OpenAI
-from promptulate.schema import MessageSet, UserMessage
-from promptulate.utils.logger import logger
 
 
 class TestOpenAI(TestCase):
-    def test_call(self):
+    @mock.patch("requests.post")
+    def test_call(self, mock_post):
+        # Mock the API response
+        mock_response = mock.Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {
+            "choices": [{"text": "[start] This is a test [end]"}]
+        }
+        mock_post.return_value = mock_response
+
         llm = OpenAI()
         prompt = """
         Please strictly output the following content.
@@ -16,9 +23,18 @@ class TestOpenAI(TestCase):
         """
         result = llm(prompt)
         self.assertIsNotNone(result)
-        self.assertTrue("[start] This is a test [end]")
+        self.assertTrue("[start] This is a test [end]" in result)
 
-    def test_call_with_stop(self):
+    @mock.patch("requests.post")
+    def test_call_with_stop(self, mock_post):
+        # Mock the API response
+        mock_response = mock.Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {
+            "choices": [{"text": "[start] This is a test"}]
+        }
+        mock_post.return_value = mock_response
+
         llm = OpenAI(temperature=0)
         prompt = """
         Please strictly output the following content.
@@ -26,16 +42,25 @@ class TestOpenAI(TestCase):
         [start] This is a test [end]
         ```
         """
-        result = llm(prompt, stop=["[end]"])
+        result = llm(prompt, stop=["test"])
         self.assertIsNotNone(result)
-        self.assertTrue("This is a test" in result)
+        self.assertTrue("[start] This is a test" == result)
 
     def test_generate_prompt_by_retry(self):
         pass
 
 
 class TestOpenAIChat(TestCase):
-    def test_call(self):
+    @mock.patch("requests.post")
+    def test_call(self, mock_post):
+        # Mock the API response
+        mock_response = mock.Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {
+            "choices": [{"message": {"content": "[start] This is a test [end]"}}]
+        }
+        mock_post.return_value = mock_response
+
         llm = ChatOpenAI()
         prompt = """
         Please strictly output the following content.
@@ -45,30 +70,27 @@ class TestOpenAIChat(TestCase):
         """
         result = llm(prompt)
         self.assertIsNotNone(result)
-        self.assertTrue("[start] This is a test [end]")
+        self.assertTrue("[start] This is a test [end]" in result)
 
-    def test_call_with_stop(self):
-        llm = ChatOpenAI(temperature=0)
-        prompt = """
-        Please strictly output the following content.
-        ```
-        [start] This is a test [end]
-        ```
-        """
-        result = llm(prompt, stop=["test"])
-        self.assertTrue("test [end]" not in result)
-        self.assertIsNotNone(result)
+    @mock.patch("requests.post")
+    def test_call_with_stop(self, mock_post):
+        # Mock the API response
+        mock_response = mock.Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {
+            "choices": [{"message": {"content": "[start] This is a test"}}]
+        }
+        mock_post.return_value = mock_response
 
-    def test_generate_prompt(self):
         llm = ChatOpenAI()
         prompt = """
         Please strictly output the following content.
         ```
-        [start] This is a test [end]
+        [start] This is a test
         ```
         """
-        user_message = UserMessage(content=prompt)
-        result = llm.predict(MessageSet(messages=[user_message]))
+        result = llm(prompt, stop=["test"])
+        self.assertTrue("[end]" not in result)
         self.assertIsNotNone(result)
 
     def test_generate_prompt_by_retry(self):

@@ -1,11 +1,12 @@
-from unittest import TestCase
+from unittest import TestCase, mock
 
 from promptulate.hook import Hook
 from promptulate.tools import DuckDuckGoTool
 
 
 class TestToolHook(TestCase):
-    def test_instance_hook(self):
+    @mock.patch('promptulate.tools.DuckDuckGoTool._run', return_value="mocked result")
+    def test_instance_hook(self, mock_run):
         create_flag = False
         start_flag = False
         result_flag = False
@@ -40,8 +41,10 @@ class TestToolHook(TestCase):
         self.assertTrue(create_flag)
         self.assertTrue(start_flag)
         self.assertTrue(result_flag)
+        mock_run.assert_called_once_with("What is LLM?")
 
-    def test_component_hook(self):
+    @mock.patch('promptulate.tools.DuckDuckGoTool._run', return_value="mocked result")
+    def test_component_hook(self, mock_run):
         create_flag = False
         start_flag = False
         result_flag = False
@@ -75,3 +78,4 @@ class TestToolHook(TestCase):
         self.assertTrue(create_flag)
         self.assertTrue(start_flag)
         self.assertTrue(result_flag)
+        mock_run.assert_called_once_with("What is promptulate?")
