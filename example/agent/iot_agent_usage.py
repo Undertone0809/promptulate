@@ -40,7 +40,7 @@ def main():
     agent = ToolAgent(
         tools,
         enable_role=True,
-        agent_name="小创",
+        agent_name="xiao chang",
         agent_identity="Smart speaker.",
         agent_goal="Control smart home, can turn on the "
         "air conditioner, heater, and lights, and enter into chat mode "
@@ -48,7 +48,7 @@ def main():
         agent_constraints="Please try to ask humans before controlling "
         "or switching on electrical appliances.",
     )
-    prompt = """我现在感觉好暗。"""
+    prompt = """I feel so dark now."""
     agent.run(prompt)
 
 
