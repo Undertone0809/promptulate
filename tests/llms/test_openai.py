@@ -15,7 +15,7 @@ class TestOpenAI(TestCase):
         mock_post.return_value = mock_response
 
         llm = OpenAI()
-        llm.set_private_api_key("")
+        llm.set_private_api_key("my key")
         prompt = """
         Please strictly output the following content.
         ```
@@ -37,7 +37,7 @@ class TestOpenAI(TestCase):
         mock_post.return_value = mock_response
 
         llm = OpenAI(temperature=0)
-        llm.set_private_api_key("")
+        llm.set_private_api_key("my key")
         prompt = """
         Please strictly output the following content.
         ```
@@ -64,7 +64,7 @@ class TestOpenAIChat(TestCase):
         mock_post.return_value = mock_response
 
         llm = ChatOpenAI()
-        llm.set_private_api_key("")
+        llm.set_private_api_key("my key")
         prompt = """
         Please strictly output the following content.
         ```
@@ -86,7 +86,7 @@ class TestOpenAIChat(TestCase):
         mock_post.return_value = mock_response
 
         llm = ChatOpenAI()
-        llm.set_private_api_key("")
+        llm.set_private_api_key("my key")
         prompt = """
         Please strictly output the following content.
         ```

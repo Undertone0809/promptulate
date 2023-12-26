@@ -43,7 +43,7 @@ class TestLLMHook(TestCase):
 
         hooks = [handle_create, handle_start, handle_result]
         llm = ChatOpenAI(hooks=hooks)
-        llm.set_private_api_key("")
+        llm.set_private_api_key("my key")
         llm("What is LLM?")
 
         self.assertTrue(create_flag)
@@ -87,7 +87,7 @@ class TestLLMHook(TestCase):
             print(result)
 
         llm = ChatOpenAI()
-        llm.set_private_api_key("")
+        llm.set_private_api_key("my key")
         llm("What is LLM?")
 
         self.assertTrue(create_flag)
