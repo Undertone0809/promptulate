@@ -112,14 +112,6 @@ The design principles of the `promptulate` framework include modularity, scalabi
 
 By following these principles and incorporating the latest advancements in artificial intelligence technology, `promptulate` aims to provide a powerful and flexible application development framework for creating automated agents.
 
-# Community
-
-Feel free to join the group chat to discuss topics related to large language models (LLM). If the link is expired, you can notify the author through an issue or email.
-
-<div style="width: 250px;margin: 0 auto;">
-    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20231219175857.png"/>
-</div>
-
 # Contributions
 
 I am currently exploring more comprehensive abstraction patterns to improve compatibility with the framework and the extended use of external tools. If you have any suggestions, I welcome discussions and exchanges.
