@@ -5,7 +5,6 @@ from promptulate.llms import ChatOpenAI
 
 
 class TestLLMHook(TestCase):
-
     @mock.patch("requests.post")
     def test_instance_hook(self, mock_post):
         mock_response = mock.Mock()
@@ -44,6 +43,7 @@ class TestLLMHook(TestCase):
 
         hooks = [handle_create, handle_start, handle_result]
         llm = ChatOpenAI(hooks=hooks)
+        llm.set_private_api_key("")
         llm("What is LLM?")
 
         self.assertTrue(create_flag)
@@ -87,6 +87,7 @@ class TestLLMHook(TestCase):
             print(result)
 
         llm = ChatOpenAI()
+        llm.set_private_api_key("")
         llm("What is LLM?")
 
         self.assertTrue(create_flag)

@@ -5,7 +5,7 @@ from promptulate.tools import DuckDuckGoTool
 
 
 class TestToolHook(TestCase):
-    @mock.patch('promptulate.tools.DuckDuckGoTool._run', return_value="mocked result")
+    @mock.patch("promptulate.tools.DuckDuckGoTool._run", return_value="mocked result")
     def test_instance_hook(self, mock_run):
         create_flag = False
         start_flag = False
@@ -43,7 +43,7 @@ class TestToolHook(TestCase):
         self.assertTrue(result_flag)
         mock_run.assert_called_once_with("What is LLM?")
 
-    @mock.patch('promptulate.tools.DuckDuckGoTool._run', return_value="mocked result")
+    @mock.patch("promptulate.tools.DuckDuckGoTool._run", return_value="mocked result")
     def test_component_hook(self, mock_run):
         create_flag = False
         start_flag = False
