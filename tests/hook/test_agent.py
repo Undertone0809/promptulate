@@ -33,8 +33,8 @@ class TestToolHook(TestCase):
             action_flag = True
 
             thought = kwargs["thought"]
-            action = kwargs['action']
-            action_input = kwargs['action_input']
+            action = kwargs["action"]
+            action_input = kwargs["action_input"]
             self.assertIsNotNone(thought)
             self.assertIsNotNone(action)
             self.assertIsNotNone(action_input)
@@ -87,8 +87,8 @@ class TestToolHook(TestCase):
             action_flag = True
 
             thought = kwargs["thought"]
-            action = kwargs['action']
-            action_input = kwargs['action_input']
+            action = kwargs["action"]
+            action_input = kwargs["action_input"]
             self.assertIsNotNone(thought)
             self.assertIsNotNone(action)
             self.assertIsNotNone(action_input)
