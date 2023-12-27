@@ -168,7 +168,7 @@ class ToolAgent(BaseAgent):
             answer(str): output of LLM
 
         Returns:
-            Return a tuple, (thought,action, action input)
+            Return a tuple, (thought,action,action input)
             action(str): tool name
             action_input(str): tool parameters
         """

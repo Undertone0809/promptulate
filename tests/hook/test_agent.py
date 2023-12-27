@@ -2,7 +2,6 @@ from unittest import TestCase
 
 from promptulate.agents import ToolAgent
 from promptulate.hook import Hook
-from promptulate.llms import ErnieBot
 from promptulate.tools import Calculator, DuckDuckGoTool
 
 
