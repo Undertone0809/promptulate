@@ -115,6 +115,8 @@ if __name__ == '__main__':
     example()
 ```
 
+### 类声明式
+
 如果你的工具逻辑较为复杂，可以使用继承式的定义方式，下面的示例展示了如何自定义一个Tool类，从而构建一个shell工具。
 
 ```python
@@ -138,14 +140,13 @@ class ShellTool(Tool):
 
     name: str = "terminal"
     description: str = f"Run shell commands on this {_get_platform()} machine."
-    api_wrapper: ShellAPIWrapper = ShellAPIWrapper()
 
     def _run(self, command: str) -> str:
         warnings.warn(
             "The shell tool has no safeguards by default. Use at your own risk."
         )
         """Run commands and return final output."""
-        return self.api_wrapper.run(command)
+        return ShellAPIWrapper().run(command)
 
 
 def example():

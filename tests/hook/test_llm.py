@@ -1,14 +1,19 @@
-from unittest import TestCase
+from unittest import TestCase, mock
 
 from promptulate.hook import Hook
 from promptulate.llms import ChatOpenAI
-from promptulate.utils.logger import enable_log
-
-enable_log()
 
 
 class TestLLMHook(TestCase):
-    def test_instance_hook(self):
+    @mock.patch("requests.post")
+    def test_instance_hook(self, mock_post):
+        mock_response = mock.Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {
+            "choices": [{"message": {"content": "LLM is large language model."}}]
+        }
+        mock_post.return_value = mock_response
+
         create_flag = False
         start_flag = False
         result_flag = False
@@ -38,13 +43,22 @@ class TestLLMHook(TestCase):
 
         hooks = [handle_create, handle_start, handle_result]
         llm = ChatOpenAI(hooks=hooks)
+        llm.set_private_api_key("my key")
         llm("What is LLM?")
 
         self.assertTrue(create_flag)
         self.assertTrue(start_flag)
         self.assertTrue(result_flag)
 
-    def test_component_hook(self):
+    @mock.patch("requests.post")
+    def test_component_hook(self, mock_post):
+        mock_response = mock.Mock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {
+            "choices": [{"message": {"content": "LLM is large language model."}}]
+        }
+        mock_post.return_value = mock_response
+
         create_flag = False
         start_flag = False
         result_flag = False
@@ -73,6 +87,7 @@ class TestLLMHook(TestCase):
             print(result)
 
         llm = ChatOpenAI()
+        llm.set_private_api_key("my key")
         llm("What is LLM?")
 
         self.assertTrue(create_flag)

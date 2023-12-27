@@ -1,13 +1,18 @@
 SHELL := /usr/bin/env bash
 OS := $(shell python -c "import sys; print(sys.platform)")
 
+DEV_TEST_TOOL_FILES := ./tests/tools/test_human_feedback_tool.py ./tests/tools/test_calculator.py ./tests/tools/test_python_repl_tools.py ./tests/tools/test_sleep_tool.py
+DEV_TEST_HOOK_FILES := ./tests/hook/test_llm.py ./tests/hook/test_tool_hook.py
+DEV_TEST_LLM_FILES := ./tests/llms/test_openai.py
+DEV_TEST_FILES := $(DEV_TEST_TOOL_FILES) $(DEV_TEST_HOOK_FILES) $(DEV_TEST_LLM_FILES) ./tests/test_chat.py ./tests/output_formatter ./tests/test_import.py ./tests/utils/test_string_template.py
+
 ifeq ($(OS),win32)
 	PYTHONPATH := $(shell python -c "import os; print(os.getcwd())")
-    TEST_COMMAND := set PYTHONPATH=$(PYTHONPATH) && poetry run pytest -c pyproject.toml --cov-report=html --cov=promptulate ./tests/test_chat.py ./tests/output_formatter ./tests/test_import.py ./tests/utils/test_string_template.py
+    TEST_COMMAND := set PYTHONPATH=$(PYTHONPATH) && poetry run pytest -c pyproject.toml --cov-report=html --cov=promptulate $(DEV_TEST_FILES)
 	TEST_PROD_COMMAND := set PYTHONPATH=$(PYTHONPATH) && poetry run pytest -c pyproject.toml --cov-report=html --cov=promptulate tests
 else
 	PYTHONPATH := `pwd`
-    TEST_COMMAND := PYTHONPATH=$(PYTHONPATH) poetry run pytest -c pyproject.toml --cov-report=html --cov=promptulate ./tests/test_chat.py ./tests/output_formatter ./tests/test_import.py ./tests/utils/test_string_template.py
+    TEST_COMMAND := PYTHONPATH=$(PYTHONPATH) poetry run pytest -c pyproject.toml --cov-report=html --cov=promptulate $(DEV_TEST_FILES)
 	TEST_PROD_COMMAND := PYTHONPATH=$(PYTHONPATH) poetry run pytest -c pyproject.toml --cov-report=html --cov=promptulate tests
 endif
 
@@ -39,7 +44,6 @@ formatting: polish-codestyle
 .PHONY: test
 test:
 	$(TEST_COMMAND)
-	poetry run coverage-badge -o docs/images/coverage.svg -f
 
 #* Linting
 .PHONY: test-prod
@@ -53,7 +57,7 @@ check-codestyle:
 	poetry run ruff check --config pyproject.toml promptulate tests example
 
 .PHONY: lint
-lint: test check-codestyle
+lint: check-codestyle test
 
 #* https://github.com/Maxlinn/linn-jupyter-site-template/blob/main/.github/workflows/linn-jupyter-site-template-deploy.yml
 .PHONY: build-docs
