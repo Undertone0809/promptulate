@@ -42,10 +42,8 @@ def enable_log():
     log level for the file is set to DEBUG. The log level for stderr is also set to
     DEBUG.
     """
-    logger.remove()
-
-    logger.add(get_log_path(), level="DEBUG", rotation="1 day", filter=pne_log_filter)
-    logger.add(sys.stderr, level="DEBUG")
+    log_manager.logger._core.handlers[log_manager.file_logger_id].level = "DEBUG"
+    log_manager.logger._core.handlers[log_manager.sys_logger_id].level = "DEBUG"
 
 
 def pne_log_filter(record) -> bool:
@@ -66,7 +64,7 @@ def pne_log_filter(record) -> bool:
     return record["name"].startswith("promptulate")
 
 
-class Logger(metaclass=Singleton):
+class LogManager(metaclass=Singleton):
     """
     Logger class that uses the Singleton design pattern.
 
@@ -83,12 +81,22 @@ class Logger(metaclass=Singleton):
     def __init__(self) -> None:
         self.logger = _logger
 
-        self.logger.remove()
-
-        self.logger.add(
+        self.file_logger_id = self.logger.add(
             get_log_path(), level="DEBUG", rotation="1 day", filter=pne_log_filter
         )
-        self.logger.add(sys.stderr, level="WARNING")
+
+        # if exist stderr handler, do not add again
+        self.sys_logger_id = next(
+            (
+                handler_id
+                for handler_id, handler in self.logger._core.handlers.items()
+                if handler._name == "<stderr>"
+            ),
+            None,
+        )
+
+        if self.sys_logger_id is None:
+            self.sys_logger_id = self.logger.add(sys.stderr, level="WARNING")
 
 
 def exception_handler(exc_type, exc_value, exc_traceback):
@@ -117,5 +125,6 @@ def exception_handler(exc_type, exc_value, exc_traceback):
     logger.error(f"Uncaught exception: {tb_info}")
 
 
-logger = Logger().logger
+log_manager = LogManager()
+logger = log_manager.logger
 sys.excepthook = exception_handler
