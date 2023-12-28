@@ -38,7 +38,7 @@ def _evaluate_expression(expression: str) -> str:
         )
     except Exception as e:
         raise ValueError(
-            f'LLMMathChain._evaluate("{expression}") raised error: {e}.'
+            f'Calculator._evaluate_expression("{expression}") raised error: {e}.'
             " Please try again with a valid numerical expression"
         )
 
@@ -73,7 +73,8 @@ class Calculator(Tool):
     name: str = "math-calculator"
     description: str = (
         "Useful for when you need to answer questions about math.You input is a nature"
-        "language of math expression."
+        "language of math expression. Attention: Expressions can not exist variables!"
+        "eg: (current age)^0.43 is wrong, you should use 18^0.43 instead."
     )
 
     def __init__(self, llm: BaseLLM = None, **kwargs):
