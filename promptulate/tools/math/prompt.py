@@ -1,40 +1,24 @@
 from promptulate.utils.string_template import StringTemplate
 
-PROMPT_TEMPLATE = """Translate a math problem into a expression that can be executed using Python's numexpr library. Use the output of running this code to answer the question.
+PROMPT_TEMPLATE = """You are provided a math problem, you should transalte it into a math expression.
 
-Question: ${{Question with math problem.}}
-```text
-${{single line mathematical expression that solves the problem}}
-```
-...numexpr.evaluate(text)...
-```output
-${{Output of running the code}}
-```
-Answer: ${{Answer}}
+## Output format
+Output the following JSON format, No explanation:
+{"expression": "the expression need to calculate"}
 
-Begin.
-
+For example:
+1. 
 Question: What is 37593 * 67?
-```text
-37593 * 67
-```
-...numexpr.evaluate("37593 * 67")...
-```output
-2518731
-```
-Answer: 2518731
+Output:
+{"expression": "37593 * 67"}
 
-Question: 37593^(1/5)
-```text
-37593**(1/5)
-```
-...numexpr.evaluate("37593**(1/5)")...
-```output
-8.222831614237718
-```
-Answer: 8.222831614237718
+2.
+Question: What is 37593^(1/5)?
+Output:
+{"expression": "37593**(1/5)"}
 
-Question: {question}
+## Question
+{{question}}
 """  # noqa
 
-prompt_template = StringTemplate(PROMPT_TEMPLATE)
+prompt_template = StringTemplate(PROMPT_TEMPLATE, template_format="jinja2")
