@@ -127,10 +127,11 @@ class ToolAgent(BaseAgent):
             if "Final Answer" in answer:
                 return answer.split("Final Answer:")[-1]
 
-            action, action_input = self._find_action(answer)
+            thought, action, action_input = self._parse_llm_response(answer)
             Hook.call_hook(
                 HookTable.ON_AGENT_ACTION,
                 self,
+                thought=thought,
                 action=action,
                 action_input=action_input,
             )
@@ -160,32 +161,37 @@ class ToolAgent(BaseAgent):
             return False
         return True
 
-    def _find_action(self, answer: str) -> (str, str):
+    def _parse_llm_response(self, answer: str) -> (str, str):
         """Parse next instruction of LLM output.
 
         Args:
             answer(str): output of LLM
 
         Returns:
-            Return a tuple, (action, action input)
+            Return a tuple, (thought,action,action input)
             action(str): tool name
             action_input(str): tool parameters
         """
+        thought_pattern = r"^Thought:\s*(.*)"
         action_pattern = r"Action:\s*([\w-]+)"
         action_input_pattern = r"Action Input:\s*(.+)"
+        thought_match = re.search(thought_pattern, answer)
         action_match = re.search(action_pattern, answer)
         action_input_match = re.search(action_input_pattern, answer)
+        thought: str = ""
         action: str = ""
         action_input: str = ""
 
+        if thought_match:
+            thought = thought_match.group(1)
+            logger.info(f"[pne] tool agent get Thought <{thought}>")
         if action_match:
             action = action_match.group(1)
             logger.info(f"[pne] tool agent get Action <{action}>")
-
         if action_input_match:
             action_input = action_input_match.group(1)
             if action_input.startswith('"'):
                 action_input = action_input[1:-1]
             logger.info(f"[pne] tool agent get Action Input <{action_input}>")
 
-        return action, action_input
+        return thought, action, action_input
