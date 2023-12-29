@@ -81,22 +81,18 @@ class LogManager(metaclass=Singleton):
     def __init__(self) -> None:
         self.logger = _logger
 
+        # self.logger.remove()
+
         self.file_logger_id = self.logger.add(
             get_log_path(), level="DEBUG", rotation="1 day", filter=pne_log_filter
         )
 
-        # if exist stderr handler, do not add again
-        self.sys_logger_id = next(
-            (
-                handler_id
-                for handler_id, handler in self.logger._core.handlers.items()
-                if handler._name == "<stderr>"
-            ),
-            None,
-        )
+        for handler_id, handler in self.logger._core.handlers.items():
+            if handler._name == "<stderr>":
+                del self.logger._core.handlers[handler_id]
+                break
 
-        if self.sys_logger_id is None:
-            self.sys_logger_id = self.logger.add(sys.stderr, level="WARNING")
+        # self.sys_logger_id = self.logger.add(sys.stderr, level="WARNING")
 
 
 def exception_handler(exc_type, exc_value, exc_traceback):
