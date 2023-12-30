@@ -180,17 +180,18 @@ reference = "tsinghua"
 
 [[package]]
 name = "arxiv"
-version = "1.4.8"
-description = "Python wrapper for the arXiv API: http://arxiv.org/help/api/"
+version = "2.1.0"
+description = "Python wrapper for the arXiv API: https://arxiv.org/help/api/"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "arxiv-1.4.8-py3-none-any.whl", hash = "sha256:c3dbef0fb7ed85c9b4c2157b40a62f5a04ce0d2f63c3ff7caa7798abf6166378"},
-    {file = "arxiv-1.4.8.tar.gz", hash = "sha256:2a818ea749eaa62a6e24fc31d53b769b4d33ff55cfc5dda7c7b7d309a3b29373"},
+    {file = "arxiv-2.1.0-py3-none-any.whl", hash = "sha256:d634a0a59c9f05baf524eaa65563bb0a4532d2b4727a1162a1a9ba7e1e6e48cc"},
+    {file = "arxiv-2.1.0.tar.gz", hash = "sha256:eb4b1d5ab9dfd66027c344bb324c20be21d56fe15f6ce216ed5b209df747dea8"},
 ]
 
 [package.dependencies]
-feedparser = "*"
+feedparser = "6.0.10"
+requests = "2.31.0"
 
 [package.source]
 type = "legacy"
@@ -840,13 +841,13 @@ reference = "tsinghua"
 
 [[package]]
 name = "feedparser"
-version = "6.0.11"
+version = "6.0.10"
 description = "Universal feed parser, handles RSS 0.9x, RSS 1.0, RSS 2.0, CDF, Atom 0.3, and Atom 1.0 feeds"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "feedparser-6.0.11-py3-none-any.whl", hash = "sha256:0be7ee7b395572b19ebeb1d6aafb0028dee11169f1c934e0ed67d54992f4ad45"},
-    {file = "feedparser-6.0.11.tar.gz", hash = "sha256:c9d0407b64c6f2a065d0ebb292c2b35c01050cc0dc33757461aaabdc4c4184d5"},
+    {file = "feedparser-6.0.10-py3-none-any.whl", hash = "sha256:79c257d526d13b944e965f6095700587f27388e50ea16fd245babe4dfae7024f"},
+    {file = "feedparser-6.0.10.tar.gz", hash = "sha256:27da485f4637ce7163cdeab13a80312b93b7d0c1b775bef4a47629a3110bca51"},
 ]
 
 [package.dependencies]
@@ -3153,4 +3154,4 @@ reference = "tsinghua"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<4.0"
-content-hash = "946a932dd32c02014c1e5233881e5b36a285563d57a4e9f31fb39403e33ddc9f"
+content-hash = "053a109694f17b9342c7813eb8d66c51c4ee58bd3fccfecef7420f1176bc1c33"
