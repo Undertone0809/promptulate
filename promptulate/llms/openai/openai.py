@@ -151,7 +151,7 @@ class OpenAI(BaseOpenAI):
         }
         body: Dict[str, Any] = self._build_api_params_dict(messages, stop)
 
-        logger.debug(f"[pne openai params] body {json.dumps(body)}")
+        logger.debug(f"[pne openai request] {json.dumps(body, indent=2)}")
         logger.debug(
             f"[pne openai request] url: {pne_config.openai_completion_request_url} proxies: {pne_config.proxies}"  # noqa: E501
         )
@@ -167,9 +167,8 @@ class OpenAI(BaseOpenAI):
             #     logger.debug(chunk)
             self.retry_counter = 0
             ret_data = response.json()
-            logger.debug(f"[pne openai response] {json.dumps(ret_data)}")
+            logger.debug(f"[pne openai response] {json.dumps(ret_data, indent=2)}")
             content = ret_data["choices"][0]["text"]
-            logger.debug(f"[pne openai answer] {content}")
             return AssistantMessage(content=content, additional_kwargs=ret_data)
 
         logger.error(
@@ -296,7 +295,7 @@ class ChatOpenAI(BaseOpenAI):
         }
         body: Dict[str, Any] = self._build_api_params_dict(prompts, stop)
 
-        logger.debug(f"[pne openai params] body {json.dumps(body)}")
+        logger.debug(f"[pne openai request] {json.dumps(body, indent=2)}")
         logger.debug(
             f"[pne openai request] url: {pne_config.openai_chat_request_url} proxies: {pne_config.proxies}"  # noqa: E501
         )
@@ -312,9 +311,8 @@ class ChatOpenAI(BaseOpenAI):
             #     logger.debug(chunk)
             self.retry_counter = 0
             ret_data = response.json()
-            logger.debug(f"[pne openai response] {json.dumps(ret_data)}")
+            logger.debug(f"[pne openai response] {json.dumps(ret_data, indent=2)}")
             content = ret_data["choices"][0]["message"]["content"]
-            logger.debug(f"[pne openai answer] {content}")
 
             response.close()
 
