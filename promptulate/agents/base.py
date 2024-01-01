@@ -48,7 +48,9 @@ class BaseAgent(ABC):
     @abstractmethod
     def _run(self, prompt: str, *args, **kwargs) -> str:
         """Run the detail agent, implemented by subclass."""
+        raise NotImplementedError()
 
     @abstractmethod
     def get_llm(self) -> BaseLLM:
         """Get the llm when necessary."""
+        raise NotImplementedError()
