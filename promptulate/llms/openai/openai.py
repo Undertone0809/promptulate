@@ -106,8 +106,9 @@ class OpenAI(BaseOpenAI):
     the models maximal context size."""
 
     def __call__(
-        self, prompt: str, stop: Optional[List[str]] = None, *args, **kwargs
+        self, instruction: str, stop: Optional[List[str]] = None, *args, **kwargs
     ) -> str:
+        # Loading OpenAI API parameters
         for key in self.api_param_keys:
             if key in kwargs:
                 setattr(self, key, kwargs[key])
@@ -122,13 +123,13 @@ class OpenAI(BaseOpenAI):
         message_set = MessageSet(
             messages=[
                 CompletionMessage(content=preset),
-                CompletionMessage(content=prompt),
+                CompletionMessage(content=instruction),
             ]
         )
         return self.predict(message_set, stop).content
 
     def _predict(
-        self, prompts: MessageSet, stop: Optional[List[str]] = None, *args, **kwargs
+        self, messages: MessageSet, stop: Optional[List[str]] = None, *args, **kwargs
     ) -> Optional[AssistantMessage]:
         """Run openai llm with custom message context."""
         if self.model == "text-davinci-003":
@@ -148,7 +149,7 @@ class OpenAI(BaseOpenAI):
             "Content-Type": "application/json",
             "Authorization": f"Bearer {api_key}",
         }
-        body: Dict[str, Any] = self._build_api_params_dict(prompts, stop)
+        body: Dict[str, Any] = self._build_api_params_dict(messages, stop)
 
         logger.debug(f"[pne openai params] body {json.dumps(body)}")
         logger.debug(
@@ -177,7 +178,7 @@ class OpenAI(BaseOpenAI):
         logger.debug("[promptulate OpenAI] retry to get response")
         if self.enable_retry and self.retry_counter < self.retry_times:
             self.retry_counter += 1
-            return self._predict(prompts, stop)
+            return self._predict(messages, stop)
 
         logger.error(f"[pne OpenAI] Has retry {self.retry_times}, but all failed.")
         raise OpenAIError(json.dumps(response.content))
@@ -258,7 +259,7 @@ class ChatOpenAI(BaseOpenAI):
     """The key of openai api parameters."""
 
     def __call__(
-        self, prompt: str, stop: Optional[List[str]] = None, *args, **kwargs
+        self, instruction: str, stop: Optional[List[str]] = None, *args, **kwargs
     ) -> str:
         for key in self.api_param_keys:
             if key in kwargs:
@@ -275,7 +276,7 @@ class ChatOpenAI(BaseOpenAI):
         message_set = MessageSet(
             messages=[
                 SystemMessage(content=system_message),
-                UserMessage(content=prompt),
+                UserMessage(content=instruction),
             ]
         )
         return self.predict(message_set, stop).content
