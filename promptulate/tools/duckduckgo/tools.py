@@ -47,7 +47,7 @@ class DuckDuckGoTool(Tool):
                 if attempt >= self.max_retry:
                     raise e
 
-                time.sleep(1.3 ** attempt)  # Exponential backoff
+                time.sleep(1.3**attempt)  # Exponential backoff
             except Exception as e:
                 raise e
 
