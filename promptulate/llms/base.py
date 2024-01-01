@@ -23,7 +23,7 @@ from typing import Optional, Union
 from pydantic import BaseModel
 
 from promptulate.hook import Hook, HookTable
-from promptulate.schema import AssistantMessage, LLMType, MessageSet
+from promptulate.schema import AssistantMessage, BaseMessage, LLMType, MessageSet
 
 
 class BaseLLM(BaseModel, ABC):
@@ -50,10 +50,12 @@ class BaseLLM(BaseModel, ABC):
 
     @abstractmethod
     def _predict(
-        self, prompts: MessageSet, *args, **kwargs
-    ) -> Optional[AssistantMessage]:
+        self, messages: MessageSet, *args, **kwargs
+    ) -> Optional[type(BaseMessage)]:
         """Run the llm, implemented through subclass."""
+        raise NotImplementedError()
 
     @abstractmethod
-    def __call__(self, prompt: str, *args, **kwargs):
+    def __call__(self, instruction: str, *args, **kwargs):
         """input string prompt return answer"""
+        raise NotImplementedError()
