@@ -163,22 +163,6 @@ url = "https://pypi.tuna.tsinghua.edu.cn/simple"
 reference = "tsinghua"
 
 [[package]]
-name = "appdirs"
-version = "1.4.4"
-description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
-optional = false
-python-versions = "*"
-files = [
-    {file = "appdirs-1.4.4-py2.py3-none-any.whl", hash = "sha256:a841dacd6b99318a741b166adb07e19ee71a274450e68237b4650ca1055ab128"},
-    {file = "appdirs-1.4.4.tar.gz", hash = "sha256:7d5d0167b2b1ba821647616af46a749d1c653740dd0d2415100fe26e27afdf41"},
-]
-
-[package.source]
-type = "legacy"
-url = "https://pypi.tuna.tsinghua.edu.cn/simple"
-reference = "tsinghua"
-
-[[package]]
 name = "arxiv"
 version = "1.4.8"
 description = "Python wrapper for the arXiv API: http://arxiv.org/help/api/"
@@ -1448,18 +1432,17 @@ reference = "tsinghua"
 
 [[package]]
 name = "litellm"
-version = "1.15.8"
+version = "1.16.10"
 description = "Library to easily interface with LLM API providers"
 optional = false
-python-versions = ">=3.8.1,<4.0.0"
+python-versions = ">=3.8, !=2.7.*, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*, !=3.6.*, !=3.7.*"
 files = [
-    {file = "litellm-1.15.8-py3-none-any.whl", hash = "sha256:442fb4d568e1f300ea5274033f8fd7c6d8035ac0003a3f4242e68b752b4b9aa4"},
-    {file = "litellm-1.15.8.tar.gz", hash = "sha256:daf599048f366ca3adc7d069ab8cac7213abe5ea2b89ba8daf0424f643a4241d"},
+    {file = "litellm-1.16.10-py3-none-any.whl", hash = "sha256:cf2c7804a4695c63aa4bff08acc6a520bb2f160b3b79680820eb9e4ad6b57e93"},
+    {file = "litellm-1.16.10.tar.gz", hash = "sha256:1bf50f194de9fc3dcca9baeafcac715a5d437ea57456112f029b6bcf03bc2fe1"},
 ]
 
 [package.dependencies]
 aiohttp = "*"
-appdirs = ">=1.4.4,<2.0.0"
 certifi = ">=2023.7.22,<2024.0.0"
 click = "*"
 importlib-metadata = ">=6.8.0"
@@ -1470,7 +1453,8 @@ tiktoken = ">=0.4.0"
 tokenizers = "*"
 
 [package.extras]
-proxy = ["backoff", "fastapi (>=0.104.1,<0.105.0)", "rq", "uvicorn (>=0.24.0.post1,<0.25.0)"]
+extra-proxy = ["streamlit (>=1.29.0,<2.0.0)"]
+proxy = ["backoff", "fastapi (>=0.104.1,<0.105.0)", "orjson (>=3.9.7,<4.0.0)", "pyyaml (>=6.0,<7.0)", "rq", "uvicorn (>=0.22.0,<0.23.0)"]
 
 [package.source]
 type = "legacy"
