@@ -725,13 +725,13 @@ reference = "tsinghua"
 
 [[package]]
 name = "cushy-storage"
-version = "1.3.3"
+version = "1.3.7"
 description = "A data local persistence ORM framework."
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "cushy_storage-1.3.3-py3-none-any.whl", hash = "sha256:844c6d94671b66c8c45eb88d04c44c23941c02cac70d6c9f5dba75e7283c8ba0"},
-    {file = "cushy_storage-1.3.3.tar.gz", hash = "sha256:6fda1c64243f7f6db04428ca84e0d2b19e4656de97109ba64a64fc49680658ce"},
+    {file = "cushy_storage-1.3.7-py3-none-any.whl", hash = "sha256:44551e0a87635107ca9481476eda2550964fcf02dd18d18454ef0437e49fa4be"},
+    {file = "cushy_storage-1.3.7.tar.gz", hash = "sha256:3da81b4ef339d97221605f73f8907313cbfe035fbc136acbc87cc155076716a7"},
 ]
 
 [package.dependencies]
