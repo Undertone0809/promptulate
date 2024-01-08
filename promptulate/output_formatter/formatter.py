@@ -1,6 +1,6 @@
 import json
 import re
-from typing import Dict, List, TypeVar, Union
+from typing import Any, Dict, List, TypeVar, Union
 
 from pydantic import BaseModel
 
@@ -11,7 +11,14 @@ T = TypeVar("T", bound=BaseModel)
 
 
 def _get_schema(pydantic_obj: type(BaseModel)) -> Dict:
-    """Get reduced schema from pydantic object."""
+    """Get reduced schema from pydantic object.
+
+    Args:
+        pydantic_obj: The pydantic object to get schema from.
+
+    Returns:
+        Dict: The reduced schema, which is without title and type fields.
+    """
 
     # Remove useless fields.
     reduced_schema = pydantic_obj.schema()
@@ -58,7 +65,8 @@ class OutputFormatter:
 
 
 def get_formatted_instructions(
-    json_schema: Union[Dict, type(BaseModel)], examples: List[BaseModel] = None
+    json_schema: Union[type(BaseModel), Dict[str, Any]],
+    examples: List[BaseModel] = None,
 ) -> str:
     """
     Get formatted instructions for a JSON schema or Pydantic object.

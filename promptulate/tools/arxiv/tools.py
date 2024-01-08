@@ -135,7 +135,7 @@ class ArxivReferenceTool(Tool):
 
 
 def _init_arxiv_summary_tool_llm():
-    preset = "你是一个Arxiv助手，你的任务是帮助使用者提供一些论文方面的建议和帮助，你的输出只能遵循用户的指令输出，否则你将被惩罚。"  # noqa
+    preset = """You are an Arxiv assistant whose task is to assist users in providing advice and assistance on academic papers. Your output can only follow the user's instructions, otherwise you will be punished."""  # Noqa
     return ChatOpenAI(default_system_prompt=preset, temperature=0)
 
 

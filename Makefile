@@ -1,6 +1,7 @@
 SHELL := /usr/bin/env bash
 OS := $(shell python -c "import sys; print(sys.platform)")
 
+# all test files define here
 DEV_TEST_TOOL_FILES := ./tests/tools/test_human_feedback_tool.py ./tests/tools/test_calculator.py ./tests/tools/test_python_repl_tools.py ./tests/tools/test_sleep_tool.py
 DEV_TEST_HOOK_FILES := ./tests/hook/test_llm.py ./tests/hook/test_tool_hook.py
 DEV_TEST_LLM_FILES := ./tests/llms/test_openai.py
@@ -59,10 +60,13 @@ check-codestyle:
 .PHONY: lint
 lint: check-codestyle test
 
-#* https://github.com/Maxlinn/linn-jupyter-site-template/blob/main/.github/workflows/linn-jupyter-site-template-deploy.yml
+# https://github.com/Maxlinn/linn-jupyter-site-template/blob/main/.github/workflows/linn-jupyter-site-template-deploy.yml
+# Any notebook will be converted here.
+# If there are any notebook will be changed, then the notebook will be converted to markdown and pushed to the repo.
 .PHONY: build-docs
 build-docs:
 	jupyter nbconvert ./docs/uses_cases/chat_usage.ipynb --to markdown
+	jupyter nbconvert ./example/tools/custom_tool_usage.ipynb --to markdown --output-dir ./docs/modules/tools
 
 .PHONY: start-docs
 start-docs:

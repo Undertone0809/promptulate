@@ -41,10 +41,10 @@ class BaseLLM(BaseModel, ABC):
                 Hook.mount_instance_hook(hook, self)
         Hook.call_hook(HookTable.ON_LLM_CREATE, self, **kwargs)
 
-    def predict(self, prompts: MessageSet, *args, **kwargs) -> AssistantMessage:
+    def predict(self, messages: MessageSet, *args, **kwargs) -> AssistantMessage:
         """llm generate prompt"""
-        Hook.call_hook(HookTable.ON_LLM_START, self, prompts, *args, **kwargs)
-        result: AssistantMessage = self._predict(prompts, *args, **kwargs)
+        Hook.call_hook(HookTable.ON_LLM_START, self, messages, *args, **kwargs)
+        result: AssistantMessage = self._predict(messages, *args, **kwargs)
         Hook.call_hook(HookTable.ON_LLM_RESULT, self, result=result.content)
         return result
 
