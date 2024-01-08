@@ -8,10 +8,7 @@ Agent是`promptulate`的核心组件之一，其核心思想是使用llm、Tool�
 
 ```python
 import promptulate as pne
-from promptulate.tools import (
-    DuckDuckGoTool,
-    Calculator,
-)
+from promptulate.tools import DuckDuckGoTool, Calculator
 
 
 def main():
@@ -19,7 +16,7 @@ def main():
         DuckDuckGoTool(),
         Calculator(),
     ]
-    agent = pne.ToolAgent(tools)
+    agent = pne.ToolAgent(tools=tools)
     prompt = """Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?"""
     agent.run(prompt)
 
@@ -50,10 +47,7 @@ Agent默认使用OpenAI的`gpt-3.5-turbo-16k`模型，如果你想要切换为�
 
 ```python
 import promptulate as pne
-from promptulate.tools import (
-    DuckDuckGoTool,
-    Calculator,
-)
+from promptulate.tools import DuckDuckGoTool, Calculator
 
 
 def main():

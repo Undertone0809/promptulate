@@ -202,7 +202,7 @@ class LLMResponse(BaseModel):
 
 current_time = datetime.now()
 response: LLMResponse = pne.chat(
-    messages=f"What's the temperature in Shanghai tomorrow? {current_time}",
+    messages=f"What's the temperature in Shanghai tomorrow? current time: {current_time}",
     output_schema=LLMResponse
 )
 print(response)
@@ -222,6 +222,8 @@ You can use `pne.tools` to add some tools to chat. Now we have `pne.tools.duckdu
 
 
 ```python
+import promptulate as pne
+
 tools = [pne.tools.duckduckgo.DuckDuckGoTool()]
 response = pne.chat(
     messages="What's the temperature in Shanghai tomorrow?",
@@ -229,6 +231,73 @@ response = pne.chat(
 )
 print(response)
 ```
+
+    {"tool": {"tool_name": "web_search", "tool_params": {"query": "Weather Shanghai tomorrow"}}, "thought": "I will use the web_search tool to find the temperature in Shanghai tomorrow.", "final_answer": null}
+    
+
+
+```python
+from typing import Any, Optional, Union
+from promptulate.output_formatter import OutputFormatter
+from pydantic import BaseModel, Field
+
+class ToolParams(BaseModel):
+    tool_name: str = Field(description="Tool name")
+    tool_params: dict = Field(description="Tool parameters, if not, pass in an empty dictionary.")
+
+class LLMResponse(BaseModel):
+    tool: Optional[ToolParams] = Field(description="The tool to take", default=None)
+    thought: str = Field(description="Ideas generated based on the current situation.")
+    final_answer: Optional[str] = Field(description="When you think you can output the final answer, write down the output here", default=None)
+
+formatter = OutputFormatter(LLMResponse)
+instruction = formatter.get_formatted_instructions()
+print(instruction)
+```
+
+    ## Output format
+    The output should be formatted as a JSON instance that conforms to the JSON schema below.
+    
+    As an example, for the schema {"properties": {"foo": {"description": "a list of strings", "type": "array", "items": {"type": "string"}}}, "required": ["foo"]}
+    the object {"foo": ["bar", "baz"]} is a well-formatted instance of the schema. The object {"properties": {"foo": ["bar", "baz"]}} is not well-formatted.
+    
+    Here is the output schema:
+    ```
+    {"properties": {"tool": {"description": "The tool to take", "allOf": [{"$ref": "#/definitions/ToolParams"}]}, "thought": {"description": "Ideas generated based on the current situation.", "type": "string"}, "final_answer": {"description": "When you think you can output the final answer, write down the output here", "type": "string"}}, "required": ["thought"], "definitions": {"ToolParams": {"title": "ToolParams", "type": "object", "properties": {"tool_name": {"title": "Tool Name", "description": "Tool name", "type": "string"}, "tool_params": {"title": "Tool Params", "description": "Tool parameters, if not, pass in an empty dictionary.", "type": "object"}}, "required": ["tool_name", "tool_params"]}}}
+    ```
+    
+
+
+```python
+from typing import Any, Optional, Union
+from promptulate.output_formatter import OutputFormatter
+from pydantic import BaseModel, Field
+
+class WebSearchParams(BaseModel):
+    query: str = Field(description="query word")
+
+class WebSearchTool(BaseModel):
+    name: str = Field(description="Tool name")
+    params: WebSearchParams = Field(description="Tool parameters, if not, pass in an empty dictionary.")
+
+formatter = OutputFormatter(WebSearchTool)
+instruction = formatter.get_formatted_instructions()
+print(instruction)
+# a = WebSearchTool.schema()
+# print(a)
+```
+
+    ## Output format
+    The output should be formatted as a JSON instance that conforms to the JSON schema below.
+    
+    As an example, for the schema {"properties": {"foo": {"description": "a list of strings", "type": "array", "items": {"type": "string"}}}, "required": ["foo"]}
+    the object {"foo": ["bar", "baz"]} is a well-formatted instance of the schema. The object {"properties": {"foo": ["bar", "baz"]}} is not well-formatted.
+    
+    Here is the output schema:
+    ```
+    {"properties": {"name": {"description": "Tool name", "type": "string"}, "params": {"description": "Tool parameters, if not, pass in an empty dictionary.", "allOf": [{"$ref": "#/definitions/WebSearchParams"}]}}, "required": ["name", "params"], "definitions": {"WebSearchParams": {"title": "WebSearchParams", "type": "object", "properties": {"query": {"title": "Query", "description": "query word", "type": "string"}}, "required": ["query"]}}}
+    ```
+    
 
 ## Streaming
 `pne.chat()` support streaming, you can use `pne.chat()` to chat with your assistant in real time.

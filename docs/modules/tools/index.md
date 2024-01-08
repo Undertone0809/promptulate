@@ -26,6 +26,10 @@ tools模块为LLM提供了调用外部工具扩展的能力，可以说tools是�
 
 Tool模块的主要作用就是为Agent提供tool能力支持，详情查看[Agent](modules/agent.md#agent)
 
+## Custom Tool
+
+See detail in [Custom Tool](modules/tools/custom_tool_usage.md#custom-tool)
+
 ## 工具的使用
 
 在大多数情况下，工具用于给Agent使用，而Tool也可以剥离Agent单独进行使用，下面的示例展示了如何使用一个DuckDuckGo进行外部搜索。
@@ -89,77 +93,6 @@ def example():
 if __name__ == "__main__":
     example()
 ```
-
-## 自定义Tool
-
-promptulate支持自定义tool，其定义方式十分简单，并且提供了函数式和继承式两种方式进行自定义，下面将会展示两种工具定义方式。
-
-### 函数式（推荐）
-
-如果你的tool逻辑较为简单，promptulate提供了方便地函数式工具定义方式，下面的示例展示了一个模拟搜索引擎工具的定义与使用：
-
-```python
-from promptulate.tools import define_tool
-
-
-def web_search(query: str):
-    return f"answer: {query}"
-
-
-def example():
-    tool = define_tool(name="web_search", description="A web search tool", callback=web_search)
-    tool.run("Shanghai weather tomorrow.")
-
-    
-if __name__ == '__main__':
-    example()
-```
-
-### 类声明式
-
-如果你的工具逻辑较为复杂，可以使用继承式的定义方式，下面的示例展示了如何自定义一个Tool类，从而构建一个shell工具。
-
-```python
-import warnings
-import sys
-
-from promptulate.tools import Tool
-from promptulate.tools.shell.api_wrapper import ShellAPIWrapper
-
-
-def _get_platform() -> str:
-    """Get platform."""
-    system = sys.platform
-    if system == "Darwin":
-        return "MacOS"
-    return system
-
-
-class ShellTool(Tool):
-    """Tool to run shell commands."""
-
-    name: str = "terminal"
-    description: str = f"Run shell commands on this {_get_platform()} machine."
-
-    def _run(self, command: str) -> str:
-        warnings.warn(
-            "The shell tool has no safeguards by default. Use at your own risk."
-        )
-        """Run commands and return final output."""
-        return ShellAPIWrapper().run(command)
-
-
-def example():
-    tool = ShellTool()
-    tool.run("echo HelloWorld")
-
-    
-if __name__ == '__main__':
-    example()
-```
-
-上面的示例继承了Tool，并且需要实现name和description两个属性，用于给Agent构建system prompt的输入，此外，你还需要实现_run方法，通过_run来运行tool，对于一个复杂的Tool，你可以采用上面的方式进行定义与逻辑处理。
-
 
 ## 有LLM能力的Tool
 
