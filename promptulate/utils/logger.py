@@ -18,10 +18,10 @@
 # Contact Email: zeeland@foxmail.com
 
 import datetime
+import logging
 import sys
 import traceback
-
-from loguru import logger as _logger
+from logging.handlers import TimedRotatingFileHandler
 
 from promptulate.utils.core_utils import get_default_storage_path
 from promptulate.utils.singleton import Singleton
@@ -34,69 +34,26 @@ def get_log_path() -> str:
 
 
 def enable_log():
-    """
-    Enables the logging system to see log information.
-
-    This function configures the logging system to write logs to a file and stderr.
-    The log file is located at the path returned by the get_log_path function, and the
-    log level for the file is set to DEBUG. The log level for stderr is also set to
-    DEBUG.
-    """
-    log_manager.logger._core.handlers[log_manager.file_logger_id].level = "DEBUG"
-    log_manager.logger._core.handlers[log_manager.sys_logger_id].level = "DEBUG"
-
-
-def pne_log_filter(record) -> bool:
-    """
-    Filter function for the logging system.
-
-    This function is used to filter out log records based on their name.
-    Only records whose name starts with "promptulate" are allowed through the filter.
-
-    Args:
-        record (dict): A log record, which is a dictionary that the logging system
-        uses to store information about the event being logged. The 'name' key in the
-        record dictionary contains the name of the logger that created the record.
-
-    Returns:
-        bool: True if the record's name starts with "promptulate", False otherwise.
-    """
-    return record["name"].startswith("promptulate")
+    pass
 
 
 class LogManager(metaclass=Singleton):
-    """
-    Logger class that uses the Singleton design pattern.
-
-    This class is responsible for managing the application's logging system. It uses
-    the loguru library for logging. The logger is configured to write logs to a file
-    and stderr. The log file is located at the path returned by the get_log_path
-    function, and the log level for the file is set to DEBUG. The log level for
-    stderr is set to WARNING.
-
-    Attributes:
-        logger: An instance of the loguru logger.
-    """
-
     def __init__(self) -> None:
-        self.logger = _logger
+        self.logger = logging.getLogger("promptulate")
+        self.logger.setLevel(logging.DEBUG)
 
-        self.file_logger_id = self.logger.add(
-            get_log_path(), level="DEBUG", rotation="1 day", filter=pne_log_filter
+        file_handler = TimedRotatingFileHandler(
+            filename=get_log_path(), when="midnight", interval=1, encoding="utf-8"
         )
+        file_handler.setLevel(logging.DEBUG)
 
-        # if exist stderr handler, do not add again
-        self.sys_logger_id = next(
-            (
-                handler_id
-                for handler_id, handler in self.logger._core.handlers.items()
-                if handler._name == "<stderr>"
-            ),
-            None,
+        formatter = logging.Formatter(
+            "%(asctime)s | %(levelname)s | %(name)s:%(funcName)s:%(lineno)d - %(message)s",  # noqa
+            "%Y-%m-%d %H:%M:%S",
         )
+        file_handler.setFormatter(formatter)
 
-        if self.sys_logger_id is None:
-            self.sys_logger_id = self.logger.add(sys.stderr, level="WARNING")
+        self.logger.addHandler(file_handler)
 
 
 def exception_handler(exc_type, exc_value, exc_traceback):
@@ -113,9 +70,6 @@ def exception_handler(exc_type, exc_value, exc_traceback):
         exc_value: The instance of the exception.
         exc_traceback: A traceback object encapsulating the call stack at
         the point where the exception originally occurred.
-
-    Returns:
-        None
     """
     if issubclass(exc_type, KeyboardInterrupt):
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
@@ -124,7 +78,10 @@ def exception_handler(exc_type, exc_value, exc_traceback):
     tb_info = "".join(traceback.format_exception(exc_type, exc_value, exc_traceback))
     logger.error(f"Uncaught exception: {tb_info}")
 
+    sys.__excepthook__(exc_type, exc_value, exc_traceback)
+
 
 log_manager = LogManager()
 logger = log_manager.logger
+original_excepthook = sys.excepthook
 sys.excepthook = exception_handler

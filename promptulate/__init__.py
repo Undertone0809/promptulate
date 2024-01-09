@@ -25,6 +25,7 @@ from promptulate.agents.web_agent.agent import WebAgent
 from promptulate.chat import chat
 from promptulate.llms.base import BaseLLM
 from promptulate.llms.openai.openai import ChatOpenAI
+from promptulate.output_formatter import OutputFormatter
 from promptulate.schema import (
     AssistantMessage,
     BaseMessage,
@@ -33,10 +34,13 @@ from promptulate.schema import (
     UserMessage,
 )
 from promptulate.tools.base import BaseTool, Tool, define_tool
-from promptulate.utils import enable_log
+from promptulate.utils.logger import enable_log
+from promptulate.utils.string_template import StringTemplate
 
 _util_fields = [
     "enable_log",
+    "OutputFormatter",
+    "StringTemplate",
 ]
 
 _schema_fields = [

@@ -28,3 +28,30 @@ def test_import_promptulate():
         chat,
         define_tool,
     )
+
+
+def test_import_tools():
+    from promptulate.tools import (
+        ArxivQueryTool,
+        ArxivReferenceTool,
+        ArxivSummaryTool,
+        BaseTool,
+        Calculator,
+        DuckDuckGoReferenceTool,
+        DuckDuckGoTool,
+        HuggingFaceTool,
+        HumanFeedBackTool,
+        IotSwitchTool,
+        LangchainTool,
+        PaperSummaryTool,
+        PythonREPLTool,
+        SemanticScholarCitationTool,
+        SemanticScholarQueryTool,
+        SemanticScholarReferenceTool,
+        ShellTool,
+        SleepTool,
+        Tool,
+        define_tool,
+        function_to_tool,
+        function_to_tool_schema,
+    )

@@ -58,5 +58,5 @@ class NetWorkError(Exception):
 
 class OutputParserError(Exception):
     def __init__(self, reason: str, llm_output: str):
-        msg = f"{reason}\n[llm_output]: {llm_output}"
+        msg = f"{reason}\n[LLM response]: {llm_output}"
         super().__init__(msg)
