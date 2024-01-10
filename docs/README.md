@@ -126,6 +126,6 @@ promptulate框架的设计原则包括：模块化、可扩展性、互操作性
 
 ## 贡献
 
-本人正在尝试一些更加完善的抽象模式，以更好地兼容该框架，以及外部工具的扩展使用，如果你有更好的建议，欢迎一起讨论交流。
+本人正在尝试一些更加完善的抽象模式，以更好地兼容该框架，如果你有更好的建议，欢迎一起讨论交流。
 如果你想为这个项目做贡献，请先查看[当前开发计划](https://undertone0809.github.io/promptulate/#/other/plan)
 和[参与贡献/开发者手册](https://undertone0809.github.io/promptulate/#/other/contribution)。我很高兴看到更多的人参与并优化它。

@@ -18,13 +18,13 @@ class FakeLLM(BaseLLM):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def __call__(self, prompt: str, *args, **kwargs):
+    def __call__(self, instruction: str, *args, **kwargs):
         return "fake response"
 
-    def _predict(self, prompts: MessageSet, *args, **kwargs) -> BaseMessage:
+    def _predict(self, messages: MessageSet, *args, **kwargs) -> BaseMessage:
         content = "fake response"
 
-        if "Output format" in prompts.messages[-1].content:
+        if "Output format" in messages.messages[-1].content:
             content = """{"city": "Shanghai", "temperature": 25}"""
 
         return AssistantMessage(content=content)
