@@ -77,14 +77,16 @@ class LLMType(str, Enum):
     ErnieBot = "ErnieBot"
 
 
-class MessageSet(BaseModel):
+class MessageSet:
     """MessageSet can be used in Memory, LLMs, Framework and some else.
     It's a universal chat message format in promptulate.
     """
 
-    messages: List[BaseMessage] = []
-    conversation_id: Optional[str] = None
-    """Used to memory"""
+    def __init__(
+        self, messages: List[BaseMessage], conversation_id: Optional[str] = None
+    ):
+        self.messages: List[BaseMessage] = messages
+        self.conversation_id: Optional[str] = conversation_id
 
     @classmethod
     def from_listdict_data(cls, value: List[Dict]) -> "MessageSet":

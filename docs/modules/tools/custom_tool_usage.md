@@ -43,7 +43,7 @@ def web_search(keyword: str) -> str:
 
 
 agent = pne.ToolAgent(tools=[web_search])
-resp: str = agent.run("What's the weather in NewYork tomorrow?")
+resp: str = agent.run("How will the temperature be in New York tomorrow?")
 ```
 
 ```text

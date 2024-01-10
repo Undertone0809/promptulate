@@ -2,7 +2,9 @@
 
 ### 简介
 
-> 需要注意的是，`promptulate`中会把LLM与llm的意思分开来，LLM表示大语言模型，llm表示`promptulate`中的llm模块。
+> Attention:
+> 1. `promptulate`中会把LLM与llm的意思分开来，LLM表示大语言模型，llm表示`promptulate`中的llm模块。
+> 2. 从 `v1.11.0` 的版本开始，我们推荐你使用 [pne.chat()](use_cases/chat_usage.md#chat) 的方式进行 LLM 的调用。
 
 本文将会介绍llm模块的**基本使用方式，API KEY、KEY池、代理的配置方式**。
 

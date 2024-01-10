@@ -3,28 +3,28 @@
   - [:bookmark: 快速开始](get_started/quick_start.md#快速开始)
 
 - Use Cases
-  - [🌟 最佳实践](uses_cases/intro.md#user-cases)
-  - [:bookmark_tabs: Awesome Chat](uses_cases/chat_usage.md#chat)
+  - [🌟 Best practices](use_cases/intro.md#use-cases)
+  - [:bookmark_tabs: Awesome Chat](use_cases/chat_usage.md#chat)
 
 - Modules
-  - [:notebook_with_decorative_cover: llm 模型](modules/llm/llm.md#llm)
+  - [:notebook_with_decorative_cover: LLMs](modules/llm/llm.md#llm)
     - [:closed_book: OpenAI](modules/llm/openai.md#openai)
-    - [:green_book: 百度文心](modules/llm/erniebot.md#百度文心erniebot)
-  - [:robot: Agent 智能代理](modules/agent.md#agent)
-  - [:toolbox: Tool 外部工具扩展](modules/tools/index#Tool)
+    - [📝 Custom LLM](modules/llm/custom_llm.md#custom-llm)
+    - [:green_book: Erniebot 百度文心](modules/llm/erniebot.md#百度文心erniebot)
+  - [:robot: Agent](modules/agent.md#agent)
+  - [:toolbox: Tool](modules/tools/index#Tool)
     - [🧰 Custom Tool](modules/tools/custom_tool_usage.md#custom-tool)
-  - [🐠 Formatter 格式化输出](modules/formatter.md#简介)
-  - [:probing_cane: Hook&Lifecycle 钩子与生命周期](modules/hook.md#what-is-hook)
-  - [:department_store: Memory 数据存储](modules/memory.md#memory)
+  - [🐠 Format Output](modules/formatter.md#简介)
+  - [:probing_cane: Hook & Lifecycle](modules/hook.md#what-is-hook)
+  - [:department_store: Memory](modules/memory.md#memory)
   - [:man_with_probing_cane: Provider](modules/provider.md#provider)
-  - [:muscle: Client 客户端](modules/client.md#client)
-  - [:helicopter: String Template 字符串格式化](modules/other/string_template.md#string-template)
+  - [:muscle: Client](modules/client.md#client)
+  - [:helicopter: String Template](modules/other/string_template.md#string-template)
   - [🏫 Schema](modules/schema.md#Schema)
   - [:hiking_boot: Framework](modules/framework.md#framework)
-  - [:man_in_tuxedo: Preset 角色预设](modules/preset.md#preset-角色预设)
+  - [:man_in_tuxedo: Preset](modules/preset.md#preset-角色预设)
 
-- Other
-  - [知识扫盲](other/knowledge.md) 
+- Other 
   - [FAQ](other/faq.md)
   - [更新日志](other/update.md)
   - [开发计划](other/plan.md)

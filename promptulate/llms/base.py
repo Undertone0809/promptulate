@@ -27,7 +27,7 @@ from promptulate.schema import AssistantMessage, BaseMessage, LLMType, MessageSe
 
 
 class BaseLLM(BaseModel, ABC):
-    llm_type: Union[str, LLMType]
+    llm_type: Union[str, LLMType] = "custom"
 
     class Config:
         """Configuration for this pydantic object."""
@@ -58,4 +58,3 @@ class BaseLLM(BaseModel, ABC):
     @abstractmethod
     def __call__(self, instruction: str, *args, **kwargs):
         """input string prompt return answer"""
-        raise NotImplementedError()

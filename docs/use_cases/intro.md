@@ -1,4 +1,4 @@
-# User cases
+# Use cases
 
 > 文档持续完善中
 
