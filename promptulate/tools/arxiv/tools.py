@@ -107,14 +107,16 @@ class ArxivReferenceTool(Tool):
 
         self.reference_counter = 0
         prompt = (
-            # f"现在你需要根据其研究的具体内容，列出至少{self.max_reference_num}篇参考文献，你可以使用arxiv进行查询，你需要给我提供3个arxiv查询关键词，我将使用"
-            # f"arxiv进行查询，你需要根据我返回的结果选取最符合当前研究的{self.max_reference_num}篇参考文献。"
-            # f"用户输入:{query}"
-            # "你的输出必须是三个查询词\n，如 [query]: keyword1, keyword2, keyword3\n"
-            f"You now need to, based on the specific content of the research, list at least {self.max_reference_num} references that can be queried using arxiv. Additionally, you need to provide me with 3 query keywords for arxiv."
-            f"I will use arxiv to conduct the search, and you will need to select the {self.max_reference_num} most relevant references for the current study based on the results I provide."
+            f"You now need to, based on the specific content of the research,\
+            list at least {self.max_reference_num} references \
+            that can be queried using arxiv. \
+            Additionally, you need to provide me with 3 query keywords for arxiv."
+            f"I will use arxiv to conduct the search, and you will \
+            need to select the {self.max_reference_num} most relevant references for \
+            the current study based on the results I provide."
             f"User input: {query}"
-            f"Your output must be three query words \n, As an example [query]: keyword1, keyword2, keyword3\n"
+            f"Your output must be three query words \n, As an example \
+            [query]: keyword1, keyword2, keyword3\n"
         )
         keywords = analyze_query_string(self.llm(prompt))
         for keyword in keywords:
@@ -126,10 +128,9 @@ class ArxivReferenceTool(Tool):
             time.sleep(0.2)
 
         prompt = (
-            # "现在你需要根据下面给出的论文，返回最合适的5篇参考文献\n"
-            "Now you need to return the most appropriate 5 references based on the papers given below\n"
+            "Now you need to return the most appropriate 5 references \
+            based on the papers given below\n"
             f"```{self.reference_string}```\n"
-            # "你的输出格式必须为\n参考文献:\n[1] [title1](url1);\n[2] [title2](url2);\n[3] [title3](url3);"  # noqa
             "Your output format must be as follows:\nReferences:\n[1] [title1](url1);\n[2] [title2](url2);\n[3] [title3](url3);\n"  # noqa
         )
         # TODO If there is a problem with the returned format and an error is reported
@@ -179,11 +180,7 @@ class ArxivSummaryTool(Tool):
         @broadcast_service.on_listen("ArxivSummaryTool.run.get_opinion")
         def get_opinion():
             prompt = (
-                # f"请就下面的论文摘要，列出论文中的关键见解和由论文得出的经验教训，你的输出需要分点给出 ```{paper_summary}```"  # noqa
-                # f"Please list the key insights and lessons learned in the paper based on the abstract below. Your output needs to be broken down into points ```{paper_summary}```"  # noqa
-                f"Based on the abstract of the paper below, please list the key insights from the paper and the lessons learned derived from it. Your output should be provided in bullet points ```{paper_summary}```"  # noqa   
-                # "你的输出格式为:\n关键见解:\n{分点给出关键见解}\n经验教训:\n{分点给出经验教训}，用`-`区分每点，用中文输出"
-                # "Your output format is:\nKey insights:\n{Give key insights at each point}\nLessons learned:\n{Give lessons learned at each point}, separated by `-`, output in Chinese"  # noqa The output should be in Chinese
+                f"Based on the abstract of the paper below, please list the key insights from the paper and the lessons learned derived from it. Your output should be provided in bullet points ```{paper_summary}```"  # noqa
                 "Please use the following output format:\nKey insights:\n{Key insights in bullet points}\nLessons learned:\n{Lessons learned in bullet points},with each point separated by a hyphen `-`"  # noqa
             )
             opinion = self.llm(prompt)
@@ -200,12 +197,8 @@ class ArxivSummaryTool(Tool):
         @broadcast_service.on_listen("ArxivSummaryTool.run.get_advice")
         def get_advice():
             prompt = (
-                # f"请就下面的论文摘要，为其相关主题或未来研究方向提供3-5个建议，你的输出需要分点给出  ```{paper_summary}```"  # noqa
-                # f"Please provide 3-5 suggestions for the relevant topics or future research directions of the paper in the abstract below. Your output needs to be broken down into points  ```{paper_summary}```"  # noqa
-                f"Based on the abstract of the paper below, please provide 3-5 suggestions related to its topics or potential future research directions. Your output should be provided in bullet points  ```{paper_summary}```" # noqa
-                # "你的输出格式为:\n相关建议:\n{分点给出相关建议}，用`-`区分每点"
-                # "Your output format is:\nRelated suggestions:\n{Give related suggestions at each point}, separated by `-`"  # noqa
-                "Please use the following output format:\nRelated suggestions:\n{related suggestions in bullet points}, with each point separated by a hyphen `-`" # noqa
+                f"Based on the abstract of the paper below, please provide 3-5 suggestions related to its topics or potential future research directions. Your output should be provided in bullet points  ```{paper_summary}```"  # noqa
+                "Please use the following output format:\nRelated suggestions:\n{related suggestions in bullet points}, with each point separated by a hyphen `-`"  # noqa
             )
             opinion = self.llm(prompt)
             self.summary_string += opinion + "\n"
