@@ -317,9 +317,9 @@ if __name__ == '__main__':
     main()
 
 ```
-### 指定url
+### Specify URL
 
-如果你想对某个ChatOpenAI使用指定的url，不使用官方默认的url，你可以使用如下方式配置：
+If you want to use the specified URL for a ChatOpenAI instead of the official default URL, you can configure it as follows:
 
 ```python
 from promptulate.llms import ChatOpenAI

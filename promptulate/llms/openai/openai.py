@@ -298,10 +298,7 @@ class ChatOpenAI(BaseOpenAI):
         body: Dict[str, Any] = self._build_api_params_dict(prompts, stop)
 
         logger.debug(f"[pne openai request] {json.dumps(body, indent=2)}")
-        if self.base_url:
-            url = self.base_url
-        else:
-            url = pne_config.openai_chat_api_url
+        url = self.base_url or pne_config.openai_chat_api_url
         logger.debug(f"[pne openai request] url: {url} proxies: {pne_config.proxies}")
         response = requests.post(
             url=url,

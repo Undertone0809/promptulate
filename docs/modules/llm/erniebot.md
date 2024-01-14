@@ -148,7 +148,7 @@ print(result)
 
 ### 指定url
 
-如果你想对某个ChatOpenAI使用指定的url，不使用官方默认的url，你可以使用如下方式配置：
+如果你想对某个ErnieBot使用指定的url，不使用官方默认的url，你可以使用如下方式配置：
 
 ```python
 from promptulate.llms import ErnieBot
