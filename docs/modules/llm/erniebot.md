@@ -145,3 +145,14 @@ print(result)
 ```text
 [start] This is 
 ```
+
+### 指定url
+
+如果你想对某个ErnieBot使用指定的url，不使用官方默认的url，你可以使用如下方式配置：
+
+```python
+from promptulate.llms import ErnieBot
+llm = ErnieBot(base_url="http://localhost:6666/v1/chat/completions") # 你自己的url
+answer = llm("请解释一下引力波的放射与广义相对论的必然关系")
+print(answer)
+```
