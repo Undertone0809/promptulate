@@ -317,3 +317,20 @@ if __name__ == '__main__':
     main()
 
 ```
+### 指定url
+
+如果你想对某个ChatOpenAI使用指定的url，不使用官方默认的url，你可以使用如下方式配置：
+
+```python
+from promptulate.llms import ChatOpenAI
+
+
+def main():
+    llm = ChatOpenAI(base_url="http://localhost:6666/v1/chat/completions")
+    print(llm("hello"))
+
+
+if __name__ == '__main__':
+    main()
+
+```

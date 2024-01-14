@@ -40,10 +40,11 @@ class ErnieBot(BaseLLM, ABC):
         "disable_search",
         "penalty_score",
     ]
-    url: str = pne_config.ernie_bot_4_url
+    base_url: str = ""
+    """set your base_url"""
 
     def __call__(
-        self, prompt: str, stop: Optional[List[str]] = None, *args, **kwargs
+        self, instruction: str, stop: Optional[List[str]] = None, *args, **kwargs
     ) -> str:
         preset = (
             self.default_system_prompt
@@ -55,7 +56,7 @@ class ErnieBot(BaseLLM, ABC):
         self.system = preset
         message_set = MessageSet(
             messages=[
-                UserMessage(content=prompt),
+                UserMessage(content=instruction),
             ]
         )
         return self.predict(message_set, stop).content
@@ -77,18 +78,21 @@ class ErnieBot(BaseLLM, ABC):
 
         headers = {"Content-Type": "application/json"}
 
-        if self.model == "ernie-bot-turbo":
-            self.url = pne_config.ernie_bot_turbo_url
-        elif self.model == "ernie-bot-4":
-            self.url = pne_config.ernie_bot_4_url
-        elif self.model == "ernie-bot":
-            self.url = pne_config.ernie_bot_url
+        if self.base_url:
+            url = self.base_url
         else:
-            raise ValueError("pne not found this model")
+            if self.model == "ernie-bot-turbo":
+                url = pne_config.ernie_bot_turbo_url
+            elif self.model == "ernie-bot-4":
+                url = pne_config.ernie_bot_4_url
+            elif self.model == "ernie-bot":
+                url = pne_config.ernie_bot_url
+            else:
+                raise ValueError("pne not found this model")
 
         body: Dict[str, Any] = self._build_api_params_dict(prompts, stop)
         response = requests.post(
-            url=self.url + "?access_token=" + pne_config.get_ernie_token(),
+            url=url + "?access_token=" + pne_config.get_ernie_token(),
             headers=headers,
             json=body,
             proxies=pne_config.proxies,

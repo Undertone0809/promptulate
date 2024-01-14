@@ -1,18 +1,9 @@
-import os
+from promptulate.llms import ErnieBot
 
-import promptulate as pne
-
-os.environ["ERNIE_API_KEY"] = "your api key"
-os.environ["ERNIE_API_SECRET"] = "your secret key"
-
-
-def main():
-    llm = pne.llms.ErnieBot()
-    while True:
-        prompt = input("[User Input] ")
-        answer = llm(prompt)
-        print(answer)
-
-
-if __name__ == "__main__":
-    main()
+llm = ErnieBot(temperature=0.1, model="ernie-bot-turbo")
+prompt = """
+Please strictly output the following content.
+[start] This is a test [end]
+"""
+result = llm(prompt, stop=["is"])
+print(result)

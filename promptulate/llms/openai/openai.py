@@ -239,6 +239,8 @@ class ChatOpenAI(BaseOpenAI):
     are present."""
     functions: Optional[List[Dict[str, str]]] = None
     """A list of functions the model may generate JSON inputs for."""
+    base_url: str = None
+    """set your base_url"""
     api_param_keys: List[str] = [
         "model",
         "temperature",
@@ -296,11 +298,13 @@ class ChatOpenAI(BaseOpenAI):
         body: Dict[str, Any] = self._build_api_params_dict(prompts, stop)
 
         logger.debug(f"[pne openai request] {json.dumps(body, indent=2)}")
-        logger.debug(
-            f"[pne openai request] url: {pne_config.openai_chat_request_url} proxies: {pne_config.proxies}"  # noqa: E501
-        )
+        if self.base_url:
+            url = self.base_url
+        else:
+            url = pne_config.openai_chat_api_url
+        logger.debug(f"[pne openai request] url: {url} proxies: {pne_config.proxies}")
         response = requests.post(
-            url=pne_config.openai_chat_request_url,
+            url=url,
             headers=headers,
             json=body,
             proxies=pne_config.proxies,
