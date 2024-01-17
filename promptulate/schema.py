@@ -75,6 +75,7 @@ class LLMType(str, Enum):
     OpenAI = "OpenAI"
     ChatOpenAI = "ChatOpenAI"
     ErnieBot = "ErnieBot"
+    QianFan = "QianFan"
 
 
 class MessageSet:
@@ -83,7 +84,7 @@ class MessageSet:
     """
 
     def __init__(
-        self, messages: List[BaseMessage], conversation_id: Optional[str] = None
+            self, messages: List[BaseMessage], conversation_id: Optional[str] = None
     ):
         self.messages: List[BaseMessage] = messages
         self.conversation_id: Optional[str] = conversation_id
@@ -154,7 +155,7 @@ class MessageSet:
 
 
 def init_chat_message_history(
-    system_content: str, user_content: str, llm: LLMType
+        system_content: str, user_content: str, llm: LLMType
 ) -> MessageSet:
     if llm == llm.ChatOpenAI or llm == llm.OpenAI:
         messages = [
@@ -182,8 +183,13 @@ def _to_ernie_bot_llm_prompt(message_set: MessageSet) -> List[Dict]:
     return message_set.listdict_messages
 
 
+def _to_qian_fan_llm_prompt(message_set: MessageSet) -> List[Dict]:
+    return message_set.listdict_messages
+
+
 _to_llm_prompt: Dict[LLMType, Callable] = {
     LLMType.OpenAI: _to_openai_llm_prompt,
     LLMType.ChatOpenAI: _to_chat_openai_llm_prompt,
     LLMType.ErnieBot: _to_ernie_bot_llm_prompt,
+    LLMType.QianFan: _to_qian_fan_llm_prompt
 }

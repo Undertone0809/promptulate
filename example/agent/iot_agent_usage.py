@@ -38,7 +38,7 @@ def main():
         ),
     ]
     agent = ToolAgent(
-        tools,
+        tools=tools,
         enable_role=True,
         agent_name="xiao chang",
         agent_identity="Smart speaker.",

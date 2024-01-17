@@ -1,10 +1,10 @@
 import re
 from time import sleep
 
-from promptulate.tools import BaseTool
+from promptulate import Tool
 
 
-class SleepTool(BaseTool):
+class SleepTool(Tool):
     name: str = "sleep"
     description: str = (
         "Make agent sleep for a specified number of seconds."
