@@ -7,15 +7,14 @@ os.environ["QIANFAN_SECRET_KEY"] = "xxxxxx"
 
 
 def main():
-    llm = pne.llms.QianFan(
-        stream=True, model="ERNIE-Bot-turbo", return_raw_response=True
-    )
+    model_config = {"stream": True, "return_raw_response": True}
+    llm = pne.llms.QianFan(model="ERNIE-Bot-4", model_config=model_config)
     while True:
         prompt = input("[User Input] ")
         answer = llm(prompt)
-        for chuck in answer:
-            print(chuck.content)
-            print(chuck.additional_kwargs)
+        for chunk in answer:
+            print(chunk.content)
+            print(chunk.additional_kwargs)
 
 
 if __name__ == "__main__":

@@ -1,4 +1,3 @@
-import json
 import os
 from abc import ABC
 from typing import Iterator, List, Optional, TypeVar, Union
@@ -6,7 +5,6 @@ from typing import Iterator, List, Optional, TypeVar, Union
 from pydantic import BaseModel
 
 from promptulate.config import pne_config
-from promptulate.error import LLMError
 from promptulate.llms import BaseLLM
 from promptulate.preset_roles.prompt import PRESET_SYSTEM_PROMPT_ERNIE
 from promptulate.schema import (
@@ -106,23 +104,16 @@ class QianFan(BaseLLM, ABC):
     """Used to MessageSet data convert"""
     model: str = "ERNIE-Bot-4"
     """Model name to use."""
-    temperature: float = 0.7
-    """What sampling temperature to use."""
-    top_p: float = 0.8
-    """variety of text"""
-    stream: bool = False
-    """Whether to stream the results or not."""
     default_system_prompt: str = ""
     """ernie-bot system message"""
     enable_default_system_prompt: bool = True
     """enable use preset description"""
-    penalty_score: float = 1.0
-    system: str = ""
-    return_raw_response: bool = False
+    model_config: dict = {}
+    """model parameters"""
 
     def __call__(
-        self, instruction: str, stop: Optional[List[str]] = None, *args, **kwargs
-    ):
+        self, instruction: str, *args, **kwargs
+    ) -> Union[str, BaseMessage, T, List[BaseMessage], QianFanStreamIterator]:
         preset = (
             self.default_system_prompt
             if self.default_system_prompt != ""
@@ -130,31 +121,40 @@ class QianFan(BaseLLM, ABC):
         )
         if not self.enable_default_system_prompt:
             preset = ""
-        self.system = preset
+        system = preset
         message_set = MessageSet(
             messages=[
                 UserMessage(content=instruction),
             ]
         )
-        result = self.predict(message_set, stop)
+        result = self.predict(message_set, system, **self.model_config)
         if isinstance(result, AssistantMessage):
             return result.content
         else:
             return result
 
     def _predict(
-        self, prompts: MessageSet, stop: Optional[List[str]] = None, *args, **kwargs
+        self,
+        prompts: MessageSet,
+        system: str = "",
+        return_raw_response: bool = False,
+        *args,
+        **kwargs,
     ) -> Union[str, BaseMessage, T, List[BaseMessage], QianFanStreamIterator]:
         """
-        Predicts the response using the ERNIE model.
+        Predicts the response using the qinfan platform.
 
         Args:
             prompts (MessageSet): The set of prompts to generate a response.
-            stop (Optional[List[str]], optional): List of stop words to stop the
-            generation. Defaults to None.
+            system (str): The set of system to generate a response.
+            return_raw_response (bool): return completion result if true
+            **kwargs: qianfan_sdk kwargs
 
         Returns:
-            AssistantMessage: The generated response.
+              Return string normally, it means enable_original_return is default False.
+              Return BaseMessage if enable_original_return is True.
+              Return List[BaseMessage] if stream is True.
+              Return T if output_schema is provided.
         """
         try:
             import qianfan  # noqa
@@ -169,17 +169,14 @@ class QianFan(BaseLLM, ABC):
         chat_comp = qianfan.ChatCompletion()
         response = chat_comp.do(
             model=self.model,
-            temperature=self.temperature,
-            top_p=self.top_p,
-            system=self.system,
-            penalty_score=self.penalty_score,
-            stream=self.stream,
-            stop=stop,
+            system=system,
             messages=prompts.listdict_messages,
+            **kwargs,
         )
-        if self.stream:
+        # return stream
+        if kwargs.get("stream", None):
             return QianFanStreamIterator(
-                response_stream=response, return_raw_response=self.return_raw_response
+                response_stream=response, return_raw_response=return_raw_response
             )
         else:
             if response.code == 200:

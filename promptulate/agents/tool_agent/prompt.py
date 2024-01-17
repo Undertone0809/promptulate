@@ -76,7 +76,7 @@ in the one of the following two formats:
 {
 "thought": "The thought of what to do and why.",
 "self_criticism":"Constructive self-criticism of the thought",
-"answer": {
+"action": {
     "name": "finish",
     "args": {"content": "Sorry, I cannot answer your query."}
     }
@@ -85,7 +85,7 @@ in the one of the following two formats:
 
 ## Attention
 - Your output is JSON only and no explanation.
-- Choose only ONE tool in one step.
+- Choose only ONE tool and you can't do without using any tools in one step.
 - Your final answer output language should be consistent with the language used by the user. Middle step output is English.
 - Whether the action input is JSON or str depends on the definition of the tool.
 

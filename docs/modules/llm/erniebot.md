@@ -114,7 +114,9 @@ ErnieBot相关模型的参数如下所示：
 ```python
 from promptulate.llms import QianFan
 
-llm = QianFan(temperature=0.1, top_p=0.8) 
+model_config = {"temperature": 0.1, "top_p": 0.8}
+
+llm = QianFan(model_config=model_config) 
 answer = llm("请解释一下引力波的放射与广义相对论的必然关系")
 print(answer)
 ```
@@ -133,12 +135,13 @@ print(answer)
 ```python
 from promptulate.llms import QianFan
 
-llm = QianFan(temperature=0.1)
+model_config = {"temperature": 0.1, "stop": ["a"]}
+llm = QianFan(model_config=model_config)
 prompt = """
 Please strictly output the following content.
 [start] This is a test [end]
 """
-result = llm(prompt, stop=["a"])
+result = llm(prompt)
 print(result)
 ```
 
@@ -155,7 +158,8 @@ print(result)
 ```python
 from promptulate.llms import QianFan
 
-llm = QianFan(stream=True)
+model_config = {"stream": True}
+llm = QianFan(model_config=model_config)
 
 response = llm("Who are you?")
 
@@ -169,7 +173,8 @@ QianFan()将返回一个迭代器，您可以使用next()或for each来获取响
 ```python
 from promptulate.llms import QianFan
 
-llm = QianFan(stream=True, return_raw_response=True)
+model_config = {"stream": True, "return_raw_response": True}
+llm = QianFan(model_config=model_config)
 
 response = llm("Who are you?")
 for chuck in response:
