@@ -1,15 +1,21 @@
 import json
 import os
 from abc import ABC
-from typing import List, Optional, Union, Iterator, TypeVar
+from typing import Iterator, List, Optional, TypeVar, Union
 
 from pydantic import BaseModel
 
 from promptulate.config import pne_config
-from promptulate.llms import BaseLLM
 from promptulate.error import LLMError
+from promptulate.llms import BaseLLM
 from promptulate.preset_roles.prompt import PRESET_SYSTEM_PROMPT_ERNIE
-from promptulate.schema import LLMType, MessageSet, AssistantMessage, UserMessage, BaseMessage
+from promptulate.schema import (
+    AssistantMessage,
+    BaseMessage,
+    LLMType,
+    MessageSet,
+    UserMessage,
+)
 from promptulate.utils import logger
 
 T = TypeVar("T", bound=BaseModel)
@@ -115,7 +121,7 @@ class QianFan(BaseLLM, ABC):
     return_raw_response: bool = False
 
     def __call__(
-            self, instruction: str, stop: Optional[List[str]] = None, *args, **kwargs
+        self, instruction: str, stop: Optional[List[str]] = None, *args, **kwargs
     ):
         preset = (
             self.default_system_prompt
@@ -137,7 +143,7 @@ class QianFan(BaseLLM, ABC):
             return result
 
     def _predict(
-            self, prompts: MessageSet, stop: Optional[List[str]] = None, *args, **kwargs
+        self, prompts: MessageSet, stop: Optional[List[str]] = None, *args, **kwargs
     ) -> Union[str, BaseMessage, T, List[BaseMessage], QianFanStreamIterator]:
         """
         Predicts the response using the ERNIE model.
@@ -161,14 +167,16 @@ class QianFan(BaseLLM, ABC):
         os.environ["QIANFAN_ACCESS_KEY"] = pne_config.get_qianfan_ak()
         os.environ["QIANFAN_SECRET_KEY"] = pne_config.get_qianfan_sk()
         chat_comp = qianfan.ChatCompletion()
-        response = chat_comp.do(model=self.model,
-                                temperature=self.temperature,
-                                top_p=self.top_p,
-                                system=self.system,
-                                penalty_score=self.penalty_score,
-                                stream=self.stream,
-                                stop=stop,
-                                messages=prompts.listdict_messages)
+        response = chat_comp.do(
+            model=self.model,
+            temperature=self.temperature,
+            top_p=self.top_p,
+            system=self.system,
+            penalty_score=self.penalty_score,
+            stream=self.stream,
+            stop=stop,
+            messages=prompts.listdict_messages,
+        )
         if self.stream:
             return QianFanStreamIterator(
                 response_stream=response, return_raw_response=self.return_raw_response

@@ -76,8 +76,9 @@ class ErnieBot(BaseLLM, ABC):
         Returns:
             AssistantMessage: The generated response.
         """
-        warnings.warn("QianFan class is online ,this module will deprecated",
-                      DeprecationWarning)
+        warnings.warn(
+            "QianFan class is online ,this module will deprecated", DeprecationWarning
+        )
         headers = {"Content-Type": "application/json"}
         models = {
             "ernie-bot-turbo": pne_config.ernie_bot_turbo_url,

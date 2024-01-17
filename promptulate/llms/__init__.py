@@ -23,5 +23,3 @@ from promptulate.llms.openai import ChatOpenAI, OpenAI
 from promptulate.llms.qianfan import QianFan
 
 __all__ = ["OpenAI", "ChatOpenAI", "BaseLLM", "ErnieBot", "QianFan"]
-
-
