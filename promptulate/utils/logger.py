@@ -54,6 +54,7 @@ class LogManager(metaclass=Singleton):
         file_handler.setFormatter(formatter)
 
         self.logger.addHandler(file_handler)
+        self.enable_log()
 
 
 def exception_handler(exc_type, exc_value, exc_traceback):
@@ -77,6 +78,19 @@ def exception_handler(exc_type, exc_value, exc_traceback):
 
     tb_info = "".join(traceback.format_exception(exc_type, exc_value, exc_traceback))
     logger.error(f"Uncaught exception: {tb_info}")
+    def enable_log(self):
+        file_handler = TimedRotatingFileHandler(
+            filename=get_log_path(), when="midnight", interval=1, encoding="utf-8"
+        )
+        file_handler.setLevel(logging.DEBUG)
+
+        formatter = logging.Formatter(
+            "%(asctime)s | %(levelname)s | %(name)s:%(funcName)s:%(lineno)d - %(message)s",  # noqa
+            "%Y-%m-%d %H:%M:%S",
+        )
+        file_handler.setFormatter(formatter)
+
+        self.logger.addHandler(file_handler)
 
     sys.__excepthook__(exc_type, exc_value, exc_traceback)
 
