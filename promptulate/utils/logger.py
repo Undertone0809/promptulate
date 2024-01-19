@@ -57,7 +57,7 @@ class LogManager(metaclass=Singleton):
         self.enable_log()
 
 
-def exception_handler(exc_type, exc_value, exc_traceback):
+def exception_handler(exc_type, exc_value, exc_traceback, logger):
     """
     Handles uncaught exceptions in the program.
 
@@ -92,10 +92,10 @@ def exception_handler(exc_type, exc_value, exc_traceback):
 
         self.logger.addHandler(file_handler)
 
-    sys.__excepthook__(exc_type, exc_value, exc_traceback)
+    sys.excepthook = lambda exc_type, exc_value, exc_traceback: exception_handler(exc_type, exc_value, exc_traceback, logger)
 
 
 log_manager = LogManager()
 logger = log_manager.logger
 original_excepthook = sys.excepthook
-sys.excepthook = exception_handler
+sys.excepthook = lambda exc_type, exc_value, exc_traceback: exception_handler(exc_type, exc_value, exc_traceback, logger)
