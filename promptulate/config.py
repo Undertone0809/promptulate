@@ -129,6 +129,33 @@ class Config(metaclass=Singleton):
             return get_cache()["ERNIE_API_SECRET"]
         raise ValueError("ERNIE_API_SECRET is not provided. Please set your secret.")
 
+    def get_zhipuai_api_(self) -> str:
+        if "ZHIPUAI_API_KEY" in os.environ.keys():
+            if self.enable_cache:
+                get_cache()["ZHIPUAI_API_KEY"] = os.getenv("ZHIPUAI_API_KEY")
+            return os.getenv("ZHIPUAI_API_KEY")
+        if self.enable_cache and "ZHIPUAI_API_KEY" in get_cache():
+            return get_cache()["ZHIPUAI_API_KEY"]
+        raise ValueError("ZHIPUAI_API_KEY is not provided. Please set your key.")
+
+    def get_qianfan_ak(self):
+        if "QIANFAN_ACCESS_KEY" in os.environ.keys():
+            if self.enable_cache:
+                get_cache()["QIANFAN_ACCESS_KEY"] = os.getenv("QIANFAN_ACCESS_KEY")
+            return os.getenv("QIANFAN_ACCESS_KEY")
+        if self.enable_cache and "QIANFAN_ACCESS_KEY" in get_cache():
+            return get_cache()["QIANFAN_ACCESS_KEY"]
+        raise ValueError("QIANFAN_ACCESS_KEY is not provided. Please set your key.")
+
+    def get_qianfan_sk(self):
+        if "QIANFAN_SECRET_KEY" in os.environ.keys():
+            if self.enable_cache:
+                get_cache()["QIANFAN_SECRET_KEY"] = os.getenv("QIANFAN_SECRET_KEY")
+            return os.getenv("QIANFAN_SECRET_KEY")
+        if self.enable_cache and "QIANFAN_SECRET_KEY" in get_cache():
+            return get_cache()["QIANFAN_SECRET_KEY"]
+        raise ValueError("QIANFAN_SECRET_KEY is not provided. Please set your secret.")
+
     def get_ernie_token(self) -> str:
         url = self.ernie_bot_token_url
         params = {

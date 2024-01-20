@@ -1,7 +1,7 @@
 import paho.mqtt.client as mqtt
 
 from promptulate.agents import ToolAgent
-from promptulate.tools import Calculator, DuckDuckGoTool, SleepTool
+from promptulate.tools import Calculator, DuckDuckGoTool, sleep_tool
 from promptulate.tools.human_feedback import HumanFeedBackTool
 from promptulate.tools.iot_swith_mqtt import IotSwitchTool
 from promptulate.utils.logger import enable_log
@@ -22,7 +22,7 @@ def main():
     tools = [
         DuckDuckGoTool(),
         Calculator(),
-        SleepTool(),
+        sleep_tool,
         HumanFeedBackTool(),
         IotSwitchTool(
             client=client,
@@ -38,7 +38,7 @@ def main():
         ),
     ]
     agent = ToolAgent(
-        tools,
+        tools=tools,
         enable_role=True,
         agent_name="xiao chang",
         agent_identity="Smart speaker.",

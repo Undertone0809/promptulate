@@ -49,9 +49,9 @@ def test_import_tools():
         SemanticScholarQueryTool,
         SemanticScholarReferenceTool,
         ShellTool,
-        SleepTool,
         Tool,
         define_tool,
         function_to_tool,
         function_to_tool_schema,
+        sleep_tool,
     )
