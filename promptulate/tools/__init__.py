@@ -30,7 +30,7 @@ if TYPE_CHECKING:
         SemanticScholarReferenceTool,
     )
     from promptulate.tools.shell import ShellTool
-    from promptulate.tools.sleep import SleepTool
+    from promptulate.tools.sleep.tool import sleep_tool
 
 
 def __getattr__(name):
@@ -106,10 +106,10 @@ def __getattr__(name):
         from promptulate.tools.math.tools import Calculator
 
         return Calculator
-    elif name == "SleepTool":
-        from promptulate.tools.sleep import SleepTool
+    elif name == "sleep_tool":
+        from promptulate.tools.sleep.tool import sleep_tool
 
-        return SleepTool
+        return sleep_tool
     elif name == "PaperSummaryTool":
         from promptulate.tools.paper.tools import PaperSummaryTool
 
@@ -147,6 +147,6 @@ __all__ = [
     "PythonREPLTool",
     "ShellTool",
     "Calculator",
-    "SleepTool",
+    "sleep_tool",
     "HumanFeedBackTool",
 ]
