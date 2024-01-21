@@ -107,16 +107,10 @@ class ArxivReferenceTool(Tool):
 
         self.reference_counter = 0
         prompt = (
-            f"You now need to, based on the specific content of the research,\
-            list at least {self.max_reference_num} references \
-            that can be queried using arxiv. \
-            Additionally, you need to provide me with 3 query keywords for arxiv."
-            f"I will use arxiv to conduct the search, and you will \
-            need to select the {self.max_reference_num} most relevant references for \
-            the current study based on the results I provide."
-            f"User input: {query}"
-            f"Your output must be three query words \n, As an example \
-            [query]: keyword1, keyword2, keyword3\n"
+            f"现在你需要根据其研究的具体内容，列出至少{self.max_reference_num}篇参考文献，你可以使用arxiv进行查询，你需要给我提供3个arxiv查询关键词，我将使用"
+            f"arxiv进行查询，你需要根据我返回的结果选取最符合当前研究的{self.max_reference_num}篇参考文献。"
+            f"用户输入:{query}"
+            "你的输出必须是三个查询词\n，如 [query]: keyword1, keyword2, keyword3\n"
         )
         keywords = analyze_query_string(self.llm(prompt))
         for keyword in keywords:
