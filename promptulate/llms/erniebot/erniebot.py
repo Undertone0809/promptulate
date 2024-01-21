@@ -1,4 +1,5 @@
 import json
+import warnings
 from abc import ABC
 from typing import Any, Dict, List, Optional
 
@@ -40,10 +41,11 @@ class ErnieBot(BaseLLM, ABC):
         "disable_search",
         "penalty_score",
     ]
-    url: str = pne_config.ernie_bot_4_url
+    base_url: str = ""
+    """set your base_url"""
 
     def __call__(
-        self, prompt: str, stop: Optional[List[str]] = None, *args, **kwargs
+        self, instruction: str, stop: Optional[List[str]] = None, *args, **kwargs
     ) -> str:
         preset = (
             self.default_system_prompt
@@ -55,7 +57,7 @@ class ErnieBot(BaseLLM, ABC):
         self.system = preset
         message_set = MessageSet(
             messages=[
-                UserMessage(content=prompt),
+                UserMessage(content=instruction),
             ]
         )
         return self.predict(message_set, stop).content
@@ -74,25 +76,32 @@ class ErnieBot(BaseLLM, ABC):
         Returns:
             AssistantMessage: The generated response.
         """
-
+        warnings.warn(
+            "QianFan class is online ,this module will deprecated", DeprecationWarning
+        )
         headers = {"Content-Type": "application/json"}
+        models = {
+            "ernie-bot-turbo": pne_config.ernie_bot_turbo_url,
+            "ernie-bot-4": pne_config.ernie_bot_4_url,
+            "ernie-bot": pne_config.ernie_bot_url,
+        }
 
-        if self.model == "ernie-bot-turbo":
-            self.url = pne_config.ernie_bot_turbo_url
-        elif self.model == "ernie-bot-4":
-            self.url = pne_config.ernie_bot_4_url
-        elif self.model == "ernie-bot":
-            self.url = pne_config.ernie_bot_url
+        if self.base_url:
+            url = self.base_url
         else:
-            raise ValueError("pne not found this model")
+            if models.__contains__(self.model):
+                url = models[self.model]
+            else:
+                raise ValueError("pne not found this model")
 
         body: Dict[str, Any] = self._build_api_params_dict(prompts, stop)
         response = requests.post(
-            url=self.url + "?access_token=" + pne_config.get_ernie_token(),
+            url=url + "?access_token=" + pne_config.get_ernie_token(),
             headers=headers,
             json=body,
             proxies=pne_config.proxies,
         )
+        logger.debug(f"[pne ernie url] {url}")
         logger.debug(f"[pne ernie body] {body}")
         if response.status_code == 200:
             # todo enable stream mode

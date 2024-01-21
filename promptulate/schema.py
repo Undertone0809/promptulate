@@ -75,16 +75,19 @@ class LLMType(str, Enum):
     OpenAI = "OpenAI"
     ChatOpenAI = "ChatOpenAI"
     ErnieBot = "ErnieBot"
+    QianFan = "QianFan"
 
 
-class MessageSet(BaseModel):
+class MessageSet:
     """MessageSet can be used in Memory, LLMs, Framework and some else.
     It's a universal chat message format in promptulate.
     """
 
-    messages: List[BaseMessage] = []
-    conversation_id: Optional[str] = None
-    """Used to memory"""
+    def __init__(
+        self, messages: List[BaseMessage], conversation_id: Optional[str] = None
+    ):
+        self.messages: List[BaseMessage] = messages
+        self.conversation_id: Optional[str] = conversation_id
 
     @classmethod
     def from_listdict_data(cls, value: List[Dict]) -> "MessageSet":
@@ -180,8 +183,13 @@ def _to_ernie_bot_llm_prompt(message_set: MessageSet) -> List[Dict]:
     return message_set.listdict_messages
 
 
+def _to_qian_fan_llm_prompt(message_set: MessageSet) -> List[Dict]:
+    return message_set.listdict_messages
+
+
 _to_llm_prompt: Dict[LLMType, Callable] = {
     LLMType.OpenAI: _to_openai_llm_prompt,
     LLMType.ChatOpenAI: _to_chat_openai_llm_prompt,
     LLMType.ErnieBot: _to_ernie_bot_llm_prompt,
+    LLMType.QianFan: _to_qian_fan_llm_prompt,
 }

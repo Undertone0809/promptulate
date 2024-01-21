@@ -1,21 +1,26 @@
-# 百度文心Erniebot
+# 文心千帆系列模型
 
-本文将会介绍百度文心系列大模型的使用，要使用其能力，你需要前往[百度千帆大模型平台](https://console.bce.baidu.com/qianfan/ais/console/applicationConsole/application)创建大模型应用并获取到对应的`API Key`和`Secret Key`。
+本文将会介绍百度文心系列大模型的使用，要使用其能力，你需要前往[百度千帆大模型平台](https://console.bce.baidu.com/qianfan/ais/console/applicationConsole/application)创建大模型应用并安装
+千帆sdk。安装命令如下
+
+```shell script
+pip install -U qianfan
+```
 
 ### KEY配置
 
-在使用百度千帆大模型平台系列的LLM之前，你需要先导入你的`API Key`和`Secret Key`
+在使用百度千帆大模型平台系列的LLM之前，你需要先导入你的`API Key`和`Secret Key` ,具体请查看百度官方文档介绍(https://cloud.baidu.com/doc/WENXINWORKSHOP/s/3lmokh7n6)
 
 **方法一（不推荐）**
 
 ```python
 import os
 
-os.environ["ERNIE_API_KEY"] = "your api key"
-os.environ["ERNIE_API_SECRET"] = "your secret key"
+os.environ["QIANFAN_ACCESS_KEY"] = "your api key"
+os.environ["QIANFAN_SECRET_KEY"] =  "your secret key"
 ```
 
-在你第一次使用的时候，需要使用`os.environ["ERNIE_API_KEY"]` 导入"ERNIE_API_KEY"的环境变量，但是在第一运行之后`promptulate`会进行缓存，即后面再运行就不需要再导入key了。同理ERNIE_API_SECRET也有上述特性。
+在你第一次使用的时候，需要使用`os.environ["QIANFAN_ACCESS_KEY"]` 导入"QIANFAN_ACCESS_KEY"的环境变量，但是在第一运行之后`promptulate`会进行缓存，即后面再运行就不需要再导入key了。同理QIANFAN_SECRET_KEY也有上述特性。
 
 如果你的key过期了，可以尝试重新按照上面的方法导入key，或者你也可以把 `cache` 文件给删除掉，通过以下代码可以获取到缓存文件的位置:
 
@@ -32,38 +37,34 @@ print(get_default_storage_path())
 在项目根目录下创建 `.env` 文件，然后填入你的 key:
 
 ```text
-ERNIE_API_KEY=xxx
-ERNIE_API_SECRET=xxx
+QIANFAN_ACCESS_KEY=xxx
+QIANFAN_SECRET_KEY=xxx
 ```
 
 ### LLM快速上手
 
 `promptulate`的架构设计可以轻松兼容不同的大语言模型扩展，在`promptulate`中，llm负责最基本的内容生成部分，因此为最基础的组件。
 
-下面的示例展示了如何使用百度文心ErnieBot的大语言模型进行交互。
+下面的示例展示了如何使用百度文心千帆的大语言模型进行交互。
 
-如果你想使用国产文心系列模型，只需要 ErnieBot()进行初始化，文心模型虽然与openai模型有较大差异，但是框架提供了尽可能完美的兼容。
-你还可以使用ErnieBot(model="ernie-bot")来具体选择对应的文心模型，目前框架提供了三种文心模型，分别是
+如果你想使用国产文心系列模型，只需要 QianFan()进行初始化，文心模型虽然与openai模型有较大差异，但是框架提供了尽可能完美的兼容。
+你还可以使用QianFan(model="ERNIE-Bot-4")来具体选择对应的文心模型，目前框架基本支持所有的文心系列模型，分别是
 
-***1.文心一言（"ernie-bot"）***
-
-***2.文心turbo（"ernie-bot-turbo"）***
-
-***3.文心4.0模型（"ernie-bot-4"）***
+![](../../images/qianfan_model.png)
 
 本框架默认为性能更加强大的文心4.0模型。
 
 
 ```python
-from promptulate.llms import ErnieBot
+from promptulate.llms import QianFan
 
-llm = ErnieBot() 
+llm = QianFan() 
 answer = llm("请解释一下引力波的放射与广义相对论的必然关系")
 print(answer)
 
 ```
 
-> 上述ErnieBot默认使用`ernie-bot-4`模型
+> 上述ErnieBot默认使用`ERNIE-Bot-4`模型
 
 输出结果如下：
 
@@ -77,7 +78,8 @@ print(answer)
 
 ### 切换模型
 
-文心提供了 "ernie-bot","ernie-bot-turbo"和"ernie-bot-4",详情介绍查看[官方文档](https://cloud.baidu.com/doc/WENXINWORKSHOP/s/Jlfmc9dit)与[API文档](https://cloud.baidu.com/doc/WENXINWORKSHOP/s/Nlks5zkzu)
+文心千帆提供了一系列大模型,详情介绍查看[官方文档](https://cloud.baidu.com/doc/WENXINWORKSHOP/s/Jlfmc9dit)与[API文档](https://cloud.baidu.com/doc/WENXINWORKSHOP/s/Nlks5zkzu)
+以下是其中一些大模型的介绍
 
 **ERNIE-Bot-turbo**
 
@@ -94,9 +96,9 @@ ERNIE-Bot 4.0是百度自行研发的大语言模型，覆盖海量中文数据�
 你可以使用如下方式切换模型：
 
 ```python
-from promptulate.llms import ErnieBot
+from promptulate.llms import QianFan
 
-llm = ErnieBot(model="ernie-bot-4") 
+llm = QianFan(model="ERNIE-Bot-turbo") 
 answer = llm("请解释一下引力波的放射与广义相对论的必然关系")
 print(answer)
 ```
@@ -110,9 +112,11 @@ ErnieBot相关模型的参数如下所示：
 你可以使用如下方式进行参数配置：
 
 ```python
-from promptulate.llms import ErnieBot
+from promptulate.llms import QianFan
 
-llm = ErnieBot(temperature=0.1, top_p=0.8) 
+model_config = {"temperature": 0.1, "top_p": 0.8}
+
+llm = QianFan(model_config=model_config) 
 answer = llm("请解释一下引力波的放射与广义相对论的必然关系")
 print(answer)
 ```
@@ -129,19 +133,51 @@ print(answer)
 **（2）最多4个元素**
 
 ```python
-from promptulate.llms import ErnieBot
+from promptulate.llms import QianFan
 
-llm = ErnieBot(temperature=0.1)
+model_config = {"temperature": 0.1, "stop": ["a"]}
+llm = QianFan(model_config=model_config)
 prompt = """
 Please strictly output the following content.
 [start] This is a test [end]
 """
-result = llm(prompt, stop=["a"])
+result = llm(prompt)
 print(result)
 ```
 
 输出结果如下：
 
 ```text
-[start] This is 
+[st
+```
+
+### 流式输出
+
+如果你想要流形式输出，你可以按照如下方式进行流输出
+
+```python
+from promptulate.llms import QianFan
+
+model_config = {"stream": True}
+llm = QianFan(model_config=model_config)
+
+response = llm("Who are you?")
+
+for chuck in response:
+    print(chuck)
+```
+
+QianFan()将返回一个迭代器，您可以使用next()或for each来获取响应。
+如果您想获取元数据，可以使用return_raw_response=True来获取pne包装的原始响应。助理消息。元数据将存储在pne.AssistantMessage.additional_kwargs。
+
+```python
+from promptulate.llms import QianFan
+
+model_config = {"stream": True, "return_raw_response": True}
+llm = QianFan(model_config=model_config)
+
+response = llm("Who are you?")
+for chuck in response:
+    print(chuck.content)
+    print(chuck.additional_kwargs)
 ```

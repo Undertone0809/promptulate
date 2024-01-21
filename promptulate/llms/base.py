@@ -27,7 +27,7 @@ from promptulate.schema import AssistantMessage, BaseMessage, LLMType, MessageSe
 
 
 class BaseLLM(BaseModel, ABC):
-    llm_type: Union[str, LLMType]
+    llm_type: Union[str, LLMType] = "custom"
 
     class Config:
         """Configuration for this pydantic object."""
@@ -44,8 +44,9 @@ class BaseLLM(BaseModel, ABC):
     def predict(self, messages: MessageSet, *args, **kwargs) -> AssistantMessage:
         """llm generate prompt"""
         Hook.call_hook(HookTable.ON_LLM_START, self, messages, *args, **kwargs)
-        result: AssistantMessage = self._predict(messages, *args, **kwargs)
-        Hook.call_hook(HookTable.ON_LLM_RESULT, self, result=result.content)
+        result = self._predict(messages, *args, **kwargs)
+        if isinstance(result, AssistantMessage):
+            Hook.call_hook(HookTable.ON_LLM_RESULT, self, result=result.content)
         return result
 
     @abstractmethod
@@ -58,4 +59,3 @@ class BaseLLM(BaseModel, ABC):
     @abstractmethod
     def __call__(self, instruction: str, *args, **kwargs):
         """input string prompt return answer"""
-        raise NotImplementedError()

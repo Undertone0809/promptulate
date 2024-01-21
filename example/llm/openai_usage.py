@@ -23,7 +23,10 @@ import promptulate as pne
 def main():
     llm = pne.ChatOpenAI()
 
-    print(llm("What's LLM?"))
+    while True:
+        prompt = input("[User Input] ")
+        answer = llm(prompt)
+        print(answer)
 
 
 if __name__ == "__main__":
