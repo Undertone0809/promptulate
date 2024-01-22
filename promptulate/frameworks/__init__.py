@@ -18,6 +18,6 @@
 # Contact Email: zeeland@foxmail.com
 
 
-from promptulate.frameworks.conversation import Conversation
+from promptulate.frameworks.conversation import Conversation, DuckDuckGoSearchAPIWrapper
 
 __all__ = ["Conversation"]
