@@ -33,7 +33,7 @@ class DuckDuckGoSearchAPIWrapper(BaseModel):
         self, keyword: str, num_results: Optional[int] = None, **kwargs
     ) -> List[str]:
         """Run query through DuckDuckGo and return concatenated results."""
-        from duckduckgo_search import DDGS
+        from promptulate.tools.duckduckgo.tools import DDGS
 
         if not num_results:
             num_results = self.max_num_of_results
@@ -70,7 +70,7 @@ class DuckDuckGoSearchAPIWrapper(BaseModel):
                 title - The title of the result.
                 link - The link to the result.
         """
-        from duckduckgo_search import DDGS
+        from promptulate.tools.duckduckgo.tools import DDGS
 
         if not num_results:
             num_results = self.max_num_of_results
