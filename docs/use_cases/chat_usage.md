@@ -54,9 +54,9 @@ print(response.content)  # response string
 print(response.additional_kwargs)  # metadata
 ```
 
-    I am an AI assistant here to help you with any questions or tasks you may have. How can I assist you today?
-    {'id': 'chatcmpl-8UK0tfwlkixWyaxKJ2XWNGMVGFPo0', 'choices': [{'finish_reason': 'stop', 'index': 0, 'message': {'content': 'I am an AI assistant here to help you with any questions or tasks you may have. How can I assist you today?', 'role': 'assistant'}}], 'created': 1702237461, 'model': 'gpt-3.5-turbo-0613', 'object': 'chat.completion', 'system_fingerprint': None, 'usage': {'completion_tokens': 25, 'prompt_tokens': 20, 'total_tokens': 45}, '_response_ms': 2492.372}
-    
+      I am an AI assistant here to help you with any questions or tasks you may have. How can I assist you today?
+      {'id': 'chatcmpl-8UK0tfwlkixWyaxKJ2XWNGMVGFPo0', 'choices': [{'finish_reason': 'stop', 'index': 0, 'message': {'content': 'I am an AI assistant here to help you with any questions or tasks you may have. How can I assist you today?', 'role': 'assistant'}}], 'created': 1702237461, 'model': 'gpt-3.5-turbo-0613', 'object': 'chat.completion', 'system_fingerprint': None, 'usage': {'completion_tokens': 25, 'prompt_tokens': 20, 'total_tokens': 45}, '_response_ms': 2492.372}
+      
 
 ## Using any model
 You can call 100+ LLMs using the same Input/Output Format(OpenAI format) in `pne.chat()`. The follow example show how to use `claude-2`, make sure you have key ANTHROPIC_API_KEY.
