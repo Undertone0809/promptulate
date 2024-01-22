@@ -17,11 +17,12 @@ else
 	TEST_PROD_COMMAND := PYTHONPATH=$(PYTHONPATH) poetry run pytest -c pyproject.toml --cov-report=html --cov=promptulate tests
 endif
 
+.PHONY: lock
+lock:
+	poetry lock -n && poetry export --without-hashes > requirements.txt
 
-#* Installation
 .PHONY: install
 install:
-	poetry lock -n && poetry export --without-hashes > requirements.txt
 	poetry install --with dev
 
 .PHONY: install-docs
@@ -32,7 +33,6 @@ install-docs:
 pre-commit-install:
 	poetry run pre-commit install
 
-#* Formatters
 .PHONY: polish-codestyle
 polish-codestyle:
 	poetry run ruff format --config pyproject.toml promptulate tests example
@@ -41,12 +41,10 @@ polish-codestyle:
 .PHONY: formatting
 formatting: polish-codestyle
 
-#* Linting
 .PHONY: test
 test:
 	$(TEST_COMMAND)
 
-#* Linting
 .PHONY: test-prod
 test-prod:
 	$(TEST_PROD_COMMAND)
