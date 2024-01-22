@@ -25,6 +25,10 @@ lock:
 install:
 	poetry install --with dev
 
+.PHONY: install-integration
+install-integration:
+	poetry install --with dev,test_integration
+
 .PHONY: install-docs
 install-docs:
 	npm i docsify-cli -g
