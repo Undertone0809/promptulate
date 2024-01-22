@@ -85,7 +85,19 @@ git clone https://github.com/Undertone0809/promptulate
 Install third-party packages:
 
 ```shell
-pip install poetry
+# Install make (if not installed)
+# On Linux:
+sudo apt install build-essential
+
+# On Windows:
+# Install make using Chocolatey
+choco install make
+
+# On Windows:
+# Install make using Chocolatey
+choco install make
+
+make install
 make install
 ```
 
