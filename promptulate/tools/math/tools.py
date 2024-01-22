@@ -119,3 +119,19 @@ class Calculator(Tool):
             return _evaluate_expression(expression)
         except Exception as e:
             raise ValueError(f"Unknown format from LLM: {llm_output}, error: {e}")
+
+
+def calculator(expression: str):
+    """Evaluate a mathematical expression.
+
+    Args:
+        expression: A mathematical expression, eg: 18^0.43
+
+    Attention:
+        Expressions can not exist variables!
+        eg: (current age)^0.43 is wrong, you should use 18^0.43 instead.
+
+    Returns:
+        The result of the evaluation.
+    """
+    return Calculator().run(expression)

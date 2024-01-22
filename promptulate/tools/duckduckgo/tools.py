@@ -83,3 +83,13 @@ class DuckDuckGoReferenceTool(Tool):
         if "return_type" in kwargs and kwargs["return_type"] == "original":
             return result
         return listdict_to_string(result, item_suffix="\n")
+
+
+def ddg_websearch(query: str) -> str:
+    """Run duckduckgo search and get search result.
+
+    Args:
+        query: query keyword
+    """
+    tool = DuckDuckGoTool()
+    return tool.run(query)
