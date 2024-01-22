@@ -4,6 +4,22 @@ Hi there! Thank you for even being interested in contributing to Promptulate. As
 
 ## Guidelines
 
+### GitHub Actions
+
+We use GitHub Actions to automate the testing and building process. If you encounter any issues with the GitHub Actions setup or need troubleshooting steps, please follow the instructions below.
+- If the GitHub Actions run fails, please analyze the error logs and follow the troubleshooting steps provided below.
+
+### Troubleshooting GitHub Actions
+
+To troubleshoot GitHub Actions run failures, follow the steps below:
+1. Analyze the error logs to identify the root cause of the failure.
+2. Common issues that can cause GitHub Actions to fail include:
+   - Invalid configuration files
+   - Incorrect workflow setup
+   - Dependency installation errors
+   - Network connectivity issues
+3. If you encounter a GitHub Actions run failure, please refer to the [GitHub Actions documentation](https://docs.github.com/en/actions) for troubleshooting tips and best practices.
+
 ### 👩‍💻 Contributing Code
 
 To contribute to this project, please follow the ["fork and pull request"](https://docs.github.com/en/get-started/quickstart/contributing-to-projects) workflow.
@@ -89,4 +105,20 @@ pip install poetry
 make install
 ```
 
-This project uses a code syntax checking tool. If you want to submit a PR, you need to run `make formatting` for code specification formatting before committing, and run `make lint` to pass syntax and unit testing checks.
+**GitHub Actions Setup and Troubleshooting**
+
+To set up GitHub Actions and troubleshoot run failures, follow the steps below:
+1. Create a `.github/workflows` directory in the root of the repository.
+2. Inside the directory, create a YAML file to define the GitHub Actions workflow.
+3. Add the necessary jobs, steps, and triggers to the workflow file.
+4. Commit and push the workflow file to your repository.
+
+### Analyzing Error Logs and Common Issues
+
+When analyzing the error logs from a failed GitHub Actions run, consider the following common issues:
+- **Invalid configuration files:** Check if the workflow file or related configuration files have errors.
+- **Incorrect workflow setup:** Ensure that the workflow is correctly configured with appropriate triggers and steps.
+- **Dependency installation errors:** Look for errors related to package installations or dependencies.
+- **Network connectivity issues:** Verify network access for package installations and other external resources.
+
+If you need assistance with troubleshooting GitHub Actions run failures, please reach out to the maintainers for support. If you want to submit a PR, you need to run `make formatting` for code specification formatting before committing, and run `make lint` to pass syntax and unit testing checks.
