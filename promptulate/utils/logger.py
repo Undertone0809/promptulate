@@ -18,6 +18,7 @@
 # Contact Email: zeeland@foxmail.com
 
 import datetime
+import os
 import logging
 import sys
 import traceback
@@ -33,8 +34,10 @@ def get_log_path() -> str:
     return f"{log_directory}/{current_time}.log"
 
 
-def enable_log():
-    pass
+def enable_log(logger):
+    logger.addHandler(logging.StreamHandler())
+    logger.setLevel(logging.INFO)
+    return logger
 
 
 class LogManager(metaclass=Singleton):
@@ -46,6 +49,7 @@ class LogManager(metaclass=Singleton):
             filename=get_log_path(), when="midnight", interval=1, encoding="utf-8"
         )
         file_handler.setLevel(logging.DEBUG)
+        file_handler.suffix = "%Y-%m-%d.log"
 
         formatter = logging.Formatter(
             "%(asctime)s | %(levelname)s | %(name)s:%(funcName)s:%(lineno)d - %(message)s",  # noqa
@@ -66,10 +70,12 @@ def exception_handler(exc_type, exc_value, exc_traceback):
     instead passed to the default Python exception handler.
 
     Args:
+        logger: The logger object for logging uncaught exceptions.
         exc_type: The type of the exception.
         exc_value: The instance of the exception.
         exc_traceback: A traceback object encapsulating the call stack at
         the point where the exception originally occurred.
+        logger: The logger object for logging uncaught exceptions.
     """
     if issubclass(exc_type, KeyboardInterrupt):
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
@@ -82,6 +88,6 @@ def exception_handler(exc_type, exc_value, exc_traceback):
 
 
 log_manager = LogManager()
-logger = log_manager.logger
+logger = logging.getLogger('promptulate')
 original_excepthook = sys.excepthook
 sys.excepthook = exception_handler
