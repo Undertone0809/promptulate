@@ -5,6 +5,7 @@ from pydantic.class_validators import root_validator
 
 
 class DuckDuckGoSearchAPIWrapper(BaseModel):
+    def __init__(self):
     """Wrapper for DuckDuckGo Search API. Free and does not require any setup."""
 
     region: Optional[str] = "us-en"
@@ -38,13 +39,16 @@ class DuckDuckGoSearchAPIWrapper(BaseModel):
         if not num_results:
             num_results = self.max_num_of_results
 
-        with DDGS() as ddgs:
+        try:
+            with DDGS() as ddgs:
             results = ddgs.text(
                 keyword,
                 region=self.region,
                 safesearch=self.safe_search,
                 timelimit=self.time,
             )
+            except Exception as e:
+                return [str(e) if e else 'An error occurred during the DuckDuckGo search.']
             if results is None or next(results, None) is None:
                 return ["No good DuckDuckGo Search Result was found"]
 
