@@ -8,10 +8,10 @@ rules:
   - "Add docstrings to all functions and file headers."
 
 # This is the branch that Sweep will develop from and make pull requests to. Most people use 'main' or 'master' but some users also use 'dev' or 'staging'.
-branch: 'main'
+branch: 'master'
 
 # By default Sweep will read the logs and outputs from your existing Github Actions. To disable this, set this to false.
-gha_enabled: True
+gha_enabled: true
 
 # This is the description of your project. It will be used by sweep when creating PRs. You can tell Sweep what's unique about your project, what frameworks you use, or anything else you want.
 #
