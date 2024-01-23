@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, Iterator, List, Optional, Union
 
 from pydantic import BaseModel, Field
 
@@ -26,6 +26,91 @@ class BaseMessage(BaseModel):
     @abstractmethod
     def type(self) -> str:
         """Type of the message, used for serialization."""
+
+
+class BaseStreamIterator:
+    """
+    This class is an iterator for the response stream from the LLM model.
+
+    Attributes:
+        response_stream: The stream of responses from the LLM model.
+        return_raw_response: A boolean indicating whether to return the raw response
+        or not.
+    """
+
+    def __init__(
+        self,
+        response_stream,
+        parse_content: callable([[Any], [str, str]]),
+        return_raw_response: bool = False,
+    ):
+        """
+        The constructor for LitellmStreamIterator class.
+
+        Parameters:
+            response_stream: The stream of responses from the LLM model.
+            return_raw_response (bool): A flag indicating whether to return the raw
+            response or not.
+        """
+        self.response_stream = response_stream
+        self.return_raw_response = return_raw_response
+        self.parse_content = parse_content
+
+    def __iter__(self) -> Union[Iterator[BaseMessage], Iterator[str]]:
+        """
+        The iterator method for the LitellmStreamIterator class.
+
+        Returns:
+            self: An instance of the LitellmStreamIterator class.
+        """
+        return self
+
+    def parse_chunk(self, chunk) -> Optional[Union[str, BaseMessage]]:
+        """
+        This method is used to parse a chunk from the response stream. It returns
+        None if the chunk is empty, otherwise it returns the parsed chunk.
+
+        Parameters:
+            chunk: The chunk to be parsed.
+
+        Returns:
+            Optional: The parsed chunk or None if the chunk is empty.
+        """
+        content, ret_data = self.parse_content(chunk)
+        if content is None:
+            return None
+        if self.return_raw_response:
+            additional_kwargs: dict = ret_data
+            message = AssistantMessage(
+                content=content,
+                additional_kwargs=additional_kwargs,
+            )
+            return message
+
+        return content
+
+    def __next__(self) -> Union[str, BaseMessage]:
+        """
+        The next method for the LitellmStreamIterator class.
+
+        This method is used to get the next response from the LLM model. It iterates
+        over the response stream and parses each chunk using the parse_chunk method.
+        If the parsed chunk is not None, it returns the parsed chunk as the next
+        response. If there are no more messages in the response stream, it raises a
+        StopIteration exception.
+
+        Returns:
+            Union[str, BaseMessage]: The next response from the LLM model. If
+            return_raw_response is True, it returns an AssistantMessage instance,
+            otherwise it returns the content of the response as a string.
+        """
+        for chunk in self.response_stream:
+            message = self.parse_chunk(chunk)
+            if message is not None:
+                return message
+
+        # If there are no more messages, stop the iteration
+        raise StopIteration
 
 
 class CompletionMessage(BaseMessage):

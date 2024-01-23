@@ -16,12 +16,13 @@ if TYPE_CHECKING:
     from promptulate.tools.duckduckgo.tools import (
         DuckDuckGoReferenceTool,
         DuckDuckGoTool,
+        ddg_websearch,
     )
     from promptulate.tools.huggingface.tools import HuggingFaceTool
     from promptulate.tools.human_feedback import HumanFeedBackTool
     from promptulate.tools.iot_swith_mqtt import IotSwitchTool
     from promptulate.tools.langchain.tools import LangchainTool
-    from promptulate.tools.math.tools import Calculator
+    from promptulate.tools.math.tools import Calculator, calculator
     from promptulate.tools.paper.tools import PaperSummaryTool
     from promptulate.tools.python_repl import PythonREPLTool
     from promptulate.tools.semantic_scholar import (
@@ -74,6 +75,10 @@ def __getattr__(name):
         from promptulate.tools.duckduckgo.tools import DuckDuckGoTool
 
         return DuckDuckGoTool
+    elif name == "ddg_websearch":
+        from promptulate.tools.duckduckgo.tools import ddg_websearch
+
+        return ddg_websearch
     elif name == "SemanticScholarCitationTool":
         from promptulate.tools.semantic_scholar import SemanticScholarCitationTool
 
@@ -106,6 +111,10 @@ def __getattr__(name):
         from promptulate.tools.math.tools import Calculator
 
         return Calculator
+    elif name == "calculator":
+        from promptulate.tools.math.tools import calculator
+
+        return calculator
     elif name == "sleep_tool":
         from promptulate.tools.sleep.tool import sleep_tool
 
@@ -136,6 +145,8 @@ __all__ = [
     "HuggingFaceTool",
     "DuckDuckGoReferenceTool",
     "DuckDuckGoTool",
+    "ddg_websearch",
+    "calculator",
     "PaperSummaryTool",
     "ArxivSummaryTool",
     "ArxivReferenceTool",

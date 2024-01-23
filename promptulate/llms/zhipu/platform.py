@@ -11,10 +11,11 @@ from pydantic import BaseModel
 from promptulate.config import pne_config
 from promptulate.error import NetWorkError
 from promptulate.llms import BaseLLM
-from promptulate.preset_roles.prompt import PRESET_SYSTEM_PROMPT_ZhiPU
+from promptulate.preset_roles.prompt import PRESET_SYSTEM_PROMPT
 from promptulate.schema import (
     AssistantMessage,
     BaseMessage,
+    BaseStreamIterator,
     LLMType,
     MessageSet,
     SystemMessage,
@@ -25,88 +26,13 @@ from promptulate.utils import logger
 T = TypeVar("T", bound=BaseModel)
 
 
-class ZhiPuStreamIterator:
-    """
-    This class is an iterator for the response stream from the LLM model.
-
-    Attributes:
-        response_stream: The stream of responses from the LLM model.
-        return_raw_response: A boolean indicating whether to return the raw response
-        or not.
-    """
-
-    def __init__(self, response_stream, return_raw_response: bool = False):
-        """
-        The constructor for LitellmStreamIterator class.
-
-        Parameters:
-            response_stream: The stream of responses from the LLM model.
-            return_raw_response (bool): A flag indicating whether to return the raw
-            response or not.
-        """
-        self.response_stream = response_stream
-        self.return_raw_response = return_raw_response
-
-    def __iter__(self) -> Union[Iterator[BaseMessage], Iterator[str]]:
-        """
-        The iterator method for the LitellmStreamIterator class.
-
-        Returns:
-            self: An instance of the LitellmStreamIterator class.
-        """
-        return self
-
-    def parse_chunk(self, chunk) -> Optional[Union[str, BaseMessage]]:
-        """
-        This method is used to parse a chunk from the response stream. It returns
-        None if the chunk is empty, otherwise it returns the parsed chunk.
-
-        Parameters:
-            chunk: The chunk to be parsed.
-
-        Returns:
-            Optional: The parsed chunk or None if the chunk is empty.
-        """
-        try:
-            ret_data = json.loads(chunk.replace("data: ", ""))
-        except JSONDecodeError:
-            return None
-        content: Optional[str] = ret_data["choices"][0]["delta"]["content"]
-        if content is None:
-            return None
-
-        if self.return_raw_response:
-            additional_kwargs: dict = ret_data
-            message = AssistantMessage(
-                content=content,
-                additional_kwargs=additional_kwargs,
-            )
-            return message
-
-        return content
-
-    def __next__(self) -> Union[str, BaseMessage]:
-        """
-        The next method for the LitellmStreamIterator class.
-
-        This method is used to get the next response from the LLM model. It iterates
-        over the response stream and parses each chunk using the parse_chunk method.
-        If the parsed chunk is not None, it returns the parsed chunk as the next
-        response. If there are no more messages in the response stream, it raises a
-        StopIteration exception.
-
-        Returns:
-            Union[str, BaseMessage]: The next response from the LLM model. If
-            return_raw_response is True, it returns an AssistantMessage instance,
-            otherwise it returns the content of the response as a string.
-        """
-        for chunk in self.response_stream:
-            message = self.parse_chunk(chunk)
-            if message is not None:
-                return message
-
-        # If there are no more messages, stop the iteration
-        raise StopIteration
+def parse_content(chunk) -> [str, str]:
+    try:
+        ret_data = json.loads(chunk.replace("data: ", ""))
+    except JSONDecodeError:
+        return None, None
+    content: Optional[str] = ret_data["choices"][0]["delta"]["content"]
+    return content, ret_data
 
 
 class ZhiPu(BaseLLM, ABC):
@@ -160,11 +86,11 @@ class ZhiPu(BaseLLM, ABC):
 
     def __call__(
         self, instruction: str, *args, **kwargs
-    ) -> Union[str, BaseMessage, T, List[BaseMessage], ZhiPuStreamIterator]:
+    ) -> Union[str, BaseMessage, T, List[BaseMessage], BaseStreamIterator]:
         system_message = (
             self.default_system_prompt
             if self.default_system_prompt != ""
-            else PRESET_SYSTEM_PROMPT_ZhiPU
+            else PRESET_SYSTEM_PROMPT
         )
         if not self.enable_default_system_prompt:
             system_message = ""
@@ -189,7 +115,7 @@ class ZhiPu(BaseLLM, ABC):
         return_raw_response: bool = False,
         *args,
         **kwargs,
-    ) -> Union[str, BaseMessage, T, List[BaseMessage], ZhiPuStreamIterator]:
+    ) -> Union[str, BaseMessage, T, List[BaseMessage], BaseStreamIterator]:
         """
         Predicts the response using the zhipuai platform.
 
@@ -220,15 +146,13 @@ class ZhiPu(BaseLLM, ABC):
         )
         # return stream
         if stream:
-            return ZhiPuStreamIterator(
+            return BaseStreamIterator(
                 response_stream=response.iter_lines(decode_unicode=True),
+                parse_content=parse_content,
                 return_raw_response=return_raw_response,
             )
         else:
             if response.status_code == 200:
-                # todo enable stream mode
-                # for chunk in response.iter_content(chunk_size=None):
-                #     logger.debug(chunk)
                 ret_data = response.json()
                 logger.debug(f"[pne zhipu response] {json.dumps(ret_data, indent=2)}")
                 content = ret_data["choices"][0]["message"]["content"]

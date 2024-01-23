@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        os: [ubuntu-20.04, macOS-10.15, windows-2019]
         python-version: ["3.8", "3.9", "3.10", "3.11"]
 
     steps:
@@ -20,7 +21,7 @@ jobs:
       run: pip install poetry
 
     - name: Set up cache
-      uses: actions/cache@v3.3.3
+      uses: actions/cache@v4.0.0
       with:
         path: .venv
         key: venv-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('poetry.lock') }}
