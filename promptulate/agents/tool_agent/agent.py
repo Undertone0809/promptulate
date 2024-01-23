@@ -179,6 +179,7 @@ class ToolAgent(BaseAgent):
         llm_resp: str = (
             llm_resp.replace("```json", "").replace("```JSON", "").replace("```", "")
         )
+
         data: dict = json.loads(llm_resp)
 
         return data["thought"], data["action"]["name"], data["action"]["args"]

@@ -63,3 +63,16 @@ wcwidth==0.2.13 ; python_full_version >= "3.8.1" and python_version < "4.0"
 win32-setctime==1.1.0 ; python_full_version >= "3.8.1" and python_version < "4.0" and sys_platform == "win32"
 yarl==1.9.4 ; python_full_version >= "3.8.1" and python_version < "4.0"
 zipp==3.17.0 ; python_full_version >= "3.8.1" and python_version < "4.0"
+
+promptulate~=1.9.1
+pytest~=6.2.5
+pydantic~=1.10.13
+langchain~=0.0.338
+paho-mqtt~=1.6.1
+PyJWT~=2.8.0
+requests~=2.31.0
+numexpr~=2.8.6
+arxiv~=1.4.8
+click~=8.1.7
+questionary~=2.0.1
+python-dotenv~=1.0.0

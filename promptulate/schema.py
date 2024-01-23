@@ -76,6 +76,7 @@ class LLMType(str, Enum):
     ChatOpenAI = "ChatOpenAI"
     ErnieBot = "ErnieBot"
     QianFan = "QianFan"
+    ZhiPu = "ZhiPu"
 
 
 class MessageSet:
@@ -187,9 +188,14 @@ def _to_qian_fan_llm_prompt(message_set: MessageSet) -> List[Dict]:
     return message_set.listdict_messages
 
 
+def _to_zhipu_llm_prompt(message_set: MessageSet) -> List[Dict]:
+    return message_set.listdict_messages
+
+
 _to_llm_prompt: Dict[LLMType, Callable] = {
     LLMType.OpenAI: _to_openai_llm_prompt,
     LLMType.ChatOpenAI: _to_chat_openai_llm_prompt,
     LLMType.ErnieBot: _to_ernie_bot_llm_prompt,
     LLMType.QianFan: _to_qian_fan_llm_prompt,
+    LLMType.ZhiPu: _to_zhipu_llm_prompt,
 }

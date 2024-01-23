@@ -14,6 +14,7 @@ class IotSwitchTool(Tool):
     description: str = (
         "An IoT tool used for switching operations on various devices."
         "This tool uses the mqtt protocol for transmission."
+        "Args: question(str)"
         "The input content is the intention or command to open the specified electrical appliance."  # noqa
         "If the operation of the device is successful, an OK will be returned, otherwise a failure will be returned."  # noqa
     )

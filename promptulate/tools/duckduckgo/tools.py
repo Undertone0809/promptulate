@@ -13,6 +13,7 @@ class DuckDuckGoTool(Tool):
     description: str = (
         "A wrapper around DuckDuckgo Web Search. "
         "Useful for when you need to answer questions about current events. "
+        "Args : keyword(str)"
         "Input should be a search query."
     )
     api_wrapper: DuckDuckGoSearchAPIWrapper = DuckDuckGoSearchAPIWrapper()
