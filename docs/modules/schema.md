@@ -21,6 +21,15 @@ A `MessageSet` is a collection of `Message` objects that together represent a fu
 
 `MessageSet` includes methods for adding new messages of different types to the conversation, such as `add_user_message` or `add_ai_message`, which take the message content as input and create the appropriate `Message` object.
 
+## StreamIterator
+
+A `StreamIterator` is an iterator for the response stream from the LLM model.`StreamIterator` provides methods for converting the messages of stream to different formats required by various language models (`LLMType`) or for serialization purposes.
+
+To use `StreamIterator` ,three parameters are required.
+
+- response_stream: The stream of responses from the LLM model.
+- parse_content: The callback function to parse the chunk.
+- return_raw_response: A boolean indicating whether to return the raw response
 ### Example Usage
 
 Here's an example of how you might use `MessageSet` and `Message` in a `Promptulate` application:
@@ -42,3 +51,27 @@ print(answer.content)
 print(answer.additional_kwargs)
 ```
 
+Here's an example of how you might use `BaseStreamIterator` in a `Promptulate` application:
+
+```python
+from promptulate.schema import StreamIterator
+
+
+# we use qianfan sdk as an example
+def parse_content(chunk) -> (str, str):
+    content = chunk["result"]
+    ret_data = chunk["body"]
+    return content, ret_data
+
+
+def stream():
+    return_raw_response = True
+    # add chunk message in response
+    response = ""
+    return StreamIterator(
+        response_stream=response,
+        parse_content=parse_content,
+        return_raw_response=return_raw_response,
+    )
+
+```
