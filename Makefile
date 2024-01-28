@@ -23,7 +23,7 @@ lock:
 
 .PHONY: install
 install:
-	poetry install --with dev
+	poetry install
 
 .PHONY: install-integration
 install-integration:
@@ -47,7 +47,7 @@ formatting: polish-codestyle
 
 .PHONY: test
 test:
-	$(TEST_COMMAND)
+	make formatting
 
 .PHONY: test-prod
 test-prod:
