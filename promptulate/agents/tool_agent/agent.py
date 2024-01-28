@@ -56,11 +56,14 @@ class ToolAgent(BaseAgent):
         agent_constraints: str = "none",
     ):
         super().__init__(hooks=hooks)
-        self.llm: BaseLLM = llm or ChatOpenAI(
-            model="gpt-3.5-turbo-16k",
-            temperature=0.0,
-            enable_default_system_prompt=False,
-        )
+        try:
+            self.llm: BaseLLM = llm or ChatOpenAI(
+                model="gpt-3.5-turbo-16k",
+                temperature=0.0,
+                enable_default_system_prompt=False,
+            )
+        except Exception as e:
+            logger.error(f"Failed to initialize the language model. Error: {str(e)}")
         """llm provider"""
         self.tool_manager: ToolManager = ToolManager(tools)
         """Used to manage all tools."""
