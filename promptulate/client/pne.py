@@ -6,7 +6,7 @@ from promptulate.utils.color_print import print_text
 def main():
     print_text(
         "🌟 Welcome to Promptulate! Let's create something amazing together!😀", "green"
-    )
+        )
     print_text(f"Version: {version('promptulate')}", "blue")
 
     prompt = """Explore the code and contribute on GitHub: 🔗 https://github.com/Undertone0809/promptulate
