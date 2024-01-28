@@ -157,7 +157,22 @@ class ToolAgent(BaseAgent):
     def _should_continue(self, current_iteration: int, current_time_elapsed) -> bool:
         """Determine whether to stop, both timeout and exceeding the maximum number of
         iterations will stop.
+        def _should_continue(self, current_iteration: int, current_time_elapsed) -> bool:
+            """Determine whether to stop, both timeout and exceeding the maximum number of
+            iterations will stop.
 
+            Args:
+                current_iteration: current iteration times.
+                current_time_elapsed: current running time.
+
+            Returns:
+                Whether to stop.
+            """
+            if self.max_iterations and current_iteration >= self.max_iterations:
+                return False
+            if self.max_execution_time and current_time_elapsed >= self.max_execution_time:
+                return False
+            return True
         Args:
             current_iteration: current iteration times.
             current_time_elapsed: current running time.
