@@ -46,7 +46,7 @@ class ToolAgent(BaseAgent):
         *,
         tools: List[Union[BaseTool, Tool, Callable]],
         llm: BaseLLM = None,
-        stop_sequences: List[str] = None,
+        stop_sequences: List[str] = ["Observation"],
         prefix_prompt_template: StringTemplate = StringTemplate(PREFIX_TEMPLATE),
         hooks: List[Callable] = None,
         enable_role: bool = False,
