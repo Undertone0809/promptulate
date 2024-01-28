@@ -78,6 +78,8 @@ class Config(metaclass=Singleton):
         self.ernie_bot_4_url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro"
         self.ernie_embedding_v1_url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/embeddings/embedding-v1"
 
+        self.zhipu_model_url = "https://open.bigmodel.cn/api/paas/v4/chat/completions"
+
         self.key_default_retry_times = 5
         """If llm(like OpenAI) unable to obtain data, retry request until the data is obtained."""  # noqa: E501
         self.enable_stdout_hook = True
@@ -129,7 +131,7 @@ class Config(metaclass=Singleton):
             return get_cache()["ERNIE_API_SECRET"]
         raise ValueError("ERNIE_API_SECRET is not provided. Please set your secret.")
 
-    def get_zhipuai_api_(self) -> str:
+    def get_zhipuai_api_key(self) -> str:
         if "ZHIPUAI_API_KEY" in os.environ.keys():
             if self.enable_cache:
                 get_cache()["ZHIPUAI_API_KEY"] = os.getenv("ZHIPUAI_API_KEY")
