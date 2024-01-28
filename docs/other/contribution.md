@@ -99,6 +99,7 @@ conda activate promptulate
 cd promptulate
 pip install poetry
 make install
+# Note: The 'make install' command will also install the necessary dependencies for running integration tests.
 ```
 
 If you need to run integration tests, you need to install by the following commend:
