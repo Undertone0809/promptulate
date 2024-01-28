@@ -27,7 +27,9 @@ class ToolAgent(BaseAgent):
             of the llm.
         system_prompt_template (StringTemplate): The preset system prompt template. Default format.
         prefix_prompt_template (StringTemplate): The prefix system prompt template.
-        tool_manager (ToolManager): Used to manage all tools.
+        agent_name (str): The name of the agent. Default is "tool-agent"
+        agent_identity (str): The identity of the agent. Default is "tool-agent"
+        agent_goal (str): The goal of the agent. Default is "provides better assistance and services for humans."# The goal is to provide better assistance and services for humans.
         conversation_prompt (str): Stores all conversation messages during a
             conversation.
         max_iterations (Optional[int]): The maximum number of executions. Default is 15.
@@ -53,7 +55,7 @@ class ToolAgent(BaseAgent):
         agent_name: str = "tool-agent",
         agent_identity: str = "tool-agent",
         agent_goal: str = "provides better assistance and services for humans.",
-        agent_constraints: str = "none",
+        agent_constraints: str = "none"# The constraints of the agent are "none",
     ):
         super().__init__(hooks=hooks)
         try:
