@@ -114,7 +114,7 @@ class ZhiPu(BaseLLM, ABC):
         stream: bool = False,
         return_raw_response: bool = False,
         *args,
-        **kwargs,
+        
     ) -> Union[str, BaseMessage, T, List[BaseMessage], StreamIterator]:
         """
         Predicts the response using the zhipuai platform.
