@@ -15,9 +15,9 @@ from promptulate.preset_roles.prompt import PRESET_SYSTEM_PROMPT
 from promptulate.schema import (
     AssistantMessage,
     BaseMessage,
-    BaseStreamIterator,
     LLMType,
     MessageSet,
+    StreamIterator,
     SystemMessage,
     UserMessage,
 )
@@ -26,7 +26,7 @@ from promptulate.utils import logger
 T = TypeVar("T", bound=BaseModel)
 
 
-def parse_content(chunk) -> [str, str]:
+def parse_content(chunk) -> (str, str):
     try:
         ret_data = json.loads(chunk.replace("data: ", ""))
     except JSONDecodeError:
@@ -86,7 +86,7 @@ class ZhiPu(BaseLLM, ABC):
 
     def __call__(
         self, instruction: str, *args, **kwargs
-    ) -> Union[str, BaseMessage, T, List[BaseMessage], BaseStreamIterator]:
+    ) -> Union[str, BaseMessage, T, List[BaseMessage], StreamIterator]:
         system_message = (
             self.default_system_prompt
             if self.default_system_prompt != ""
@@ -115,7 +115,7 @@ class ZhiPu(BaseLLM, ABC):
         return_raw_response: bool = False,
         *args,
         **kwargs,
-    ) -> Union[str, BaseMessage, T, List[BaseMessage], BaseStreamIterator]:
+    ) -> Union[str, BaseMessage, T, List[BaseMessage], StreamIterator]:
         """
         Predicts the response using the zhipuai platform.
 
@@ -146,7 +146,7 @@ class ZhiPu(BaseLLM, ABC):
         )
         # return stream
         if stream:
-            return BaseStreamIterator(
+            return StreamIterator(
                 response_stream=response.iter_lines(decode_unicode=True),
                 parse_content=parse_content,
                 return_raw_response=return_raw_response,

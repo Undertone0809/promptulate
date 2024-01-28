@@ -55,38 +55,78 @@ we do not want these to get in the way of getting good code into the codebase.
 
 ## 🚀 Quick Start
 
-This quick start guide explains how to run the repository locally.
+This quick start guide explains how to run the repository locally. Before quick start, there are some concepts you need to know.
 
-### Dependency Management: Poetry and other env/dependency managers
+**Poetry**: This project utilizes [Poetry](https://python-poetry.org/) v1.6.1+ as a dependency manager.
 
-This project utilizes [Poetry](https://python-poetry.org/) v1.6.1+ as a dependency manager.
+**Conda**: We recommend you to use [Conda](https://docs.conda.io/en/latest/) as your environment/package manager when you are developing.
 
-❗Note: *Before installing Poetry*, if you use `Conda`, create and activate a new Conda env (e.g. `conda create -n langchain python=3.9`)
+**Make**: This project uses make to build supporting facilities for the project. With the ability of makefiles, it is easy to integrate and run modules such as test and lint. Please ensure that make is installed on your computer.
 
-Install Poetry: **[documentation on how to install it](https://python-poetry.org/docs/#installation)**.
+**ruff**: This project uses [ruff](https://docs.astral.sh/ruff/) to manage the project's code format and type check. 
 
-❗Note: If you use `Conda` or `Pyenv` as your environment/package manager, after installing Poetry,
-tell Poetry to use the virtualenv python environment (`poetry config virtualenvs.prefer-active-python true`)
+**GitHub Actions**: This project use GitHub Actions to check the code. When you create a PR, promptulate will start a GitHub action to check the code. Make sure that the code can pass the check before you create the PR. 
 
-**Environment**
+### Build development environment
+
+**Basic Environment**
 - Python >= 3.8
 - make
+- Conda (Recommend, not required)
 
 > This project uses make to build supporting facilities for the project. With the ability of makefiles, it is easy to integrate and run modules such as test and lint. Please ensure that make is installed on your computer.
 > 
 > [how to install and use make in windows?](https://stackoverflow.com/questions/32127524/how-to-install-and-use-make-in-windows)
 
-Run the following code:
+1. Clone the latest code: 
 
 ```shell
 git clone https://github.com/Undertone0809/promptulate 
 ```
 
-Install third-party packages:
+2. Create a conda environment and activate it.
+
+> Conda is recommended, not required. You can also use other virtual environments such as venv.
 
 ```shell
+conda create -n promptulate python=3.10
+conda activate promptulate
+```
+
+3. Install third-party packages:
+
+```shell
+cd promptulate
 pip install poetry
 make install
 ```
 
-This project uses a code syntax checking tool. If you want to submit a PR, you need to run `make formatting` for code specification formatting before committing, and run `make lint` to pass syntax and unit testing checks.
+If you need to run integration tests, you need to install by the following commend:
+
+```bash
+pip install poetry
+make install-integration 
+```
+
+Here, we have finished the installation of the development environment. 
+
+## Development and push code
+
+When you create a PR, promptulate will start a GitHub action to check the code. Make sure that the code can pass the check before you create the PR. If you want to develop and push code, you need to follow the following steps:
+
+1. Change your code
+2. Code check
+
+Before you commit the code, you should start the code check to ensure that the code is in the correct format and can pass the unit test. You need to run the following command:
+
+```shell
+make lint
+```
+
+`make lint` will run the code formatting and unit test. If the code formatting is not correct, you can run the following command to format the code:
+
+```shell
+make formatting
+```
+
+3. Commit your code, create the PR after passing the code check

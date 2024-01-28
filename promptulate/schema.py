@@ -28,12 +28,13 @@ class BaseMessage(BaseModel):
         """Type of the message, used for serialization."""
 
 
-class BaseStreamIterator:
+class StreamIterator:
     """
     This class is an iterator for the response stream from the LLM model.
 
     Attributes:
         response_stream: The stream of responses from the LLM model.
+        parse_content: The callback function to parse the chunk.
         return_raw_response: A boolean indicating whether to return the raw response
         or not.
     """
@@ -45,7 +46,7 @@ class BaseStreamIterator:
         return_raw_response: bool = False,
     ):
         """
-        The constructor for LitellmStreamIterator class.
+        The constructor for BaseStreamIterator class.
 
         Parameters:
             response_stream: The stream of responses from the LLM model.
@@ -58,10 +59,10 @@ class BaseStreamIterator:
 
     def __iter__(self) -> Union[Iterator[BaseMessage], Iterator[str]]:
         """
-        The iterator method for the LitellmStreamIterator class.
+        The iterator method for the BaseStreamIterator class.
 
         Returns:
-            self: An instance of the LitellmStreamIterator class.
+            self: An instance of the BaseStreamIterator class.
         """
         return self
 
@@ -91,7 +92,7 @@ class BaseStreamIterator:
 
     def __next__(self) -> Union[str, BaseMessage]:
         """
-        The next method for the LitellmStreamIterator class.
+        The next method for the BaseStreamIterator class.
 
         This method is used to get the next response from the LLM model. It iterates
         over the response stream and parses each chunk using the parse_chunk method.

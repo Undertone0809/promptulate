@@ -11,9 +11,9 @@ from promptulate.preset_roles.prompt import PRESET_SYSTEM_PROMPT_ERNIE
 from promptulate.schema import (
     AssistantMessage,
     BaseMessage,
-    BaseStreamIterator,
     LLMType,
     MessageSet,
+    StreamIterator,
     UserMessage,
 )
 from promptulate.utils import logger
@@ -21,7 +21,7 @@ from promptulate.utils import logger
 T = TypeVar("T", bound=BaseModel)
 
 
-def parse_content(chunk) -> [str, str]:
+def parse_content(chunk) -> (str, str):
     content = chunk["result"]
     ret_data = chunk["body"]
     return content, ret_data
@@ -41,7 +41,7 @@ class QianFan(BaseLLM, ABC):
 
     def __call__(
         self, instruction: str, *args, **kwargs
-    ) -> Union[str, BaseMessage, T, List[BaseMessage], BaseStreamIterator]:
+    ) -> Union[str, BaseMessage, T, List[BaseMessage], StreamIterator]:
         preset = (
             self.default_system_prompt
             if self.default_system_prompt != ""
@@ -68,7 +68,7 @@ class QianFan(BaseLLM, ABC):
         return_raw_response: bool = False,
         *args,
         **kwargs,
-    ) -> Union[str, BaseMessage, T, List[BaseMessage], BaseStreamIterator]:
+    ) -> Union[str, BaseMessage, T, List[BaseMessage], StreamIterator]:
         """
         Predicts the response using the qinfan platform.
 
@@ -104,7 +104,7 @@ class QianFan(BaseLLM, ABC):
         )
         # return stream
         if kwargs.get("stream", None):
-            return BaseStreamIterator(
+            return StreamIterator(
                 response_stream=response,
                 parse_content=parse_content,
                 return_raw_response=return_raw_response,
