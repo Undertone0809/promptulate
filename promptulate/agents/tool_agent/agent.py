@@ -112,6 +112,7 @@ class ToolAgent(BaseAgent):
         iterations = 0
         used_time = 0.0
         start_time = time.time()
+        self.error_occurred: bool = False
 
         while self._should_continue(iterations, used_time):
             llm_resp: str = self.llm(
@@ -145,7 +146,7 @@ class ToolAgent(BaseAgent):
             )
             self.conversation_prompt += f"Observation: {tool_result}\n"
 
-            iterations += 1
+            used_time += time.time() - start_time
             used_time += time.time() - start_time
 
     def _should_continue(self, current_iteration: int, current_time_elapsed) -> bool:
