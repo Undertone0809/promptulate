@@ -18,6 +18,7 @@
 # Contact Email: zeeland@foxmail.com
 
 import promptulate as pne
+import promptulate as pne
 
 
 def main():
