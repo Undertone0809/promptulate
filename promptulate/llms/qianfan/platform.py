@@ -61,7 +61,7 @@ class QianFan(BaseLLM, ABC):
         else:
             return result
 
-    def _predict(
+    def _qianfan_predict(
         self,
         prompts: MessageSet,
         system: str = "",
