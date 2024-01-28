@@ -127,7 +127,7 @@ make lint
 `make lint` will run the code formatting and unit test. If the code formatting is not correct, you can run the following command to format the code:
 
 ```shell
-make formatting
+
 ```
 
 3. Commit your code, create the PR after passing the code check
