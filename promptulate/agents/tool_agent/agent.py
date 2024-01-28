@@ -76,9 +76,9 @@ class ToolAgent(BaseAgent):
         self.conversation_prompt: str = ""
         """Store all conversation message when conversation. ToolAgent use dynamic
         system prompt."""
-        self.max_iterations: Optional[int] = 15
+        self.max_iterations: Optional[int] = 10
         """The maximum number of executions."""
-        self.max_execution_time: Optional[float] = None
+        self.max_execution_time: Optional[float] = 60.0
         """The longest running time. """
         self.enable_role: bool = enable_role
         self.agent_name: str = agent_name
