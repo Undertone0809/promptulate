@@ -65,7 +65,7 @@ This quick start guide explains how to run the repository locally. Before quick 
 
 **ruff**: This project uses [ruff](https://docs.astral.sh/ruff/) to manage the project's code format and type check. 
 
-**GitHub Actions**: This project use GitHub Actions to check the code. When you create a PR, promptulate will start a GitHub action to check the code. Make sure that the code can pass the check before you create the PR. 
+**GitHub Workflows**: This project use GitHub Actions to check the code. When you create a PR, promptulate will start a GitHub action to check the code. Make sure that the code can pass the check before you create the PR. 
 
 ### Build development environment
 
@@ -115,7 +115,7 @@ Here, we have finished the installation of the development environment.
 When you create a PR, promptulate will start a GitHub action to check the code. Make sure that the code can pass the check before you create the PR. If you want to develop and push code, you need to follow the following steps:
 
 1. Change your code
-2. Code check
+2. GitHub Workflows check
 
 Before you commit the code, you should start the code check to ensure that the code is in the correct format and can pass the unit test. You need to run the following command:
 
@@ -129,4 +129,4 @@ make lint
 make formatting
 ```
 
-3. Commit your code, create the PR after passing the code check
+3. If the GitHub Workflows check fails, ensure that the error logs are examined to identify the cause of failure. Common issues include dependency mismatches, linting errors, and test failures. If the error is related to a specific package, ensure that the package and its version are correctly specified. If the error persists, please contact a maintainer for further assistance.
