@@ -25,7 +25,7 @@ class ToolAgent(BaseAgent):
             "gpt-3.5-turbo-16k".
         stop_sequences (List[str]): The sequences that, when met, will stop the output
             of the llm.
-        system_prompt_template (StringTemplate): The preset system prompt template.
+        system_prompt_template (StringTemplate): The preset system prompt template. Default format.
         prefix_prompt_template (StringTemplate): The prefix system prompt template.
         tool_manager (ToolManager): Used to manage all tools.
         conversation_prompt (str): Stores all conversation messages during a
@@ -69,7 +69,7 @@ class ToolAgent(BaseAgent):
         """Used to manage all tools."""
         self.stop_sequences: List[str] = stop_sequences
         """llm output will stop when stop sequences is met."""
-        self.system_prompt_template: StringTemplate = REACT_SYSTEM_PROMPT_TEMPLATE
+        self.system_prompt_template: StringTemplate = StringTemplate(REACT_SYSTEM_PROMPT_TEMPLATE)
         """Preset system prompt template."""
         self.prefix_prompt_template: StringTemplate = prefix_prompt_template
         """Prefix system prompt template."""
@@ -115,7 +115,7 @@ class ToolAgent(BaseAgent):
         iterations = 0
         used_time = 0.0
         start_time = time.time()
-        self.error_occurred: bool = False
+        self.error_occurred = False
 
         while self._should_continue(iterations, used_time):
             llm_resp: str = self.llm(
