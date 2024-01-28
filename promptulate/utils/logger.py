@@ -76,7 +76,7 @@ def exception_handler(exc_type, exc_value, exc_traceback):
         return
 
     tb_info = "".join(traceback.format_exception(exc_type, exc_value, exc_traceback))
-    logger.error(f"Uncaught exception: {tb_info}")
+    logger.error(f"Uncaught exception: {exc_value} - {tb_info}")
 
     sys.__excepthook__(exc_type, exc_value, exc_traceback)
 
