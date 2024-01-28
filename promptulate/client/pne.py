@@ -17,5 +17,7 @@ Join the development and contribute: 🔗 https://undertone0809.github.io/prompt
     print_text(prompt, "blue")
 
 
+import logging
+
 if __name__ == "__main__":
     main()
