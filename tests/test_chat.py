@@ -7,6 +7,7 @@ import pytest
 from pydantic import BaseModel, Field
 
 import promptulate as pne
+from promptulate.schema import MessageSet, UserMessage
 from promptulate import chat
 from promptulate.llms import BaseLLM
 from promptulate.schema import AssistantMessage, BaseMessage, MessageSet, UserMessage
@@ -50,6 +51,9 @@ def test_custom_llm_chat():
     assert answer == "fake response"
 
     # test messages is list
+    # test an empty message list
+    answer = chat([], model="fake", custom_llm=llm)
+    assert answer == "fake response"
     messages = [{"content": "Hello, how are you?", "role": "user"}]
     answer = chat(messages, model="fake", custom_llm=llm)
     assert answer == "fake response"
@@ -64,6 +68,11 @@ def test_custom_llm_chat_response():
     assert answer.content == "fake response"
 
     # test formatter response
+    # test empty response
+    answer = chat("", model="fake", output_schema=LLMResponse, custom_llm=llm)
+    assert isinstance(answer, LLMResponse)
+    assert getattr(answer, "city", None) is None
+    assert getattr(answer, "temperature", None) is None
     answer = chat(
         "what's weather tomorrow in shanghai?",
         model="fake",
