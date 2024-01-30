@@ -98,3 +98,24 @@ def test_stream():
     # stream and output_schema and not exist at the same time.
     with pytest.raises(ValueError):
         pne.chat("hello", stream=True, output_schema=LLMResponse)
+def test_stream():
+    class LLMResponse(BaseModel):
+        data: Optional[str] = None
+
+    # stream and output_schema and not exist at the same time.
+    with pytest.raises(ValueError):
+        pne.chat("hello", stream=True, output_schema=LLMResponse)
+def test_stream():
+    class LLMResponse(BaseModel):
+        data: Optional[str] = None
+
+    # stream and output_schema and not exist at the same time.
+    with pytest.raises(ValueError):
+        pne.chat("hello", stream=True, output_schema=LLMResponse)
+def test_stream():
+    class LLMResponse(BaseModel):
+        data: Optional[str] = None
+
+    # stream and output_schema and not exist at the same time.
+    with pytest.raises(ValueError):
+        pne.chat("hello", stream=True, output_schema=LLMResponse)
