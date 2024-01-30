@@ -49,7 +49,14 @@ def test_custom_llm_chat():
     answer = chat(messages, model="fake", custom_llm=llm)
     assert answer == "fake response"
 
-    # test messages is list
+    # Add test case with a different role
+    user_message = UserMessage(content="hello")
+    assistant_message = AssistantMessage(content="fake")
+    messages = MessageSet(messages=[user_message, assistant_message])
+    answer = chat(messages, model="fake", custom_llm=llm)
+    assert answer == "fake response"
+    answer = chat(messages, model="fake", custom_llm=llm)
+    assert answer == "fake response"
     messages = [{"content": "Hello, how are you?", "role": "user"}]
     answer = chat(messages, model="fake", custom_llm=llm)
     assert answer == "fake response"
@@ -63,7 +70,7 @@ def test_custom_llm_chat():
     assert answer == "fake response"
 
 
-def test_custom_llm_chat_response():
+def test_custom_llm_chat_response_and_new_logic():
     llm = FakeLLM()
 
     # test original response
@@ -82,7 +89,21 @@ def test_custom_llm_chat_response():
     assert getattr(answer, "city", None) == "Shanghai"
     assert getattr(answer, "temperature", None) == 25
 
-    # test formatter response with examples
+        # Add test case for formatter response with examples
+    examples = [
+        LLMResponse(city="Shanghai", temperature=25),
+        LLMResponse(city="Beijing", temperature=30),
+    ]
+    answer = chat(
+        "what's weather tomorrow in shanghai?",
+        model="fake",
+        output_schema=LLMResponse,
+        examples=examples,
+        custom_llm=llm,
+    )
+    assert isinstance(answer, LLMResponse)
+    assert getattr(answer, "city", None) == "Shanghai"
+    assert getattr(answer, "temperature", None) == 25
     examples = [
         LLMResponse(city="Shanghai", temperature=25),
         LLMResponse(city="Beijing", temperature=30),
