@@ -12,7 +12,7 @@ from promptulate.schema import (
     StreamIterator,
 )
 from promptulate.tools.base import BaseTool
-from promptulate.chat_utils import convert_messages, add_output_format
+from promptulate.chat_utils import convert_messages, chat_by_custom_llm, add_output_format
 from promptulate.utils.logger import logger
 
 T = TypeVar("T", bound=BaseModel)
@@ -36,15 +36,7 @@ def chat(
     # TODO add BaseLLM support
     # chat by custom LLM and get response
     if custom_llm:
-        response: BaseMessage = custom_llm.predict(
-            MessageSet.from_listdict_data(messages), **kwargs
-        )
-    # chat by universal llm get response
-    else:
-        import litellm
-
-        logger.info("[pne chat] chat by litellm.")
-        temp_response = litellm.completion(model, messages, **kwargs)
+        response = chat_by_custom_llm(custom_llm, model, messages, kwargs)
 
         # return stream
         if kwargs.get("stream", None):
