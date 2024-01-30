@@ -1,4 +1,5 @@
 import unittest
+from promptulate.llms import ZhiPu
 
 from promptulate.llms import ZhiPu
 
