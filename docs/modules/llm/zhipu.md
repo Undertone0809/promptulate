@@ -69,11 +69,11 @@ print(answer)
 你可以使用如下方式进行参数配置：
 
 ```python
-from promptulate.llms import QianFan
+from promptulate.llms import ZhiPu
 
 model_config = {"temperature": 0.1, "top_p": 0.8}
 
-llm = QianFan(model_config=model_config) 
+llm = ZhiPu(model_config=model_config) 
 answer = llm("请解释一下引力波的放射与广义相对论的必然关系")
 print(answer)
 ```
