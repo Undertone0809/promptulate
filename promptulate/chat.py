@@ -16,7 +16,7 @@ from promptulate.utils.logger import logger
 T = TypeVar("T", bound=BaseModel)
 
 
-class LitellmStreamIterator:
+class StreamIterator:
     """
     This class is an iterator for the response stream from the LLM model.
 
@@ -28,7 +28,7 @@ class LitellmStreamIterator:
 
     def __init__(self, response_stream, return_raw_response: bool = False):
         """
-        The constructor for LitellmStreamIterator class.
+        The constructor for StreamIterator class.
 
         Parameters:
             response_stream: The stream of responses from the LLM model.
@@ -40,13 +40,12 @@ class LitellmStreamIterator:
 
     def __iter__(self) -> Union[Iterator[BaseMessage], Iterator[str]]:
         """
-        The iterator method for the LitellmStreamIterator class.
+        The iterator method for the StreamIterator class.
 
         Returns:
-            self: An instance of the LitellmStreamIterator class.
+            self: An instance of the StreamIterator class.
         """
         return self
-
     def parse_chunk(self, chunk) -> Optional[Union[str, BaseMessage]]:
         """
         This method is used to parse a chunk from the response stream. It returns
