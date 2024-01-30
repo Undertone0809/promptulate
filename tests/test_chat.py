@@ -54,6 +54,14 @@ def test_custom_llm_chat():
     answer = chat(messages, model="fake", custom_llm=llm)
     assert answer == "fake response"
 
+    # add additional unit tests for different scenarios and edge cases
+    # Add a new test case with a different role
+    user_message = UserMessage(content="hello")
+    assistant_message = AssistantMessage(content="fake")
+    messages = MessageSet(messages=[user_message, assistant_message])
+    answer = chat(messages, model="fake", custom_llm=llm)
+    assert answer == "fake response"
+
 
 def test_custom_llm_chat_response():
     llm = FakeLLM()
