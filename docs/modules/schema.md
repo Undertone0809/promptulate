@@ -30,7 +30,7 @@ To use `StreamIterator` ,three parameters are required.
 - response_stream: The stream of responses from the LLM model.
 - parse_content: The callback function to parse the chunk.
 - return_raw_response: A boolean indicating whether to return the raw response
-### Example Usage
+## Example Usage
 
 Here's an example of how you might use `MessageSet` and `Message` in a `Promptulate` application:
 
