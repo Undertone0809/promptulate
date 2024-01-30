@@ -14,6 +14,7 @@ from promptulate.schema import (
 from promptulate.tools.base import BaseTool
 from promptulate.chat_utils import convert_messages, chat_by_custom_llm, add_output_format
 from promptulate.utils.logger import logger
+from promptulate.chat_utils import chat_by_litellm
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -35,23 +36,21 @@ def chat(
     convert_messages(messages)
     # TODO add BaseLLM support
     # chat by custom LLM and get response
-    if custom_llm:
-        response = chat_by_custom_llm(custom_llm, model, messages, kwargs)
+response = chat_by_litellm(custom_llm, model, messages, kwargs)
 
-        # return stream
-        if kwargs.get("stream", None):
-            return StreamIterator(
-                response_stream=temp_response,
-                parse_content=parse_content,
-                return_raw_response=return_raw_response,
-            )
-        else:
-            response: BaseMessage = AssistantMessage(
-                content=temp_response.choices[0].message.content,
-                additional_kwargs=temp_response.json()
-                if isinstance(temp_response.json(), dict)
-                else json.loads(temp_response.json()),
-            )
+    if kwargs.get("stream", None):
+        return StreamIterator(
+            response_stream=response,
+            parse_content=parse_content,
+            return_raw_response=return_raw_response,
+        )
+    else:
+        response = AssistantMessage(content=response.choices[0].message.content,
+                                    additional_kwargs=response.json()
+                                        if isinstance(response.json(), dict)
+                                        else json.loads(response.json()),
+                                    )
+    
 
     logger.debug(f"[pne chat] response: {response}")
 
