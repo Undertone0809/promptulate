@@ -12,10 +12,13 @@ from promptulate.schema import (
     StreamIterator,
 )
 from promptulate.tools.base import BaseTool
+from promptulate.chat_utils import convert_messages
 from promptulate.utils.logger import logger
 
 T = TypeVar("T", bound=BaseModel)
 
+
+from promptulate.chat_utils import convert_messages
 
 def parse_content(chunk) -> (str, str):
     content = chunk.choices[0].delta.content
@@ -29,7 +32,7 @@ def chat(
 
     logger.debug(f"[pne chat] messages: {messages}")
 
-    # TODO add assistant Agent
+    convert_messages(messages)
     # TODO add BaseLLM support
     # chat by custom LLM and get response
     if custom_llm:
