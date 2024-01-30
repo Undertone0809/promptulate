@@ -12,7 +12,7 @@ from promptulate.schema import (
     StreamIterator,
 )
 from promptulate.tools.base import BaseTool
-from promptulate.chat_utils import convert_messages
+from promptulate.chat_utils import convert_messages, add_output_format
 from promptulate.utils.logger import logger
 
 T = TypeVar("T", bound=BaseModel)
