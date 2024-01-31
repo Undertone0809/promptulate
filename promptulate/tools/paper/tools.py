@@ -43,6 +43,27 @@ class PaperSummaryTool(BaseTool):
     semantic_scholar_reference_tool: SemanticScholarReferenceTool = Field(
         default_factory=SemanticScholarReferenceTool
     )
+    """
+    A powerful paper summary tool.
+
+    This class provides functionality to obtain a summary of a research paper. It can find the top k papers and provide the following information:
+    - Paper abstract
+    - Paper key insights
+    - Lessons learned from the paper
+    - Referenced papers and their URLs
+
+    The input to this tool is a keyword query related to the paper.
+
+    Attributes:
+    - name: The name of the tool ("paper-summary")
+    - description: A description of the tool's functionality
+    - llm: The language model used for generating the summary
+    - semantic_scholar_query_tool: The tool used for querying Semantic Scholar
+    - semantic_scholar_reference_tool: The tool used for retrieving references from Semantic Scholar
+    """
+    semantic_scholar_reference_tool: SemanticScholarReferenceTool = Field(
+        default_factory=SemanticScholarReferenceTool
+    )
     arxiv_apiwrapper: ArxivAPIWrapper = Field(default_factory=ArxivAPIWrapper)
     arxiv_query_tool: ArxivQueryTool = Field(default_factory=ArxivQueryTool)
     summary_dic: Dict[str, str] = {}
