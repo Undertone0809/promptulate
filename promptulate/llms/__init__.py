@@ -21,5 +21,6 @@ from promptulate.llms.base import BaseLLM
 from promptulate.llms.erniebot.erniebot import ErnieBot
 from promptulate.llms.openai import ChatOpenAI, OpenAI
 from promptulate.llms.qianfan import QianFan
+from promptulate.llms.zhipu import ZhiPu
 
-__all__ = ["OpenAI", "ChatOpenAI", "BaseLLM", "ErnieBot", "QianFan"]
+__all__ = ["OpenAI", "ChatOpenAI", "BaseLLM", "ErnieBot", "QianFan", "ZhiPu"]

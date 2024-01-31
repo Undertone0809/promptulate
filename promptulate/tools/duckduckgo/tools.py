@@ -13,6 +13,7 @@ class DuckDuckGoTool(Tool):
     description: str = (
         "A wrapper around DuckDuckgo Web Search. "
         "Useful for when you need to answer questions about current events. "
+        "Args : keyword(str)"
         "Input should be a search query."
     )
     api_wrapper: DuckDuckGoSearchAPIWrapper = DuckDuckGoSearchAPIWrapper()
@@ -83,3 +84,13 @@ class DuckDuckGoReferenceTool(Tool):
         if "return_type" in kwargs and kwargs["return_type"] == "original":
             return result
         return listdict_to_string(result, item_suffix="\n")
+
+
+def ddg_websearch(query: str) -> str:
+    """Run duckduckgo search and get search result.
+
+    Args:
+        query: query keyword
+    """
+    tool = DuckDuckGoTool()
+    return tool.run(query)
