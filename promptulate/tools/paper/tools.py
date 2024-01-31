@@ -88,8 +88,9 @@ class PaperSummaryTool(BaseTool):
         @broadcast_service.on_listen("PaperSummaryTool.run.get_translate")
         def get_translate():
             prompt = (
-                f"请将下面的科研论文标题和摘要翻译成中文\n ```{paper_summary}```"
-                "你的输出格式为:\n标题：{标题翻译}\n\n摘要：{摘要翻译}"
+                f"Please format the title and\
+                summary below the output\n```{paper_summary}```"
+                "Your output format is:\nTitle: {Title}\n\nSummary: {Summary}"
             )
             self.summary_dic["summary_zh"] = self.llm(prompt)
             self.summary_counter += 1
@@ -97,8 +98,8 @@ class PaperSummaryTool(BaseTool):
         @broadcast_service.on_listen("PaperSummaryTool.run.get_opinion")
         def get_opinion():
             prompt = (
-                f"请就下面的论文摘要，总结论文中的关键见解和由论文得出的经验教训，你的输出需要分点给出 ```{paper_summary}```"  # noqa
-                "你的输出格式为:\n关键见解：\n{分点给出关键见解}\n经验教训：\n{分点给出经验教训}，用`-`区分每点"
+                f"Based on the abstract of the paper below, please list the key insights from the paper and the lessons learned derived from it. Your output should be provided in bullet points ```{paper_summary}```"  # noqa
+                "Please use the following output format:\nKey insights:\n{Key insights in bullet points}\nLessons learned:\n{Lessons learned in bullet points},with each point separated by a hyphen `-`"  # noqa
             )
             self.summary_dic["opinion"] = self.llm(prompt)
             self.summary_counter += 1
@@ -106,8 +107,8 @@ class PaperSummaryTool(BaseTool):
         @broadcast_service.on_listen("PaperSummaryTool.run.get_keywords")
         def get_keywords():
             prompt = (
-                f"请就下面的论文摘要，总结列出论文中的keywords，不超过7个```{paper_summary}```"
-                "你的输出格式为:\n关键词：keyword1, keyword2, keyword3"
+                f"Please list no more than 7 keywords in the paper for the following abstract```{paper_summary}```"  # noqa
+                "Your output format is:\nKeywords: keyword1, keyword2, keyword3"
             )
             self.summary_dic["keywords"] = self.llm(prompt)
             self.summary_counter += 1
@@ -115,9 +116,8 @@ class PaperSummaryTool(BaseTool):
         @broadcast_service.on_listen("PaperSummaryTool.run.get_advice")
         def get_advice():
             prompt = (
-                f"请就下面的论文摘要，为其相关主题或未来研究方向提供3-5个建议，你的输出需要分点给出  ```{paper_summary}```"  # noqa
-                "你的输出格式为:\n相关建议：\n{分点给出相关建议}，用`-`区分每点"
-                "你需要用中文输出正确结果，但是部分专业词汇或者中文不好表达含义的部分可以使用英文"
+                f"Based on the abstract of the paper below, please provide 3-5 suggestions related to its topics or potential future research directions. Your output should be provided in bullet points  ```{paper_summary}```"  # noqa
+                "Please use the following output format:\nRelated suggestions:\n{related suggestions in bullet points}, with each point separated by a hyphen `-`"  # noqa
             )
             self.summary_dic["advice"] = self.llm(prompt)
             self.summary_counter += 1
