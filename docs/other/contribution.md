@@ -130,3 +130,17 @@ make formatting
 ```
 
 3. Commit your code, create the PR after passing the code check
+
+Any question, please contact us or create an [issue](https://github.com/Undertone0809/promptulate/issues).
+
+## Edit the documentation
+
+This project utilizes [docsify](https://docsify.js.org/#/) to build documentation. 
+
+If you want to edit the documentation, you can edit `/docs` directory. After that, if you want to startup the documentation server and see the effect, you can run the following command:
+
+```bash
+# install docsify
+npm i -g docsify-cli
+make start-docs
+```

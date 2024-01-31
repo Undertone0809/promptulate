@@ -1,6 +1,6 @@
 - Get started
-  - [:bookmark_tabs: 介绍](README.md)
-  - [:bookmark: 快速开始](get_started/quick_start.md#快速开始)
+  - [:bookmark_tabs: Introduction](README.md)
+  - [:bookmark: Quick Start](get_started/quick_start.md#quick-start)
 
 - Use Cases
   - [🌟 Best practices](use_cases/intro.md#use-cases)
@@ -11,7 +11,7 @@
     - [:closed_book: OpenAI](modules/llm/openai.md#openai)
     - [📝 Custom LLM](modules/llm/custom_llm.md#custom-llm)
     - [:green_book: Erniebot 百度文心](modules/llm/erniebot.md#百度文心erniebot)
-    - [:green_book: GLM 智谱AI](modules/llm/zhipu.md#智谱系列模型)
+    - [:blue_book: GLM 智谱AI](modules/llm/zhipu.md#智谱系列模型)
   - [:robot: Agent](modules/agent.md#agent)
   - [:toolbox: Tool](modules/tools/index#Tool)
     - [🧰 Custom Tool](modules/tools/custom_tool_usage.md#custom-tool)
@@ -27,6 +27,6 @@
 
 - Other 
   - [FAQ](other/faq.md)
-  - [更新日志](other/update.md)
-  - [开发计划](other/plan.md)
-  - [参与贡献](other/contribution.md#contributing-to-promptulate)
+  - [Release Version](other/update.md)
+  - [Roadmap](other/plan.md)
+  - [Developer guidance](other/contribution.md#contributing-to-promptulate)
