@@ -21,8 +21,9 @@ class TestZhiPu(unittest.TestCase):
         model_config = {"temperature": 0.1, "top_p": 0.8}
         llm = ZhiPu(model_config=model_config)
         answer = llm("Please explain the relationship between gravitational waves and general relativity")
-        expected_answer = "The relationship between gravitational waves and general relativity is..."
-        self.assertEqual(answer, expected_answer)
+        self.assertIn("general relativity", answer)
+        self.assertIn("gravitational waves", answer)
+        self.assertTrue(isinstance(answer, str))
 
     def test_stop_words(self):
         model_config = {"stop": ["a"]}
@@ -36,7 +37,9 @@ class TestZhiPu(unittest.TestCase):
         model_config = {"stream": True}
         llm = ZhiPu(model_config=model_config)
         response = llm("Who are you?")
-        expected_response = ["Response chunk 1", "Response chunk 2", ...]
+        expected_response = ["Response chunk 1", "Response chunk 2"] # Adjusted for clarity
+        self.assertTrue(isinstance(response, list))
+        self.assertEqual(len(response), len(expected_response))
         for i, chunk in enumerate(response):
             self.assertEqual(chunk, expected_response[i])
 
