@@ -17,10 +17,41 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from promptulate.llms.base import BaseLLM
-from promptulate.llms.erniebot.erniebot import ErnieBot
-from promptulate.llms.openai import ChatOpenAI, OpenAI
-from promptulate.llms.qianfan import QianFan
-from promptulate.llms.zhipu import ZhiPu
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from promptulate.llms.base import BaseLLM
+    from promptulate.llms.erniebot.erniebot import ErnieBot
+    from promptulate.llms.openai import ChatOpenAI, OpenAI
+    from promptulate.llms.qianfan import QianFan
+    from promptulate.llms.zhipu import ZhiPu
+
+
+def __getattr__(name):
+    if name == "BaseLLM":
+        from promptulate.llms.base import BaseLLM
+
+        return BaseLLM
+    elif name == "ErnieBot":
+        from promptulate.llms.erniebot.erniebot import ErnieBot
+
+        return ErnieBot
+    elif name == "ChatOpenAI":
+        from promptulate.llms.openai import ChatOpenAI
+
+        return ChatOpenAI
+    elif name == "OpenAI":
+        from promptulate.llms.openai import OpenAI
+
+        return OpenAI
+    elif name == "QianFan":
+        from promptulate.llms.qianfan import QianFan
+
+        return QianFan
+    elif name == "ZhiPu":
+        from promptulate.llms.zhipu import ZhiPu
+
+        return ZhiPu
+
 
 __all__ = ["OpenAI", "ChatOpenAI", "BaseLLM", "ErnieBot", "QianFan", "ZhiPu"]
