@@ -1957,13 +1957,13 @@ reference = "tsinghua"
 
 [[package]]
 name = "openai"
-version = "1.10.0"
+version = "1.11.1"
 description = "The official Python library for the openai API"
 optional = false
 python-versions = ">=3.7.1"
 files = [
-    {file = "openai-1.10.0-py3-none-any.whl", hash = "sha256:aa69e97d0223ace9835fbf9c997abe9ee95318f684fd2de6d02c870700c71ebc"},
-    {file = "openai-1.10.0.tar.gz", hash = "sha256:208886cb501b930dc63f48d51db9c15e5380380f80516d07332adad67c9f1053"},
+    {file = "openai-1.11.1-py3-none-any.whl", hash = "sha256:e0f388ce499f53f58079d0c1f571f356f2b168b84d0d24a412506b6abc714980"},
+    {file = "openai-1.11.1.tar.gz", hash = "sha256:f66b8fe431af43e09594147ef3cdcb79758285de72ebafd52be9700a2af41e99"},
 ]
 
 [package.dependencies]
