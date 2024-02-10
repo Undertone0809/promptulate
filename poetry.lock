@@ -1494,13 +1494,13 @@ reference = "tsinghua"
 
 [[package]]
 name = "litellm"
-version = "1.21.0"
+version = "1.23.5"
 description = "Library to easily interface with LLM API providers"
 optional = false
 python-versions = ">=3.8, !=2.7.*, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*, !=3.6.*, !=3.7.*"
 files = [
-    {file = "litellm-1.21.0-py3-none-any.whl", hash = "sha256:64cff6f31402df189624c6db1b05e8636bf52e43a681a487f93d290458859e32"},
-    {file = "litellm-1.21.0.tar.gz", hash = "sha256:3bba0fc150e6f849887395b1a084e4f3bfac419cfe7b030af882a487f4f0895b"},
+    {file = "litellm-1.23.5-py3-none-any.whl", hash = "sha256:a8430c6cd0b4936bc15f09bf030204dcfd4f1d6904601e6cb9df9b0e37c719f2"},
+    {file = "litellm-1.23.5.tar.gz", hash = "sha256:0440f8a7cfae120fa194041ca772ee36f6463e8968b64cf560bbae73a22cf63d"},
 ]
 
 [package.dependencies]
@@ -1516,7 +1516,7 @@ tokenizers = "*"
 
 [package.extras]
 extra-proxy = ["streamlit (>=1.29.0,<2.0.0)"]
-proxy = ["apscheduler (>=3.10.4,<4.0.0)", "backoff", "fastapi (>=0.104.1,<0.105.0)", "gunicorn (>=21.2.0,<22.0.0)", "orjson (>=3.9.7,<4.0.0)", "pyyaml (>=6.0.1,<7.0.0)", "rq", "uvicorn (>=0.22.0,<0.23.0)"]
+proxy = ["PyJWT (>=2.8.0,<3.0.0)", "apscheduler (>=3.10.4,<4.0.0)", "backoff", "fastapi (>=0.104.1,<0.105.0)", "fastapi-sso (>=0.10.0,<0.11.0)", "gunicorn (>=21.2.0,<22.0.0)", "orjson (>=3.9.7,<4.0.0)", "python-multipart (>=0.0.6,<0.0.7)", "pyyaml (>=6.0.1,<7.0.0)", "rq", "uvicorn (>=0.22.0,<0.23.0)"]
 
 [package.source]
 type = "legacy"
