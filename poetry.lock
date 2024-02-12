@@ -1445,19 +1445,19 @@ reference = "tsinghua"
 
 [[package]]
 name = "langchain-core"
-version = "0.1.21"
+version = "0.1.19"
 description = "Building applications with LLMs through composability"
 optional = false
 python-versions = ">=3.8.1,<4.0"
 files = [
-    {file = "langchain_core-0.1.21-py3-none-any.whl", hash = "sha256:9dd1cedc5a3a6081136352e9403d1a87befbab4d36d6ee1877b2e639e85f15ed"},
-    {file = "langchain_core-0.1.21.tar.gz", hash = "sha256:b5625901d38121aa449ef73446605032ddd31ac2787be1428c52e9c793ef8229"},
+    {file = "langchain_core-0.1.19-py3-none-any.whl", hash = "sha256:46b5fd54181df5aa6d3041d61beb2b91e5437b6742274e7924a97734ed62cf43"},
+    {file = "langchain_core-0.1.19.tar.gz", hash = "sha256:30539190a63dff53e995f10aefb943b4f7e01aba4bf28fd1e13016b040c0e9da"},
 ]
 
 [package.dependencies]
 anyio = ">=3,<5"
 jsonpatch = ">=1.33,<2.0"
-langsmith = ">=0.0.87,<0.0.88"
+langsmith = ">=0.0.83,<0.1"
 packaging = ">=23.2,<24.0"
 pydantic = ">=1,<3"
 PyYAML = ">=5.3"
@@ -1474,13 +1474,13 @@ reference = "tsinghua"
 
 [[package]]
 name = "langsmith"
-version = "0.0.87"
+version = "0.0.90"
 description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform."
 optional = false
 python-versions = ">=3.8.1,<4.0"
 files = [
-    {file = "langsmith-0.0.87-py3-none-any.whl", hash = "sha256:8903d3811b9fc89eb18f5961c8e6935fbd2d0f119884fbf30dc70b8f8f4121fc"},
-    {file = "langsmith-0.0.87.tar.gz", hash = "sha256:36c4cc47e5b54be57d038036a30fb19ce6e4c73048cd7a464b8f25b459694d34"},
+    {file = "langsmith-0.0.90-py3-none-any.whl", hash = "sha256:b361f48a9e945699dac440e275e07c3573a4741eb6b562206e454660da88c3ec"},
+    {file = "langsmith-0.0.90.tar.gz", hash = "sha256:a63c87d00ba29364147e5d5b7678b2c8d8acf60d842e8c8468de126588fad510"},
 ]
 
 [package.dependencies]
