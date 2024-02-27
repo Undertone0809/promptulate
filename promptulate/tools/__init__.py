@@ -18,6 +18,15 @@ if TYPE_CHECKING:
         DuckDuckGoTool,
         ddg_websearch,
     )
+    from promptulate.tools.file.tools import (
+        AppendFileTool,
+        CopyFileTool,
+        DeleteFileTool,
+        ListDirectoryTool,
+        MoveFileTool,
+        ReadFileTool,
+        WriteFileTool,
+    )
     from promptulate.tools.huggingface.tools import HuggingFaceTool
     from promptulate.tools.human_feedback import HumanFeedBackTool
     from promptulate.tools.iot_swith_mqtt import IotSwitchTool
@@ -32,15 +41,6 @@ if TYPE_CHECKING:
     )
     from promptulate.tools.shell import ShellTool
     from promptulate.tools.sleep.tool import sleep_tool
-    from promptulate.tools.file.tools import(
-        AppendFileTool,
-        CopyFileTool,
-        DeleteFileTool,
-        ListDirectoryTool,
-        MoveFileTool,
-        ReadFileTool,
-        WriteFileTool,
-    )
 
 
 def __getattr__(name):
