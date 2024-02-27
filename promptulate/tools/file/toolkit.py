@@ -1,16 +1,16 @@
-from typing import List, Optional
 import os
+from typing import List, Optional
 
+from promptulate.tools.base import BaseToolKit, Tool
 from promptulate.tools.file.tools import (
-    WriteFileTool,
     AppendFileTool,
-    ReadFileTool,
+    CopyFileTool,
     DeleteFileTool,
     ListDirectoryTool,
-    CopyFileTool,
-    MoveFileTool
+    MoveFileTool,
+    ReadFileTool,
+    WriteFileTool,
 )
-from promptulate.tools.base import BaseToolKit, Tool
 
 DefaultTools: List[Tool] = [
     WriteFileTool,
@@ -19,23 +19,23 @@ DefaultTools: List[Tool] = [
     DeleteFileTool,
     ListDirectoryTool,
     CopyFileTool,
-    MoveFileTool
+    MoveFileTool,
 ]
 
 DefaultTools_str = {
-    "WriteFileTool":WriteFileTool,
-    "AppendFileTool":AppendFileTool,
-    "ReadFileTool":ReadFileTool,
-    "DeleteFileTool":DeleteFileTool,
-    "ListDirectoryTool":ListDirectoryTool,
-    "CopyFileTool":CopyFileTool,
-    "MoveFileTool":MoveFileTool,
+    "write": WriteFileTool,
+    "append": AppendFileTool,
+    "read": ReadFileTool,
+    "delete": DeleteFileTool,
+    "list": ListDirectoryTool,
+    "copy": CopyFileTool,
+    "move": MoveFileTool,
 }
 
 
 class FileToolKit(BaseToolKit):
     """File ToolKit
-    
+
     Args:
         root_dir: The root directory of the file tool.
         selected_tools: The selected tools of the file tool.
@@ -44,22 +44,29 @@ class FileToolKit(BaseToolKit):
         The instance object of the corresponding tool
     """
 
-    def __init__(self, root_dir: str = None,selected_tools: Optional[List[str]] = None) -> None:
+    def __init__(self, root_dir: str = None, modes: Optional[List[str]] = None) -> None:
+        """validate_root_dir"""
         if root_dir is None or root_dir == "":
             root_dir = os.getcwd()
         self.root_dir = root_dir
-        self.selected_tools = selected_tools
+        """validate_tools"""
+        if modes is not None and modes != []:
+            for tool in modes:
+                if tool not in DefaultTools_str:
+                    raise ValueError(
+                        f"{tool} does not exist.\n"
+                        f"Please select from {list(DefaultTools_str.keys())}"
+                    )
+        self.modes = modes
 
     def get_tools(self) -> List[Tool]:
         tools_list = []
 
-        if self.selected_tools is None or self.selected_tools == []:
+        if self.modes is None or self.modes == []:
             tools = DefaultTools_str
         else:
-            tools = self.selected_tools
+            tools = self.modes
         for tool in tools:
             tool_cls = DefaultTools_str[tool]
             tools_list.append(tool_cls(self.root_dir))
         return tools_list
-
-    
