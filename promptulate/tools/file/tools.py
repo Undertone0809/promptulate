@@ -15,8 +15,9 @@ class WriteFileTool(Tool):
         "file_name(file name), text(related information)."
     )
 
-    def __init__(self, root_dir: str) -> None:
+    def __init__(self, root_dir: str, *args, **kwargs) -> None:
         self.root_dir = root_dir
+        super().__init__(*args, **kwargs)
 
     def _run(self, file_name: str, text: str) -> str:
         """Write to a file
@@ -51,8 +52,9 @@ class AppendFileTool(Tool):
         "file_name(file name), text(related information)."
     )
 
-    def __init__(self, root_dir: str) -> None:
+    def __init__(self, root_dir: str, *args, **kwargs) -> None:
         self.root_dir = root_dir
+        super().__init__(*args, **kwargs)
 
     def _run(self, file_name: str, text: str) -> str:
         """Append to a file
@@ -84,8 +86,9 @@ class ReadFileTool(Tool):
         "The output parameters must be: file_name(file name)."
     )
 
-    def __init__(self, root_dir: str) -> None:
+    def __init__(self, root_dir: str, *args, **kwargs) -> None:
         self.root_dir = root_dir
+        super().__init__(*args, **kwargs)
 
     def _run(self, file_name: str) -> str:
         """Read a file
@@ -122,8 +125,9 @@ class DeleteFileTool(Tool):
         "The output parameters must be: file_name(file name)."
     )
 
-    def __init__(self, root_dir: str) -> None:
+    def __init__(self, root_dir: str, *args, **kwargs) -> None:
         self.root_dir = root_dir
+        super().__init__(*args, **kwargs)
 
     def _run(self, file_name: str) -> str:
         """Delete a file
@@ -155,8 +159,9 @@ class ListDirectoryTool(Tool):
         "The output parameters is None."
     )
 
-    def __init__(self, root_dir: str) -> None:
+    def __init__(self, root_dir: str, *args, **kwargs) -> None:
         self.root_dir = root_dir
+        super().__init__(*args, **kwargs)
 
     def _run(self) -> str:
         """List directory
@@ -184,8 +189,9 @@ class CopyFileTool(Tool):
         "file_name(file name),destination_path(destination path)."
     )
 
-    def __init__(self, root_dir: str) -> None:
+    def __init__(self, root_dir: str, *args, **kwargs) -> None:
         self.root_dir = root_dir
+        super().__init__(*args, **kwargs)
 
     def _run(self, file_name: str, destination_path: str) -> str:
         """Copy a file
@@ -222,8 +228,9 @@ class MoveFileTool(Tool):
         "file_name(file name),destination_path(destination path)"
     )
 
-    def __init__(self, root_dir: str) -> None:
+    def __init__(self, root_dir: str, *args, **kwargs) -> None:
         self.root_dir = root_dir
+        super().__init__(*args, **kwargs)
 
     def _run(self, file_name: str, destination_path: str) -> str:
         """Move a file
