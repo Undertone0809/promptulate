@@ -1,31 +1,27 @@
-from promptulate.tools.base import BaseTool, Tool
-from promptulate.tools.manager import ToolManager
-from promptulate.tools.manager import ToolManager
-from promptulate.tools.manager import ToolManager
-
-
-class Tool1(Tool):
-    name = "Tool1"
-    description = "This is tool1"
-
-    def _run(self, *args, **kwargs):
-        pass
-
-
-class Tool2(BaseTool):
-    name: str = "Tool2"
-    description: str = "This is tool2"
-
-    def _run(self, *args, **kwargs):
-        pass
-
-
-def tool_3(age: str):
-    """This is tool3"""
-    return "tool 3 result"
-
-
 def test_get_tool():
+    tool_1 = Tool1()
+    tool_2 = Tool2()
+    tool_manager = ToolManager(tools=[tool_1, tool_2, tool_3])
+    tool = tool_manager.get_tool("Tool1")
+    assert tool.to_schema() == tool_1.to_schema()
+
+    tool = tool_manager.get_tool("Tool2")
+    assert tool.to_schema() == {
+        "name": "Tool2",
+        "description": "This is tool2",
+    }
+
+    tool = tool_manager.get_tool("tool_3")
+    assert tool.to_schema() == {
+        "type": "object",
+        "properties": {"age": {"type": "string"}},
+        "required": ["age"],
+        "description": "This is tool3",
+        "name": "tool_3",
+    }
+
+    tool = tool_manager.get_tool("no exist")
+    assert tool is None
     tool_1 = Tool1()
     tool_2 = Tool2()
     tool_manager = ToolManager(tools=[tool_1, tool_2, tool_3])
