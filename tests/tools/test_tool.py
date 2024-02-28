@@ -250,6 +250,7 @@ class FakerBaseToolWithParams(BaseTool):
 
 
 def test_base_tool_with_params_to_tool():
+    """Test the conversion of BaseTool to Tool when the tool has parameters."""
     """Test BaseTool convert to Tool"""
     tool: BaseTool = FakerBaseToolWithParams()
     new_tool: Tool = ToolImpl.from_base_tool(tool)
@@ -281,6 +282,7 @@ class FakerBaseToolWithNOParams(BaseTool):
 
 
 def test_base_tool_with_no_params_to_tool():
+    """Test the conversion of BaseTool to Tool when the tool has no parameters."""
     """Test BaseTool convert to Tool"""
     tool: BaseTool = FakerBaseToolWithNOParams()
     new_tool: Tool = ToolImpl.from_base_tool(tool)
