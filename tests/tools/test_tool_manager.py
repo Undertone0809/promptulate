@@ -1,5 +1,7 @@
 from promptulate.tools.base import BaseTool, Tool
 from promptulate.tools.manager import ToolManager
+from promptulate.tools.manager import ToolManager
+from promptulate.tools.manager import ToolManager
 
 
 class Tool1(Tool):
