@@ -4,7 +4,12 @@ from abc import ABC, abstractmethod
 from typing import Any, Callable, Dict, List, Optional, Type, Union
 
 from promptulate.hook.base import Hook, HookTable
-from promptulate.pydantic_v1 import BaseModel, Extra, create_model, validate_arguments
+from promptulate.pydantic_v1 import (
+    BaseModel,
+    Extra,
+    create_model,
+    validate_arguments,
+)
 from promptulate.utils.logger import logger
 
 
@@ -105,6 +110,9 @@ class BaseTool(ABC, BaseModel):
     description: str
     """Used to tell the model how/when/why to use the tool.
     You can provide few-shot examples as a part of the description."""
+    parameters: Optional[Union[Dict, Type[BaseModel]]] = None
+    """The parameters that the tool accepts. This can be a dictionary or a Pydantic
+    model."""
     example: List[str] = None
     """Show how to use this tool. This is few shot for agent. You few shot may like:
 
@@ -112,9 +120,6 @@ class BaseTool(ABC, BaseModel):
     example2 = "Question: What is 37593^(1/5)?\n```\n37593**(1/5)\n```\nnumexpr.evaluate("37593**(1/5)")\nAnswer:8.222831614237718"
     few_shot_example = [example1, example2]
     """  # noqa
-
-    # hook_manager: Optional[HookManager] = Field(default=HookManager())
-    # """Hook manager will call hook function at the specified lifecycle."""
 
     def __init__(self, **kwargs):
         """Custom tool config.
@@ -233,15 +238,15 @@ class ToolImpl(Tool):
         parameters: Union[dict, BaseModel] = None,
         **kwargs,
     ):
-        self.name: str = name or ""
-        self.description: str = description or ""
-        self.parameters: Union[dict, BaseModel] = parameters
+        self.name: str = name
+        self.description: str = description
         self.callback: Callable = callback
+        self.parameters: Union[dict, BaseModel] = parameters
 
         super().__init__(**kwargs)
 
     @classmethod
-    def from_function(cls, func: Callable):
+    def from_function(cls, func: Callable) -> "ToolImpl":
         """Create a ToolImpl instance from a function.
 
         Args:
@@ -280,8 +285,8 @@ def web_search(keyword: str, top_k: int = 10) -> str:
         callback: Callable,
         name: str = None,
         description: str = None,
-        parameters: Union[dict, BaseModel] = None,
-    ):
+        parameters: Optional[Union[Dict, Type[BaseModel]]] = None,
+    ) -> "ToolImpl":
         """Create a ToolImpl instance from a function.
 
         Args:
@@ -314,6 +319,24 @@ def web_search(keyword: str, top_k: int = 10) -> str:
             parameters=schema,
         )
 
+    @classmethod
+    def from_base_tool(cls, tool: BaseTool) -> "ToolImpl":
+        """Create a ToolImpl instance from a BaseTool instance.
+
+        Args:
+            tool: BaseTool instance to create the ToolImpl instance from.
+
+        Returns:
+            A ToolImpl instance.
+        """
+
+        return cls(
+            name=tool.name,
+            description=tool.description,
+            callback=tool.run,
+            parameters=tool.parameters,
+        )
+
     def _run(self, *args, **kwargs):
         return self.callback(*args, **kwargs)
 
@@ -323,7 +346,7 @@ def define_tool(
     callback: Callable,
     name: Optional[str] = None,
     description: Optional[str] = None,
-    parameters: Union[dict, BaseModel] = None,
+    parameters: Union[dict, Type[BaseModel]] = None,
 ) -> ToolImpl:
     """
     A tool with llm or API wrapper will automatically initialize the llm and API wrapper

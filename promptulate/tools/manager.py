@@ -5,27 +5,26 @@ from promptulate.tools.base import BaseTool, Tool, ToolImpl, function_to_tool
 
 
 class ToolManager:
-    """ToolManager helps ToolAgent manage tools"""
+    """ToolManager helps Agent to manage tools"""
 
     def __init__(self, tools: List[Union[BaseTool, Callable, Tool]]):
-        self.tools: List[Union[BaseTool, Callable, Tool]] = []
+        self.tools: List[Tool] = []
 
         for tool in tools:
             if isinstance(tool, Callable):
                 tool = function_to_tool(tool)
+            elif isinstance(tool, BaseTool):
+                tool = ToolImpl.from_base_tool(tool)
 
             self.tools.append(tool)
 
-    def find(self, tool_name: str) -> Optional[BaseTool]:
+    def get_tool(self, tool_name: str) -> Optional[Tool]:
         """Find specified tool by tool name."""
-        for tool in self.tools:
-            if tool.name == tool_name:
-                return tool
-        return None
+        return next((tool for tool in self.tools if tool.name == tool_name), None)
 
     def run_tool(self, tool_name: str, parameters: Union[str, dict]) -> str:
         """Run tool by input tool name and data inputs"""
-        tool = self.find(tool_name)
+        tool = self.get_tool(tool_name)
 
         if tool is None:
             return (
@@ -50,6 +49,3 @@ class ToolManager:
         for tool in self.tools:
             tool_descriptions += json.dumps(tool.to_schema()) + "\n"
         return tool_descriptions
-
-    def func(self):
-        pass

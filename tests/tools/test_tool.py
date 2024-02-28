@@ -4,7 +4,9 @@ import pytest
 
 from promptulate.pydantic_v1 import BaseModel, Field
 from promptulate.tools.base import (
+    BaseTool,
     Tool,
+    ToolImpl,
     define_tool,
     function_to_tool,
     function_to_tool_schema,
@@ -118,7 +120,7 @@ def test_define_tool():
     )
 
     assert tool.name == "mock tool"
-    assert tool.description == "mock tool description"
+    assert tool.description == "mock tool description\nmock func 0"
 
     resp: str = tool.run()
     assert resp == "result"
@@ -231,3 +233,59 @@ def test_function_to_tool():
 
     tool: Tool = function_to_tool(func_0)
     assert tool.to_schema() == func_0_schema
+
+
+class FakerBaseToolParams(BaseModel):
+    arg1: str = Field(..., description="This is arg1")
+    arg2: Optional[int] = Field(default=1, description="This is arg2")
+
+
+class FakerBaseToolWithParams(BaseTool):
+    name: str = Field(default="fake tool")
+    description: str = Field(default="fake tool description")
+    parameters: BaseModel = Field(default=FakerBaseToolParams)
+
+    def _run(self, *args, **kwargs):
+        return "fake tool result"
+
+
+def test_base_tool_with_params_to_tool():
+    """Test BaseTool convert to Tool"""
+    tool: BaseTool = FakerBaseToolWithParams()
+    new_tool: Tool = ToolImpl.from_base_tool(tool)
+
+    assert new_tool.to_schema() == {
+        "name": "fake tool",
+        "description": "fake tool description",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "arg1": {"description": "This is arg1", "type": "string"},
+                "arg2": {
+                    "default": 1,
+                    "description": "This is arg2",
+                    "type": "integer",
+                },
+            },
+            "required": ["arg1"],
+        },
+    }
+
+
+class FakerBaseToolWithNOParams(BaseTool):
+    name = "fake tool"
+    description = "fake tool description"
+
+    def _run(self, *args, **kwargs):
+        return "fake tool result"
+
+
+def test_base_tool_with_no_params_to_tool():
+    """Test BaseTool convert to Tool"""
+    tool: BaseTool = FakerBaseToolWithNOParams()
+    new_tool: Tool = ToolImpl.from_base_tool(tool)
+
+    assert new_tool.to_schema() == {
+        "name": "fake tool",
+        "description": "fake tool description",
+    }
