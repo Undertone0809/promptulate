@@ -17,11 +17,10 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from pydantic import BaseModel
-
 from promptulate.config import Config
 from promptulate.llms.base import BaseLLM
 from promptulate.memory.base import BaseChatMemory
+from promptulate.pydantic_v1 import BaseModel
 
 CFG = Config()
 

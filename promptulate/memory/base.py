@@ -19,8 +19,7 @@
 from abc import abstractmethod
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel
-
+from promptulate.pydantic_v1 import BaseModel
 from promptulate.schema import MessageSet
 from promptulate.utils.core_utils import generate_conversation_id
 

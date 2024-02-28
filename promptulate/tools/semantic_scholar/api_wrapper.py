@@ -3,9 +3,9 @@ import time
 from typing import Dict, List, Optional
 
 import requests
-from pydantic import BaseModel
 
 from promptulate.error import NetWorkError
+from promptulate.pydantic_v1 import BaseModel
 from promptulate.utils.logger import logger
 
 

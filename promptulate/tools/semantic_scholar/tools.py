@@ -1,7 +1,6 @@
 from typing import Dict, List, Union
 
-from pydantic import Field
-
+from promptulate.pydantic_v1 import Field
 from promptulate.tools.base import BaseTool
 from promptulate.tools.semantic_scholar.api_wrapper import SemanticScholarAPIWrapper
 from promptulate.utils.core_utils import listdict_to_string

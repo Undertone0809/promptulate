@@ -1,10 +1,20 @@
-from pydantic import Field
+import sys
+from io import StringIO
+from typing import Dict, Optional
 
-from promptulate.tools.base import BaseTool
-from promptulate.tools.python_repl.api_wrapper import PythonREPLAPIWrapper
+from promptulate.pydantic_v1 import BaseModel, Field
+from promptulate.tools.base import Tool
 
 
-class PythonREPLTool(BaseTool):
+class Parameters(BaseModel):
+    command: str = Field(
+        ...,
+        description="The python command to be executed",
+        example="print('hello world')",
+    )
+
+
+class PythonREPLTool(Tool):
     """A tool for running python code in a REPL."""
 
     name: str = "Python_REPL"
@@ -14,7 +24,29 @@ class PythonREPLTool(BaseTool):
         "If you want to see the output of a value, you should print it out "
         "with `print(...)`."
     )
-    api_wrapper: PythonREPLAPIWrapper = Field(default_factory=PythonREPLAPIWrapper)
+    parameters: BaseModel = Parameters
+
+    def __init__(
+        self,
+        _globals: Optional[Dict] = None,
+        _locals: Optional[Dict] = None,
+        *args,
+        **kwargs,
+    ):
+        self.globals = _globals or {}
+        self.locals = _locals or {}
+
+        super().__init__(*args, **kwargs)
 
     def _run(self, command: str, *args, **kwargs) -> str:
-        return self.api_wrapper.run(command)
+        """Run command with own globals/locals and returns anything printed."""
+        old_stdout = sys.stdout
+        sys.stdout = mystdout = StringIO()
+        try:
+            exec(command, self.globals, self.locals)
+            sys.stdout = old_stdout
+            output = mystdout.getvalue()
+        except Exception as e:
+            sys.stdout = old_stdout
+            output = repr(e)
+        return output

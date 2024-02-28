@@ -20,10 +20,10 @@
 from typing import Optional
 
 from cushy_storage import CushyOrmCache
-from pydantic import Field, validator
 
 from promptulate.error import EmptyMessageSetError
 from promptulate.memory.base import BaseChatMemory
+from promptulate.pydantic_v1 import Field, validator
 from promptulate.schema import MessageSet
 
 

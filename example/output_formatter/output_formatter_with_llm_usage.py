@@ -1,10 +1,9 @@
 """This example show how to use JSONFormatter by ChatOpenAI."""
 from typing import List
 
-from pydantic import BaseModel, Field
-
 from promptulate.llms import ChatOpenAI
 from promptulate.output_formatter import OutputFormatter
+from promptulate.pydantic_v1 import BaseModel, Field
 
 
 class Response(BaseModel):

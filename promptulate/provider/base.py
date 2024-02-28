@@ -1,9 +1,8 @@
 from typing import Optional
 
-from pydantic import BaseModel
-
 from promptulate.llms.base import BaseLLM
 from promptulate.memory.base import BaseChatMemory, MessageSet
+from promptulate.pydantic_v1 import BaseModel
 from promptulate.schema import BaseMessage
 
 

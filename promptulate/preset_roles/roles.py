@@ -19,7 +19,7 @@
 
 from typing import Union
 
-from pydantic import BaseModel
+from promptulate.pydantic_v1 import BaseModel
 
 
 class CustomPresetRole(BaseModel):

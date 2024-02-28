@@ -2,7 +2,7 @@ from abc import abstractmethod
 from enum import Enum
 from typing import Any, Callable, Dict, Iterator, List, Optional, Union
 
-from pydantic import BaseModel, Field
+from promptulate.pydantic_v1 import BaseModel, Field
 
 __all__ = [
     "LLMType",

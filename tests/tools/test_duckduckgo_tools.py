@@ -1,4 +1,5 @@
 from unittest import TestCase
+from unittest.mock import patch
 
 from promptulate.tools.duckduckgo.api_wrapper import DuckDuckGoSearchAPIWrapper
 from promptulate.tools.duckduckgo.tools import DuckDuckGoReferenceTool, DuckDuckGoTool
