@@ -21,8 +21,8 @@ import logging
 from typing import Dict, List, Optional
 
 from cushy_storage.orm import BaseORMModel, CushyOrmCache
-from pydantic import BaseModel, Field
 
+from promptulate.pydantic_v1 import BaseModel, Field
 from promptulate.utils.core_utils import get_cache
 from promptulate.utils.singleton import singleton
 

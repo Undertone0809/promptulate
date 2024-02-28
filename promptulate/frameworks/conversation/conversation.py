@@ -20,8 +20,6 @@
 import warnings
 from typing import Any, Dict, Optional, Union
 
-from pydantic import Field, validator
-
 from promptulate.error import EmptyMessageSetError
 from promptulate.frameworks.schema import BasePromptFramework
 from promptulate.llms import ChatOpenAI
@@ -34,6 +32,7 @@ from promptulate.provider.mixins import (
     SummarizerMixin,
     TranslatorMixin,
 )
+from promptulate.pydantic_v1 import Field, validator
 from promptulate.schema import (
     BaseMessage,
     LLMType,

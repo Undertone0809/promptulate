@@ -2,10 +2,9 @@ import json
 import re
 from typing import Any, Dict, List, TypeVar, Union
 
-from pydantic import BaseModel
-
 from promptulate.error import OutputParserError
 from promptulate.output_formatter.prompt import OUTPUT_FORMAT
+from promptulate.pydantic_v1 import BaseModel
 
 T = TypeVar("T", bound=BaseModel)
 

@@ -1,11 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import Any, Callable, List, Optional
 
-from pydantic import BaseModel
-
 from promptulate.hook import Hook, HookTable
 from promptulate.llms import BaseLLM
 from promptulate.output_formatter import OutputFormatter
+from promptulate.pydantic_v1 import BaseModel
 
 
 class BaseAgent(ABC):

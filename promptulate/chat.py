@@ -1,10 +1,9 @@
 import json
 from typing import Dict, List, Optional, TypeVar, Union
 
-from pydantic import BaseModel
-
 from promptulate.llms import BaseLLM
 from promptulate.output_formatter import formatting_result, get_formatted_instructions
+from promptulate.pydantic_v1 import BaseModel
 from promptulate.schema import (
     AssistantMessage,
     BaseMessage,
@@ -109,7 +108,7 @@ def chat(
                 else json.loads(temp_response.json()),
             )
 
-    logger.debug(f"[pne chat] response: {response}")
+    logger.debug(f"[pne chat] response: {response.additional_kwargs}")
 
     # return output format if provide
     if output_schema:

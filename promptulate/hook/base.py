@@ -1,9 +1,9 @@
 import logging
 from typing import Callable, List, Optional, Tuple, Union
 
-from pydantic import BaseModel
 from typing_extensions import Literal
 
+from promptulate.pydantic_v1 import BaseModel
 from promptulate.utils.core_utils import generate_unique_id
 
 logger = logging.getLogger(__name__)

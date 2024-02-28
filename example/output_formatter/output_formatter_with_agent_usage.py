@@ -1,7 +1,6 @@
 """This example show how to use JSONFormatter by Agent."""
-from pydantic import BaseModel, Field
-
 from promptulate.agents import WebAgent
+from promptulate.pydantic_v1 import BaseModel, Field
 
 
 class Response(BaseModel):

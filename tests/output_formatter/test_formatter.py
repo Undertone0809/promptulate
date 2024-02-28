@@ -1,11 +1,11 @@
 from typing import Optional
 
 import pytest
-from pydantic import BaseModel, Field
 
 from promptulate.agents import BaseAgent
 from promptulate.llms import BaseLLM
 from promptulate.output_formatter import OutputFormatter, formatting_result
+from promptulate.pydantic_v1 import BaseModel, Field
 from promptulate.schema import BaseMessage, MessageSet
 
 

@@ -1,7 +1,6 @@
 from typing import Dict, List, Optional
 
-from pydantic import BaseModel, Extra
-from pydantic.class_validators import root_validator
+from promptulate.pydantic_v1 import BaseModel, Extra, root_validator
 
 
 class DuckDuckGoSearchAPIWrapper(BaseModel):

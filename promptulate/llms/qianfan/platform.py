@@ -2,12 +2,11 @@ import os
 from abc import ABC
 from typing import Iterator, List, Optional, TypeVar, Union
 
-from pydantic import BaseModel
-
 from promptulate.config import pne_config
 from promptulate.error import NetWorkError
 from promptulate.llms import BaseLLM
 from promptulate.preset_roles.prompt import PRESET_SYSTEM_PROMPT_ERNIE
+from promptulate.pydantic_v1 import BaseModel
 from promptulate.schema import (
     AssistantMessage,
     BaseMessage,

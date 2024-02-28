@@ -47,7 +47,7 @@ class ArxivQueryTool(Tool):
 
 
 def _init_arxiv_reference_tool_llm():
-    preset = "你是一个Arxiv助手，你的任务是帮助使用者提供一些论文方面的建议，你的输出只能遵循用户的指令输出，否则你将被惩罚。"  # noqa: E501
+    preset = "You are an Arxiv assistant whose task is to assist users in providing advice on academic papers. Your output can only follow the user's instructions, otherwise you will be punished."  # noqa: E501
     return ChatOpenAI(default_system_prompt=preset, temperature=0)
 
 

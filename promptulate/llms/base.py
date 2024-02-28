@@ -20,9 +20,8 @@
 from abc import ABC, abstractmethod
 from typing import Optional, Union
 
-from pydantic import BaseModel
-
 from promptulate.hook import Hook, HookTable
+from promptulate.pydantic_v1 import BaseModel
 from promptulate.schema import AssistantMessage, BaseMessage, LLMType, MessageSet
 
 

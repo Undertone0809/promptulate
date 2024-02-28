@@ -1,7 +1,8 @@
 from typing import Dict, List, Optional, Union
 
 import arxiv
-from pydantic import BaseModel, root_validator
+
+from promptulate.pydantic_v1 import BaseModel, root_validator
 
 
 class ArxivQuerySet:

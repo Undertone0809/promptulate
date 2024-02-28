@@ -19,13 +19,12 @@
 
 from typing import List, Optional
 
-from pydantic import BaseModel
-
 from promptulate.frameworks.prompt import (
     SUMMARY_CONTENT_PROMPT_ZH,
     SUMMARY_TOPIC_PROMPT_ZH,
 )
 from promptulate.provider.base import BaseMixin
+from promptulate.pydantic_v1 import BaseModel
 from promptulate.schema import BaseMessage, MessageSet, UserMessage
 
 
