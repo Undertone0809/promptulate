@@ -48,10 +48,9 @@ func_1_schema = {
 }
 
 
-def func_2(a: str, b: Optional[int] = None):
+def func_2(a: str, b: Optional[int] = None, c: bool = False):
     """mock func 2"""
     return "result"
-
 
 func_2_schema = {
     "description": "mock func 2",
