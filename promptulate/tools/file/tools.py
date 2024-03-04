@@ -23,7 +23,6 @@ class WriteFileTool(Tool):
         """Write to a file
 
         Args:
-            query: file_name and text.
             file_name(Optional(str)): The name of the file you want to edit.
             text(Optional(str)): The content you want to edit.
 
@@ -60,7 +59,6 @@ class AppendFileTool(Tool):
         """Append to a file
 
         Args:
-            query: file_name and text.
             file_name(Optional(str)): The name of the file you want to edit.
             text(Optional(str)): The content you want to edit.
 
@@ -94,7 +92,6 @@ class ReadFileTool(Tool):
         """Read a file
 
         Args:
-            query: file_name.
             file_name(Optional(str)): The name of the file you want to read.
 
         Returns:
@@ -133,7 +130,6 @@ class DeleteFileTool(Tool):
         """Delete a file
 
         Args:
-            query: file_name.
             file_name(Optional(str)): The name of the file you want to delete.
 
         Returns:
@@ -167,7 +163,7 @@ class ListDirectoryTool(Tool):
         """List directory
 
         Args:
-            query: None.
+            None
 
         Returns:
             str: All files in the current path(Separated by newlines)
@@ -197,7 +193,6 @@ class CopyFileTool(Tool):
         """Copy a file
 
         Args:
-            query: file_name.
             file_name(Optional(str)): The name of the file you want to copy.
             destination_path(Optional(str)): The path you want to copy the file to.
 
@@ -236,7 +231,6 @@ class MoveFileTool(Tool):
         """Move a file
 
         Args:
-            query: file_name and destination_path.
             file_name(Optional(str)): The name of the file you want to move.
             destination_path(Optional(str)): The path you want to move the file to.
 

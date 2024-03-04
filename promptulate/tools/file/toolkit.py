@@ -12,17 +12,7 @@ from promptulate.tools.file.tools import (
     WriteFileTool,
 )
 
-DefaultTools: List[Tool] = [
-    WriteFileTool,
-    AppendFileTool,
-    ReadFileTool,
-    DeleteFileTool,
-    ListDirectoryTool,
-    CopyFileTool,
-    MoveFileTool,
-]
-
-DefaultTools_str = {
+TOOL_MAPPER = {
     "write": WriteFileTool,
     "append": AppendFileTool,
     "read": ReadFileTool,
@@ -45,28 +35,17 @@ class FileToolKit(BaseToolKit):
     """
 
     def __init__(self, root_dir: str = None, modes: Optional[List[str]] = None) -> None:
-        """validate_root_dir"""
-        if root_dir is None or root_dir == "":
-            root_dir = os.getcwd()
-        self.root_dir = root_dir
-        """validate_tools"""
-        if modes is not None and modes != []:
-            for tool in modes:
-                if tool not in DefaultTools_str:
-                    raise ValueError(
-                        f"{tool} does not exist.\n"
-                        f"Please select from {list(DefaultTools_str.keys())}"
-                    )
-        self.modes = modes
+        self.root_dir = root_dir or os.getcwd()
+        self.modes = modes or []
+
+        for mode in self.modes:
+            if mode not in TOOL_MAPPER.keys():
+                raise ValueError(
+                    f"{mode} does not exist.\n"
+                    f"Please select from {list(TOOL_MAPPER.keys())}"
+                )
 
     def get_tools(self) -> List[Tool]:
-        tools_list = []
-
-        if self.modes is None or self.modes == []:
-            tools = DefaultTools_str
-        else:
-            tools = self.modes
-        for tool in tools:
-            tool_cls = DefaultTools_str[tool]
-            tools_list.append(tool_cls(self.root_dir))
-        return tools_list
+        if self.modes:
+            return [TOOL_MAPPER[mode](self.root_dir) for mode in self.modes]
+        return [tool(self.root_dir) for tool in TOOL_MAPPER.values()]
