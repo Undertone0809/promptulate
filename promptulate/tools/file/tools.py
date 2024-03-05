@@ -2,6 +2,7 @@ import os
 import shutil
 
 from promptulate.tools.base import Tool
+from pydantic import Field
 
 
 class WriteFileTool(Tool):
@@ -11,8 +12,6 @@ class WriteFileTool(Tool):
         "Useful when you need to edit/create and edit a file."
         "It can edit the specified file in the specified directory/local directory"
         "If the file does not exist, edit it after it is created."
-        "The output parameters must be:"
-        "file_name(file name), text(related information)."
     )
 
     def __init__(self, root_dir: str, *args, **kwargs) -> None:
@@ -47,8 +46,6 @@ class AppendFileTool(Tool):
         "It can edit the specified file in the specified directory/local directory,"
         "Append the content to the end of the file."
         "If the file does not exist, edit it after it is created"
-        "The output parameters must be:"
-        "file_name(file name), text(related information)."
     )
 
     def __init__(self, root_dir: str, *args, **kwargs) -> None:
@@ -81,7 +78,6 @@ class ReadFileTool(Tool):
         "Read a file"
         "Useful when you need to read a file."
         "It can read the specified file in the specified directory/local directory."
-        "The output parameters must be: file_name(file name)."
     )
 
     def __init__(self, root_dir: str, *args, **kwargs) -> None:
@@ -119,7 +115,6 @@ class DeleteFileTool(Tool):
         "Delete a file"
         "Useful when you need to delete a file."
         "It can delete the specified file in the specified directory/local directory."
-        "The output parameters must be: file_name(file name)."
     )
 
     def __init__(self, root_dir: str, *args, **kwargs) -> None:
@@ -152,7 +147,6 @@ class ListDirectoryTool(Tool):
         "List directory"
         "Useful when you need to list all files in the directory."
         "It can list all files in the specified directory/local directory."
-        "The output parameters is None."
     )
 
     def __init__(self, root_dir: str, *args, **kwargs) -> None:
@@ -181,8 +175,6 @@ class CopyFileTool(Tool):
         "Copy a file"
         "Useful when you need to copy a file."
         "It can copy the specified file in the specified directory/local directory."
-        "The output parameters must be:"
-        "file_name(file name),destination_path(destination path)."
     )
 
     def __init__(self, root_dir: str, *args, **kwargs) -> None:
@@ -219,8 +211,6 @@ class MoveFileTool(Tool):
         "Useful when you need to move a file."
         "It can move or rename the specified file \
         in the specified directory/local directory."
-        "The output parameters must be:"
-        "file_name(file name),destination_path(destination path)"
     )
 
     def __init__(self, root_dir: str, *args, **kwargs) -> None:
