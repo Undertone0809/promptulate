@@ -2,7 +2,6 @@ import os
 import shutil
 
 from promptulate.tools.base import Tool
-from pydantic import Field
 
 
 class WriteFileTool(Tool):
