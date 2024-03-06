@@ -70,6 +70,7 @@ build-docs:
 	jupyter nbconvert ./example/chat_usage.ipynb --to markdown --output-dir ./docs/uses_cases/
 	jupyter nbconvert ./example/tools/custom_tool_usage.ipynb --to markdown --output-dir ./docs/modules/tools
 	jupyter nbconvert ./example/llm/custom_llm.ipynb --to markdown --output-dir ./docs/modules/llm
+	jupyter nbconvert ./example/tools/langchain_tool_usage.ipynb --to markdown --output-dir ./docs/modules/tools
 
 .PHONY: start-docs
 start-docs:
