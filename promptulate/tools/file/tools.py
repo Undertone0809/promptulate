@@ -1,7 +1,27 @@
 import os
 import shutil
+from typing import Optional
 
+from promptulate.pydantic_v1 import BaseModel, Field
 from promptulate.tools.base import Tool
+
+
+class RToolParameters(BaseModel):
+    file_name: str = Field(
+        description="The name of the file you want to edit.",
+    )
+
+
+class ToolParameters(RToolParameters):
+    text: Optional[str] = Field(
+        description="The content you want to edit.",
+    )
+
+
+class CMToolParameters(RToolParameters):
+    destination_path: str = Field(
+        description="The directory you want to reach.",
+    )
 
 
 class WriteFileTool(Tool):
@@ -12,12 +32,13 @@ class WriteFileTool(Tool):
         "It can edit the specified file in the specified directory/local directory"
         "If the file does not exist, edit it after it is created."
     )
+    parameters = ToolParameters
 
     def __init__(self, root_dir: str, *args, **kwargs) -> None:
         self.root_dir = root_dir
         super().__init__(*args, **kwargs)
 
-    def _run(self, file_name: str, text: str) -> str:
+    def _run(self, file_name: str, text: Optional[str] = None) -> str:
         """Write to a file
 
         Args:
@@ -46,12 +67,13 @@ class AppendFileTool(Tool):
         "Append the content to the end of the file."
         "If the file does not exist, edit it after it is created"
     )
+    parameters = ToolParameters
 
     def __init__(self, root_dir: str, *args, **kwargs) -> None:
         self.root_dir = root_dir
         super().__init__(*args, **kwargs)
 
-    def _run(self, file_name: str, text: str) -> str:
+    def _run(self, file_name: str, text: Optional[str]) -> str:
         """Append to a file
 
         Args:
@@ -78,6 +100,7 @@ class ReadFileTool(Tool):
         "Useful when you need to read a file."
         "It can read the specified file in the specified directory/local directory."
     )
+    parameters = RToolParameters
 
     def __init__(self, root_dir: str, *args, **kwargs) -> None:
         self.root_dir = root_dir
@@ -115,6 +138,7 @@ class DeleteFileTool(Tool):
         "Useful when you need to delete a file."
         "It can delete the specified file in the specified directory/local directory."
     )
+    parameters = RToolParameters
 
     def __init__(self, root_dir: str, *args, **kwargs) -> None:
         self.root_dir = root_dir
@@ -147,6 +171,7 @@ class ListDirectoryTool(Tool):
         "Useful when you need to list all files in the directory."
         "It can list all files in the specified directory/local directory."
     )
+    parameters = None
 
     def __init__(self, root_dir: str, *args, **kwargs) -> None:
         self.root_dir = root_dir
@@ -175,6 +200,7 @@ class CopyFileTool(Tool):
         "Useful when you need to copy a file."
         "It can copy the specified file in the specified directory/local directory."
     )
+    parameters = CMToolParameters
 
     def __init__(self, root_dir: str, *args, **kwargs) -> None:
         self.root_dir = root_dir
@@ -211,6 +237,7 @@ class MoveFileTool(Tool):
         "It can move or rename the specified file \
         in the specified directory/local directory."
     )
+    parameters = CMToolParameters
 
     def __init__(self, root_dir: str, *args, **kwargs) -> None:
         self.root_dir = root_dir
