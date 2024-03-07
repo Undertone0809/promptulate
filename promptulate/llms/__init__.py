@@ -22,6 +22,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from promptulate.llms.base import BaseLLM
     from promptulate.llms.erniebot.erniebot import ErnieBot
+    from promptulate.llms.factory import LLMFactory
     from promptulate.llms.openai import ChatOpenAI, OpenAI
     from promptulate.llms.qianfan import QianFan
     from promptulate.llms.zhipu import ZhiPu
@@ -52,6 +53,18 @@ def __getattr__(name):
         from promptulate.llms.zhipu import ZhiPu
 
         return ZhiPu
+    elif name == "LLMFactory":
+        from promptulate.llms.factory import LLMFactory
+
+        return LLMFactory
 
 
-__all__ = ["OpenAI", "ChatOpenAI", "BaseLLM", "ErnieBot", "QianFan", "ZhiPu"]
+__all__ = [
+    "OpenAI",
+    "ChatOpenAI",
+    "BaseLLM",
+    "ErnieBot",
+    "QianFan",
+    "ZhiPu",
+    "LLMFactory",
+]
