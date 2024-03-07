@@ -15,6 +15,7 @@
   - [:robot: Agent](modules/agent.md#agent)
   - [:toolbox: Tool](modules/tools/index#Tool)
     - [🧰 Custom Tool](modules/tools/custom_tool_usage.md#custom-tool)
+    - [🌟 LangChain Tool Usage](modules/tools/langchain_tool_usage.md#langchain-tool-usage)
   - [🐠 Format Output](modules/formatter.md#简介)
   - [:probing_cane: Hook & Lifecycle](modules/hook.md#what-is-hook)
   - [:department_store: Memory](modules/memory.md#memory)

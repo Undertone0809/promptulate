@@ -1,14 +1,8 @@
-from langchain.tools import DuckDuckGoSearchRun
+from langchain.agents import load_tools
 
-from promptulate.agents import ToolAgent
-from promptulate.tools import LangchainTool
-
-
-def example():
-    tools = [LangchainTool(DuckDuckGoSearchRun())]
-    agent = ToolAgent(tools)
-    agent.run("Shanghai weather tomorrow")
-
+import promptulate as pne
 
 if __name__ == "__main__":
-    example()
+    tools = load_tools(["arxiv"])
+    agent = pne.ToolAgent(tools=tools)
+    agent.run("What's the paper 1605.08386 about?")

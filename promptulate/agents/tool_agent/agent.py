@@ -10,10 +10,14 @@ from promptulate.agents.tool_agent.prompt import (
 from promptulate.hook import Hook, HookTable
 from promptulate.llms.base import BaseLLM
 from promptulate.llms.openai import ChatOpenAI
-from promptulate.tools.base import BaseTool, Tool
+from promptulate.schema import TOOL_TYPES
 from promptulate.tools.manager import ToolManager
 from promptulate.utils.logger import logger
 from promptulate.utils.string_template import StringTemplate
+
+Thought = str
+ActionName = str
+ActionInput = Union[dict, str]
 
 
 class ToolAgent(BaseAgent):
@@ -44,9 +48,8 @@ class ToolAgent(BaseAgent):
     def __init__(
         self,
         *,
-        tools: List[Union[BaseTool, Tool, Callable]],
+        tools: List[TOOL_TYPES],
         llm: BaseLLM = None,
-        stop_sequences: List[str] = None,
         prefix_prompt_template: StringTemplate = StringTemplate(PREFIX_TEMPLATE),
         hooks: List[Callable] = None,
         enable_role: bool = False,
@@ -64,8 +67,6 @@ class ToolAgent(BaseAgent):
         """llm provider"""
         self.tool_manager: ToolManager = ToolManager(tools)
         """Used to manage all tools."""
-        self.stop_sequences: List[str] = stop_sequences
-        """llm output will stop when stop sequences is met."""
         self.system_prompt_template: StringTemplate = REACT_SYSTEM_PROMPT_TEMPLATE
         """Preset system prompt template."""
         self.prefix_prompt_template: StringTemplate = prefix_prompt_template
@@ -82,7 +83,6 @@ class ToolAgent(BaseAgent):
         self.agent_identity: str = agent_identity
         self.agent_goal: str = agent_goal
         self.agent_constraints: str = agent_constraints
-        self.stop_sequences = stop_sequences or ["Observation"]
 
     def get_llm(self) -> BaseLLM:
         return self.llm
@@ -114,13 +114,9 @@ class ToolAgent(BaseAgent):
         start_time = time.time()
 
         while self._should_continue(iterations, used_time):
-            llm_resp: str = self.llm(
-                instruction=self.conversation_prompt, stop=self.stop_sequences
-            )
+            llm_resp: str = self.llm(instruction=self.conversation_prompt)
             while llm_resp == "":
-                llm_resp = self.llm(
-                    instruction=self.conversation_prompt, stop=self.stop_sequences
-                )
+                llm_resp = self.llm(instruction=self.conversation_prompt)
 
             thought, action_name, action_parameters = self._parse_llm_response(llm_resp)
             self.conversation_prompt += f"{llm_resp}\n"
@@ -165,7 +161,7 @@ class ToolAgent(BaseAgent):
             return False
         return True
 
-    def _parse_llm_response(self, llm_resp: str) -> (str, str, Union[dict, str]):
+    def _parse_llm_response(self, llm_resp: str) -> (Thought, ActionName, ActionInput):
         """Parse next instruction of LLM output.
 
         Args:

@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from enum import Enum
-from typing import Any, Callable, Dict, Iterator, List, Optional, Union
+from typing import TYPE_CHECKING, Any, Callable, Dict, Iterator, List, Optional, Union
 
 from promptulate.pydantic_v1 import BaseModel, Field
 
@@ -13,7 +13,14 @@ __all__ = [
     "AssistantMessage",
     "MessageSet",
     "init_chat_message_history",
+    "TOOL_TYPES",
 ]
+
+if TYPE_CHECKING:
+    from langchain.tools.base import BaseTool as LangchainBaseToolType  # noqa
+    from promptulate.tools.base import BaseTool, Tool  # noqa
+
+TOOL_TYPES = Union["BaseTool", "Tool", Callable, "LangchainBaseToolType"]
 
 
 class BaseMessage(BaseModel):
