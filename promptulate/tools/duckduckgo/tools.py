@@ -34,7 +34,9 @@ class DuckDuckGoTool(Tool):
             result_type="original"
         """
         from duckduckgo_search.exceptions import RateLimitException
-
+        if "proxies" in kwargs:
+            if kwargs["proxies"]:
+                self.api_wrapper.proxies = kwargs["proxies"]
         attempt = 0
         while attempt < self.max_retry:
             try:
@@ -80,6 +82,9 @@ class DuckDuckGoReferenceTool(Tool):
             default is string. Return List[Dict[str, str]] type data if you pass
             result_type="original"
         """
+        if "proxies" in kwargs:
+            if kwargs["proxies"]:
+                self.api_wrapper.proxies = kwargs["proxies"]
         result = self.api_wrapper.query_by_formatted_results(keyword, **kwargs)
         if "return_type" in kwargs and kwargs["return_type"] == "original":
             return result
