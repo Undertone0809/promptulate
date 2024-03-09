@@ -14,6 +14,7 @@ class RToolParameters(BaseModel):
 
 class ToolParameters(RToolParameters):
     text: Optional[str] = Field(
+        default=None,
         description="The content you want to edit.",
     )
 
@@ -73,7 +74,7 @@ class AppendFileTool(Tool):
         self.root_dir = root_dir
         super().__init__(*args, **kwargs)
 
-    def _run(self, file_name: str, text: Optional[str]) -> str:
+    def _run(self, file_name: str, text: Optional[str] = None) -> str:
         """Append to a file
 
         Args:
