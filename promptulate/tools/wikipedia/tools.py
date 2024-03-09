@@ -10,6 +10,20 @@ def wikipedia_search(
     """
     Function to search Wikipedia for a given query and return page summaries.
 
+    Function to search Wikipedia for a given query and return page summaries.
+
+    Args:
+        query (str): The search query for Wikipedia.
+        top_k_results (int): The number of top results to retrieve. Default is 3.
+        lang (str): The language for the Wikipedia search. Default is "en".
+        doc_content_chars_max (int): Maximum number of characters
+                                    for the document content. Default is 4000.
+
+    Returns:
+        str: A string containing the concatenated page summaries
+            of the top search results, limited by doc_content_chars_max.
+    
+
     Args:
         query (str): The search query for Wikipedia.
         top_k_results (int): The number of top results to retrieve. Default is 3.
