@@ -59,6 +59,8 @@ Modules 是一组专门设计用于执行特定任务的模块，例如情感分
 pip install -U promptulate  
 ```
 
+> Your Python version should be 3.8 or higher.
+
 - 通过下面这个简单的程序开始你的 “HelloWorld”。
 
 ```python
@@ -77,6 +79,27 @@ The temperature tomorrow in Shanghai is expected to be 23°C.
 ```
 
 > 大多数时候我们会将 promptulate 称之为 pne,其中 p 和 e 表示 promptulate 开头和结尾的单词，而 n 表示 9，即 p 和 e 中间的九个单词的简写。
+
+要将包括网络搜索、计算器等在内的各种外部工具集成到您的Python应用程序中，您可以使用promptulate库与langchain库一起使用。langchain库允许您构建一个带有工具集的ToolAgent，例如基于OpenAI的DALL-E模型的图像生成器。
+
+下面是一个如何使用promptulate和langchain库根据文本描述创建图像的例子：
+
+```python
+import promptulate as pne
+from langchain.agents import load_tools
+
+tools: list = load_tools(["dalle-image-generator"])
+agent = pne.ToolAgent(tools=tools)
+output = agent.run("创建一个万圣节夜晚在一个闹鬼的博物馆的图像")
+```
+
+output:
+
+```text
+Here is the generated image: [![Halloween Night at a Haunted Museum](https://oaidalleapiprodscus.blob.core.windows.net/private/org-OyRC1wqD0EP6oWMS2n4kZgVi/user-JWA0mHqDqYh3oPpQtXbWUPgu/img-SH09tWkWZLJVltxifLi6jFy7.png)]
+```
+
+![Halloween Night at a Haunted Museum](./docs/images/dall-e-gen.png)
 
 更多详细资料，请查看[快速上手/官方文档](https://undertone0809.github.io/promptulate/#/)
 

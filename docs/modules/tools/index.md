@@ -68,31 +68,7 @@ from promptulate.tools import (
 
 ## Langchain Tool的使用
 
-promptulate兼容langchain所有的tool，并且完美兼容promptulate的hooks系统，下面的示例展示了如何在promptulate中使用langchain tool。
-
-首先，你需要先安装langchain：
-
-```shell
-pip install langchain
-```
-
-接着，你可以通过如下方式进行调用，下面的示例调用的langchain的DuckDuckGoSearchRun工具。
-
-```python
-from langchain.tools import DuckDuckGoSearchRun
-from promptulate.tools import LangchainTool
-from promptulate.agents import ToolAgent
-
-
-def example():
-    tools = [LangchainTool(DuckDuckGoSearchRun())]
-    agent = ToolAgent(tools)
-    agent.run("Shanghai weather tomorrow")
-
-
-if __name__ == "__main__":
-    example()
-```
+promptulate兼容langchain所有的tool，并且完美兼容promptulate的hooks系统。 See the detail in [LangChain Tool usage](modules/tools/langchain_tool_usage.md)
 
 ## 有LLM能力的Tool
 
