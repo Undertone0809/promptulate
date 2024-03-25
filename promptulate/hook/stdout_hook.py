@@ -38,10 +38,10 @@ class StdOutHook:
     def handle_agent_result(*args, **kwargs):
         if kwargs.get("_from", None) is None:
             print_text(f"[Agent Result] {kwargs['result']}", "green")
-            print_text("Agent End.", "pink")
+            print_text("[Agent] Agent End.", "pink")
         elif kwargs["_from"] == "agent":
             print_text(f"[Execute Result] {kwargs['result']}", "green")
-            print_text("Execute End.", "pink")
+            print_text("[Execute] Execute End.", "pink")
 
     @staticmethod
     def registry_stdout_hooks():

@@ -1,5 +1,5 @@
 # Custom LLM
-This guide details the process of creating a custom Language Model (LLM) wrapper for use with Promtulate. To integrate your own LLM or an alternative to the supported wrappers, your custom LLM class must implement two essential methods.
+This guide details the process of creating a custom Language Model (LLM) wrapper for use with Promptulate. To integrate your own LLM or an alternative to the supported wrappers, your custom LLM class must implement two essential methods.
 
 Below is a template for a custom LLM class:
 
