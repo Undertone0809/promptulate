@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, Field
+from promptulate.pydantic_v1 import BaseModel, Field
 
 
 class Status(Enum):
