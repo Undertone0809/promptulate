@@ -31,3 +31,4 @@
   - [Release Version](other/update.md)
   - [Roadmap](other/plan.md)
   - [Developer guidance](other/contribution.md#contributing-to-promptulate)
+  - [Log system](other/log_system.md#log-system)
