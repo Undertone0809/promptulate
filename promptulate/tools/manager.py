@@ -1,5 +1,6 @@
+import inspect
 import json
-from typing import Any, Callable, List, Optional, Union
+from typing import Any, List, Optional, Union
 
 from promptulate.schema import TOOL_TYPES
 from promptulate.tools.base import BaseTool, Tool, ToolImpl, function_to_tool
@@ -42,10 +43,10 @@ def _initialize_tool(tool: TOOL_TYPES) -> Optional[Tool]:
     """
     if isinstance(tool, BaseTool):
         return ToolImpl.from_base_tool(tool)
-    elif isinstance(tool, Callable):
-        return function_to_tool(tool)
     elif isinstance(tool, Tool):
         return tool
+    elif inspect.isfunction(tool):
+        return function_to_tool(tool)
 
     return _judge_langchain_tool_and_wrap(tool)
 
