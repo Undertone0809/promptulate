@@ -1,6 +1,6 @@
 import uuid
 from abc import ABC
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from promptulate.uacp.schema import Artifact, Status, Step, Task
 
@@ -21,8 +21,8 @@ class TaskDB(ABC):
         name: Optional[str] = None,
         input: Optional[str] = None,
         is_last: bool = False,
-        additional_properties: Optional[Dict[str, str]] = None,
-        artifacts: List[Artifact] = [],
+        additional_properties: Optional[Dict[str, Any]] = None,
+        artifacts: Optional[List[Artifact]] = None,
     ) -> Step:
         raise NotImplementedError
 
@@ -101,9 +101,11 @@ class InMemoryTaskDB(TaskDB):
         input: Optional[str] = None,
         is_last=False,
         additional_properties: Optional[Dict[str, Any]] = None,
-        artifacts: List[Artifact] = [],
+        artifacts: Optional[List[Artifact]] = None,
     ) -> Step:
         step_id = str(uuid.uuid4())
+        artifacts = artifacts or []
+
         step = Step(
             task_id=task_id,
             step_id=step_id,

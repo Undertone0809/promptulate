@@ -69,7 +69,7 @@ class Step(StepRequestBody):
     additional_properties: Optional[Dict[str, Any]] = None
     additional_output: Optional[StepOutput] = None
     artifacts: List[Artifact] = Field(
-        ..., description="A list of artifacts that the step has produced."
+        [], description="A list of artifacts that the step has produced."
     )
     is_last: bool = Field(
         ..., description="Whether this is the last step in the task.", example=True

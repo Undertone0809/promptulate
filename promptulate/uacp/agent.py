@@ -14,6 +14,19 @@ _step_handler: Optional[StepHandler]
 
 
 class Agent:
+    """Unified Agent Communication Protocol (UACP) agent. You can implement the
+    `TaskHandler`, `StepHandler`, and `ResultHandler` to customize the agent's
+    behavior.
+
+    TaskHandler: A function that handles the task, task handler will be called when
+    the task is created.
+
+    StepHandler: A function that handles the step, step handler will be called when
+    the step is created.
+
+    ResultHandler: A function that handles the result, result handler will be called
+    when the task is completed.
+    """
     def __init__(
         self,
         task_handler: TaskHandler,
@@ -58,6 +71,9 @@ class Agent:
 
             self.db.update_step(task.task_id, step)
             logger.info(f"[uacp] Step {step.name}: {step.json()}")
+
+            if step.is_last:
+                break
 
         # result handler
         task = self.db.get_task(task.task_id)
