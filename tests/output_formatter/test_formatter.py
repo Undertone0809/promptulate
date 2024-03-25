@@ -60,7 +60,7 @@ def test_formatter_with_llm():
 def test_formatter_with_agent():
     agent = AgentForTest()
     prompt = "What is the temperature in Shanghai tomorrow?"
-    response: LLMResponse = agent.run(prompt=prompt, output_schema=LLMResponse)
+    response: LLMResponse = agent.run(instruction=prompt, output_schema=LLMResponse)
     assert isinstance(response, LLMResponse)
     assert isinstance(response.city, str)
     assert isinstance(response.temperature, float)

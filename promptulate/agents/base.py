@@ -18,7 +18,7 @@ class BaseAgent(ABC):
 
     def run(
         self,
-        prompt: str,
+        instruction: str,
         output_schema: Optional[type(BaseModel)] = None,
         examples: Optional[List[BaseModel]] = None,
         *args,
@@ -26,11 +26,11 @@ class BaseAgent(ABC):
     ) -> Any:
         """run the tool including specified function and hooks"""
         Hook.call_hook(
-            HookTable.ON_AGENT_START, self, prompt, output_schema, *args, **kwargs
+            HookTable.ON_AGENT_START, self, instruction, output_schema, *args, **kwargs
         )
 
         # get original response from LLM
-        result: str = self._run(prompt, *args, **kwargs)
+        result: str = self._run(instruction, *args, **kwargs)
 
         # Return Pydantic instance if output_schema is specified
         if output_schema:
@@ -45,7 +45,7 @@ class BaseAgent(ABC):
         return result
 
     @abstractmethod
-    def _run(self, prompt: str, *args, **kwargs) -> str:
+    def _run(self, instruction: str, *args, **kwargs) -> str:
         """Run the detail agent, implemented by subclass."""
         raise NotImplementedError()
 

@@ -64,7 +64,7 @@ class Step(StepRequestBody):
     output: Optional[str] = Field(
         None,
         description="Output of the task step.",
-        example="I am going to use the write_to_file command and write Washington to a file called output.txt <write_to_file('output.txt', 'Washington')", # noqa
+        example="I am going to use the write_to_file command and write Washington to a file called output.txt <write_to_file('output.txt', 'Washington')",  # noqa
     )
     additional_properties: Optional[Dict[str, Any]] = None
     additional_output: Optional[StepOutput] = None

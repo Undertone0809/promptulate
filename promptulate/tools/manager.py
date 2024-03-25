@@ -22,11 +22,17 @@ def _judge_langchain_tool_and_wrap(tool: Any) -> Optional[Tool]:
             return LangchainTool(tool)
 
     except ImportError:
-        pass
+        raise ValueError(
+            (
+                f"Error tool type {tool}, please check the tool type.",
+                "If you are using langchain tool, please install -U langchain.",
+            )
+        )
 
 
 def _initialize_tool(tool: TOOL_TYPES) -> Optional[Tool]:
     """Initialize the tool.
+
     Args:
         tool(Union[BaseTool, Callable, Tool, "LangchainBaseToolType"]): The tool to be
             initialized.
@@ -34,17 +40,14 @@ def _initialize_tool(tool: TOOL_TYPES) -> Optional[Tool]:
     Returns:
         Optional[Tool]: The initialized tool.
     """
-    wrapped_tool = _judge_langchain_tool_and_wrap(tool)
-    if wrapped_tool is not None:
-        return wrapped_tool
-
     if isinstance(tool, BaseTool):
         return ToolImpl.from_base_tool(tool)
-
     elif isinstance(tool, Callable):
         return function_to_tool(tool)
+    elif isinstance(tool, Tool):
+        return tool
 
-    return None
+    return _judge_langchain_tool_and_wrap(tool)
 
 
 class ToolManager:
