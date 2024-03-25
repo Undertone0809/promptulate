@@ -3,6 +3,7 @@ from abc import ABC
 from typing import Any, Dict, List, Optional, Union
 
 from promptulate.uacp.schema import Artifact, Status, Step, Task
+from promptulate.utils.logger import logger
 
 
 class TaskDB(ABC):
@@ -116,6 +117,7 @@ class InMemoryTaskDB(TaskDB):
             additional_properties=additional_properties,
             artifacts=artifacts,
         )
+        logger.info(f"Create step: {step}")
         task = self.get_task(task_id)
         task.steps.append(step)
         return step
@@ -127,8 +129,8 @@ class InMemoryTaskDB(TaskDB):
             raise ValueError(f"Step {step_id} not found in task {task_id}")
         return step
 
-    async def update_step(self, task_id: str, step: Step) -> Step:
-        task = await self.get_task(task_id)
+    def update_step(self, task_id: str, step: Step) -> Step:
+        task = self.get_task(task_id)
 
         for i, s in enumerate(task.steps):
             if s.step_id == step.step_id:

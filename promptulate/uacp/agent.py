@@ -27,6 +27,7 @@ class Agent:
     ResultHandler: A function that handles the result, result handler will be called
     when the task is completed.
     """
+
     def __init__(
         self,
         task_handler: TaskHandler,
@@ -47,10 +48,20 @@ class Agent:
         input: Optional[str] = None,
         additional_input: Optional[dict] = None,
     ) -> Any:
+        """Run the agent with the specified input and additional input.
+        Args:
+            input(Optional[str]): The input for the agent.
+            additional_input: Additional input for the agent.
+
+        Returns:
+            Any: The result of the agent.
+        """
         task = self.db.create_task(input=input, additional_input=additional_input)
+
+        # task handler to create the first step
         self.task_handler(task)
 
-        # step handler
+        # step handler to execute the steps
         task = self.db.get_task(task.task_id)
 
         if not task.steps:
@@ -75,7 +86,7 @@ class Agent:
             if step.is_last:
                 break
 
-        # result handler
+        # result handler to process the task result
         task = self.db.get_task(task.task_id)
         task_result: Any = self.result_handler(task)
         self.db.update_task(task)

@@ -10,10 +10,14 @@ from promptulate.pydantic_v1 import BaseModel
 class BaseAgent(ABC):
     """Base class of Agent."""
 
-    def __init__(self, hooks: List[Callable] = None, *args, **kwargs):
-        if hooks:
-            for hook in hooks:
-                Hook.mount_instance_hook(hook, self)
+    def __init__(self, hooks: Optional[List[Callable]] = None, *args, **kwargs):
+        hooks = hooks or []
+        for hook in hooks:
+            Hook.mount_instance_hook(hook, self)
+
+        self._agent_type: str = kwargs.get("agent_type", "Agent")
+        self._from = kwargs.get("_from", None)
+
         Hook.call_hook(HookTable.ON_AGENT_CREATE, self, *args, **kwargs)
 
     def run(
@@ -26,7 +30,13 @@ class BaseAgent(ABC):
     ) -> Any:
         """run the tool including specified function and hooks"""
         Hook.call_hook(
-            HookTable.ON_AGENT_START, self, instruction, output_schema, *args, **kwargs
+            HookTable.ON_AGENT_START,
+            self,
+            instruction,
+            output_schema,
+            *args,
+            agent_type=self._agent_type,
+            **kwargs,
         )
 
         # get original response from LLM
@@ -41,7 +51,13 @@ class BaseAgent(ABC):
             json_response = self.get_llm()(prompt)
             return formatter.formatting_result(json_response)
 
-        Hook.call_hook(HookTable.ON_AGENT_RESULT, self, result=result)
+        Hook.call_hook(
+            HookTable.ON_AGENT_RESULT,
+            mounted_obj=self,
+            result=result,
+            agent_type=self._agent_type,
+            _from=self._from,
+        )
         return result
 
     @abstractmethod
