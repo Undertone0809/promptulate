@@ -58,10 +58,10 @@ pyjwt = "^2.8.0"
 pne = "promptulate.client.pne:main"
 pne-chat = "promptulate.client.chat:main"
 
-[[tool.poetry.source]]
-name = "tsinghua"
-priority = "default"
-url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+#[[tool.poetry.source]]
+#name = "tsinghua"
+#priority = "default"
+#url = "https://pypi.tuna.tsinghua.edu.cn/simple"
 
 [tool.ruff]
 # https://beta.ruff.rs/docs/settings/

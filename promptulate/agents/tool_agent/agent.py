@@ -52,20 +52,21 @@ class ToolAgent(BaseAgent):
         llm: BaseLLM,
         tools: Optional[List[TOOL_TYPES]] = None,
         prefix_prompt_template: StringTemplate = StringTemplate(PREFIX_TEMPLATE),
-        hooks: List[Callable] = None,
+        hooks: Optional[List[Callable]] = None,
         enable_role: bool = False,
         agent_name: str = "tool-agent",
         agent_identity: str = "tool-agent",
         agent_goal: str = "provides better assistance and services for humans.",
         agent_constraints: str = "none",
         tool_manager: Optional[ToolManager] = None,
+        _from: Optional[str] = None,
     ):
         if tools is not None and tool_manager is not None:
             raise ValueError(
                 "Please provide either 'tools' or 'tool_manager', but not both simultaneously."  # noqa
             )
 
-        super().__init__(hooks=hooks)
+        super().__init__(hooks=hooks, agent_type="Tool Agent", _from=_from)
         self.llm: BaseLLM = llm
         """llm provider"""
         self.tool_manager: ToolManager = (
@@ -111,6 +112,11 @@ class ToolAgent(BaseAgent):
             tool_descriptions=self.tool_manager.tool_descriptions,
         )
 
+    @property
+    def current_date(self) -> str:
+        """Get the current date."""
+        return f"Current date: {time.strftime('%Y-%m-%d %H:%M:%S')}"
+
     def _run(
         self, instruction: str, return_raw_data: bool = False, **kwargs
     ) -> Union[str, ActionResponse]:
@@ -131,9 +137,13 @@ class ToolAgent(BaseAgent):
         start_time = time.time()
 
         while self._should_continue(iterations, used_time):
-            llm_resp: str = self.llm(instruction=self.conversation_prompt)
+            llm_resp: str = self.llm(
+                instruction=self.conversation_prompt + self.current_date
+            )
             while llm_resp == "":
-                llm_resp = self.llm(instruction=self.conversation_prompt)
+                llm_resp = self.llm(
+                    instruction=self.conversation_prompt + self.current_date
+                )
 
             action_resp: ActionResponse = self._parse_llm_response(llm_resp)
             self.conversation_prompt += f"{llm_resp}\n"
