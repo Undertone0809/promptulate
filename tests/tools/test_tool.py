@@ -148,7 +148,8 @@ def test_tool_cls():
 
     print(tool.to_schema())
 
-    # test custom Tool but lack of name
+
+def test_tool_cls_lack_of_parameters():
     class ToolWithLackParam(Tool):
         name = "mock tool"
 
@@ -173,19 +174,21 @@ def test_tool_class_parameter():
     """Test class' tool to covert to schema."""
 
     # define parameters by BaseModel
-    class Parameters(BaseModel):
-        param1: Optional[str] = Field(description="param1 description")
-        param2: str = Field(description="param2 description")
+    class ToolParameters(BaseModel):
+        param1: str = Field(description="param1 description")
+        param2: Optional[str] = Field(description="param2 description")
 
     class MockTool(Tool):
         name = "mock tool"
         description = "mock tool description"
-        parameters = Parameters
+        parameters: BaseModel = ToolParameters
 
-        def _run(self):
+        def _run(self, param1: str, param2: Optional[str] = None):
             return "mock tool"
 
     tool = MockTool()
+    result: str = tool.run(param1="param1", param2="param2")
+    assert result == "mock tool"
 
     assert tool.to_schema() == {
         "name": "mock tool",

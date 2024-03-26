@@ -26,9 +26,7 @@ def get_llm_cls(platform_type, model_name, model_config):
 
 class LLMFactory:
     @classmethod
-    def build(
-        self, platform_type: str, model_name: str = None, model_config: {} = None
-    ):
+    def build(cls, platform_type: str, model_name: str = None, model_config: {} = None):
         if model_config is None:
             model_config = {}
         model_name: str = model_name or ""

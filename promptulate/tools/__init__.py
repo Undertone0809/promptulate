@@ -18,6 +18,15 @@ if TYPE_CHECKING:
         DuckDuckGoTool,
         ddg_websearch,
     )
+    from promptulate.tools.file.tools import (
+        AppendFileTool,
+        CopyFileTool,
+        DeleteFileTool,
+        ListDirectoryTool,
+        MoveFileTool,
+        ReadFileTool,
+        WriteFileTool,
+    )
     from promptulate.tools.huggingface.tools import HuggingFaceTool
     from promptulate.tools.human_feedback import HumanFeedBackTool
     from promptulate.tools.iot_swith_mqtt import IotSwitchTool
@@ -131,6 +140,34 @@ def __getattr__(name):
         from promptulate.tools.shell import ShellTool
 
         return ShellTool
+    elif name == "ListDirectoryTool":
+        from promptulate.tools.file.tools import ListDirectoryTool
+
+        return ListDirectoryTool
+    elif name == "ReadFileTool":
+        from promptulate.tools.file.tools import ReadFileTool
+
+        return ReadFileTool
+    elif name == "WriteFileTool":
+        from promptulate.tools.file.tools import WriteFileTool
+
+        return WriteFileTool
+    elif name == "AppendFileTool":
+        from promptulate.tools.file.tools import AppendFileTool
+
+        return AppendFileTool
+    elif name == "MoveFileTool":
+        from promptulate.tools.file.tools import MoveFileTool
+
+        return MoveFileTool
+    elif name == "CopyFileTool":
+        from promptulate.tools.file.tools import CopyFileTool
+
+        return CopyFileTool
+    elif name == "DeleteFileTool":
+        from promptulate.tools.file.tools import DeleteFileTool
+
+        return DeleteFileTool
     else:
         raise AttributeError(f"module {__name__} has no attribute {name}")
 
@@ -160,4 +197,11 @@ __all__ = [
     "Calculator",
     "sleep_tool",
     "HumanFeedBackTool",
+    "ListDirectoryTool",
+    "ReadFileTool",
+    "WriteFileTool",
+    "AppendFileTool",
+    "MoveFileTool",
+    "CopyFileTool",
+    "DeleteFileTool",
 ]

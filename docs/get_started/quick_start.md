@@ -157,6 +157,29 @@ Agent Start...
 Agent End.
 ```
 
+To integrate a variety of external tools, including web search, calculators, and more, into your Python application, you can use the promptulate library alongside langchain. The langchain library allows you to build a ToolAgent with a collection of tools, such as an image generator based on OpenAI's DALL-E model. 
+
+Below is an example of how to use the promptulate and langchain libraries to create an image from a text description:
+
+> You need to set the `OPENAI_API_KEY` environment variable to your OpenAI API key. Click [here](https://undertone0809.github.io/promptulate/#/modules/tools/langchain_tool_usage?id=langchain-tool-usage) to see the detail.
+
+```python
+import promptulate as pne
+from langchain.agents import load_tools
+
+tools: list = load_tools(["dalle-image-generator"])
+agent = pne.ToolAgent(tools=tools)
+output = agent.run("Create an image of a halloween night at a haunted museum")
+```
+
+output:
+
+```text
+Here is the generated image: [![Halloween Night at a Haunted Museum](https://oaidalleapiprodscus.blob.core.windows.net/private/org-OyRC1wqD0EP6oWMS2n4kZgVi/user-JWA0mHqDqYh3oPpQtXbWUPgu/img-SH09tWkWZLJVltxifLi6jFy7.png)]
+```
+
+![Halloween Night at a Haunted Museum](./docs/images/dall-e-gen.png)
+
 ### Output Formatter
 
 很多时候，LLM 的输出具有很强的不可控性，promptulate 通过 JSON schema 为 LLM 的输出构建了一个输出格式化器，简单来说，你可以用这种方式制定 LLM 的输出内容，并转换成一个 python 对象。

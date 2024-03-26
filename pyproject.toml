@@ -8,7 +8,7 @@ description = "A powerful LLM Application development framework."
 name = "promptulate"
 readme = "README.md"
 repository = "https://github.com/Undertone0809/promptulate"
-version = "1.13.2"
+version = "1.14.0"
 keywords = [
     "promptulate",
     "pne",
@@ -35,6 +35,7 @@ python-dotenv = "^1.0.0"
 questionary = "^2.0.1"
 requests = "^2.31.0"
 jinja2 = "^3.1.3"
+typing-extensions = "^4.10.0"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -57,10 +58,10 @@ pyjwt = "^2.8.0"
 pne = "promptulate.client.pne:main"
 pne-chat = "promptulate.client.chat:main"
 
-[[tool.poetry.source]]
-name = "tsinghua"
-priority = "default"
-url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+#[[tool.poetry.source]]
+#name = "tsinghua"
+#priority = "default"
+#url = "https://pypi.tuna.tsinghua.edu.cn/simple"
 
 [tool.ruff]
 # https://beta.ruff.rs/docs/settings/

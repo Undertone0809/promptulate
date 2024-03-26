@@ -2,9 +2,9 @@
 
 Hi there! Thank you for even being interested in contributing to Promptulate. As an open-source project in a rapidly developing field, we are extremely open to contributions, whether they involve new features, improved infrastructure, better documentation, or bug fixes.
 
-## Guidelines
+## 1. Guidelines
 
-### 👩‍💻 Contributing Code
+### 👩‍💻 1.1 Contributing Code
 
 To contribute to this project, please follow the ["fork and pull request"](https://docs.github.com/en/get-started/quickstart/contributing-to-projects) workflow.
 Please do not try to push directly to this repo unless you are a maintainer.
@@ -28,7 +28,7 @@ It's essential that we maintain great documentation and testing. If you:
 We are a small, progress-oriented team. If there's something you'd like to add or change, opening a pull request is the
 best way to get our attention.
 
-### 🚩GitHub Issues
+### 🚩 1.2 GitHub Issues
 
 Our [issues](https://github.com/Undertone0809/promptulate/issues) page is kept up to date with bugs, improvements, and feature requests.
 
@@ -43,7 +43,7 @@ We will try to keep these issues as up-to-date as possible, though
 with the rapid rate of development in this field some may get out of date.
 If you notice this happening, please let us know.
 
-### 🙋Getting Help
+### 🙋 1.3 Getting Help
 
 Our goal is to have the simplest developer setup possible. Should you experience any difficulty getting setup, please
 contact a maintainer! Not only do we want to help get you unblocked, but we also want to make sure that the process is
@@ -53,7 +53,7 @@ In a similar vein, we do enforce certain linting, formatting, and documentation 
 If you are finding these difficult (or even just annoying) to work with, feel free to contact a maintainer for help -
 we do not want these to get in the way of getting good code into the codebase.
 
-## 🚀 Quick Start
+## 🚀 2. Quick Start
 
 This quick start guide explains how to run the repository locally. Before quick start, there are some concepts you need to know.
 
@@ -67,7 +67,7 @@ This quick start guide explains how to run the repository locally. Before quick 
 
 **GitHub Actions**: This project use GitHub Actions to check the code. When you create a PR, promptulate will start a GitHub action to check the code. Make sure that the code can pass the check before you create the PR. 
 
-### Build development environment
+### 2.1 Build development environment
 
 **Basic Environment**
 - Python >= 3.8
@@ -101,7 +101,7 @@ pip install poetry
 make install
 ```
 
-If you need to run integration tests, you need to install by the following commend:
+Integrated test contains some third-party packages. If you need to run integration tests, you need to install by the following commend:
 
 ```bash
 pip install poetry
@@ -110,7 +110,7 @@ make install-integration
 
 Here, we have finished the installation of the development environment. 
 
-## Development and push code
+### 2.2 Development and push code
 
 When you create a PR, promptulate will start a GitHub action to check the code. Make sure that the code can pass the check before you create the PR. If you want to develop and push code, you need to follow the following steps:
 
@@ -129,11 +129,17 @@ make lint
 make formatting
 ```
 
+You can run the `make test` command to run the unit test. If you add new code, you need to add the corresponding unit test in `tests/`.
+
+After that, you should add corresponding test file directory in `Makefile`.
+
+![img.png](../images/add_test_file_in_makefile.png)
+
 3. Commit your code, create the PR after passing the code check
 
 Any question, please contact us or create an [issue](https://github.com/Undertone0809/promptulate/issues).
 
-## Edit the documentation
+### 2.3 Edit the documentation
 
 This project utilizes [docsify](https://docsify.js.org/#/) to build documentation. 
 
@@ -144,3 +150,5 @@ If you want to edit the documentation, you can edit `/docs` directory. After tha
 npm i -g docsify-cli
 make start-docs
 ```
+
+When you add a new feature, you are recommended to add a demo notebook in `example/`. Moreover, you can add corresponding documentation in `docs/`.
