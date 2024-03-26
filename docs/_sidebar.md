@@ -13,6 +13,7 @@
     - [:green_book: Erniebot 百度文心](modules/llm/erniebot.md#百度文心erniebot)
     - [:blue_book: GLM 智谱AI](modules/llm/zhipu.md#智谱系列模型)
   - [:robot: Agent](modules/agent.md#agent)
+    - [:alien: Assistant Agent](modules/agents/assistant_agent_usage.md#assistant-agent)
   - [:toolbox: Tool](modules/tools/index#Tool)
     - [🧰 Custom Tool](modules/tools/custom_tool_usage.md#custom-tool)
     - [🌟 LangChain Tool Usage](modules/tools/langchain_tool_usage.md#langchain-tool-usage)

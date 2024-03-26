@@ -22,6 +22,8 @@ class HookTable:
     ON_TOOL_RESULT = ("Tool", "on_tool_result")
 
     ON_AGENT_CREATE = ("Agent", "on_agent_create")
+    ON_AGENT_PLAN = ("Agent", "on_agent_plan")
+    ON_AGENT_REVISE_PLAN = ("Agent", "on_agent_revise_plan")
     ON_AGENT_START = ("Agent", "on_agent_start")
     ON_AGENT_ACTION = ("Agent", "on_agent_action")
     ON_AGENT_OBSERVATION = ("Agent", "on_agent_observation")
@@ -114,6 +116,20 @@ class AgentHookMixin:
     def on_agent_start(hook_type: HOOK_TYPE):
         def decorator(fn):
             return _hook_decorator(HookTable.ON_AGENT_START, hook_type, fn)
+
+        return decorator
+
+    @staticmethod
+    def on_agent_plan(hook_type: HOOK_TYPE):
+        def decorator(fn):
+            return _hook_decorator(HookTable.ON_AGENT_PLAN, hook_type, fn)
+
+        return decorator
+
+    @staticmethod
+    def on_agent_revise_plan(hook_type: HOOK_TYPE):
+        def decorator(fn):
+            return _hook_decorator(HookTable.ON_AGENT_REVISE_PLAN, hook_type, fn)
 
         return decorator
 

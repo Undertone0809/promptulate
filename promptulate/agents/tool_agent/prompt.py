@@ -78,7 +78,7 @@ in the one of the following two formats:
 "self_criticism":"Constructive self-criticism of the thought",
 "action": {
     "name": "finish",
-    "args": {"content": "Sorry, I cannot answer your query."}
+    "args": {"content": "Sorry, I cannot answer your query, because (Summary all the upper steps, and explain)"}
     }
 }
 ```

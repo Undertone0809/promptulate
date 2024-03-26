@@ -2,10 +2,11 @@ SHELL := /usr/bin/env bash
 OS := $(shell python -c "import sys; print(sys.platform)")
 
 # all test files define here
-DEV_TEST_TOOL_FILES := ./tests/tools/test_human_feedback_tool.py ./tests/tools/test_calculator.py ./tests/tools/test_python_repl_tools.py ./tests/tools/test_sleep_tool.py ./tests/tools/test_arxiv_tools.py
+DEV_TEST_TOOL_FILES := ./tests/tools/test_human_feedback_tool.py ./tests/tools/test_calculator.py ./tests/tools/test_python_repl_tools.py ./tests/tools/test_sleep_tool.py ./tests/tools/test_arxiv_tools.py ./tests/tools/test_tool_manager.py
 DEV_TEST_HOOK_FILES := ./tests/hook/test_llm.py ./tests/hook/test_tool_hook.py
 DEV_TEST_LLM_FILES := ./tests/llms/test_openai.py
-DEV_TEST_FILES := $(DEV_TEST_TOOL_FILES) $(DEV_TEST_HOOK_FILES) $(DEV_TEST_LLM_FILES) ./tests/test_chat.py ./tests/output_formatter ./tests/test_import.py ./tests/utils/test_string_template.py
+DEV_TEST_AGENT_FILES := ./tests/agents/test_tool_agent.py ./tests/agents/test_assistant_agent.py
+DEV_TEST_FILES := $(DEV_TEST_TOOL_FILES) $(DEV_TEST_HOOK_FILES) $(DEV_TEST_LLM_FILES) $(DEV_TEST_AGENT_FILES) ./tests/test_chat.py ./tests/output_formatter ./tests/test_import.py ./tests/utils/test_string_template.py
 
 ifeq ($(OS),win32)
 	PYTHONPATH := $(shell python -c "import os; print(os.getcwd())")
@@ -67,10 +68,12 @@ lint: check-codestyle test
 # If there are any notebook will be changed, then the notebook will be converted to markdown and pushed to the repo.
 .PHONY: build-docs
 build-docs:
-	jupyter nbconvert ./example/chat_usage.ipynb --to markdown --output-dir ./docs/uses_cases/
+	jupyter nbconvert ./example/chat_usage.ipynb --to markdown --output-dir ./docs/use_cases/
 	jupyter nbconvert ./example/tools/custom_tool_usage.ipynb --to markdown --output-dir ./docs/modules/tools
 	jupyter nbconvert ./example/llm/custom_llm.ipynb --to markdown --output-dir ./docs/modules/llm
 	jupyter nbconvert ./example/tools/langchain_tool_usage.ipynb --to markdown --output-dir ./docs/modules/tools
+		jupyter nbconvert ./example/agent/assistant_agent_usage.ipynb --to markdown --output-dir ./docs/modules/agents
+
 
 .PHONY: start-docs
 start-docs:
