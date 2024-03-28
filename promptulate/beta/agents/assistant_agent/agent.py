@@ -8,9 +8,7 @@ from promptulate.agents.base import BaseAgent
 from promptulate.agents.tool_agent import ToolAgent
 from promptulate.agents.tool_agent.agent import ActionResponse
 from promptulate.beta.agents.assistant_agent import operations
-from promptulate.beta.agents.assistant_agent.schema import (
-    Plan,
-)
+from promptulate.beta.agents.assistant_agent.schema import Plan
 from promptulate.hook import Hook, HookTable
 from promptulate.llms.base import BaseLLM
 from promptulate.schema import TOOL_TYPES
@@ -39,6 +37,7 @@ class AssistantAgent(BaseAgent):
         *,
         llm: BaseLLM,
         tools: Optional[List[TOOL_TYPES]] = None,
+        max_iterations: Optional[int] = 20,
         **kwargs,
     ):
         super().__init__(agent_type="Assistant Agent", **kwargs)
@@ -52,6 +51,7 @@ class AssistantAgent(BaseAgent):
             self.task_handler, self.step_handler, self.result_handler
         )
         self.current_task_id: Optional[str] = None
+        self.max_iterations: int = max_iterations
 
         logger.info("Assistant Agent initialized.")
 
@@ -209,7 +209,7 @@ class AssistantAgent(BaseAgent):
             raise Exception("No task prompt")
 
         logger.info(
-            f"[Assistant Agent] Task received. Creating Plan step, task input: {task.input}"  # noqa
+            f"[Assistant Agent] Task received. Creating Plan step, task input: {task.input}" # noqa
         )
         self.current_task_id = task.task_id
         self.uacp_agent.db.create_step(
@@ -225,6 +225,11 @@ class AssistantAgent(BaseAgent):
             StepTypes.EXECUTE: self.execute,
             StepTypes.REVISE: self.revise,
         }
+
+        if len(self.current_task.steps) > self.max_iterations:
+            final_output: str = self.current_task.steps[-1].output
+            step.output = f"Task has too many steps. Aborting. Recently step output: {final_output}" # noqa
+            return step
 
         if step.name not in step_map:
             raise ValueError(f"Step name {step.name} not found in step mapping.")
