@@ -216,7 +216,7 @@ pne 框架的设计原则包括：模块化、可扩展性、互操作性、鲁�
 欢迎加入群聊一起交流讨论 LLM & AI Agent 相关的话题，群里会不定期进行技术分享，链接过期了可以 issue 或 email 提醒一下作者。
 
 <div style="width: 250px;margin: 0 auto;">
-    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20240331034649.png"/>
+    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20240331035352.png"/>
 </div>
 
 For more information please contact: [zeeland4work@gmail.com](zeeland4work@gmail.com)

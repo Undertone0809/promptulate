@@ -1,6 +1,6 @@
 # 快速开始
 
-通过该部分教学，你可以快速对 promptulate 有一个整体的认知，了解一些常用模块的基本使用方式，在阅读完该部分之后，你可以继续阅读 [User Cases](modules/usercases/intro.md#user-cases) 来了解 promptulate 的一些最佳实践，在遇到问题的时候，可以查看每个模块的具体使用方式，也欢迎你在 [issue](https://github.com/Undertone0809/promptulate/issues) 中为 promptulate 提供更好的建议。
+通过该部分教学，你可以快速对 promptulate 有一个整体的认知，了解一些常用模块的基本使用方式，在阅读完该部分之后，你可以继续阅读 [User Cases](modules/usercases/intro.md#user-cases) 和 [example](https://github.com/Undertone0809/promptulate/tree/main/example) 来了解 promptulate 的一些最佳实践，在遇到问题的时候，可以查看每个模块的具体使用方式，也欢迎你在 [issue](https://github.com/Undertone0809/promptulate/issues) 中为 promptulate 提供更好的建议。
 
 ## 安装最新版
 
