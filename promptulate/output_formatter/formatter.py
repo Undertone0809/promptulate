@@ -1,15 +1,15 @@
 import json
 import re
-from typing import Any, Dict, List, TypeVar, Union
+from typing import Any, Dict, List, Optional, Type, TypeVar, Union
 
 from promptulate.error import OutputParserError
 from promptulate.output_formatter.prompt import OUTPUT_FORMAT
-from promptulate.pydantic_v1 import BaseModel
+from promptulate.pydantic_v1 import PYDANTIC_V2, BaseModel
 
 T = TypeVar("T", bound=BaseModel)
 
 
-def _get_schema(pydantic_obj: type(BaseModel)) -> Dict:
+def _get_schema(pydantic_obj: Type[BaseModel]) -> dict:
     """Get reduced schema from pydantic object.
 
     Args:
@@ -20,7 +20,12 @@ def _get_schema(pydantic_obj: type(BaseModel)) -> Dict:
     """
 
     # Remove useless fields.
-    reduced_schema = pydantic_obj.schema()
+    # Compatibility with Pydantic v2 model_json_schema method.
+    if hasattr(pydantic_obj, "model_json_schema"):
+        return pydantic_obj.model_json_schema()
+    else:
+        reduced_schema = pydantic_obj.schema()
+
     if "title" in reduced_schema:
         del reduced_schema["title"]
     if "type" in reduced_schema:
@@ -40,7 +45,12 @@ class OutputFormatter:
     result of a Pydantic object.
     """
 
-    def __init__(self, pydantic_obj: type(BaseModel), examples: List[BaseModel] = None):
+    def __init__(
+        self,
+        pydantic_obj: Type[BaseModel],
+        examples: Optional[List[BaseModel]] = None,
+        **kwargs,
+    ):
         """
         Initialize the OutputFormatter class.
 
@@ -48,13 +58,10 @@ class OutputFormatter:
             pydantic_obj (type(BaseModel)): The Pydantic object to format.
             examples (List[BaseModel], optional): Examples of the Pydantic object.
         """
-        if not isinstance(pydantic_obj, type(BaseModel)):
-            raise ValueError(
-                f"pydantic_obj must be a Pydantic object. Got: {pydantic_obj}"
-            )
+        super().__init__(**kwargs)
 
-        self.pydantic_obj = pydantic_obj
-        self.examples = examples
+        self.pydantic_obj: Type[BaseModel] = pydantic_obj
+        self.examples: Optional[List[BaseModel]] = examples
 
     def get_formatted_instructions(self) -> str:
         return get_formatted_instructions(self.pydantic_obj, self.examples)
@@ -64,7 +71,7 @@ class OutputFormatter:
 
 
 def get_formatted_instructions(
-    json_schema: Union[type(BaseModel), Dict[str, Any]],
+    json_schema: Union[Type[BaseModel], Dict[str, Any]],
     examples: List[BaseModel] = None,
 ) -> str:
     """
@@ -80,8 +87,8 @@ def get_formatted_instructions(
         str: The formatted instructions.
     """
     # If a Pydantic model is passed, extract the schema from it.
-    if isinstance(json_schema, type(BaseModel)):
-        json_schema = _get_schema(json_schema)
+    if not issubclass(json_schema, dict):
+        json_schema: dict = _get_schema(json_schema)
 
     # Ensure json with double quotes.
     schema_str = json.dumps(json_schema)
@@ -116,7 +123,13 @@ def formatting_result(pydantic_obj: type(BaseModel), llm_output: str) -> T:
         )
         json_str = match.group() if match else ""
         json_object = json.loads(json_str, strict=False)
-        return pydantic_obj.parse_obj(json_object)
+
+        # Compatibility with Pydantic v2 model_validate method.
+        if hasattr(pydantic_obj, "model_validate"):
+            return pydantic_obj.model_validate(json_object)
+        else:
+            return pydantic_obj.parse_obj(json_object)
+
     except Exception as e:
         name = pydantic_obj.__name__
         msg = f"Failed to parse {name} from completion {llm_output}. Got: {e}"
