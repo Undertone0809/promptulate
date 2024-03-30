@@ -6,20 +6,20 @@ from promptulate.output_formatter import OutputFormatter
 from promptulate.pydantic_v1 import BaseModel, Field
 
 
-class Response(BaseModel):
+class LLMResponse(BaseModel):
     provinces: List[str] = Field(description="List of provinces name")
 
 
 def main():
     llm = ChatOpenAI()
-    formatter = OutputFormatter(Response)
+    formatter = OutputFormatter(LLMResponse)
 
     prompt = (
         f"Please tell me the names of provinces in China.\n"
         f"{formatter.get_formatted_instructions()}"
     )
     llm_output = llm(prompt)
-    response: Response = formatter.formatting_result(llm_output)
+    response: LLMResponse = formatter.formatting_result(llm_output)
     print(response)
 
 

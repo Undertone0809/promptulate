@@ -13,14 +13,15 @@ __all__ = [
     "AssistantMessage",
     "MessageSet",
     "init_chat_message_history",
-    "TOOL_TYPES",
+    "ToolTypes",
+    "StreamIterator",
 ]
 
 if TYPE_CHECKING:
     from langchain.tools.base import BaseTool as LangchainBaseToolType  # noqa
     from promptulate.tools.base import BaseTool, Tool  # noqa
 
-TOOL_TYPES = Union["BaseTool", "Tool", Callable, "LangchainBaseToolType"]
+ToolTypes = Union["BaseTool", "Tool", Callable, "LangchainBaseToolType"]
 
 
 class BaseMessage(BaseModel):
@@ -178,21 +179,28 @@ class MessageSet:
     """
 
     def __init__(
-        self, messages: List[BaseMessage], conversation_id: Optional[str] = None
+        self,
+        messages: List[BaseMessage],
+        conversation_id: Optional[str] = None,
+        additional_kwargs: Optional[dict] = None,
     ):
         self.messages: List[BaseMessage] = messages
         self.conversation_id: Optional[str] = conversation_id
+        self.additional_kwargs: dict = additional_kwargs or {}
 
     @classmethod
-    def from_listdict_data(cls, value: List[Dict]) -> "MessageSet":
+    def from_listdict_data(
+        cls, value: List[Dict], additional_kwargs: Optional[dict] = None
+    ) -> "MessageSet":
         """initialize MessageSet from a List[Dict] data
 
         Args:
-            value(List[Dict]): the example is as follow:
+            value(List[Dict]): the example is as follows:
                 [
                     {"type": "user", "content": "This is a message1."},
                     {"type": "assistant", "content": "This is a message2."}
                 ]
+            additional_kwargs(Optional[dict]): additional kwargs
 
         Returns:
             initialized MessageSet
@@ -200,7 +208,7 @@ class MessageSet:
         messages: List[BaseMessage] = [
             MESSAGE_TYPE[item["role"]](content=item["content"]) for item in value
         ]
-        return cls(messages=messages)
+        return cls(messages=messages, additional_kwargs=additional_kwargs)
 
     @property
     def listdict_messages(self) -> List[Dict]:

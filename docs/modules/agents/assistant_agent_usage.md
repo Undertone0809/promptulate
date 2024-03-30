@@ -51,7 +51,7 @@ However, it is really easy to create your own tools - see documentation [here](h
 ```python
 from langchain_community.tools.tavily_search import TavilySearchResults
 
-tools = [TavilySearchResults(max_results=3)]
+tools = [TavilySearchResults(max_results=5)]
 ```
 
 ## Create the Assistant Agent
@@ -69,7 +69,7 @@ agent = AssistantAgent(tools=tools, llm=llm)
 agent.run("what is the hometown of the 2024 Australia open winner?")
 ```
 
-**output**
+**Output:**
 
 ```text
 [Agent] Assistant Agent start...

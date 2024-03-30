@@ -1,12 +1,11 @@
-import logging
 from typing import Callable, List, Optional, Tuple, Union
 
 from typing_extensions import Literal
 
 from promptulate.pydantic_v1 import BaseModel
 from promptulate.utils.core_utils import generate_unique_id
+from promptulate.utils.logger import logger
 
-logger = logging.getLogger(__name__)
 HOOK_TYPE = Literal["component", "instance"]
 # Hook component type
 COMPONENT_TYPE = Literal["Tool", "llm", "Agent"]

@@ -21,6 +21,15 @@ T = TypeVar("T", bound=BaseModel)
 
 
 def parse_content(chunk) -> (str, str):
+    """Parse the qianfan model chunk.
+
+    Args:
+        chunk: qianfan model chunk.
+
+    Returns:
+        content: The content of the chunk.
+        ret_data: The additional data of the chunk.
+    """
     content = chunk["result"]
     ret_data = chunk["body"]
     return content, ret_data
@@ -48,6 +57,7 @@ class QianFan(BaseLLM, ABC):
         )
         if not self.enable_default_system_prompt:
             preset = ""
+
         system = preset
         message_set = MessageSet(
             messages=[
@@ -55,6 +65,7 @@ class QianFan(BaseLLM, ABC):
             ]
         )
         result = self.predict(message_set, system, **self.model_config)
+
         if isinstance(result, AssistantMessage):
             return result.content
         else:
@@ -65,6 +76,7 @@ class QianFan(BaseLLM, ABC):
         prompts: MessageSet,
         system: str = "",
         return_raw_response: bool = False,
+        stream: bool = False,
         *args,
         **kwargs,
     ) -> Union[str, BaseMessage, T, List[BaseMessage], StreamIterator]:
@@ -94,6 +106,7 @@ class QianFan(BaseLLM, ABC):
             )
         os.environ["QIANFAN_ACCESS_KEY"] = pne_config.get_qianfan_ak()
         os.environ["QIANFAN_SECRET_KEY"] = pne_config.get_qianfan_sk()
+
         chat_comp = qianfan.ChatCompletion()
         response = chat_comp.do(
             model=self.model,
@@ -102,18 +115,18 @@ class QianFan(BaseLLM, ABC):
             **kwargs,
         )
         # return stream
-        if kwargs.get("stream", None):
+        if stream:
             return StreamIterator(
                 response_stream=response,
                 parse_content=parse_content,
                 return_raw_response=return_raw_response,
             )
+
+        if response.code == 200:
+            ret_data = response.body
+            logger.debug(f"[pne ernie response] {ret_data}")
+            content: str = ret_data["result"]
+            logger.debug(f"[pne ernie answer] {content}")
+            return AssistantMessage(content=content, additional_kwargs=ret_data)
         else:
-            if response.code == 200:
-                ret_data = response.body
-                logger.debug(f"[pne ernie response] {ret_data}")
-                content: str = ret_data["result"]
-                logger.debug(f"[pne ernie answer] {content}")
-                return AssistantMessage(content=content, additional_kwargs=ret_data)
-            else:
-                raise NetWorkError(str(response.code))
+            raise NetWorkError(str(response.code))

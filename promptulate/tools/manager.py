@@ -2,7 +2,7 @@ import inspect
 import json
 from typing import Any, List, Optional, Union
 
-from promptulate.schema import TOOL_TYPES
+from promptulate.schema import ToolTypes
 from promptulate.tools.base import BaseTool, Tool, ToolImpl, function_to_tool
 from promptulate.tools.langchain.tools import LangchainTool
 
@@ -31,7 +31,7 @@ def _judge_langchain_tool_and_wrap(tool: Any) -> Optional[Tool]:
         )
 
 
-def _initialize_tool(tool: TOOL_TYPES) -> Optional[Tool]:
+def _initialize_tool(tool: ToolTypes) -> Optional[Tool]:
     """Initialize the tool.
 
     Args:
@@ -54,7 +54,7 @@ def _initialize_tool(tool: TOOL_TYPES) -> Optional[Tool]:
 class ToolManager:
     """ToolManager helps Agent to manage tools"""
 
-    def __init__(self, tools: List[TOOL_TYPES]):
+    def __init__(self, tools: List[ToolTypes]):
         self.tools: List[Tool] = [
             _initialize_tool(tool)
             for tool in tools
