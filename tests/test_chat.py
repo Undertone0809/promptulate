@@ -30,28 +30,54 @@ class FakeLLM(BaseLLM):
         return AssistantMessage(content=content)
 
 
+def mock_tool():
+    """This is mock tool"""
+    return "mock tool"
+
+
 class LLMResponse(BaseModel):
     city: str = Field(description="city name")
     temperature: float = Field(description="temperature")
+
+
+def test_init():
+    llm = FakeLLM()
+
+    # stream and output_schema and not exist at the same time.
+    with pytest.raises(ValueError):
+        chat("hello", custom_llm=llm, output_schema=LLMResponse, stream=True)
+
+    # stream and tools and not exist at the same time.
+    with pytest.raises(ValueError):
+        chat("hello", custom_llm=llm, tools=[mock_tool], stream=True)
+
+    # It is not allowed to pass MessageSet or List[Dict] type messages when using tools.
+    with pytest.raises(ValueError):
+        chat(
+            MessageSet(messages=[UserMessage(content="hello")]),
+            custom_llm=llm,
+            tools=[mock_tool],
+        )
+        chat([], custom_llm=llm, tools=[mock_tool])
 
 
 def test_custom_llm_chat():
     llm = FakeLLM()
 
     # test general chat
-    answer = chat("hello", model="fake", custom_llm=llm)
+    answer = chat("hello", custom_llm=llm)
     assert answer == "fake response"
 
     # test messages is MessageSet
     messages = MessageSet(
         messages=[UserMessage(content="hello"), AssistantMessage(content="fake")]
     )
-    answer = chat(messages, model="fake", custom_llm=llm)
+    answer = chat(messages, custom_llm=llm)
     assert answer == "fake response"
 
     # test messages is list
     messages = [{"content": "Hello, how are you?", "role": "user"}]
-    answer = chat(messages, model="fake", custom_llm=llm)
+    answer = chat(messages, custom_llm=llm)
     assert answer == "fake response"
 
 
