@@ -104,8 +104,8 @@ class InMemoryTaskDB(TaskDB):
         additional_properties: Optional[Dict[str, Any]] = None,
         artifacts: Optional[List[Artifact]] = None,
     ) -> Step:
-        step_id = str(uuid.uuid4())
-        artifacts = artifacts or []
+        step_id: str = str(uuid.uuid4())
+        artifacts: List[Artifact] = artifacts or []
 
         step = Step(
             task_id=task_id,
@@ -117,7 +117,7 @@ class InMemoryTaskDB(TaskDB):
             additional_properties=additional_properties,
             artifacts=artifacts,
         )
-        logger.info(f"Create step: {step}")
+        logger.info(f"Create step: {step.json()}")
         task = self.get_task(task_id)
         task.steps.append(step)
         return step

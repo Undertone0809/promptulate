@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional, Type, TypeVar, Union
 
 from promptulate.error import OutputParserError
 from promptulate.output_formatter.prompt import OUTPUT_FORMAT
-from promptulate.pydantic_v1 import PYDANTIC_V2, BaseModel
+from promptulate.pydantic_v1 import BaseModel
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -87,7 +87,7 @@ def get_formatted_instructions(
         str: The formatted instructions.
     """
     # If a Pydantic model is passed, extract the schema from it.
-    if not issubclass(json_schema, dict):
+    if not isinstance(json_schema, dict):
         json_schema: dict = _get_schema(json_schema)
 
     # Ensure json with double quotes.

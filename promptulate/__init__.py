@@ -22,7 +22,7 @@ import warnings
 from promptulate.agents.base import BaseAgent
 from promptulate.agents.tool_agent.agent import ToolAgent
 from promptulate.agents.web_agent.agent import WebAgent
-from promptulate.chat import chat
+from promptulate.chat import AIChat, chat
 from promptulate.llms.base import BaseLLM
 from promptulate.llms.factory import LLMFactory
 from promptulate.llms.openai.openai import ChatOpenAI
@@ -52,7 +52,7 @@ _schema_fields = [
     "MessageSet",
 ]
 
-_llm_fields = ["chat", "BaseLLM", "ChatOpenAI", "LLMFactory"]
+_llm_fields = ["chat", "AIChat", "BaseLLM", "ChatOpenAI", "LLMFactory"]
 
 _tool_fields = [
     "Tool",

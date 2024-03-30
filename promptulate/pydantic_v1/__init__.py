@@ -1,6 +1,4 @@
-from importlib import metadata
-
-## Create namespaces for pydantic v1 and v2.
+# Create namespaces for pydantic v1 and v2.
 # This code must stay at the top of the file before other modules may
 # attempt to import pydantic since it adds pydantic_v1 and pydantic_v2 to sys.modules.
 #
@@ -11,11 +9,12 @@ from importlib import metadata
 #   unambiguously uses either v1 or v2 API.
 # * This change is easier to roll out and roll back.
 
+from importlib import metadata
+
 try:
     from pydantic.v1 import *  # noqa: F403
 except ImportError:
     from pydantic import *  # noqa: F403
-
 
 try:
     _PYDANTIC_MAJOR_VERSION: int = int(metadata.version("pydantic").split(".")[0])

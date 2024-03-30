@@ -49,6 +49,7 @@ class Agent:
         additional_input: Optional[dict] = None,
     ) -> Any:
         """Run the agent with the specified input and additional input.
+
         Args:
             input(Optional[str]): The input for the agent.
             additional_input: Additional input for the agent.
@@ -81,7 +82,7 @@ class Agent:
             step.status = Status.completed
 
             self.db.update_step(task.task_id, step)
-            logger.info(f"[uacp] Step {step.name}: {step.json()}")
+            logger.info(f"[uacp] Finish step, name: {step.name} data: {step.json()}")
 
             if step.is_last:
                 break

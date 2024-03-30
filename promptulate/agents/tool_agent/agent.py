@@ -9,7 +9,8 @@ from promptulate.agents.tool_agent.prompt import (
 )
 from promptulate.hook import Hook, HookTable
 from promptulate.llms.base import BaseLLM
-from promptulate.schema import TOOL_TYPES
+from promptulate.llms.openai.openai import ChatOpenAI
+from promptulate.schema import ToolTypes
 from promptulate.tools.manager import ToolManager
 from promptulate.utils.logger import logger
 from promptulate.utils.string_template import StringTemplate
@@ -49,8 +50,8 @@ class ToolAgent(BaseAgent):
     def __init__(
         self,
         *,
-        llm: BaseLLM,
-        tools: Optional[List[TOOL_TYPES]] = None,
+        llm: BaseLLM = None,
+        tools: Optional[List[ToolTypes]] = None,
         prefix_prompt_template: StringTemplate = StringTemplate(PREFIX_TEMPLATE),
         hooks: Optional[List[Callable]] = None,
         enable_role: bool = False,
@@ -67,7 +68,7 @@ class ToolAgent(BaseAgent):
             )
 
         super().__init__(hooks=hooks, agent_type="Tool Agent", _from=_from)
-        self.llm: BaseLLM = llm
+        self.llm: BaseLLM = llm or ChatOpenAI(model="gpt-4-1106-preview")
         """llm provider"""
         self.tool_manager: ToolManager = (
             tool_manager if tool_manager is not None else ToolManager(tools or [])

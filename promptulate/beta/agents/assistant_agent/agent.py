@@ -11,7 +11,7 @@ from promptulate.beta.agents.assistant_agent import operations
 from promptulate.beta.agents.assistant_agent.schema import Plan
 from promptulate.hook import Hook, HookTable
 from promptulate.llms.base import BaseLLM
-from promptulate.schema import TOOL_TYPES
+from promptulate.schema import ToolTypes
 from promptulate.tools.manager import ToolManager
 from promptulate.utils.logger import logger
 
@@ -36,7 +36,7 @@ class AssistantAgent(BaseAgent):
         self,
         *,
         llm: BaseLLM,
-        tools: Optional[List[TOOL_TYPES]] = None,
+        tools: Optional[List[ToolTypes]] = None,
         max_iterations: Optional[int] = 20,
         **kwargs,
     ):
@@ -209,7 +209,7 @@ class AssistantAgent(BaseAgent):
             raise Exception("No task prompt")
 
         logger.info(
-            f"[Assistant Agent] Task received. Creating Plan step, task input: {task.input}" # noqa
+            f"[Assistant Agent] Task received. Creating Plan step, task input: {task.input}"  # noqa
         )
         self.current_task_id = task.task_id
         self.uacp_agent.db.create_step(
@@ -228,7 +228,7 @@ class AssistantAgent(BaseAgent):
 
         if len(self.current_task.steps) > self.max_iterations:
             final_output: str = self.current_task.steps[-1].output
-            step.output = f"Task has too many steps. Aborting. Recently step output: {final_output}" # noqa
+            step.output = f"Task has too many steps. Aborting. Recently step output: {final_output}"  # noqa
             return step
 
         if step.name not in step_map:

@@ -101,14 +101,11 @@ class ErnieBot(BaseLLM, ABC):
             json=body,
             proxies=pne_config.proxies,
         )
-        logger.debug(f"[pne ernie url] {url}")
-        logger.debug(f"[pne ernie body] {body}")
         if response.status_code == 200:
             # todo enable stream mode
             # for chunk in response.iter_content(chunk_size=None):
             #     logger.debug(chunk)
             ret_data = response.json()
-            logger.debug(f"[pne ernie response] {json.dumps(ret_data)}")
 
             if ret_data.get("error_code", None):
                 raise LLMError(ret_data)
