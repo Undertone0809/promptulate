@@ -234,7 +234,6 @@ pip install poetry
 make install
 ```
 
-
 本项目使用配备代码语法检查工具，如果你想提交 pr，则需要在 commit 之前运行 `make polish-codestyle` 进行代码规范格式化，并且运行 `make lint` 通过语法与单元测试的检查。
 
 ## 更多

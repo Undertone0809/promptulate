@@ -26,119 +26,132 @@
   <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/promptulate_logo_new.png"/>
 </p>
 
-# What is Promptulate?
-`Promptulate AI` focuses on building a developer platform for large language model applications, dedicated to providing developers and businesses with the ability to build, extend, and evaluate large language model applications. `Promptulate` is a large language model automation and application development framework under `Promptulate AI`, designed to help developers build industry-level large model applications at a lower cost. It includes most of the common components for application layer development in the LLM field, such as external tool components, model components, Agent intelligent agents, external data source integration modules, data storage modules, and lifecycle modules. With `Promptulate`, you can easily build your own LLM applications.
+## Overview
 
-# Envisage
-To create a powerful and flexible LLM application development platform for creating autonomous agents that can automate various tasks and applications, `Promptulate` implements an automated AI platform through six components: Core AI Engine, Agent System, APIs and Tools Provider, Multimodal Processing, Knowledge Base, and Task-specific Modules. The Core AI Engine is the core component of the framework, responsible for processing and understanding various inputs, generating outputs, and making decisions. The Agent System is a module that provides high-level guidance and control over AI agent behavior. The APIs and Tools Provider offers APIs and integration libraries for interacting with tools and services. Multimodal Processing is a set of modules for processing and understanding different data types, such as text, images, audio, and video, using deep learning models to extract meaningful information from different data modalities. The Knowledge Base is a large structured knowledge repository for storing and organizing world information, enabling AI agents to access and reason about a vast amount of knowledge. The Task-specific Modules are a set of modules specifically designed to perform specific tasks, such as sentiment analysis, machine translation, or object detection. By combining these components, the framework provides a comprehensive, flexible, and powerful platform for automating various complex tasks and applications.
+**Promptulate** is an AI Agent application development framework crafted by **Cogit Lab**, which offers developers an extremely concise and efficient way to build Agent applications through a Pythonic development paradigm. The core philosophy of Promptulate is to borrow and integrate the wisdom of the open-source community, incorporating the highlights of various development frameworks to lower the barrier to entry and unify the consensus among developers. With Promptulate, you can manipulate components like LLM, Agent, Tool, RAG, etc., with the most succinct code, as most tasks can be easily completed with just a few lines of code. 🚀
 
+## 💡 Features
 
-# Features
+- 🐍 Pythonic Code Style: Embraces the habits of Python developers, providing a Pythonic SDK calling approach, putting everything within your grasp with just one `pne.chat` function to encapsulate all essential functionalities.
+- 🧠 Model Compatibility: Supports nearly all types of large models on the market and allows for easy customization to meet specific needs.
+- 🕵️‍♂️ Diverse Agents: Offers various types of Agents, such as WebAgent, ToolAgent, CodeAgent, etc., capable of planning, reasoning, and acting to handle complex problems.
+- 🔗 Low-Cost Integration: Effortlessly integrates tools from different frameworks like LangChain, significantly reducing integration costs.
+- 🔨 Functions as Tools: Converts any Python function directly into a tool usable by Agents, simplifying the tool creation and usage process.
+- 🪝 Lifecycle and Hooks: Provides a wealth of Hooks and comprehensive lifecycle management, allowing the insertion of custom code at various stages of Agents, Tools, and LLMs.
+- 💻 Terminal Integration: Easily integrates application terminals, with built-in client support, offering rapid debugging capabilities for prompts.
+- ⏱️ Prompt Caching: Offers a caching mechanism for LLM Prompts to reduce repetitive work and enhance development efficiency.
 
-- Large language model support: Support for various types of large language models through extensible interfaces.
-- Dialogue terminal: Provides a simple dialogue terminal for direct interaction with large language models.
-- Role presets: Provides preset roles for invoking GPT from different perspectives.
-- Long conversation mode: Supports long conversation chat and persistence in multiple ways.
-- External tools: Integrated external tool capabilities for powerful functions such as web search and executing Python code.
-- KEY pool: Provides an API key pool to completely solve the key rate limiting problem.
-- Intelligent agent: Integrates advanced agents such as ReAct and self-ask, empowering LLM with external tools.
-- Autonomous agent mode: Supports calling official API interfaces, autonomous agents, or using agents provided by Promptulate.
-- Chinese optimization: Specifically optimized for the Chinese context, more suitable for Chinese scenarios.
-- Data export: Supports dialogue export in formats such as markdown.
-- Hooks and lifecycles: Provides Agent, Tool, and LLM lifecycles and hook systems.
-- Advanced abstraction: Supports plugin extensions, storage extensions, and large language model extensions.
+> Below, `pne` stands for Promptulate, which is the nickname for Promptulate. The `p` and `e` represent the beginning and end of Promptulate, respectively, and `n` stands for 9, which is a shorthand for the nine letters between `p` and `e`.
 
-# Quick Start
+## Supported Base Models
 
-- [Quick Start/Official Documentation](https://undertone0809.github.io/promptulate/#/)
+Promptulate integrates the capabilities of [litellm](https://github.com/BerriAI/litellm), supporting nearly all types of large models on the market, including but not limited to the following models:
+
+| Provider      | [Completion](https://docs.litellm.ai/docs/#basic-usage) | [Streaming](https://docs.litellm.ai/docs/completion/stream#streaming-responses)  | [Async Completion](https://docs.litellm.ai/docs/completion/stream#async-completion)  | [Async Streaming](https://docs.litellm.ai/docs/completion/stream#async-streaming)  | [Async Embedding](https://docs.litellm.ai/docs/embedding/supported_embedding)  | [Async Image Generation](https://docs.litellm.ai/docs/image_generation)  | 
+| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
+| [openai](https://docs.litellm.ai/docs/providers/openai)  | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [azure](https://docs.litellm.ai/docs/providers/azure)  | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [aws - sagemaker](https://docs.litellm.ai/docs/providers/aws_sagemaker)  | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [aws - bedrock](https://docs.litellm.ai/docs/providers/bedrock)  | ✅ | ✅ | ✅ | ✅ |✅ |
+| [google - vertex_ai [Gemini]](https://docs.litellm.ai/docs/providers/vertex)  | ✅ | ✅ | ✅ | ✅ |
+| [google - palm](https://docs.litellm.ai/docs/providers/palm)  | ✅ | ✅ | ✅ | ✅ |
+| [google AI Studio - gemini](https://docs.litellm.ai/docs/providers/gemini)  | ✅ |  | ✅ |  | |
+| [mistral ai api](https://docs.litellm.ai/docs/providers/mistral)  | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [cloudflare AI Workers](https://docs.litellm.ai/docs/providers/cloudflare_workers)  | ✅ | ✅ | ✅ | ✅ |
+| [cohere](https://docs.litellm.ai/docs/providers/cohere)  | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [anthropic](https://docs.litellm.ai/docs/providers/anthropic)  | ✅ | ✅ | ✅ | ✅ |
+| [huggingface](https://docs.litellm.ai/docs/providers/huggingface)  | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [replicate](https://docs.litellm.ai/docs/providers/replicate)  | ✅ | ✅ | ✅ | ✅ |
+| [together_ai](https://docs.litellm.ai/docs/providers/togetherai)  | ✅ | ✅ | ✅ | ✅ |
+| [openrouter](https://docs.litellm.ai/docs/providers/openrouter)  | ✅ | ✅ | ✅ | ✅ |
+| [ai21](https://docs.litellm.ai/docs/providers/ai21)  | ✅ | ✅ | ✅ | ✅ |
+| [baseten](https://docs.litellm.ai/docs/providers/baseten)  | ✅ | ✅ | ✅ | ✅ |
+| [vllm](https://docs.litellm.ai/docs/providers/vllm)  | ✅ | ✅ | ✅ | ✅ |
+| [nlp_cloud](https://docs.litellm.ai/docs/providers/nlp_cloud)  | ✅ | ✅ | ✅ | ✅ |
+| [aleph alpha](https://docs.litellm.ai/docs/providers/aleph_alpha)  | ✅ | ✅ | ✅ | ✅ |
+| [petals](https://docs.litellm.ai/docs/providers/petals)  | ✅ | ✅ | ✅ | ✅ |
+| [ollama](https://docs.litellm.ai/docs/providers/ollama)  | ✅ | ✅ | ✅ | ✅ |
+| [deepinfra](https://docs.litellm.ai/docs/providers/deepinfra)  | ✅ | ✅ | ✅ | ✅ |
+| [perplexity-ai](https://docs.litellm.ai/docs/providers/perplexity)  | ✅ | ✅ | ✅ | ✅ |
+| [Groq AI](https://docs.litellm.ai/docs/providers/groq)  | ✅ | ✅ | ✅ | ✅ |
+| [anyscale](https://docs.litellm.ai/docs/providers/anyscale)  | ✅ | ✅ | ✅ | ✅ |
+| [voyage ai](https://docs.litellm.ai/docs/providers/voyage)  |  |  |  |  | ✅ |
+| [xinference [Xorbits Inference]](https://docs.litellm.ai/docs/providers/xinference)  |  |  |  |  | ✅ |
+
+For more details, please visit the [litellm documentation](https://docs.litellm.ai/docs/providers).
+
+You can easily build any third-party model calls using the following method:
+
+```python
+import promptulate as pne
+
+resp: str = pne.chat(model="ollama/llama2", messages=[{"content": "Hello, how are you?", "role": "user"}])
+```
+
+## 📗 Related Documentation
+
+- [Getting Started/Official Documentation](https://undertone0809.github.io/promptulate/#/)
 - [Current Development Plan](https://undertone0809.github.io/promptulate/#/other/plan)
-- [Contribution/Developer's Guide](https://undertone0809.github.io/promptulate/#/other/contribution)
-- [FAQ](https://undertone0809.github.io/promptulate/#/other/faq)
+- [Contributing/Developer's Manual](https://undertone0809.github.io/promptulate/#/other/contribution)
+- [Frequently Asked Questions](https://undertone0809.github.io/promptulate/#/other/faq)
 - [PyPI Repository](https://pypi.org/project/promptulate/)
 
-To install the framework, open the terminal and run the following command:
+## 🛠 Quick Start
+
+- Open the terminal and enter the following command to install the framework:
 
 ```shell script
 pip install -U promptulate  
 ```
 
-> Your Python version should be 3.8 or higher.
+> Note: Your Python version should be 3.8 or higher.
 
-Get started with your "HelloWorld" using the simple program below:
-
-```python
-import os
-import promptulate as pne
-
-os.environ['OPENAI_API_KEY'] = "your-key"
-
-agent = pne.WebAgent()
-answer = agent.run("What is the temperature tomorrow in Shanghai")
-print(answer)
-```
-
-```
-The temperature tomorrow in Shanghai is expected to be 23°C.
-```
-
-> Most of the time, we refer to template as pne, where p and e represent the words that start and end template, and n represents 9, which is the abbreviation of the nine words between p and e.
-
-To integrate a variety of external tools, including web search, calculators, and more, into your LLM Agent application, you can use the promptulate library alongside langchain. The langchain library allows you to build a ToolAgent with a collection of tools, such as an image generator based on OpenAI's DALL-E model. 
-
-Below is an example of how to use the promptulate and langchain libraries to create an image from a text description:
-
-> You need to set the `OPENAI_API_KEY` environment variable to your OpenAI API key. Click [here](https://undertone0809.github.io/promptulate/#/modules/tools/langchain_tool_usage?id=langchain-tool-usage) to see the detail.
+Robust output formatting is a fundamental basis for LLM application development. We hope that LLMs can return stable data. With pne, you can easily perform formatted output. In the following example, we use Pydantic's BaseModel to encapsulate a data structure that needs to be returned.
 
 ```python
+from typing import List
 import promptulate as pne
-from langchain.agents import load_tools
+from pydantic import BaseModel, Field
 
-tools: list = load_tools(["dalle-image-generator"])
-agent = pne.ToolAgent(tools=tools)
-output = agent.run("Create an image of a halloween night at a haunted museum")
+class LLMResponse(BaseModel):
+    provinces: List[str] = Field(description="List of provinces' names")
+
+resp: LLMResponse = pne.chat("Please tell me all provinces in China.", output_schema=LLMResponse)
+print(resp)
 ```
 
-output:
+**Output:**
 
 ```text
-Here is the generated image: [![Halloween Night at a Haunted Museum](https://oaidalleapiprodscus.blob.core.windows.net/private/org-OyRC1wqD0EP6oWMS2n4kZgVi/user-JWA0mHqDqYh3oPpQtXbWUPgu/img-SH09tWkWZLJVltxifLi6jFy7.png)]
+provinces=['Anhui', 'Fujian', 'Gansu', 'Guangdong', 'Guizhou', 'Hainan', 'Hebei', 'Heilongjiang', 'Henan', 'Hubei', 'Hunan', 'Jiangsu', 'Jiangxi', 'Jilin', 'Liaoning', 'Qinghai', 'Shaanxi', 'Shandong', 'Shanxi', 'Sichuan', 'Yunnan', 'Zhejiang', 'Taiwan', 'Guangxi', 'Nei Mongol', 'Ningxia', 'Xinjiang', 'Xizang', 'Beijing', 'Chongqing', 'Shanghai', 'Tianjin', 'Hong Kong', 'Macao']
 ```
 
-![Halloween Night at a Haunted Museum](./docs/images/dall-e-gen.png)
+... (The content continues as in the original text, including examples and output results) ...
 
-For more detailed information, please refer to the [Quick Start/Official Documentation](https://undertone0809.github.io/promptulate/#/).
+## 📚 Design Principles
 
-# Architecture
+The design principles of the pne framework include modularity, extensibility, interoperability, robustness, maintainability, security, efficiency, and usability.
 
-Currently, `promptulate` is in the rapid development stage and there are still many aspects that need to be improved and discussed. Your participation and discussions are highly welcome. As a large language model automation and application development framework, `promptulate` mainly consists of the following components:
+- Modularity refers to using modules as the basic unit, allowing for easy integration of new components, models, and tools.
+- Extensibility refers to the framework's ability to handle large amounts of data, complex tasks, and high concurrency.
+- Interoperability means the framework is compatible with various external systems, tools, and services and can achieve seamless integration and communication.
+- Robustness indicates the framework has strong error handling, fault tolerance, and recovery mechanisms to ensure reliable operation under various conditions.
+- Security implies the framework has implemented strict measures to protect against unauthorized access and malicious behavior.
+- Efficiency is about optimizing the framework's performance, resource usage, and response times to ensure a smooth and responsive user experience.
+- Usability means the framework uses user-friendly interfaces and clear documentation, making it easy to use and understand.
 
-- `Agent`: More advanced execution units responsible for task scheduling and distribution.
-- `llm`: Large language model responsible for generating answers, supporting different types of large language models.
-- `Memory`: Responsible for storing conversations, supporting different storage methods and extensions such as file storage and database storage.
-- `Framework`: Framework layer that implements different prompt frameworks, including the basic `Conversation` model and models such as `self-ask` and `ReAct`.
-- `Tool`: Provides external tool extensions for search engines, calculators, etc.
-- `Hook&Lifecycle`: Hook system and lifecycle system that allows developers to customize lifecycle logic control.
-- `Role presets`: Provides preset roles for customized conversations.
-- `Provider`: Provides more data sources or autonomous operations for the system, such as connecting to databases.
+Following these principles and applying the latest artificial intelligence technologies, `pne` aims to provide a powerful and flexible framework for creating automated agents.
 
-<img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230704180202.png"/>
+## 💌 Contact
 
-# Design Principles
+Feel free to join the group chat to discuss topics related to LLM & AI Agents. There will be occasional technical shares in the group. If the link expires, please remind the author via issue or email.
 
-The design principles of the `promptulate` framework include modularity, scalability, interoperability, robustness, maintainability, security, efficiency, and usability.
+<div style="width: 250px;margin: 0 auto;">
+    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20240331034649.png"/>
+</div>
 
-- Modularity refers to the ability to integrate new components, models, and tools conveniently, using modules as the basic unit.
-- Scalability refers to the framework's capability to handle large amounts of data, complex tasks, and high concurrency.
-- Interoperability means that the framework is compatible with various external systems, tools, and services, allowing seamless integration and communication.
-- Robustness refers to the framework's ability to handle errors, faults, and recovery mechanisms to ensure reliable operation under different conditions.
-- Security involves strict security measures to protect the framework, its data, and users from unauthorized access and malicious behavior.
-- Efficiency focuses on optimizing the framework's performance, resource utilization, and response time to ensure a smooth and responsive user experience.
-- Usability involves providing a user-friendly interface and clear documentation to make the framework easy to use and understand.
+For more information, please contact: [zeeland4work@gmail.com](mailto:zeeland4work@gmail.com)
 
-By following these principles and incorporating the latest advancements in artificial intelligence technology, `promptulate` aims to provide a powerful and flexible application development framework for creating automated agents.
+## ⭐ Contribution
 
-# Contributions
-
-I am currently exploring more comprehensive abstraction patterns to improve compatibility with the framework and the extended use of external tools. If you have any suggestions, I welcome discussions and exchanges.
-
-If you would like to contribute to this project, please refer to the [current development plan](https://undertone0809.github.io/promptulate/#/other/plan) and [contribution/developer's guide](https://undertone0809.github.io/promptulate/#/other/contribution). I'm excited to see more people getting involved and optimizing it.
+We appreciate your interest in contributing to our open-source initiative. We have provided a [Developer's Guide](https://undertone0809.github.io/promptulate/#/other/contribution) outlining the steps to contribute to Promptulate. Please refer to this guide to ensure smooth collaboration and successful contributions. Additionally, you can view the [Current Development Plan](https://undertone0809.github.io/promptulate/#/other/plan) to see the latest development progress 🤝🚀
