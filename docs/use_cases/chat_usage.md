@@ -93,7 +93,7 @@ messages = [
 response = pne.chat(
     messages=messages,
     model="huggingface/WizardLM/WizardCoder-Python-34B-V1.0",
-    api_base="https://my-endpoint.huggingface.cloud"
+    model_config={"api_base": "https://my-endpoint.huggingface.cloud"}
 )
 print(response)
 ```
