@@ -195,7 +195,7 @@ Following these principles and applying the latest artificial intelligence techn
 Feel free to join the group chat to discuss topics related to LLM & AI Agents. There will be occasional technical shares in the group. If the link expires, please remind the author via issue or email.
 
 <div style="width: 250px;margin: 0 auto;">
-    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20240331035352.png"/>
+    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/pne_group.png"/>
 </div>
 
 For more information, please contact: [zeeland4work@gmail.com](mailto:zeeland4work@gmail.com)
