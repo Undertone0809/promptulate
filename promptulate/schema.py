@@ -13,15 +13,8 @@ __all__ = [
     "AssistantMessage",
     "MessageSet",
     "init_chat_message_history",
-    "ToolTypes",
     "StreamIterator",
 ]
-
-if TYPE_CHECKING:
-    from langchain.tools.base import BaseTool as LangchainBaseToolType  # noqa
-    from promptulate.tools.base import BaseTool, Tool  # noqa
-
-ToolTypes = Union["BaseTool", "Tool", Callable, "LangchainBaseToolType"]
 
 
 class BaseMessage(BaseModel):
