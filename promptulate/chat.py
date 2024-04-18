@@ -14,9 +14,8 @@ from promptulate.schema import (
     BaseMessage,
     MessageSet,
     StreamIterator,
-    ToolTypes,
 )
-from promptulate.tools.base import BaseTool
+from promptulate.tools.base import BaseTool, ToolTypes
 from promptulate.utils.logger import logger
 
 T = TypeVar("T", bound=BaseModel)

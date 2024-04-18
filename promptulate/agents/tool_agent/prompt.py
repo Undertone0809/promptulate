@@ -41,8 +41,7 @@ The output should be formatted as a JSON instance that conforms to the format be
 
 ```json
 {
-"thought": "The thought of what to do and why.",
-"self_criticism":"Constructive self-criticism of the thought",
+"analysis": "The thought of what to do and why.",
 "action": # the action to take, must be one of provided tools
     {
     "name": "tool name",
@@ -61,10 +60,11 @@ You should keep repeating the above format until you have enough information
 to answer the question without using any more tools. At that point, you MUST respond
 in the one of the following two formats:
 
+- If you can answer the question:
+
 ```json
 {
-"thought": "The thought of what to do and why.",
-"self_criticism":"Constructive self-criticism of the thought",
+"analysis": "The thought of what to do and why.",
 "action": {
     "name": "finish",
     "args": {"content": "You answer here."}
@@ -72,10 +72,11 @@ in the one of the following two formats:
 }
 ```
 
+- If you cannot answer the question in the current context:
+
 ```json
 {
 "thought": "The thought of what to do and why.",
-"self_criticism":"Constructive self-criticism of the thought",
 "action": {
     "name": "finish",
     "args": {"content": "Sorry, I cannot answer your query, because (Summary all the upper steps, and explain)"}

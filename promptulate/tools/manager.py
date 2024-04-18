@@ -2,12 +2,18 @@ import inspect
 import json
 from typing import Any, List, Optional, Union
 
-from promptulate.schema import ToolTypes
-from promptulate.tools.base import BaseTool, Tool, ToolImpl, function_to_tool
+from promptulate.tools.base import (
+    BaseTool,
+    BaseToolKit,
+    Tool,
+    ToolImpl,
+    ToolTypes,
+    function_to_tool,
+)
 from promptulate.tools.langchain.tools import LangchainTool
 
 
-def _judge_langchain_tool_and_wrap(tool: Any) -> Optional[Tool]:
+def _judge_langchain_tool_and_wrap(tool: Any) -> Tool:
     """Judge if the tool is a langchain tool and wrap it.
 
     Args:
@@ -22,6 +28,7 @@ def _judge_langchain_tool_and_wrap(tool: Any) -> Optional[Tool]:
         if isinstance(tool, LangchainBaseTool):
             return LangchainTool(tool)
 
+        raise ValueError(f"Unknown tool type {tool}.")
     except ImportError:
         raise ValueError(
             (
@@ -31,7 +38,7 @@ def _judge_langchain_tool_and_wrap(tool: Any) -> Optional[Tool]:
         )
 
 
-def _initialize_tool(tool: ToolTypes) -> Optional[Tool]:
+def _initialize_tool(tool: ToolTypes) -> Union[Tool, List[Tool]]:
     """Initialize the tool.
 
     Args:
@@ -41,6 +48,12 @@ def _initialize_tool(tool: ToolTypes) -> Optional[Tool]:
     Returns:
         Optional[Tool]: The initialized tool.
     """
+    if isinstance(tool, BaseToolKit):
+        initialized_tools = []
+        for tool in tool.get_tools():
+            initialized_tools.append(_initialize_tool(tool))
+        return initialized_tools
+
     if isinstance(tool, BaseTool):
         return ToolImpl.from_base_tool(tool)
     elif isinstance(tool, Tool):
@@ -55,11 +68,15 @@ class ToolManager:
     """ToolManager helps Agent to manage tools"""
 
     def __init__(self, tools: List[ToolTypes]):
-        self.tools: List[Tool] = [
-            _initialize_tool(tool)
-            for tool in tools
-            if _initialize_tool(tool) is not None
-        ]
+        self.tools: List[Tool] = []
+
+        for tool in tools:
+            initialized_tool: Union[list, Tool] = _initialize_tool(tool)
+
+            if isinstance(initialized_tool, list):
+                self.tools.extend(initialized_tool)
+            else:
+                self.tools.append(initialized_tool)
 
     def get_tool(self, tool_name: str) -> Optional[Tool]:
         """Find specified tool by tool name.

@@ -1,7 +1,7 @@
 import inspect
 import warnings
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Dict, List, Optional, Type, Union
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Type, Union
 
 from promptulate.hook.base import Hook, HookTable
 from promptulate.pydantic_v1 import (
@@ -11,6 +11,11 @@ from promptulate.pydantic_v1 import (
     validate_arguments,
 )
 from promptulate.utils.logger import logger
+
+if TYPE_CHECKING:
+    from langchain.tools.base import BaseTool as LangchainBaseToolType  # noqa
+
+ToolTypes = Union["BaseTool", "Tool", Callable, "LangchainBaseToolType", "BaseToolKit"]
 
 
 class _SchemaConfig:
@@ -381,5 +386,6 @@ def function_to_tool(func: Callable) -> ToolImpl:
 
 class BaseToolKit:
     @abstractmethod
-    def get_tools(self):
+    def get_tools(self) -> List[ToolTypes]:
         """get tools in the toolkit"""
+        raise NotImplementedError

@@ -10,14 +10,14 @@ from promptulate.agents.tool_agent.prompt import (
 from promptulate.hook import Hook, HookTable
 from promptulate.llms.base import BaseLLM
 from promptulate.llms.openai.openai import ChatOpenAI
-from promptulate.schema import ToolTypes
+from promptulate.tools.base import ToolTypes
 from promptulate.tools.manager import ToolManager
 from promptulate.utils.logger import logger
 from promptulate.utils.string_template import StringTemplate
 
 
 class ActionResponse(TypedDict):
-    thought: str
+    analysis: str
     action_name: str
     action_parameters: Union[dict, str]
 
@@ -29,7 +29,6 @@ class ToolAgent(BaseAgent):
     Attributes:
         llm (BaseLLM): The language model driver. Default is ChatOpenAI with model
             "gpt-3.5-turbo-16k".
-        stop_sequences (List[str]): The sequences that, when met, will stop the output
             of the llm.
         system_prompt_template (StringTemplate): The preset system prompt template.
         prefix_prompt_template (StringTemplate): The prefix system prompt template.
@@ -45,6 +44,7 @@ class ToolAgent(BaseAgent):
         agent_goal (str): The goal of the agent. Default is "provides better assistance
             and services for humans.".
         agent_constraints (str): The constraints of the agent. Default is "none".
+        _from (Optional[str]): The initialization source. Default is None.
     """
 
     def __init__(
@@ -161,7 +161,7 @@ class ToolAgent(BaseAgent):
             Hook.call_hook(
                 HookTable.ON_AGENT_ACTION,
                 self,
-                thought=action_resp["thought"],
+                thought=action_resp["analysis"],
                 action=action_resp["action_name"],
                 action_input=action_resp["action_parameters"],
             )
@@ -211,7 +211,7 @@ class ToolAgent(BaseAgent):
         data: dict = json.loads(llm_resp)
 
         return ActionResponse(
-            thought=data["thought"],
+            analysis=data["analysis"],
             action_name=data["action"]["name"],
             action_parameters=data["action"]["args"],
         )

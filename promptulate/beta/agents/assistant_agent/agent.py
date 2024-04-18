@@ -11,7 +11,7 @@ from promptulate.beta.agents.assistant_agent import operations
 from promptulate.beta.agents.assistant_agent.schema import Plan
 from promptulate.hook import Hook, HookTable
 from promptulate.llms.base import BaseLLM
-from promptulate.schema import ToolTypes
+from promptulate.tools.base import ToolTypes
 from promptulate.tools.manager import ToolManager
 from promptulate.utils.logger import logger
 

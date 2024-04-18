@@ -1,7 +1,7 @@
 import os
-from typing import List, Optional
+from typing import List, Literal, Optional
 
-from promptulate.tools.base import BaseToolKit, Tool
+from promptulate.tools.base import BaseToolKit, ToolTypes
 from promptulate.tools.file.tools import (
     AppendFileTool,
     CopyFileTool,
@@ -12,6 +12,7 @@ from promptulate.tools.file.tools import (
     WriteFileTool,
 )
 
+FileToolType = Literal["write", "append", "read", "delete", "list", "copy", "move"]
 TOOL_MAPPER = {
     "write": WriteFileTool,
     "append": AppendFileTool,
@@ -28,13 +29,18 @@ class FileToolKit(BaseToolKit):
 
     Args:
         root_dir: The root directory of the file tool.
-        selected_tools: The selected tools of the file tool.
+        modes(Option): The modes of the file tool. Default is None.
 
     Returns:
         The instance object of the corresponding tool
     """
 
-    def __init__(self, root_dir: str = None, modes: Optional[List[str]] = None) -> None:
+    def __init__(
+        self,
+        *,
+        root_dir: Optional[str] = None,
+        modes: Optional[List[FileToolType]] = None,
+    ) -> None:
         self.root_dir = root_dir or os.getcwd()
         self.modes = modes or []
 
@@ -45,7 +51,7 @@ class FileToolKit(BaseToolKit):
                     f"Please select from {list(TOOL_MAPPER.keys())}"
                 )
 
-    def get_tools(self) -> List[Tool]:
+    def get_tools(self) -> List[ToolTypes]:
         if self.modes:
             return [TOOL_MAPPER[mode](self.root_dir) for mode in self.modes]
         return [tool(self.root_dir) for tool in TOOL_MAPPER.values()]
