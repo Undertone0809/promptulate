@@ -74,7 +74,7 @@ build-docs:
 	jupyter nbconvert ./example/tools/custom_tool_usage.ipynb --to markdown --output-dir ./docs/modules/tools
 	jupyter nbconvert ./example/llm/custom_llm.ipynb --to markdown --output-dir ./docs/modules/llm
 	jupyter nbconvert ./example/tools/langchain_tool_usage.ipynb --to markdown --output-dir ./docs/modules/tools
-		jupyter nbconvert ./example/agent/assistant_agent_usage.ipynb --to markdown --output-dir ./docs/modules/agents
+	jupyter nbconvert ./example/agent/assistant_agent_usage.ipynb --to markdown --output-dir ./docs/modules/agents
 
 
 .PHONY: start-docs
