@@ -34,7 +34,6 @@ from promptulate.tools import (
     DuckDuckGoTool,
     HumanFeedBackTool,
     PythonREPLTool,
-    SleepTool,
 )
 from promptulate.tools.shell import ShellTool
 from promptulate.utils.color_print import print_text
@@ -46,7 +45,6 @@ TOOL_MAPPING = {
     "WebSearch": DuckDuckGoTool,
     "Python Script Executor": PythonREPLTool,
     "Arxiv Query": ArxivQueryTool,
-    "Sleep": SleepTool,
     "Shell Executor": ShellTool,
     "HumanFeedBackTool": HumanFeedBackTool,
 }
@@ -173,6 +171,8 @@ def chat():
         llm = ChatOpenAI(model=model, temperature=0.0)
     elif "ernie" in model:
         llm = ErnieBot(model=model, temperature=0.1)
+    else:
+        raise ValueError(f"model {model} is not supported.")
 
     if terminal_mode == "Simple Chat":
         simple_chat(llm)

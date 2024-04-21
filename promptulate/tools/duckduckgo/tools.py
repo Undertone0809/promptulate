@@ -1,5 +1,5 @@
 import time
-from typing import Dict, List, Union
+from typing import Dict, List, Optional, Union
 
 from promptulate.tools.base import Tool
 from promptulate.tools.duckduckgo.api_wrapper import DuckDuckGoSearchAPIWrapper
@@ -16,8 +16,12 @@ class DuckDuckGoTool(Tool):
         "Args : keyword(str)"
         "Input should be a search query."
     )
-    api_wrapper: DuckDuckGoSearchAPIWrapper = DuckDuckGoSearchAPIWrapper()
-    max_retry: int = 5
+
+    def __init__(self, max_retry: Optional[int] = None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.max_retry: int = max_retry or 5
+        self.api_wrapper = DuckDuckGoSearchAPIWrapper()
 
     def _run(self, keyword: str, **kwargs) -> Union[str, List[str]]:
         """Run duckduckgo search and get search result.
