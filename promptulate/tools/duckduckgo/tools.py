@@ -68,7 +68,12 @@ class DuckDuckGoReferenceTool(Tool):
         "Useful for when you need to answer questions about current events. "
         "Input should be a search query."
     )
-    api_wrapper: DuckDuckGoSearchAPIWrapper = DuckDuckGoSearchAPIWrapper()
+
+    def __init__(self, max_retry: Optional[int] = None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.max_retry: int = max_retry or 5
+        self.api_wrapper = DuckDuckGoSearchAPIWrapper()
 
     def _run(self, keyword: str, **kwargs) -> Union[str, List[Dict[str, str]]]:
         """Run duckduckgo search and get search result with href, snippet, title.
