@@ -111,9 +111,6 @@ class StreamIterator:
             otherwise it returns the content of the response as a string.
         """
         for chunk in self.response_stream:
-            # message = self.parse_chunk(chunk)
-            # if message is not None:
-            #     return message
             content, ret_data = self.parse_content(chunk)
             if content is None:
                 continue
