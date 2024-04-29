@@ -1,5 +1,11 @@
+> All your need is a `pne.chat()` function. A powerful and easy-to-use function covers 90% of LLM application scenarios.
+
 # Chat
 `pne.chat()` is an awesome function, you can use **tools, formatted output, different llm** in this function. 
+
+## Best Practice
+
+Here are some tips for using `pne.chat()`. Even though pne provides many modules, in 90% of LLM application development scenarios, you only need to use the pne.chat () function, so you only need to start with chat to understand the use of pne, and when you need to use additional modules, you can learn more about the features and use of other modules.
 
 `pne.chat()` integrate the ability of [litellm](https://github.com/BerriAI/litellm). It means you can call all LLM APIs using the OpenAI format. Use Bedrock, Azure, OpenAI, Cohere, Anthropic, Ollama, Sagemaker, HuggingFace, Replicate (100+ LLMs). Now let's take a look at how to use it.
 
@@ -14,7 +20,7 @@ messages = [
     {"role": "system", "content": "You are a helpful assistant."},
     {"role": "user", "content": "Who are you?"},
 ]
-response: str = pne.chat(messages=messages)
+response: str = pne.chat(messages=messages, model="gpt-4-turbo")
 print(response)
 ```
 
@@ -29,7 +35,7 @@ import promptulate as pne
 
 response = pne.chat(
     messages="When is your knowledge up to?",
-    model="gpt-4-1106-preview"
+    model="gpt-4-turbo"
 )
 print(response)
 ```
@@ -49,7 +55,8 @@ If you want to do more complex thing, metadata is important. You can use `return
 ```python
 import promptulate as pne
 
-response: pne.AssistantMessage = pne.chat("Who are you?", return_raw_response=True)
+response: pne.AssistantMessage = pne.chat(messages="Who are you?", model="gpt-4-turbo",
+                                          return_raw_response=True)
 print(response.content)  # response string
 print(response.additional_kwargs)  # metadata
 ```
@@ -171,6 +178,7 @@ from typing import List
 from pydantic import BaseModel, Field
 import promptulate as pne
 
+
 class LLMResponse(BaseModel):
     provinces: List[str] = Field(description="All provinces in China")
 
@@ -267,6 +275,7 @@ Moreover, you can customize your function easily. The follow example show how to
 ```python
 import promptulate as pne
 
+
 def websearch(query: str) -> str:
     """Search the web for the query.
     
@@ -277,7 +286,8 @@ def websearch(query: str) -> str:
         str: The search result.
     """
     return pne.tools.DuckDuckGoTool().run(query)
-    
+
+
 response = pne.chat(
     messages="What's the temperature in Shanghai tomorrow?",
     tools=[websearch]
@@ -371,10 +381,13 @@ from typing import List
 import promptulate as pne
 from pydantic import BaseModel, Field
 
+
 class LLMResponse(BaseModel):
     provinces: List[str] = Field(description="List of provinces name")
 
-resp: LLMResponse = pne.chat("Please tell me all provinces in China.?", output_schema=LLMResponse)
+
+resp: LLMResponse = pne.chat("Please tell me all provinces in China.?",
+                             output_schema=LLMResponse)
 print(resp)
 ```
 

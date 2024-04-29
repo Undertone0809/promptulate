@@ -1,4 +1,4 @@
-# 快速开始
+# Quick Start
 
 通过该部分教学，你可以快速对 promptulate 有一个整体的认知，了解一些常用模块的基本使用方式，在阅读完该部分之后，你可以继续阅读 [User Cases](modules/usercases/intro.md#user-cases) 和 [example](https://github.com/Undertone0809/promptulate/tree/main/example) 来了解 promptulate 的一些最佳实践，在遇到问题的时候，可以查看每个模块的具体使用方式，也欢迎你在 [issue](https://github.com/Undertone0809/promptulate/issues) 中为 promptulate 提供更好的建议。
 
@@ -19,7 +19,7 @@ pip install -U promptulate
 
 ### KEY配置
 
-在使用`promptulate`之前，你需要先导入你的`OPENAI_API_KEY`，你可以使用两种方式进行导入。
+在使用 pne 之前，你需要先导入你的`OPENAI_API_KEY`，你可以使用两种方式进行导入。
 
 **方法一（不推荐）**
 
@@ -41,7 +41,7 @@ print(get_default_storage_path())
 
 **方法二（推荐）**
 
-方法二是 promptulate 官方推荐的最佳实践，你可以通过创建 `.env` 的方式来导入 key，与上面的配置效果是等价的。 [env 的使用方式](https://github.com/theskumar/python-dotenv)
+方法二是 pne 官方推荐的最佳实践，你可以通过创建 `.env` 的方式来导入 key，与上面的配置效果是等价的。 [env 的使用方式](https://github.com/theskumar/python-dotenv)
 
 在项目根目录下创建 `.env` 文件，然后填入你的 key:
 
@@ -51,7 +51,9 @@ OPENAI_API_KEY=sk-xxx
 
 ### pne.chat()
 
-先抛去所有组件的概念，pne 渐进式的学习方式，可以让你在不需要了解其他组件详细概念的情况下，快速上手开发一个简单的 LLM Agent 应用，下面我们将介绍如何使用 pne.chat() 进行 All in one。
+pne.chat() 是 pne 中最强大的函数，在实际的 LLM Agent 应用开发中，90% 的功能你都可以用它来完成搭建。
+
+此外，在 pne 中，你可以抛去所有组件的概念，pne 渐进式的学习方式，可以让你在不需要了解其他组件详细概念的情况下，快速上手开发一个简单的 LLM Agent 应用，下面我们将介绍如何使用 pne.chat() 进行 All in one。
 
 > 关于 pne.chat() 详细参考 [pne.chat()](/use_cases/chat_usage.md#chat)
 
@@ -147,34 +149,6 @@ pne.chat("what is the hometown of the 2024 Australia open winner?", model="gpt-4
 [Revised Plan] {"goals": ["Find the hometown of the 2024 Australian Open winner"], "tasks": [], "next_task_id": null}
 [Agent Result] Jannik Sinner was born in San Candido (Italian) / Innichen (German), Italy.
 [Agent] Agent End.
-```
-
-
-### LLM
-
-> 详细文档请跳转[LLM](modules/llm/llm.md#llm)
-
-`promptulate`的架构设计可以轻松兼容不同的大语言模型扩展，在`promptulate`中，llm负责最基本的内容生成部分，因此为最基础的组件。
-
-下面的示例展示了如何使用OpenAI进行交互。
-
-```python
-import promptulate as pne
-
-llm = pne.ChatOpenAI()
-answer = llm("请解释一下引力波的放射与广义相对论的必然关系")
-print(answer)
-
-```
-
-输出结果如下：
-
-```text
-广义相对论是一种描述引力如何影响时空的物理学理论，它指出当物质和能量聚集在一起时，它们弯曲了周围的时空，引起了引力。质量和能量更大的物体会导致更大
-的时空弯曲，这就是为什么地球会围绕太阳旋转。根据广义相对论，当物质或能量在空间中运动时，它们会产生引力波，就像在水面上产生涟漪一样。引力波是一种类
-似电磁波的波动，但它们是由物质和能量的弯曲引起的，而电磁波是由电荷的振动引起的。引力波是极微弱的，但是当强烈的引力场存在（例如在引力天体碰撞或超新
-星爆炸等事件中），它们可以被探测到。事实上，2015年，激光干涉引力波天文台利用引力波探测器直接探测到了引力波，并为广义相对论提供了强有力的证据。因
-此，引力波的放射与广义相对论必然关系紧密。通过引力波，我们可以更加深入地了解时空的性质，并进一步验证这个理论。
 ```
 
 ### 客户端
@@ -281,6 +255,8 @@ Here is the generated image: [![Halloween Night at a Haunted Museum](https://oai
 ### Output Formatter
 
 很多时候，LLM 的输出具有很强的不可控性，promptulate 通过 JSON schema 为 LLM 的输出构建了一个输出格式化器，简单来说，你可以用这种方式制定 LLM 的输出内容，并转换成一个 python 对象。
+
+虽然 pne.chat() 已经集成了该功能，但是在必要的时候，你也可以讲此组件拆出来单独使用。
 
 下面的示例展示了在 WebAgent 中使用格式化输出的最佳实践：
 

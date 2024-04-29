@@ -78,7 +78,7 @@ Promptulate integrates the capabilities of [litellm](https://github.com/BerriAI/
 | [voyage ai](https://docs.litellm.ai/docs/providers/voyage)  |  |  |  |  | ✅ |
 | [xinference [Xorbits Inference]](https://docs.litellm.ai/docs/providers/xinference)  |  |  |  |  | ✅ |
 
-For more details, please visit the [litellm documentation](https://docs.litellm.ai/docs/providers).
+For more models, please visit the [litellm documentation](https://docs.litellm.ai/docs/providers).
 
 You can easily build any third-party model calls using the following method:
 
@@ -87,6 +87,8 @@ import promptulate as pne
 
 resp: str = pne.chat(model="ollama/llama2", messages=[{"content": "Hello, how are you?", "role": "user"}])
 ```
+
+You can see how to use pne.chat in the [Getting Started/Official Documentation](https://undertone0809.github.io/promptulate/#/get_started/quick_start?id=quick-start).
 
 ## 📗 Related Documentation
 

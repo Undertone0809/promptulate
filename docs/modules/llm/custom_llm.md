@@ -1,22 +1,36 @@
 # Custom LLM
 This guide details the process of creating a custom Language Model (LLM) wrapper for use with Promptulate. To integrate your own LLM or an alternative to the supported wrappers, your custom LLM class must implement two essential methods.
 
-Below is a template for a custom LLM class:
+The following example shows how to create a custom LLM and use LLM to output a response to a user query. Here we wrap the OpenAI API to create a custom LLM.
 
 
 
 ```python
+import os
+
+from openai import OpenAI
+from pydantic import Field
+
 from promptulate.llms.base import BaseLLM
 from promptulate.schema import MessageSet, AssistantMessage
 
+os.environ["OPENAI_API_KEY"] = "your key"
+
 
 class MyLLM(BaseLLM):
-    def _predict(self, messages: MessageSet, *args, **kwargs) -> AssistantMessage:
-        return AssistantMessage(content="This is predict reply")
+    model: str = "gpt-3.5-turbo"
+    client: OpenAI = Field(default_factory=OpenAI)
 
-    def __call__(self, instruction: str, *args, **kwargs):
-        return "This is call reply"
+    def _predict(self, messages: MessageSet, *args, **kwargs) -> AssistantMessage:
+        resp = self.client.chat.completions.create(model=self.model, messages=messages.listdict_messages, temperature=0.0)
+        return AssistantMessage(content=resp.choices[0].message.content, additional_kwargs=resp)
 ```
+
+If you custom a LLM class, you need to implement the following methods:
+
+1. `_predict` Method: This method is used to make predictions using your LLM. It should return an `AssistantMessage` object.
+2. `__call__` Method: This method is used to interact with your LLM as if it were a function. It should return a string.
+
 
 ## Using Your Custom LLM
 

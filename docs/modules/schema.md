@@ -30,6 +30,7 @@ To use `StreamIterator` ,three parameters are required.
 - response_stream: The stream of responses from the LLM model.
 - parse_content: The callback function to parse the chunk.
 - return_raw_response: A boolean indicating whether to return the raw response
+
 ## Example Usage
 
 Here's an example of how you might use `MessageSet` and `Message` in a `Promptulate` application:
@@ -50,6 +51,36 @@ answer: AssistantMessage = llm.predict(messages)
 print(answer.content)
 print(answer.additional_kwargs)
 ```
+
+You can also use `MessageSet` to convert a OpenAI type messages:
+
+```python
+from promptulate.schema import MessageSet
+
+messages: MessageSet = MessageSet.from_listdict_data([
+    {"role": "system", "content": "You are a helpful assitant"},
+    {"role": "user", "content": "Hello?"},
+])
+str_message: str = messages.string_messages
+openai_type_msg: list = messages.listdict_messages
+```
+
+You can use `MessageSet` to append messages:
+
+```python
+from promptulate.schema import MessageSet, SystemMessage, UserMessage
+
+messages = MessageSet(
+    messages=[
+        SystemMessage(content="You are a helpful assitant"),
+        UserMessage(content="Hello?"),
+    ]
+)
+messages.add_ai_message(content="Hello, how can I help you?")
+messages.add_user_message(content="I need help with my computer")
+```
+
+```python
 
 Here's an example of how you might use `BaseStreamIterator` in a `Promptulate` application:
 
