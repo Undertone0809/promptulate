@@ -46,7 +46,7 @@ class StreamIterator:
         parse_content: callable([[Any], [str, str]]),
         return_raw_response: bool = False,
         additional_kwargs: dict = None,
-        content: str = None
+        content: str = None,
     ):
         """
         The constructor for BaseStreamIterator class.
