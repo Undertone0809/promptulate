@@ -286,7 +286,7 @@ class ChatOpenAI(BaseOpenAI):
         self, prompts: MessageSet, stop: Optional[List[str]] = None, *args, **kwargs
     ) -> Optional[AssistantMessage]:
         warnings.warn(
-            "ChatOpenAI is deprecated in v1.16.0. Please use pne.LLMFactory instead. \nSee the detail in https://undertone0809.github.io/promptulate/#/modules/llm/llm?id=llm", # noqa
+            "ChatOpenAI is deprecated in v1.16.0. Please use pne.LLMFactory instead. \nSee the detail in https://undertone0809.github.io/promptulate/#/modules/llm/llm?id=llm",  # noqa
             DeprecationWarning,
         )
 

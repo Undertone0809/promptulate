@@ -50,7 +50,7 @@ def test_init():
 
     # stream and output_schema and not exist at the same time.
     with pytest.raises(ValueError):
-        chat("hello", custom_llm=llm, output_schema=LLMResponse, stream=True)
+        chat(messages="hello", custom_llm=llm, output_schema=LLMResponse, stream=True)
 
     # stream and tools and not exist at the same time.
     with pytest.raises(ValueError):
@@ -64,6 +64,19 @@ def test_init():
             tools=[mock_tool],
         )
         chat([], custom_llm=llm, tools=[mock_tool])
+
+    with pytest.raises(ValueError) as e:
+        chat("hello", model="gpt-3.5-turbo", custom_llm=llm)
+        assert (
+            str(e.value) == "model and custom_llm can't be provided at the same time."
+        )
+
+    with pytest.raises(ValueError) as e:
+        chat("hello", model_config={"model": "gpt-3.5-turbo"}, custom_llm=llm)
+        assert (
+            str(e.value)
+            == "model_config and custom_llm can't be provided at the same time."
+        )
 
 
 def test_custom_llm_chat():
@@ -90,14 +103,13 @@ def test_custom_llm_chat_response():
     llm = FakeLLM()
 
     # test original response
-    answer = chat("hello", model="fake", custom_llm=llm, return_raw_response=True)
+    answer = chat("hello", custom_llm=llm, return_raw_response=True)
     assert isinstance(answer, BaseMessage)
     assert answer.content == "fake response"
 
     # test formatter response
     answer = chat(
         "what's weather tomorrow in shanghai?",
-        model="fake",
         output_schema=LLMResponse,
         custom_llm=llm,
     )
@@ -112,7 +124,6 @@ def test_custom_llm_chat_response():
     ]
     answer = chat(
         "what's weather tomorrow in shanghai?",
-        model="fake",
         output_schema=LLMResponse,
         examples=examples,
         custom_llm=llm,
@@ -137,7 +148,6 @@ def test_streaming():
     # test stream output
     answer = chat(
         "what's weather tomorrow in shanghai?",
-        model="fake",
         custom_llm=llm,
         stream=True,
     )
