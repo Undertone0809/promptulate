@@ -38,6 +38,8 @@ class StreamIterator:
         parse_content: The callback function to parse the chunk.
         return_raw_response: A boolean indicating whether to return the raw response
         or not.
+        additional_kwargs: Optional dictionary with additional keyword parameters
+        content: An optional string that represents the content
     """
 
     def __init__(
@@ -45,18 +47,25 @@ class StreamIterator:
         response_stream,
         parse_content: callable([[Any], [str, str]]),
         return_raw_response: bool = False,
+        additional_kwargs: dict = None,
+        content: str = None,
     ):
         """
         The constructor for BaseStreamIterator class.
 
-        Parameters:
+        Args:
             response_stream: The stream of responses from the LLM model.
-            return_raw_response (bool): A flag indicating whether to return the raw
-            response or not.
+            parse_content: The callback function to parse the chunk.
+            return_raw_response: A boolean indicating whether to return the raw response
+            or not.
+            additional_kwargs: Optional dictionary with additional keyword parameters
+            content: An optional string that represents the content
         """
         self.response_stream = response_stream
         self.return_raw_response = return_raw_response
         self.parse_content = parse_content
+        self.additional_kwargs = additional_kwargs or {}
+        self.content = content
 
     def __iter__(self) -> Union[Iterator[BaseMessage], Iterator[str]]:
         """
@@ -72,7 +81,7 @@ class StreamIterator:
         This method is used to parse a chunk from the response stream. It returns
         None if the chunk is empty, otherwise it returns the parsed chunk.
 
-        Parameters:
+        Args:
             chunk: The chunk to be parsed.
 
         Returns:
@@ -107,9 +116,18 @@ class StreamIterator:
             otherwise it returns the content of the response as a string.
         """
         for chunk in self.response_stream:
-            message = self.parse_chunk(chunk)
-            if message is not None:
+            content, ret_data = self.parse_content(chunk)
+            if content is None:
+                continue
+            if self.return_raw_response:
+                additional_kwargs: dict = ret_data
+                message = AssistantMessage(
+                    content=content,
+                    additional_kwargs=additional_kwargs,
+                )
                 return message
+
+            return content
 
         # If there are no more messages, stop the iteration
         raise StopIteration
