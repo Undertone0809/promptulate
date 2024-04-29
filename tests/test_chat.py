@@ -9,7 +9,12 @@ import promptulate as pne
 from promptulate import chat
 from promptulate.llms import BaseLLM
 from promptulate.pydantic_v1 import BaseModel, Field
-from promptulate.schema import AssistantMessage, BaseMessage, MessageSet, UserMessage
+from promptulate.schema import (
+    AssistantMessage,
+    BaseMessage,
+    MessageSet,
+    UserMessage,
+)
 
 
 class FakeLLM(BaseLLM):
@@ -127,4 +132,13 @@ def test_stream():
 
 
 def test_streaming():
-    pne.chat("Who are you?", stream=True)
+    llm = FakeLLM()
+
+    # test stream output
+    answer = chat(
+        "what's weather tomorrow in shanghai?",
+        model="fake",
+        custom_llm=llm,
+        stream=True,
+    )
+    assert answer == "fake response"
