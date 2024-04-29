@@ -38,6 +38,8 @@ class StreamIterator:
         parse_content: The callback function to parse the chunk.
         return_raw_response: A boolean indicating whether to return the raw response
         or not.
+        additional_kwargs: Optional dictionary with additional keyword parameters
+        content: An optional string that represents the content
     """
 
     def __init__(
@@ -51,10 +53,13 @@ class StreamIterator:
         """
         The constructor for BaseStreamIterator class.
 
-        Parameters:
+        Args:
             response_stream: The stream of responses from the LLM model.
-            return_raw_response (bool): A flag indicating whether to return the raw
-            response or not.
+            parse_content: The callback function to parse the chunk.
+            return_raw_response: A boolean indicating whether to return the raw response
+            or not.
+            additional_kwargs: Optional dictionary with additional keyword parameters
+            content: An optional string that represents the content
         """
         self.response_stream = response_stream
         self.return_raw_response = return_raw_response
@@ -76,7 +81,7 @@ class StreamIterator:
         This method is used to parse a chunk from the response stream. It returns
         None if the chunk is empty, otherwise it returns the parsed chunk.
 
-        Parameters:
+        Args:
             chunk: The chunk to be parsed.
 
         Returns:
