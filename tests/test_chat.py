@@ -124,3 +124,7 @@ def test_stream():
     # stream and output_schema and not exist at the same time.
     with pytest.raises(ValueError):
         pne.chat("hello", stream=True, output_schema=LLMResponse)
+
+
+def test_streaming():
+    pne.chat("Who are you?", stream=True)

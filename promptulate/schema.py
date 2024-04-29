@@ -45,6 +45,8 @@ class StreamIterator:
         response_stream,
         parse_content: callable([[Any], [str, str]]),
         return_raw_response: bool = False,
+        additional_kwargs: dict = None,
+        content: str = None
     ):
         """
         The constructor for BaseStreamIterator class.
@@ -57,6 +59,8 @@ class StreamIterator:
         self.response_stream = response_stream
         self.return_raw_response = return_raw_response
         self.parse_content = parse_content
+        self.additional_kwargs = additional_kwargs or {}
+        self.content = content
 
     def __iter__(self) -> Union[Iterator[BaseMessage], Iterator[str]]:
         """
@@ -107,9 +111,21 @@ class StreamIterator:
             otherwise it returns the content of the response as a string.
         """
         for chunk in self.response_stream:
-            message = self.parse_chunk(chunk)
-            if message is not None:
+            # message = self.parse_chunk(chunk)
+            # if message is not None:
+            #     return message
+            content, ret_data = self.parse_content(chunk)
+            if content is None:
+                continue
+            if self.return_raw_response:
+                additional_kwargs: dict = ret_data
+                message = AssistantMessage(
+                    content=content,
+                    additional_kwargs=additional_kwargs,
+                )
                 return message
+
+            return content
 
         # If there are no more messages, stop the iteration
         raise StopIteration
