@@ -50,7 +50,7 @@ class ZhiPu(BaseLLM, ABC):
     """enable use preset description"""
     exp_seconds: int = 3600
     """set your token expire time"""
-    model_config = {}
+    model_config: dict = {}
     """model parameters"""
 
     @property
