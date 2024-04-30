@@ -1,19 +1,21 @@
 - Get started
   - [:bookmark_tabs: Introduction](README.md)
   - [:bookmark: Quick Start](get_started/quick_start.md#quick-start)
+  - [:bookmark_tabs: Awesome Chat](use_cases/chat_usage.md#chat)
 
 - Use Cases
   - [🌟 Best practices](use_cases/intro.md#use-cases)
-  - [:bookmark_tabs: Awesome Chat](use_cases/chat_usage.md#chat)
+  
 
 - Modules
-  - [:notebook_with_decorative_cover: LLMs](modules/llm/llm.md#llm)
-    - [:closed_book: OpenAI](modules/llm/openai.md#openai)
-    - [📝 Custom LLM](modules/llm/custom_llm.md#custom-llm)
-    - [:green_book: Erniebot 百度文心](modules/llm/erniebot.md#百度文心erniebot)
-    - [:blue_book: GLM 智谱AI](modules/llm/zhipu.md#智谱系列模型)
   - [:robot: Agent](modules/agent.md#agent)
     - [:alien: Assistant Agent](modules/agents/assistant_agent_usage.md#assistant-agent)
+  - [:notebook_with_decorative_cover: LLMs](modules/llm/llm.md#llm)
+    - [📝 Custom LLM](modules/llm/custom_llm.md#custom-llm)
+    - [ LLM Factory](modules/llm/llm-factory-usage.md#LLMFactory)
+    - [:closed_book: OpenAI](modules/llm/openai.md#openai)
+    - [:green_book: Erniebot 百度文心](modules/llm/erniebot.md#百度文心erniebot)
+    - [:blue_book: GLM 智谱AI](modules/llm/zhipu.md#智谱系列模型)
   - [:toolbox: Tool](modules/tools/index#Tool)
     - [🧰 Custom Tool](modules/tools/custom_tool_usage.md#custom-tool)
     - [🌟 LangChain Tool Usage](modules/tools/langchain_tool_usage.md#langchain-tool-usage)

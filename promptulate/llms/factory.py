@@ -1,37 +1,28 @@
-def get_llm_cls(platform_type, model_name, model_config):
-    if platform_type == "qianfan":
-        from promptulate.llms import QianFan
+from typing import Any, Dict, Optional
 
-        if model_name == "":
-            return QianFan(model_config=model_config)
-        else:
-            return QianFan(model=model_name, model_config=model_config)
-    elif platform_type == "zhipu":
-        from promptulate.llms import ZhiPu
-
-        if model_name == "":
-            return ZhiPu(model_config=model_config)
-        else:
-            return ZhiPu(model=model_name, model_config=model_config)
-    elif platform_type == "custom_llm":
-        from promptulate.llms import CustomLLM
-
-        if model_name == "":
-            return CustomLLM(model_config=model_config)
-        else:
-            return CustomLLM(model=model_name, model_config=model_config)
-    else:
-        raise ImportError("not found this platform")
+from promptulate.llms._litellm import LiteLLM
+from promptulate.llms.base import BaseLLM
 
 
 class LLMFactory:
     @classmethod
-    def build(cls, platform_type: str, model_name: str = None, model_config: {} = None):
-        if model_config is None:
-            model_config = {}
-        model_name: str = model_name or ""
-        return get_llm_cls(
-            platform_type=platform_type,
-            model_name=model_name,
-            model_config=model_config,
-        )
+    def build(
+        cls, model_name: str, *, model_config: Optional[Dict[str, Any]] = None, **kwargs
+    ) -> BaseLLM:
+        model_config = model_config or {}
+
+        try:
+            provider, model_id = model_name.split("/")
+
+            if provider == "zhipu":
+                from promptulate.llms import ZhiPu
+
+                return ZhiPu(model=model_id, model_config=model_config, **kwargs)
+            elif provider == "qianfan":
+                from promptulate.llms import QianFan
+
+                return QianFan(model=model_id, model_config=model_config, **kwargs)
+        except ValueError:
+            pass
+
+        return LiteLLM(model=model_name, model_config=model_config, **kwargs)

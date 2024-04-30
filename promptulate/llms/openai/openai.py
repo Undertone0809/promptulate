@@ -285,6 +285,11 @@ class ChatOpenAI(BaseOpenAI):
     def _predict(
         self, prompts: MessageSet, stop: Optional[List[str]] = None, *args, **kwargs
     ) -> Optional[AssistantMessage]:
+        warnings.warn(
+            "ChatOpenAI is deprecated in v1.16.0. Please use pne.LLMFactory instead. \nSee the detail in https://undertone0809.github.io/promptulate/#/modules/llm/llm?id=llm",  # noqa
+            DeprecationWarning,
+        )
+
         for key in self.api_param_keys:
             if key in kwargs:
                 setattr(self, key, kwargs[key])

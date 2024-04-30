@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from enum import Enum
-from typing import TYPE_CHECKING, Any, Callable, Dict, Iterator, List, Optional, Union
+from typing import Any, Callable, Dict, Iterator, List, Optional, Union
 
 from promptulate.pydantic_v1 import BaseModel, Field
 
@@ -222,17 +222,22 @@ class MessageSet:
         return cls(messages=messages, additional_kwargs=additional_kwargs)
 
     @property
-    def listdict_messages(self) -> List[Dict]:
+    def listdict_messages(self) -> List[Dict[str, str]]:
+        """Convert the MessageSet messages to a list of dictionary(openai type).
+
+        Returns:
+            List[Dict[str, str]]: the example is as follows:
+                [
+                    {"role": "user", "content": "This is a message1."},
+                    {"role": "assistant", "content": "This is a message2."}
+                ]
+        """
         converted_messages = []
         for message in self.messages:
             converted_messages.append(
                 {"role": message.type, "content": message.content}
             )
         return converted_messages
-
-    @property
-    def memory_messages(self) -> List[Dict]:
-        return self.listdict_messages
 
     def to_llm_prompt(self, llm_type: LLMType) -> Any:
         """Convert the MessageSet messages to specified llm prompt"""

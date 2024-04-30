@@ -1,8 +1,11 @@
 # Use cases
 
-> 文档持续完善中
+This section contains walkthroughs and techniques for common end-to-end use tasks.
 
-我们希望通过一些官方最佳实践的方式，来引导用户快速上手，用更低的成本来学习 promptulate，在此之前，请确保你已经阅读过[快速开始](get_started/quick_start.md#快速开始)。
+We hope to guide users through some official best practices to get up to speed and learn pne at a lower cost. Before doing so, please make sure you have read [quick start](get_started/quick_start.md#quick-start) and [awesome chat](use_cases/chat_usage.md)
 
+If you're looking to build something specific or are more of a hands-on learner, try one out! While they reference building blocks that are explained in greater detail in other sections, we absolutely encourage folks to get started by going through them and picking apart the code in a real-world context.
 
-
+- [Build a math application with agent [Steamlit, ToolAgent, Hooks].](https://github.com/Undertone0809/promptulate/tree/main/example/build-math-application-with-agent)
+- [A Mulitmodal Robot Agent framework of ROS2 and Promptulate [Agent]](https://github.com/Undertone0809/Athena)
+- [Use streamlit and pne to compare different model a playground. [Streamlit]](https://github.com/Undertone0809/pne-playground-model-comparison)
