@@ -1,5 +1,7 @@
 # 文心千帆系列模型
 
+> 从 `v1.16.0` 版本开始，不在使用 llm 的概念，LLM 所有的功能都可以用 pne.chat() 来代替。只有当你需要自定义模型的时候，需要学习 [Custom LLM](modules/llm/custom_llm.md#custom-llm) 的使用方式。
+
 本文将会介绍百度文心系列大模型的使用，要使用其能力，你需要前往[百度千帆大模型平台](https://console.bce.baidu.com/qianfan/ais/console/applicationConsole/application)创建大模型应用并安装
 千帆sdk。安装命令如下
 

@@ -73,7 +73,7 @@ pne 集成了 [litellm](https://github.com/BerriAI/litellm) 的能力，支持�
 | [voyage ai](https://docs.litellm.ai/docs/providers/voyage)  |  |  |  |  | ✅ |
 | [xinference [Xorbits Inference]](https://docs.litellm.ai/docs/providers/xinference)  |  |  |  |  | ✅ |
 
-详情可以跳转 [litellm documentation](https://docs.litellm.ai/docs/providers) 查看。
+更多支持的模型，可以在 [litellm documentation](https://docs.litellm.ai/docs/providers) 查看。
 
 你可以使用下面的方式十分轻松的构建起任何第三方模型的调用。
 

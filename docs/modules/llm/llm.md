@@ -5,8 +5,7 @@
 > Attention:
 > 1. `promptulate`中会把LLM与llm的意思分开来，LLM表示大语言模型，llm表示`promptulate`中的llm模块。
 > 2. 从 `v1.11.0` 的版本开始，我们推荐你使用 [pne.chat()](use_cases/chat_usage.md#chat) 的方式进行 LLM 的调用。
-> 3. 从 `v1.16.0` 版本开始，不在使用 llm 的概念，LLM 所有的功能都可以用 pne.chat() 来代替。只有当你需要自定义模型的时候，需要学习 [Custom LLM](modules/llm/custom_llm.md#custom-llm) 的使用方式。
-
+> 3. 从 `v1.16.0` 版本开始，不在使用 llm 的概念，LLM 所有的功能都可以用 [pne.chat()](use_cases/chat_usage.md#chat) 来代替。只有当你需要自定义模型的时候，需要学习 [Custom LLM](modules/llm/custom_llm.md#custom-llm) 的使用方式。
 本文将会介绍llm模块的**基本使用方式，API KEY、KEY池、代理的配置方式**。
 
 LLM指大语言模型，当前市面上常见的大语言模型有GPT3.5, GPT4, LLaMa, InstructGPT等大语言模型。`promptulate`可以支持不同类型的大语言模型调用。
