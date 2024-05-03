@@ -22,10 +22,10 @@ Thought:
 tool_description = """
 duckduckgo_search: A wrapper around DuckDuckGo Search. Useful for when you need to answer questions about current events. Input should be a search query.
 
-Calculator: Useful for when you need to answer questions about math.
+calculator: Useful for when you need to answer questions about math.
 """  # noqa
 
-tool_name = """duckduckgo_search, Calculator"""
+tool_name = """duckduckgo_search, calculator"""
 
 question = "Tell me a funny joke about chickens."
 string_template = StringTemplate(prompt)

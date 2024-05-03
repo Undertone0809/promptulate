@@ -14,7 +14,7 @@ def _evaluate_expression(expression: str) -> str:
     """
     Parse numexpr expression.
 
-    This function takes a string expression, evaluates it using numexpr.evaluate,
+    This function takes a string expression, evaluates it using `numexpr.evaluate`,
     and returns the result as a string. It also handles exceptions and raises a
     ValueError with a custom error message if the evaluation fails.
 
@@ -124,14 +124,19 @@ class Calculator(Tool):
 def calculator(expression: str):
     """Evaluate a mathematical expression.
 
+    This function takes a string expression, evaluates it using `numexpr.evaluate`,
+    and returns the result as a string. It also handles exceptions and raises a
+    ValueError with a custom error message if the evaluation fails.
+
     Args:
         expression: A mathematical expression, eg: 18^0.43
 
     Attention:
         Expressions can not exist variables!
-        eg: (current age)^0.43 is wrong, you should use 18^0.43 instead.
+        bad example: (current age)^0.43, (number)^(1/5)
+        good example: 18^0.43, 37593**(1/5)
 
     Returns:
         The result of the evaluation.
     """
-    return Calculator().run(expression)
+    return _evaluate_expression(expression)
