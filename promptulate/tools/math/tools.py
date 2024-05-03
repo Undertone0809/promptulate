@@ -139,4 +139,8 @@ def calculator(expression: str):
     Returns:
         The result of the evaluation.
     """
-    return _evaluate_expression(expression)
+    if _is_valid_expression(expression):
+        return _evaluate_expression(expression)
+    else:
+        raise ValueError(
+            "Invalid mathematical expression. Please provide a valid expression.")
