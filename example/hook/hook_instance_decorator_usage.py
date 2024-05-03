@@ -1,28 +1,29 @@
+import promptulate as pne
 from promptulate.hook import Hook
-from promptulate.tools import Calculator
+from promptulate.tools import calculator
 
 
-@Hook.on_tool_create(hook_type="instance")
-def handle_tool_create(**kwargs):
-    print("math tool component create")
+@Hook.on_agent_create(hook_type="instance")
+def handle_agent_create(**kwargs):
+    print("math agent component create")
 
 
-@Hook.on_tool_start(hook_type="instance")
-def handle_tool_start(*args, **kwargs):
+@Hook.on_agent_start(hook_type="instance")
+def handle_agent_start(tool, *args, **kwargs):
     prompt = args[0]
-    print(f"math tool instance hook start, user prompt: {prompt}")
+    print(f"math agent instance hook start, user prompt: {prompt}, tool: {tool}")
 
 
-@Hook.on_tool_result(hook_type="instance")
-def handle_tool_result(**kwargs):
+@Hook.on_agent_result(hook_type="instance")
+def handle_agent_result(**kwargs):
     result = kwargs["result"]
-    print(f"math tool component result: {result}")
+    print(f"math agent component result: {result}")
 
 
 def main():
-    hooks = [handle_tool_create, handle_tool_start, handle_tool_result]
-    tool = Calculator(hooks=hooks)
-    result = tool.run("6的五次方等于多少")
+    hooks = [handle_agent_create, handle_agent_start, handle_agent_result]
+    agent = pne.ToolAgent(tools=[calculator], hooks=hooks)
+    result = agent.run("What is the 5 power of 6?")
     print(result)
 
 
