@@ -1,87 +1,93 @@
 ## What is hook?
 
-- What is hook？钩子`hook`，顾名思义，可以理解是一个挂钩，作用是有需要的时候挂一个东西上去。具体的解释是：钩子函数是把我们自己实现的hook函数在某一时刻挂接到目标挂载点上。
-- Hook是一种机制，允许开发者在应用程序或框架中的特定时刻插入自定义代码。它是一种事件触发机制，这些事件可以是系统事件、用户操作或其他特定情况。通过使用钩子，开发者可以在特定事件发生时干预应用程序的行为，例如修改数据、添加功能、执行自定义逻辑等。Hook通常以回调函数的形式存在，当特定事件发生时，系统会自动调用这些回调函数。钩子的使用可以实现灵活的扩展和定制，使得应用程序的行为可以根据实际需求进行修改。
-- 举个例子，Hook的概念在windows桌面软件开发很常见，特别是各种事件触发的机制; 比如C++的MFC程序中，要监听鼠标左键按下的时间，MFC提供了一个onLeftKeyDown的钩子函数。很显然，MFC框架并没有为我们实现onLeftKeyDown具体的操作，只是为我们提供一个钩子，当我们需要处理的时候，只要去重写这个函数，把我们需要操作挂载在这个钩子里，如果我们不挂载，MFC事件触发机制中执行的就是空的操作。
+- `Hook`, as the name suggests, can be understood as a hook, its function is to hang something up when needed. Specifically, the explanation is: the hook function will attach our own implemented hook function to a target mounting point at a certain moment.
+- A Hook is a mechanism that allows developers to insert custom code at specific moments in an application or framework. It is an event-triggering mechanism where these events can be system events, user actions, or other specific situations. By using hooks, developers can intervene in the behavior of an application when specific events occur, such as modifying data, adding functionality, executing custom logic, etc. Hooks typically exist in the form of callback functions, and when specific events occur, the system automatically calls these callback functions. The use of hooks enables flexible extension and customization, allowing the behavior of the application to be modified according to actual needs.
+- For example, the concept of hooks is common in Windows desktop software development, especially various event triggering mechanisms: for example, listening to the left mouse button press event in C++ MFC programs. In MFC programs, a hook function onLeftKeyDown is provided, but this hook function does not implement the specific operation onLeftKeyDown for us. It only provides a hook for us. Therefore, when we need to handle it, we just need to override this function and mount the operation we need on this hook. If we do not mount it, the empty operation will be executed in the MFC event triggering mechanism.
 
-因此我们可以知道：
-- Hook函数是程序中预定义好的函数，这个函数处于原有程序流程当中（暴露一个钩子出来）。
-- 我们需要再在有流程中钩子定义的函数块中实现某个具体的细节，需要把我们的实现，挂接或者注册（register）到钩子里，使得hook函数对目标可用。
-- Hook是一种编程机制，和具体的语言没有直接的关系。
-- 钩子只有注册的时候，才会使用，所以原有程序的流程中，没有注册或挂载时，执行的是空（即没有执行任何操作）
+Therefore, we can know that:
+- The hook function is a pre-defined function in the program, and this function is in the original program flow (exposing a hook).
+- If we need to implement a specific detail in a function block defined by a hook in the flow, we need to attach or register our implementation to the hook so that the hook function is available for the target.
+- Hook is a programming mechanism and is not directly related to a specific language.
+- Hooks are only used when registered, so in the original program flow, if not registered or mounted, it will execute nothing (i.e., no operation is performed).
 
-## Hook与生命周期
+## Hook & Life cycle
+### 1. What is Life cycle
+Lifecycle refers to a series of stages that an object or component goes through during creation, existence, and destruction. In these stages, specific operations can be performed or specific events can be handled to ensure the correct behavior and resource management of the object or component. It is like the human lifecycle, which includes stages such as infancy, childhood, adolescence, adulthood, and old age. Each stage is accompanied by different physiological, psychological development, and behaviors, ultimately forming a complete lifecycle.
 
-`promptulate`构建了一个Hook（钩子）系统，可以让`promptulate`的组件有更加细力度的功能编辑与自定义功能控制，`promptulate`在Agent，llm，Tool特定的执行节点插入用户特定的代码，下面我们用生命周期的概念来代指某个特定的执行节点。
+### 2. Construction of hook with life cycle
+Hooks are commonly used in conjunction with lifecycle methods, allowing developers to insert custom logic into the lifecycle of objects or components.
 
-具体地，你可以在以下几种生命周期中构建Hook。
+`promptulate` has built a Hook system that allows components of `promptulate` to have finer-grained function editing and custom function control. `promptulate` inserts user-specific code into specific execution nodes of Agent, llm, and Tool, and in the following text, we use the concept of lifecycle to refer to a specific execution node.
 
+Specifically, you can mount hooks in the following lifecycles to perform specific functions:
 - **Agent**
-  - `on_agent_create` 在Agent初始化时触发
-  - `on_agent_start` 在Agent开始运行时触发
-  - `on_agent_result` 在Agent返回结果时触发
+  - `on_agent_create` Triggered when the Agent is initialized
+  - `on_agent_start` Triggered when the Agent starts running
+  - `on_agent_result` Triggered when the Agent returns a result
 - **llm**
-  - `on_llm_create` 在llm初始化时触发
-  - `on_llm_start` 在llm开始运行时触发
-  - `on_llm_result` 在llm返回结果时触发
+  - `on_llm_create` Triggered when llm is initialized
+  - `on_llm_start` Triggered when llm starts running
+  - `on_llm_result` Triggered when llm returns a result
 - **Tool**
-  - `on_tool_create` 在Tool初始化时触发
-  - `on_tool_start` 在Tool开始运行时触发
-  - `on_tool_result` 在Tool返回结果时触发
+  - `on_tool_create` Triggered when the Tool is initialized
+  - `on_tool_start` Triggered when the Tool starts running
+  - `on_tool_result` Triggered when the Tool returns a result
 
 ![](../images/hook_1.png)
 
-有了Hook，你可以在上面指定的生命周期中进行Hook挂载，从而执行特定的功能。下面的示例展示了如何监听Tool Calculator的各个生命周期并打印对应日志信息（装饰器定义）。
-
+### 3.example
+The following example shows how to listen to various lifecycles of Agent Calculator and print corresponding log information (decorator definition)
 
 ```python
+import promptulate as pne
 from promptulate.hook import Hook
-from promptulate.tools import Calculator
+from promptulate.tools import calculator
 
 
-@Hook.on_tool_create(hook_type="instance")
-def handle_tool_create(*args, **kwargs):
-    print("math tool component create")
+@Hook.on_agent_create(hook_type="instance")
+def handle_agent_create(**kwargs):
+    print("math agent component create")
 
 
-@Hook.on_tool_start(hook_type="instance")
-def handle_tool_start(*args, **kwargs):
+@Hook.on_agent_start(hook_type="instance")
+def handle_agent_start(tool, *args, **kwargs):
     prompt = args[0]
-    print(f"math tool instance hook start, user prompt: {prompt}")
+    print(f"math agent instance hook start, user prompt: {prompt}, tool: {tool}")
 
 
-@Hook.on_tool_result(hook_type="instance")
-def handle_tool_result(**kwargs):
+@Hook.on_agent_result(hook_type="instance")
+def handle_agent_result(**kwargs):
     result = kwargs["result"]
-    print(f"math tool component result: {result}")
+    print(f"math agent component result: {result}")
 
 
 def main():
-    hooks = [handle_tool_create, handle_tool_start, handle_tool_result]
-    tool = Calculator(hooks=hooks)
-    result = tool.run("6的五次方等于多少")
+    hooks = [handle_agent_create, handle_agent_start, handle_agent_result]
+    agent = pne.ToolAgent(tools=[calculator], hooks=hooks)
+    result = agent.run("What is the 5 power of 6?")
     print(result)
 
 
 if __name__ == "__main__":
     main()
 
+
 ```
 
-输出结果如下：
+The output result is as follows:
 
 ```text
-math tool component create
-math tool instance hook start, user prompt: 6的五次方等于多少
-math tool component result: 7776
+math agent component create
+math agent instance hook start, user prompt: What is the 5 power of 6?
+math agent component result: 7776
 7776
 ```
 
-在上面的示例中，对on_tool_create、on_tool_start、on_tool_result三个生命周期构建了Hook，并且将Hook传入到需要被挂载的Calculator中，以此实现对应逻辑的挂载。通过args和kwargs，我们可以获取到生命周期执行过程中的传参，如在on_tool_start生命周期中，我们获取到了Calculator的用户输入；在on_tool_result生命周期中，我们获取到了Calculator的返回的结果。
+In the example above, hooks for on_agent_create, on_agent_start, and on_agent_result lifecycles are built, and the hooks are passed to the Calculator that needs to be mounted, thereby implementing the mounting of corresponding logic. Through args and kwargs, we can obtain the parameters passed during the lifecycle execution, such as in the on_agent_start lifecycle, we obtain the user input of Calculator; in the on_agent_result lifecycle, we obtain the result returned by Calculator.
 
-> hook_type="instance"参数的含义在下文[hook的两种类型](#hook的两种类型)会进一步讲解。
+> The meaning of the hook_type="instance" will be further explained in the section [Two Types of Hooks](#Two Types of Hooks)
 
-此外，你也可以使用函数式声明的方式定义Hook，下面是一个与上面等价的示例：
+Additionally, you can also define hooks using the functional declaration method, here is an equivalent example to the one above:
 
 ```python
 from promptulate.hook import Hook, HookTable
@@ -104,55 +110,153 @@ llm = ChatOpenAI(hooks=hooks)
 llm("hello")
 ```
 
-当然，我们推荐使用装饰器的方式进行声明，更为直观一些。
+Of course, we recommend using the decorator method for declaration, which is more intuitive.
 
-
-## Hook的两种类型
-
-为了让Hook可以提供更加细粒度的调控，`promptulate`中将Hook分为了以下两种类型：
+## Two Types of Hooks
+In order to provide more fine-grained control, `promptulate` divides hooks into the following two types:
 
 - **ComponentHook**
-
-组件级Hook，挂载时将同时触发同一类型组件的指定生命周期，例如，假如你给Agent导入了五个Tool，这个时候你可以使用组件级Hook，用一个Hook函数对五个Tool的同一生命周期进行监听。
+Component-level Hook, when mounted, will trigger the specified lifecycle of the same type of component simultaneously. For example, if you import five Tools to an Agent, you can use a component-level Hook to listen to the same lifecycle of the five Tools.
 
 - **InstanceHook**
+Instance-level Hook, mounts the Hook to a specific instance of a component, and the Hook function is only called when the instance triggers the corresponding lifecycle.
 
-实例级Hook，将Hook挂载到指定组件的实例中，其只有在实例触发对应的生命周期时，Hook函数才会被调用。
-
-下面的示例展示了ComponentHook和InstanceHook的使用方式。
+The following example demonstrates the usage of ComponentHook and InstanceHook.
+The usage of InstanceHook is shown in the Agent Calculator example above.
+The following example demonstrates the usage of component hook for Agent with 2 tools imported:
 
 ```python
+import promptulate as pne
+from promptulate import ChatOpenAI
 from promptulate.hook import Hook
-from promptulate.tools import Calculator
-
+from promptulate.tools import calculator
+from promptulate.tools.wikipedia import wikipedia_search
 
 @Hook.on_tool_create(hook_type="component")
 def handle_tool_create_by_component(*args, **kwargs):
-    print("math tool component create by component")
-
-
-@Hook.on_tool_create(hook_type="instance")
-def handle_tool_create_by_instance(*args, **kwargs):
-    print("math tool component create by instance")
-
+    print("tool component create by component")
 
 def main():
-    hooks = [handle_tool_create_by_instance]
-    tool = Calculator(hooks=hooks)
-    result = tool.run("6的五次方等于多少")
-    print(result)
-
+    llm = ChatOpenAI(model="gpt-4-1106-preview")
+    agent = pne.ToolAgent(tools=[wikipedia_search, calculator],
+                          llm=llm)
+    response: str = agent.run("Tell me the year in which Tom Cruise's Top Gun was "
+                              "released, and calculate the square of that year.")
+    print(response)
 
 if __name__ == "__main__":
     main()
 ```
 
+## Custom Hook
 
-## 自定义Hook
+Through the Hook system of `promptulate`, you can customize Hook systems in various components.
 
-通过 `promptulate`的Hook系统，你可以在各个组件中自定义Hook系统。
+The following demonstrates a custom component hook for an Agent with 3 tools imported:
+```python
+import promptulate as pne
+from promptulate.hook import Hook, HookTable
+from promptulate.llms import ChatOpenAI
+from promptulate.tools.math.tools import calculator
+from promptulate.tools.wikipedia.tools import wikipedia_search
+from promptulate.utils.color_print import print_text
 
+# Define the component hook class
+class MidStepOutHook:
+    @staticmethod
+    def handle_agent_start(*args, **kwargs):
+        if kwargs.get("agent_type", None):
+            print_text(f"[Agent] {kwargs['agent_type']} start...", "red")
+        else:
+            print_text("[Agent] Agent Start...", "red")
 
-## 自定义生命周期
+        if kwargs.get("_from", None) is None:
+            print_text(f"[User instruction] {args[0]}", "blue")
+        elif kwargs["_from"] == "agent":
+            print_text(f"[Agent execution] {args[0]}", "blue")
 
-> 待完善
+    @staticmethod
+    def handle_agent_plan(*args, **kwargs):
+        print_text(f"[Plan] {kwargs['plan']}", "green")
+
+    @staticmethod
+    def handle_agent_revise_plan(*args, **kwargs):
+        print_text(f"[Revised Plan] {kwargs['revised_plan']}", "green")
+
+    @staticmethod
+    def handle_agent_action(*args, **kwargs):
+        print_text(f"[Thought] {kwargs['thought']}", "yellow")
+        print_text(
+            f"[Action] {kwargs['action']} args: {kwargs['action_input']}", "yellow"
+        )
+
+    @staticmethod
+    def handle_agent_observation(*args, **kwargs):
+        print_text(f"[Observation] {kwargs['observation']}", "yellow")
+
+    @staticmethod
+    def handle_agent_result(*args, **kwargs):
+        if kwargs.get("_from", None) is None:
+            print_text(f"[Agent Result] {kwargs['result']}", "green")
+            print_text("[Agent] Agent End.", "pink")
+        elif kwargs["_from"] == "agent":
+            print_text(f"[Execute Result] {kwargs['result']}", "green")
+            print_text("[Execute] Execute End.", "pink")
+
+    @staticmethod
+    def registry_hooks():
+        """Registry and enable stdout hooks. StdoutHook can print colorful
+        information."""
+        Hook.registry_hook(
+            HookTable.ON_AGENT_REVISE_PLAN,
+            MidStepOutHook.handle_agent_revise_plan,
+            "component",
+        )
+        Hook.registry_hook(
+            HookTable.ON_AGENT_ACTION, MidStepOutHook.handle_agent_action, "component"
+        )
+        Hook.registry_hook(
+            HookTable.ON_AGENT_OBSERVATION,
+            MidStepOutHook.handle_agent_observation,
+            "component",
+        )
+
+        
+# Register hook function
+MidStepOutHook.registry_hooks()
+
+# Custom tool
+def word_problem_tool(question: str) -> str:
+    """
+    Useful for when you need to answer logic-based/reasoning questions.
+
+    Args:
+        question(str): Detail question, the description of the problem requires a
+        detailed question context. Include a description of the problem
+
+    Returns:
+        question answer
+    """
+    system_prompt: str = """You are a reasoning agent tasked with solving t he user's logic-based questions.
+    Logically arrive at the solution, and be factual.
+    In your answers, clearly detail the steps involved and give the final answer.
+    Provide the response in bullet points."""  # noqa
+    llm = ChatOpenAI()
+    return llm(f"{system_prompt}\n\nQuestion:{question}Answer:")
+
+# Create agent
+llm = ChatOpenAI(model="gpt-4-1106-preview")
+agent = pne.ToolAgent(tools=[wikipedia_search, calculator, word_problem_tool],
+                      llm=llm)
+
+response: str = agent.run("I have 3 apples and 4 oranges.I give half of my oranges "
+                          "away and buy two dozen new ones,along with three packs of "
+                          "strawberries.Each pack of strawberry has 30 "
+                          "strawberries.How many total pieces of fruit do I have at "
+                          "the end?")
+print(response)
+```
+
+##  Custom lifecycle
+
+> To be improved
