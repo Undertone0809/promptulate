@@ -91,7 +91,7 @@ Additionally, you can also define hooks using the functional declaration method,
 
 ```python
 from promptulate.hook import Hook, HookTable
-from promptulate.llms import ChatOpenAI
+import promptulate as pne
 
 
 def handle_start(*args, **kwargs):
@@ -106,8 +106,9 @@ def handle_result(*args, **kwargs):
 Hook.registry_hook(HookTable.ON_LLM_START, handle_start, "instance")
 Hook.registry_hook(HookTable.ON_LLM_RESULT, handle_result, "instance")
 hooks = [handle_start, handle_result]
-llm = ChatOpenAI(hooks=hooks)
-llm("hello")
+model = pne.LLMFactory.build(model_name="gpt-4-1106-preview", hooks=hooks)
+
+model("hello")
 ```
 
 Of course, we recommend using the decorator method for declaration, which is more intuitive.
@@ -127,7 +128,6 @@ The following example demonstrates the usage of component hook for Agent with 2 
 
 ```python
 import promptulate as pne
-from promptulate import ChatOpenAI
 from promptulate.hook import Hook
 from promptulate.tools import calculator
 from promptulate.tools.wikipedia import wikipedia_search
@@ -137,9 +137,8 @@ def handle_tool_create_by_component(*args, **kwargs):
     print("tool component create by component")
 
 def main():
-    llm = ChatOpenAI(model="gpt-4-1106-preview")
-    agent = pne.ToolAgent(tools=[wikipedia_search, calculator],
-                          llm=llm)
+    model = pne.LLMFactory.build(model_name="gpt-4-1106-preview")
+    agent = pne.ToolAgent(tools=[wikipedia_search, calculator], llm=model)
     response: str = agent.run("Tell me the year in which Tom Cruise's Top Gun was "
                               "released, and calculate the square of that year.")
     print(response)
@@ -156,7 +155,6 @@ The following demonstrates a custom component hook for an Agent with 3 tools imp
 ```python
 import promptulate as pne
 from promptulate.hook import Hook, HookTable
-from promptulate.llms import ChatOpenAI
 from promptulate.tools.math.tools import calculator
 from promptulate.tools.wikipedia.tools import wikipedia_search
 from promptulate.utils.color_print import print_text
@@ -221,10 +219,6 @@ class MidStepOutHook:
             "component",
         )
 
-        
-# Register hook function
-MidStepOutHook.registry_hooks()
-
 # Custom tool
 def word_problem_tool(question: str) -> str:
     """
@@ -241,13 +235,15 @@ def word_problem_tool(question: str) -> str:
     Logically arrive at the solution, and be factual.
     In your answers, clearly detail the steps involved and give the final answer.
     Provide the response in bullet points."""  # noqa
-    llm = ChatOpenAI()
-    return llm(f"{system_prompt}\n\nQuestion:{question}Answer:")
+    return pne.chat(messages=f"{system_prompt}\n\nQuestion:{question}Answer:", model="gpt-4-1106-preview")
+
+
+# Register hook function
+MidStepOutHook.registry_hooks()
 
 # Create agent
-llm = ChatOpenAI(model="gpt-4-1106-preview")
-agent = pne.ToolAgent(tools=[wikipedia_search, calculator, word_problem_tool],
-                      llm=llm)
+model = pne.LLMFactory.build(model_name="gpt-4-1106-preview")
+agent = pne.ToolAgent(tools=[wikipedia_search, calculator, word_problem_tool], llm=model)
 
 response: str = agent.run("I have 3 apples and 4 oranges.I give half of my oranges "
                           "away and buy two dozen new ones,along with three packs of "
