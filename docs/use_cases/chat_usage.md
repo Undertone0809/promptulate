@@ -1,4 +1,4 @@
-> All your need is a `pne.chat()` function. A powerful and easy-to-use function covers 90% of LLM application scenarios.
+> All your need is a `pne.chat()` function.
 
 # Chat
 `pne.chat()` is an awesome function, you can use **tools, formatted output, different llm** in this function. 
@@ -24,7 +24,7 @@ response: str = pne.chat(messages=messages, model="gpt-4-turbo")
 print(response)
 ```
 
-    I am a helpful assistant designed to assist you with any questions or tasks you may have. How can I assist you today?
+    I am a helpful assistant designed to provide information and assistance to users like you. How can I help you today?
     
 
 Moreover, you can only pass a string to `pne.chat()`, it will automatically convert it to the OpenAI format.
@@ -43,6 +43,39 @@ print(response)
     My knowledge is up to date as of March 2021. Any events or developments occurring after that date would not be included in my responses. If you're asking for any recent information or updates, I recommend checking the latest sources as my information might not be current.
     
 
+## AIChat
+
+If you have multi-conversation and only use one LLM, you can use `pne.AIChat` init a chat object. It will save the LLM object and you can use it to chat. AIChat is the same as chat, but it is more convenient to use when you have multiple conversations.
+
+The follow example show how to use `pne.AIChat` to chat.
+
+
+```python
+import promptulate as pne
+
+ai = pne.AIChat(model="gpt-4-1106-preview", model_config={"temperature": 0.5})
+resp: str = ai.run("Hello")
+print(resp)
+```
+
+    Hello! How can I assist you today?
+    
+
+The usage of `pne.AIChat` is the same as `pne.chat()`, you can also use OpenAI format to chat.
+
+
+```python
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "Who are you?"},
+]
+resp: str = ai.run(messages)
+print(resp)
+```
+
+    I am an AI digital assistant designed to provide information, answer questions, and assist with various tasks to the best of my ability based on the data and algorithms I've been programmed with. How can I assist you today?
+    
+
 ## Return type
 `pne.chat()` return string by default.
 
@@ -55,8 +88,9 @@ If you want to do more complex thing, metadata is important. You can use `return
 ```python
 import promptulate as pne
 
-response: pne.AssistantMessage = pne.chat(messages="Who are you?", model="gpt-4-turbo",
-                                          return_raw_response=True)
+response: pne.AssistantMessage = pne.chat(
+    messages="Who are you?", model="gpt-4-turbo", return_raw_response=True
+)
 print(response.content)  # response string
 print(response.additional_kwargs)  # metadata
 ```
@@ -80,6 +114,73 @@ messages = [
     {"role": "user", "content": "Who are you?"},
 ]
 response = pne.chat(messages=messages, model="claude-2")
+print(response)
+```
+
+### Deepseek
+
+This example show how to use Deepseek LLMs in `pne.chat()`. Make sure you have key DEEPSEEK_API_KEY.
+
+
+```python
+import os
+import promptulate as pne
+
+os.environ["DEEPSEEK_API_KEY"] = "your-api-key"
+
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "Who are you?"},
+]
+response = pne.chat(
+    messages=messages,
+    model="deepseek/deepseek-chat",
+)
+print(response)
+```
+
+### Zhipu
+
+This example show how to use Zhipu model in `pne.chat()`. Make sure you have key ZHIPUAI_API_KEY.
+
+
+```python
+import os
+import promptulate as pne
+
+os.environ["ZHIPUAI_API_KEY"] = "your-api-key"
+
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "Who are you?"},
+]
+response = pne.chat(
+    messages=messages,
+    model="zhipu/glm-4",
+)
+print(response)
+```
+
+### Ernie
+
+This example show how to use Baidu Ernie model in `pne.chat()`. Make sure you have key QIANFAN_ACCESS_KEY and QIANFAN_SECRET_KEY.
+
+
+```python
+import os
+import promptulate as pne
+
+os.environ["QIANFAN_ACCESS_KEY"] = "your-api-key"
+os.environ["QIANFAN_SECRET_KEY"] = "your-api-key"
+
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "Who are you?"},
+]
+response = pne.chat(
+    messages=messages,
+    model="qianfan/ERNIE-Bot-4",
+)
 print(response)
 ```
 
@@ -169,8 +270,8 @@ print(response)
     I am a helpful assistant designed to provide information, answer questions, and assist with various tasks. How can I assist you today?
     
 
-## Output Format
-The output of LLM has strong uncertainty. Pne provide the ability to get a formatted object by LLM. The following example shows that if LLM strictly returns you an array listing all provinces in China. 
+## Structured Output
+The output of LLM has strong uncertainty. Pne provide the ability to get a structured object by LLM. The following example shows that if LLM strictly returns you an array listing all provinces in China. Here we use Pydantic to build a structured object.
 
 
 ```python
@@ -185,6 +286,7 @@ class LLMResponse(BaseModel):
 
 resp: LLMResponse = pne.chat(
     messages="Please tell me all provinces in China.",
+    model= "gpt-4-turbo",
     output_schema=LLMResponse
 )
 
@@ -207,6 +309,7 @@ class LLMResponse(BaseModel):
 
 response: LLMResponse = pne.chat(
     messages="Please tell me all provinces in China.",
+    model= "gpt-4-turbo",
     output_schema=LLMResponse
 )
 print(response.provinces)
@@ -232,6 +335,7 @@ class LLMResponse(BaseModel):
 current_time = datetime.now()
 response: LLMResponse = pne.chat(
     messages=f"What's the temperature in Shanghai tomorrow? current time: {current_time}",
+    model= "gpt-4-turbo",
     output_schema=LLMResponse
 )
 print(response)
@@ -259,6 +363,7 @@ import promptulate as pne
 websearch = pne.tools.DuckDuckGoTool()
 response = pne.chat(
     messages="What's the temperature in Shanghai tomorrow?",
+    model= "gpt-4-turbo",
     tools=[websearch]
 )
 print(response)
@@ -386,8 +491,7 @@ class LLMResponse(BaseModel):
     provinces: List[str] = Field(description="List of provinces name")
 
 
-resp: LLMResponse = pne.chat("Please tell me all provinces in China.?",
-                             output_schema=LLMResponse)
+resp: LLMResponse = pne.chat("Please tell me all provinces in China.?", model= "gpt-4-turbo", output_schema=LLMResponse)
 print(resp)
 ```
 
@@ -401,35 +505,11 @@ print(resp)
 ```python
 import promptulate as pne
 
-response = pne.chat("Who are you?", stream=True)
+response = pne.chat("Who are you?", model="gpt-4-turbo", stream=True)
 
 for chuck in response:
     print(chuck)
 ```
-
-    I
-     am
-     a
-     virtual
-     assistant
-     designed
-     to
-     provide
-     information
-     and
-     assistance
-    .
-     Is
-     there
-     something
-     specific
-     you
-     would
-     like
-     help
-     with
-    ?
-    
 
 `pne.chat()` by stream will return an iterator, you can use `next()` or `for each` to get the response.
 
@@ -439,30 +519,12 @@ If you want to get metadata, you can use `return_raw_response=True` to get the r
 ```python
 import promptulate as pne
 
-response = pne.chat("Who are you?", stream=True, return_raw_response=True)
+response = pne.chat("Who are you?", model="gpt-4-turbo", stream=True, return_raw_response=True)
 
 for chuck in response:
     print(chuck.content)
     print(chuck.additional_kwargs)
 ```
-
-## AIChat
-
-If you have multi-conversation and only use one LLM, you can use `pne.AIChat` init a chat object. It will save the LLM object and you can use it to chat.
-
-The follow example show how to use `pne.AIChat` to chat.
-
-
-```python
-import promptulate as pne
-
-ai_chat = pne.AIChat(model="gpt-4-1106-preview", model_config={"temperature": 0.5})
-resp: str = ai_chat.run("Hello")
-print(resp)
-```
-
-    Hello! How can I assist you today?
-    
 
 ## Retrieve && RAG
 **RAG(Retrieval-Augmented Generation)** is a important data retrieve method. You can use `pne.chat()` to retrieve data from your database.

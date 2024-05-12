@@ -14,7 +14,7 @@ from pydantic import Field
 from promptulate.llms.base import BaseLLM
 from promptulate.schema import MessageSet, AssistantMessage
 
-os.environ["OPENAI_API_KEY"] = "your key"
+# os.environ["OPENAI_API_KEY"] = "your key"
 
 
 class MyLLM(BaseLLM):
@@ -26,11 +26,7 @@ class MyLLM(BaseLLM):
         return AssistantMessage(content=resp.choices[0].message.content, additional_kwargs=resp)
 ```
 
-If you custom a LLM class, you need to implement the following methods:
-
-1. `_predict` Method: This method is used to make predictions using your LLM. It should return an `AssistantMessage` object.
-2. `__call__` Method: This method is used to interact with your LLM as if it were a function. It should return a string.
-
+If you custom a LLM class, you need to implement the `_predict` method. This method should return an `AssistantMessage` object. The `AssistantMessage` object should contain the response to the user query.
 
 ## Using Your Custom LLM
 
