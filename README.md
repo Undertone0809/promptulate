@@ -40,6 +40,7 @@
 - 🪝 Lifecycle and Hooks: Provides a wealth of Hooks and comprehensive lifecycle management, allowing the insertion of custom code at various stages of Agents, Tools, and LLMs.
 - 💻 Terminal Integration: Easily integrates application terminals, with built-in client support, offering rapid debugging capabilities for prompts.
 - ⏱️ Prompt Caching: Offers a caching mechanism for LLM Prompts to reduce repetitive work and enhance development efficiency.
+- 🤖 Powerful OpenAI Wrapper: With pne, you no longer need to use the openai sdk, the core functions can be replaced with pne.chat, and provides enhanced features to simplify development difficulty.
 
 > Below, `pne` stands for Promptulate, which is the nickname for Promptulate. The `p` and `e` represent the beginning and end of Promptulate, respectively, and `n` stands for 9, which is a shorthand for the nine letters between `p` and `e`.
 

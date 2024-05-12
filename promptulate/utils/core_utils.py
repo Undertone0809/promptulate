@@ -118,6 +118,16 @@ def convert_backslashes(path: str):
 
 
 def get_default_storage_path(module_name: str = "") -> str:
+    """Get the default storage path for the current module. The storage path is
+    created in the user's home directory, or in a temporary directory if permission
+    is denied.
+
+    Args:
+        module_name(str): The name of the module to create a storage path for.
+
+    Returns:
+        str: The default storage path for the current module.
+    """
     storage_path = os.path.expanduser("~/.pne")
 
     if module_name:

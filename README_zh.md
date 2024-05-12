@@ -29,6 +29,7 @@
 
 - 🐍 Pythonic Code Style: 采用 Python 开发者的习惯，提供 Pythonic 的 SDK 调用方式，一切尽在掌握，仅需一个 pne.chat 函数便可封装所有必需功能。
 - 🧠 模型兼容性: 支持市面上几乎所有类型的大模型，并且可以轻松自定义模型以满足特定需求。
+- 🤖 取代OpenAI SDK：你不再需要使用 openai sdk，核心功能都可以使用 pne.chat 来替代，并且提供增强特性，简化开发难度。
 - 🕵️‍♂️ 多样化 Agent: 提供 WebAgent、ToolAgent、CodeAgent 等多种类型的 Agent，具备计划、推理、行动等处理复杂问题的能力。
 - 🔗 低成本集成: 轻而易举地集成如 LangChain 等不同框架的工具，大幅降低集成成本。
 - 🔨 函数即工具: 将任意 Python 函数直接转化为 Agent 可用的工具，简化了工具的创建和使用过程。
@@ -82,6 +83,18 @@ import promptulate as pne
 
 resp: str = pne.chat(model="ollama/llama2", messages = [{ "content": "Hello, how are you?","role": "user"}])
 ```
+
+## 取代 OpenAI SDK
+
+很多第三方库可以使用 OpenAI SDK 调用它们的模型，如 [Open]，有了 pne，你可以直接使用 pne.chat 函数来调用这些模型，而不需要再使用 OpenAI SDK，并且提供增强特性，简化开发难度。
+
+```python
+import promptulate as pne
+
+pne.chat("openai/custom-model")
+```
+
+
 
 ## 📗 相关文档
 
