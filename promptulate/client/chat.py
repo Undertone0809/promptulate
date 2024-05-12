@@ -24,9 +24,10 @@ from typing import Optional
 import click
 import questionary
 
+import promptulate as pne
 from promptulate.agents import ToolAgent
 from promptulate.config import Config
-from promptulate.llms import BaseLLM, ChatOpenAI, ErnieBot
+from promptulate.llms import BaseLLM, ErnieBot
 from promptulate.schema import LLMType, MessageSet
 from promptulate.tools import (
     ArxivQueryTool,
@@ -155,7 +156,7 @@ def chat():
         exit(0)
 
     model = questionary.select(
-        "Choose a llm model:",
+        "Choose a language model:",
         choices=[
             "gpt-3.5-turbo",
             "gpt-4",
@@ -163,14 +164,18 @@ def chat():
             "ernie-bot-turbo",
             "ernie-bot",
             "ernie-bot-4",
+            "custom-model",
         ],
     ).ask()
 
     # init model
     if "gpt" in model:
-        llm = ChatOpenAI(model=model, temperature=0.0)
+        llm = pne.LLMFactory.build(model_name=model, model_config={"temperature": 0.0})
     elif "ernie" in model:
         llm = ErnieBot(model=model, temperature=0.1)
+    elif "custom-model" in model:
+        model_name: str = questionary.text("Please input your model name: ").ask()
+        llm = pne.LLMFactory.build(model_name=model_name)
     else:
         raise ValueError(f"model {model} is not supported.")
 
