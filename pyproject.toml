@@ -8,7 +8,7 @@ description = "A powerful LLM Application development framework."
 name = "promptulate"
 readme = "README.md"
 repository = "https://github.com/Undertone0809/promptulate"
-version = "1.16.0"
+version = "1.16.1"
 keywords = [
     "promptulate",
     "pne",
