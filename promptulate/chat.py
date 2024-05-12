@@ -4,7 +4,7 @@ from promptulate.agents.base import BaseAgent
 from promptulate.agents.tool_agent.agent import ToolAgent
 from promptulate.beta.agents.assistant_agent import AssistantAgent
 from promptulate.llms import BaseLLM
-from promptulate.llms._litellm import LiteLLM
+from promptulate.llms.factory import LLMFactory
 from promptulate.output_formatter import formatting_result, get_formatted_instructions
 from promptulate.pydantic_v1 import BaseModel
 from promptulate.schema import (
@@ -69,7 +69,7 @@ def _get_llm(
     if custom_llm:
         return custom_llm
 
-    return LiteLLM(model=model, model_config=model_config)
+    return LLMFactory.build(model, model_config=model_config)
 
 
 class AIChat:
