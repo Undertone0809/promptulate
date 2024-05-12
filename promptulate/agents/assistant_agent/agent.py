@@ -209,8 +209,7 @@ class AssistantAgent(BaseAgent):
             raise Exception("No task prompt")
 
         logger.info(
-            f"[Assistant Agent] Task received. Creating Plan step, task input: {task.input}"
-            # noqa
+            f"[Assistant Agent] Task received. Creating Plan step, task input: {task.input}"  # noqa
         )
         self.current_task_id = task.task_id
         self.uacp_agent.db.create_step(
