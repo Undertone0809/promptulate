@@ -48,6 +48,11 @@ class LLMResponse(BaseModel):
 def test_init():
     llm = FakeLLM()
 
+    # not model and custom_llm
+    with pytest.raises(ValueError) as e:
+        chat("hello")
+        assert str(e.value) == "model or custom_llm must be provided."
+
     # stream and output_schema and not exist at the same time.
     with pytest.raises(ValueError):
         chat(messages="hello", custom_llm=llm, output_schema=LLMResponse, stream=True)

@@ -55,6 +55,9 @@ def _get_llm(
     Returns:
         Return LLM instance.
     """
+    if (model or custom_llm) is None:
+        raise ValueError("model or custom_llm must be provided.")
+
     if model and custom_llm:
         raise ValueError("model and custom_llm can't be provided at the same time.")
 
@@ -72,7 +75,7 @@ def _get_llm(
 class AIChat:
     def __init__(
         self,
-        model: str,
+        model: Optional[str] = None,
         model_config: Optional[dict] = None,
         tools: Optional[List[ToolTypes]] = None,
         custom_llm: Optional[BaseLLM] = None,
