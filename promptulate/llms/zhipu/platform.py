@@ -68,8 +68,8 @@ class ZhiPu(BaseLLM, ABC):
     def generate_token(self, api_key: str, exp_seconds: int):
         try:
             id, secret = api_key.split(".")
-        except Exception as e:
-            raise Exception("invalid apikey", e)
+        except ValueError:
+            raise ValueError("invalid apikey, please provide a correct key")
 
         payload = {
             "api_key": id,
