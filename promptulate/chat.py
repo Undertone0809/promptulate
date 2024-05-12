@@ -1,7 +1,6 @@
 from typing import Dict, List, Optional, TypeVar, Union
 
 from promptulate.agents.base import BaseAgent
-from promptulate.agents.tool_agent.agent import ToolAgent
 from promptulate.beta.agents.assistant_agent import AssistantAgent
 from promptulate.llms import BaseLLM
 from promptulate.llms.factory import LLMFactory
@@ -100,6 +99,8 @@ class AIChat:
                 self.agent = AssistantAgent(tools=self.tools, llm=self.llm)
                 logger.info("[pne chat] invoke AssistantAgent with plan ability.")
             else:
+                from promptulate.agents.tool_agent.agent import ToolAgent
+
                 self.agent = ToolAgent(tools=self.tools, llm=self.llm)
                 logger.info("[pne chat] invoke ToolAgent.")
 
