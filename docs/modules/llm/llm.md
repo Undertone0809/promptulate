@@ -1,19 +1,19 @@
 # LLM
 
-### 简介
-
 > Attention:
-> 1. `promptulate`中会把LLM与llm的意思分开来，LLM表示大语言模型，llm表示`promptulate`中的llm模块。
-> 2. 从 `v1.11.0` 的版本开始，我们推荐你使用 [pne.chat()](use_cases/chat_usage.md#chat) 的方式进行 LLM 的调用。
-> 3. 从 `v1.16.0` 版本开始，不在使用 llm 的概念，LLM 所有的功能都可以用 [pne.chat()](use_cases/chat_usage.md#chat) 来代替。只有当你需要自定义模型的时候，需要学习 [Custom LLM](modules/llm/custom_llm.md#custom-llm) 的使用方式。
-本文将会介绍llm模块的**基本使用方式，API KEY、KEY池、代理的配置方式**。
+> 1. pne will separate the meaning of LLM from llm, LLM stands for large language model, llm stands for llm module in 'promptulate'.
+> 2. Starting with v1.11.0, we recommend that you use  [pne.chat()](use_cases/chat_usage.md#chat)  for LLM calls.
+> 3. Starting from v1.16.0, the concept of llm is no longer used, and all functions of LLM can be replaced by  [pne.chat()](use_cases/chat_usage.md#chat). Only when you need to customize the model, You need to learn how to use [Custom LLM](modules/llm/custom_llm.md#custom-llm) and [LLMFactory](modules/llm/llm-factory-usage#LLMFactory).
 
-LLM指大语言模型，当前市面上常见的大语言模型有GPT3.5, GPT4, LLaMa, InstructGPT等大语言模型。`promptulate`可以支持不同类型的大语言模型调用。
+## Introduction
 
-当前`promptulate`重点适配了OpenAI的相关的大语言模型(GPT-3.5, GPT-4.0, text-davinci-003),百度文心系列大模型与智谱系列大模型，其他模型正在逐步适配中（如通义千问模型适配中），如果你有想用的LLM或者更好的想法，欢迎提出你的想法。
+llm is a component in pne that makes up the smallest unit of a large model, can do large model inference, and supports the construction of almost all large models on the market, of course, you can also customize local models. It integrates the ability of [litellm](https://github.com/BerriAI/litellm). It means you can call all LLM APIs using the OpenAI format. Use Bedrock, Azure, OpenAI, Cohere, Anthropic, Ollama, Sagemaker, HuggingFace, Replicate (100+ LLMs). Now let's take a look at how to use it.
 
+## When will this module be used?
 
-### 相关教程
+In general, we do not use the llm module directly, because in most cases we can directly use pne.chat() to complete the business, only when the custom model and the Agent are used. 
 
-- [OpenAI快速上手](modules/llm/openai.md#openai)
-- [百度文心大模型快速上手](modules/llm/erniebot.md#百度文心erniebot)
+### How to use?
+
+- [Use LLMFactory to create a language model](modules/llm/llm-factory-usage#LLMFactory)
+- [Custom your llm](modules/llm/custom_llm.md#custom-llm)
