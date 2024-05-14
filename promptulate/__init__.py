@@ -19,7 +19,9 @@
 
 import warnings
 
+from promptulate.agents.assistant_agent.agent import AssistantAgent
 from promptulate.agents.base import BaseAgent
+from promptulate.agents.planner.planner import Planner
 from promptulate.agents.tool_agent.agent import ToolAgent
 from promptulate.agents.web_agent.agent import WebAgent
 from promptulate.chat import AIChat, chat
@@ -64,6 +66,8 @@ _agent_fields = [
     "BaseAgent",
     "WebAgent",
     "ToolAgent",
+    "AssistantAgent",
+    "Planner",
 ]
 
 __all__ = [
