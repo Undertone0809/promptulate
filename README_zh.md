@@ -30,7 +30,7 @@
 - 🐍 Pythonic Code Style: 采用 Python 开发者的习惯，提供 Pythonic 的 SDK 调用方式，一切尽在掌握，仅需一个 pne.chat 函数便可封装所有必需功能。
 - 🧠 模型兼容性: 支持市面上几乎所有类型的大模型，并且可以轻松自定义模型以满足特定需求。
 - 🤖 取代OpenAI SDK：你不再需要使用 openai sdk，核心功能都可以使用 pne.chat 来替代，并且提供增强特性，简化开发难度。
-- 🕵️‍♂️ 多样化 Agent: 提供 WebAgent、ToolAgent、CodeAgent 等多种类型的 Agent，具备计划、推理、行动等处理复杂问题的能力。
+- 🕵️‍♂️ 多样化 Agent: 提供 WebAgent、ToolAgent、CodeAgent 等多种类型的 Agent，具备计划、推理、行动等处理复杂问题的能力，原子化 Planner 等组件。
 - 🔗 低成本集成: 轻而易举地集成如 LangChain 等不同框架的工具，大幅降低集成成本。
 - 🔨 函数即工具: 将任意 Python 函数直接转化为 Agent 可用的工具，简化了工具的创建和使用过程。
 - 🪝 生命周期与钩子: 提供丰富的 Hook 和完善的生命周期管理，允许在 Agent、Tool、LLM 的各个阶段插入自定义代码。
@@ -84,18 +84,6 @@ import promptulate as pne
 resp: str = pne.chat(model="ollama/llama2", messages = [{ "content": "Hello, how are you?","role": "user"}])
 ```
 
-## 取代 OpenAI SDK
-
-很多第三方库可以使用 OpenAI SDK 调用它们的模型，如 [Open]，有了 pne，你可以直接使用 pne.chat 函数来调用这些模型，而不需要再使用 OpenAI SDK，并且提供增强特性，简化开发难度。
-
-```python
-import promptulate as pne
-
-pne.chat("openai/custom-model")
-```
-
-
-
 ## 📗 相关文档
 
 - [快速上手/官方文档](https://undertone0809.github.io/promptulate/#/)
@@ -103,6 +91,12 @@ pne.chat("openai/custom-model")
 - [参与贡献/开发者手册](https://undertone0809.github.io/promptulate/#/other/contribution)
 - [常见问题](https://undertone0809.github.io/promptulate/#/other/faq)
 - [pypi仓库](https://pypi.org/project/promptulate/)
+
+## 📝 Examples
+
+- [Build a math application with agent [Steamlit, ToolAgent, Hooks].](https://github.com/Undertone0809/promptulate/tree/main/example/build-math-application-with-agent)
+- [A Mulitmodal Robot Agent framework of ROS2 and Promptulate [Agent]](https://github.com/Undertone0809/Athena)
+- [Use streamlit and pne to compare different model a playground. [Streamlit]](https://github.com/Undertone0809/pne-playground-model-comparison)
 
 ## 🛠 快速开始
 
@@ -113,6 +107,8 @@ pip install -U promptulate
 ```
 
 > 注意：Your Python version should be 3.8 or higher.
+
+### 结构化输出
 
 格式化输出是 LLM 应用开发鲁棒性的重要基础，我们希望 LLM 可以返回稳定的数据，使用 pne，你可以轻松的进行格式化输出，下面的示例中，我们使用 pydantic 的 BaseModel 封装起一个需要返回的数据结构。
 
@@ -134,6 +130,31 @@ print(resp)
 provinces=['Anhui', 'Fujian', 'Gansu', 'Guangdong', 'Guizhou', 'Hainan', 'Hebei', 'Heilongjiang', 'Henan', 'Hubei', 'Hunan', 'Jiangsu', 'Jiangxi', 'Jilin', 'Liaoning', 'Qinghai', 'Shaanxi', 'Shandong', 'Shanxi', 'Sichuan', 'Yunnan', 'Zhejiang', 'Taiwan', 'Guangxi', 'Nei Mongol', 'Ningxia', 'Xinjiang', 'Xizang', 'Beijing', 'Chongqing', 'Shanghai', 'Tianjin', 'Hong Kong', 'Macao']
 ```
 
+### 取代 OpenAI SDK
+
+很多第三方库可以使用 OpenAI SDK 调用它们的模型，如 [Deepseek](https://www.deepseek.com/)，有了 pne，你可以直接使用 pne.chat 函数来调用这些模型，而不需要再使用 OpenAI SDK，并且提供增强特性，简化开发难度，在 model 中使用 openai/xxx 的 provider 前缀，即可使用 OpenAI 的模型进行调用。
+
+```python
+import os
+import promptulate as pne
+
+os.environ["DEEPSEEK_API_KEY"] = "your api key"
+
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "How are you?"},
+]
+response = pne.chat(
+    messages=messages,
+    model="openai/deepseek-chat",
+)
+print(response)
+```
+
+当然，如果你想使用 Deepseek 的模型，你可以直接使用 `response = pne.chat(messages=messages, model="deepseek/deepseek-chat")` 的方式进行调用。
+
+### 🧰 外部工具集成
+
 在 pne，你可以轻松集成各种不同类型不同框架（如LangChain，llama-index）的 tools，如网络搜索、计算器等在外部工具，下面的示例中，我们使用 LangChain 的 duckduckgo 的搜索工具，来获取明天上海的天气。
 
 ```python
@@ -146,6 +167,8 @@ os.environ["OPENAI_API_KEY"] = "your-key"
 tools: list = load_tools(["ddg-search", "arxiv"])
 resp: str = pne.chat(model="gpt-4-1106-preview", messages = [{ "content": "What is the temperature tomorrow in Shanghai","role": "user"}], tools=tools)
 ```
+
+### 🤖 具有规划、工具调用、反思等能力的Agent
 
 在这个示例中，pne 内部集成了拥有推理和反思能力的 [ReAct](https://arxiv.org/abs/2210.03629) 研究，封装成 ToolAgent，拥有强大的推理能力和工具调用能力，可以选择合适的工具进行调用，从而获取更加准确的结果。
 
@@ -206,6 +229,27 @@ pne.chat("what is the hometown of the 2024 Australia open winner?", model="gpt-4
 [Revised Plan] {"goals": ["Find the hometown of the 2024 Australian Open winner"], "tasks": [], "next_task_id": null}
 [Agent Result] Jannik Sinner was born in San Candido (Italian) / Innichen (German), Italy.
 [Agent] Agent End.
+```
+
+### 原子化 Agent 结构
+
+在 Agent 开发的场景下，很多时候我们需要拆分出很多 Agent 的原子话组件，以达到更好地定制化效果，pne 提供了原子化的 Agent 组件，如 Planner，下面的实例展示了使用单独的 Planner 组件进行任务规划。
+
+```python
+import promptulate as pne
+
+model = pne.LLMFactory.build("gpt-4-turbo")
+planner = pne.Planner(model, system_prompt="You are a planner")
+plans = planner.run("Plan a trip to Paris")
+print(plans)
+```
+
+**输出：**
+
+```text
+('goals', ['Plan a trip to Paris'])
+('tasks', [Task(task_id=1, description='Check passport validity', status=<TaskStatus.TODO: 'todo'>), Task(task_id=2, description='Determine travel dates', status=<TaskStatus.TODO: 'todo'>), Task(task_id=3, description='Research and book flights', status=<TaskStatus.TODO: 'todo'>), Task(task_id=4, description='Book accommodations', status=<TaskStatus.TODO: 'todo'>), Task(task_id=5, description='Plan itinerary for the trip', status=<TaskStatus.TODO: 'todo'>), Task(task_id=6, description='Investigate and purchase travel insurance', status=<TaskStatus.TODO: 'todo'>), Task(task_id=7, description='Set a budget for the trip', status=<TaskStatus.TODO: 'todo'>), Task(task_id=8, description='Pack luggage', status=<TaskStatus.TODO: 'todo'>), Task(task_id=9, description='Notify bank of international travel', status=<TaskStatus.TODO: 'todo'>), Task(task_id=10, description='Check weather forecast and pack accordingly', status=<TaskStatus.TODO: 'todo'>)])
+('next_task_id', 1)
 ```
 
 更多详细资料，请查看[快速上手/官方文档](https://undertone0809.github.io/promptulate/#/)
