@@ -155,6 +155,9 @@ class AIChat:
 
         response: AssistantMessage = self.llm.predict(messages, stream=stream, **kwargs)
 
+        if stream:
+            return response
+
         logger.info(f"[pne chat] response: {response.additional_kwargs}")
 
         # return output format if provide
