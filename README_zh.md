@@ -84,6 +84,30 @@ import promptulate as pne
 resp: str = pne.chat(model="ollama/llama2", messages = [{ "content": "Hello, how are you?","role": "user"}])
 ```
 
+### News 
+
+🌟 2024.5.14 OpenAI 推出了他们最新的 “omni” 模型，与 turbo 相比，它提供了更高的速度和价格，你可以在任何 pne 应用程序中使用它的多模态功能。
+
+```python
+import promptulate as pne
+
+messages=[
+    {
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "What's in this image?"},
+            {
+                "type": "image_url",
+                "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg",
+            },
+        ],
+    }
+]
+
+resp = pne.chat(model="gpt-4o", messages=messages)
+print(resp)
+```
+
 ## 📗 相关文档
 
 - [快速上手/官方文档](https://undertone0809.github.io/promptulate/#/)
