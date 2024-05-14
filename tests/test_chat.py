@@ -1,5 +1,5 @@
 """
-TODO add test: test_stream, test pne's llm, test litellm llm
+TODO add test: test pne's llm, test litellm llm
 """
 from typing import Optional
 
@@ -27,12 +27,21 @@ class FakeLLM(BaseLLM):
         return "fake response"
 
     def _predict(self, messages: MessageSet, *args, **kwargs) -> BaseMessage:
-        content = "fake response"
+        if not kwargs.get("stream", False):
+            content = "fake response"
+            if "Output format" in messages.messages[-1].content:
+                content = """{"city": "Shanghai", "temperature": 25}"""
+            return AssistantMessage(content=content)
 
-        if "Output format" in messages.messages[-1].content:
-            content = """{"city": "Shanghai", "temperature": 25}"""
+        messages: list = [
+            AssistantMessage(content="This", additional_kwargs={}),
+            AssistantMessage(content="is", additional_kwargs={}),
+            AssistantMessage(content="fake", additional_kwargs={}),
+            AssistantMessage(content="message", additional_kwargs={})
+        ]
 
-        return AssistantMessage(content=content)
+        for message in messages:
+            yield message
 
 
 def mock_tool():
@@ -151,9 +160,20 @@ def test_streaming():
     llm = FakeLLM()
 
     # test stream output
-    answer = chat(
+    answer_stream = pne.chat(
         "what's weather tomorrow in shanghai?",
         custom_llm=llm,
         stream=True,
     )
-    assert answer == "fake response"
+
+    # check if the answer is a stream of response
+    answer: list = []
+    for item in answer_stream:
+        print(item.content)
+        answer.append(item)
+
+    assert len(answer) == 4
+    assert answer[0].content == "This"
+    assert answer[1].content == "is"
+    assert answer[2].content == "fake"
+    assert answer[3].content == "message"
