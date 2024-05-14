@@ -171,7 +171,7 @@ def test_tool_cls_lack_of_parameters():
 
 
 def test_tool_class_parameter():
-    """Test class' tool to covert to schema."""
+    """Test class' tool to convert to schema."""
 
     # define parameters by BaseModel
     class ToolParameters(BaseModel):
