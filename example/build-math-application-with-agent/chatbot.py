@@ -2,7 +2,6 @@ import streamlit as st
 
 import promptulate as pne
 from promptulate.hook import Hook, HookTable
-from promptulate.llms import ChatOpenAI
 from promptulate.tools.math.tools import calculator
 from promptulate.tools.wikipedia.tools import wikipedia_search
 
