@@ -25,8 +25,8 @@ def parse_content(chunk) -> (str, str):
         content: The content of the chunk.
         ret_data: The additional data of the chunk.
     """
-    content = chunk[1]
-    ret_data = json.loads(json.dumps(chunk))
+    content = chunk.choices[0].delta.content
+    ret_data = json.loads(json.dumps(chunk.json()))
     return content, ret_data
 
 
@@ -42,7 +42,10 @@ class LiteLLM(BaseLLM):
     ) -> Union[AssistantMessage, StreamIterator]:
         logger.info(f"[pne chat] prompts: {messages.string_messages}")
         temp_response = litellm.completion(
-            model=self._model, messages=messages.listdict_messages, **self._model_config
+            model=self._model,
+            messages=messages.listdict_messages,
+            **self._model_config,
+            stream=stream,
         )
 
         if stream:

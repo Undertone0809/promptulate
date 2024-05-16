@@ -154,7 +154,9 @@ class AIChat:
 
         logger.info(f"[pne chat] messages: {messages}")
 
-        response: AssistantMessage = self.llm.predict(messages, stream=stream, **kwargs)
+        response: Union[AssistantMessage, StreamIterator] = self.llm.predict(
+            messages, stream=stream, **kwargs
+        )
 
         if stream:
             return response
