@@ -55,6 +55,7 @@ class BaseLLM(BaseModel, ABC):
         result = self._predict(messages, *args, **kwargs)
         if isinstance(result, AssistantMessage):
             Hook.call_hook(HookTable.ON_LLM_RESULT, self, result=result.content)
+
         return result
 
     @abstractmethod

@@ -46,18 +46,3 @@ urllib3==2.2.1 ; python_full_version >= "3.8.1" and python_version < "4.0"
 wcwidth==0.2.13 ; python_full_version >= "3.8.1" and python_version < "4.0"
 yarl==1.9.4 ; python_full_version >= "3.8.1" and python_version < "4.0"
 zipp==3.18.1 ; python_full_version >= "3.8.1" and python_version < "4.0"
-
-promptulate~=1.13.1
-pytest~=7.4.4
-langchain~=0.1.4
-streamlit~=1.33.0
-typing_extensions~=4.9.0
-pyjwt~=2.8.0
-requests~=2.31.0
-numexpr~=2.8.6
-arxiv~=1.4.8
-pydantic~=1.10.14
-click~=8.1.7
-questionary~=2.0.1
-litellm~=1.23.14
-python-dotenv~=1.0.1

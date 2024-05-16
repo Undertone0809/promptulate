@@ -1,7 +1,7 @@
 """
 TODO add test: test pne's llm, test litellm llm
 """
-from typing import Optional
+from typing import Generator, Optional, Union
 
 import pytest
 
@@ -17,22 +17,10 @@ from promptulate.schema import (
 )
 
 
-class FakeLLM(BaseLLM):
-    llm_type: str = "fake"
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    def __call__(self, instruction: str, *args, **kwargs):
-        return "fake response"
-
-    def _predict(self, messages: MessageSet, *args, **kwargs) -> BaseMessage:
-        if not kwargs.get("stream", False):
-            content = "fake response"
-            if "Output format" in messages.messages[-1].content:
-                content = """{"city": "Shanghai", "temperature": 25}"""
-            return AssistantMessage(content=content)
-
+class StreamLLM(BaseLLM):
+    def _predict(
+        self, messages: MessageSet, *args, **kwargs
+    ) -> Optional[type(BaseMessage)]:
         messages: list = [
             AssistantMessage(content="This", additional_kwargs={}),
             AssistantMessage(content="is", additional_kwargs={}),
@@ -42,6 +30,26 @@ class FakeLLM(BaseLLM):
 
         for message in messages:
             yield message
+
+
+class FakeLLM(BaseLLM):
+    llm_type: str = "fake"
+
+    def __init__(self, *args, **kwargs):
+        print(33333)
+        super().__init__(*args, **kwargs)
+
+    def __call__(self, instruction: str, *args, **kwargs):
+        print(44444)
+        return "fake response"
+
+    def _predict(
+        self, messages: MessageSet, *args, **kwargs
+    ) -> Union[BaseMessage, Generator]:
+        content = "fake response"
+        if "Output format" in messages.messages[-1].content:
+            content = """{"city": "Shanghai", "temperature": 25}"""
+        return AssistantMessage(content=content, additional_kwargs={})
 
 
 def mock_tool():
@@ -157,7 +165,7 @@ def test_stream():
 
 
 def test_streaming():
-    llm = FakeLLM()
+    llm = StreamLLM()
 
     # test stream output
     answer_stream = pne.chat(
@@ -169,7 +177,6 @@ def test_streaming():
     # check if the answer is a stream of response
     answer: list = []
     for item in answer_stream:
-        print(item.content)
         answer.append(item)
 
     assert len(answer) == 4
