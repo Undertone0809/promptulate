@@ -25,8 +25,8 @@ def parse_content(chunk) -> (str, str):
         content: The content of the chunk.
         ret_data: The additional data of the chunk.
     """
-    content = chunk.choices[0].delta.content
-    ret_data = json.loads(chunk.json())
+    content = chunk[1]
+    ret_data = json.loads(json.dumps(chunk))
     return content, ret_data
 
 
