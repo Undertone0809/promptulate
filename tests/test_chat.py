@@ -37,7 +37,7 @@ class FakeLLM(BaseLLM):
             AssistantMessage(content="This", additional_kwargs={}),
             AssistantMessage(content="is", additional_kwargs={}),
             AssistantMessage(content="fake", additional_kwargs={}),
-            AssistantMessage(content="message", additional_kwargs={})
+            AssistantMessage(content="message", additional_kwargs={}),
         ]
 
         for message in messages:
