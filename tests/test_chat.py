@@ -36,11 +36,9 @@ class FakeLLM(BaseLLM):
     llm_type: str = "fake"
 
     def __init__(self, *args, **kwargs):
-        print(33333)
         super().__init__(*args, **kwargs)
 
     def __call__(self, instruction: str, *args, **kwargs):
-        print(44444)
         return "fake response"
 
     def _predict(

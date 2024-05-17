@@ -134,7 +134,6 @@ class AIChat:
             Return List[BaseMessage] if stream is True.
             Return T if output_schema is provided.
         """
-        print("[pne chat] run")
         if stream and (output_schema or self.tools):
             raise ValueError(
                 "stream, tools and output_schema can't be True at the same time, "
