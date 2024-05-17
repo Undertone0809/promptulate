@@ -24,13 +24,10 @@ keywords = [
     "litellm"
 ]
 
-[[tool.poetry.urls]]
-name = "Source"
-url = "https://github.com/Undertone0809/promptulate"
 
-[[tool.poetry.urls]]
-name = "Homepage"
-url = "https://github.com/Undertone0809/promptulate"
+[tool.poetry.urls]
+"Source" = "https://github.com/Undertone0809/promptulate"
+"Homepage" = "https://github.com/Undertone0809/promptulate"
 
 [tool.poetry.dependencies]
 broadcast-service = "1.3.2"
