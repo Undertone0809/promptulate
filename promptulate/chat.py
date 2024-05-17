@@ -139,7 +139,6 @@ class AIChat:
                 "stream, tools and output_schema can't be True at the same time, "
                 "because stream is used to return Iterator[BaseMessage]."
             )
-
         if self.agent:
             return self.agent.run(messages, output_schema=output_schema)
 
@@ -151,12 +150,18 @@ class AIChat:
                 json_schema=output_schema, examples=examples
             )
             messages.messages[-1].content += f"\n{instruction}"
-
         logger.info(f"[pne chat] messages: {messages}")
 
-        response: AssistantMessage = self.llm.predict(messages, stream=stream, **kwargs)
+        response: Union[AssistantMessage, StreamIterator] = self.llm.predict(
+            messages, stream=stream, **kwargs
+        )
 
-        logger.info(f"[pne chat] response: {response.additional_kwargs}")
+        if stream:
+            return response
+
+        if isinstance(response, AssistantMessage):
+            # Access additional_kwargs only if response is AssistantMessage
+            logger.info(f"[pne chat] response: {response.additional_kwargs}")
 
         # return output format if provide
         if output_schema:
