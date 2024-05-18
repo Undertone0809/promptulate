@@ -29,12 +29,13 @@
 
 - 🐍 Pythonic Code Style: Embraces the habits of Python developers, providing a Pythonic SDK calling approach, putting everything within your grasp with just one `pne.chat` function to encapsulate all essential functionalities.
 - 🧠 Model Compatibility: Supports nearly all types of large models on the market and allows for easy customization to meet specific needs.
-- 🕵️‍♂️ Diverse Agents: Offers various types of Agents, such as WebAgent, ToolAgent, CodeAgent, etc., capable of planning, reasoning, and acting to handle complex problems.
+- 🕵️‍♂️ Diverse Agents: Offers various types of Agents, such as WebAgent, ToolAgent, CodeAgent, etc., capable of planning, reasoning, and acting to handle complex problems. Atomize the Planner and other components to simplify the development process.
 - 🔗 Low-Cost Integration: Effortlessly integrates tools from different frameworks like LangChain, significantly reducing integration costs.
 - 🔨 Functions as Tools: Converts any Python function directly into a tool usable by Agents, simplifying the tool creation and usage process.
 - 🪝 Lifecycle and Hooks: Provides a wealth of Hooks and comprehensive lifecycle management, allowing the insertion of custom code at various stages of Agents, Tools, and LLMs.
 - 💻 Terminal Integration: Easily integrates application terminals, with built-in client support, offering rapid debugging capabilities for prompts.
 - ⏱️ Prompt Caching: Offers a caching mechanism for LLM Prompts to reduce repetitive work and enhance development efficiency.
+- 🤖 Powerful OpenAI Wrapper: With pne, you no longer need to use the openai sdk, the core functions can be replaced with pne.chat, and provides enhanced features to simplify development difficulty.
 
 > Below, `pne` stands for Promptulate, which is the nickname for Promptulate. The `p` and `e` represent the beginning and end of Promptulate, respectively, and `n` stands for 9, which is a shorthand for the nine letters between `p` and `e`.
 
@@ -73,7 +74,7 @@ Promptulate integrates the capabilities of [litellm](https://github.com/BerriAI/
 | [voyage ai](https://docs.litellm.ai/docs/providers/voyage)  |  |  |  |  | ✅ |
 | [xinference [Xorbits Inference]](https://docs.litellm.ai/docs/providers/xinference)  |  |  |  |  | ✅ |
 
-For more details, please visit the [litellm documentation](https://docs.litellm.ai/docs/providers).
+For more models, please visit the [litellm documentation](https://docs.litellm.ai/docs/providers).
 
 You can easily build any third-party model calls using the following method:
 
@@ -81,6 +82,31 @@ You can easily build any third-party model calls using the following method:
 import promptulate as pne
 
 resp: str = pne.chat(model="ollama/llama2", messages=[{"content": "Hello, how are you?", "role": "user"}])
+```
+
+🌟 2024.5.14 OpenAI launched their newest "omni" model, offering improved speed and pricing compared to turbo.
+
+You can use the available multimodal capabilities of it in any of your promptulate applications!
+
+```python
+import promptulate as pne
+
+messages=[
+    {
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "What's in this image?"},
+            {
+                "type": "image_url",
+                "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg",
+            },
+        ],
+    }
+]
+
+
+resp = pne.chat(model="gpt-4o", messages=messages)
+print(resp)
 ```
 
 ## 📗 Related Documentation
@@ -91,15 +117,61 @@ resp: str = pne.chat(model="ollama/llama2", messages=[{"content": "Hello, how ar
 - [Frequently Asked Questions](https://undertone0809.github.io/promptulate/#/other/faq)
 - [PyPI Repository](https://pypi.org/project/promptulate/)
 
+## 📝 Examples
+
+- [Build a math application with agent [Steamlit, ToolAgent, Hooks].](https://github.com/Undertone0809/promptulate/tree/main/example/build-math-application-with-agent)
+- [A Mulitmodal Robot Agent framework of ROS2 and Promptulate [Agent]](https://github.com/Undertone0809/Athena)
+- [Use streamlit and pne to compare different model a playground. [Streamlit]](https://github.com/Undertone0809/pne-playground-model-comparison)
+
 ## 🛠 Quick Start
 
 - Open the terminal and enter the following command to install the framework:
 
 ```shell script
-pip install -U promptulate  
+pip install -U pne 
 ```
 
 > Note: Your Python version should be 3.8 or higher.
+
+Even though pne provides many modules, in 90% of LLM application development scenarios, you only need to use the pne.chat () function, so you only need to start with chat to understand the use of pne, and when you need to use additional modules, you can learn more about the features and use of other modules.
+
+### Chat like OpenAI
+
+You can use `pne.chat()` to chat like openai. OpenAI chat API document: [https://platform.openai.com/docs/api-reference/chat](https://platform.openai.com/docs/api-reference/chat)
+
+```python
+import promptulate as pne
+
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "Who are you?"},
+]
+response: str = pne.chat(messages=messages, model="gpt-4-turbo")
+print(response)
+```
+
+### Replace the OpenAI SDK
+
+Many third party libraries can use OpenAI SDK calls their models, such as [Deepseek](https://www.deepseek.com/). In pne, you can directly use `pne.chat()` function to call these models, It does not need to use the OpenAI SDK, and provides enhanced features to simplify the development difficulty. Use the `openai/xxx` provider prefix in the model, and you can use the OpenAI model to make calls.
+
+```python
+import os
+import promptulate as pne
+
+os.environ["DEEPSEEK_API_KEY"] = "your api key"
+
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "How are you?"},
+]
+response = pne.chat(
+    messages=messages,
+    model="openai/deepseek-chat",
+)
+print(response)
+```
+
+### Structured Output
 
 Robust output formatting is a fundamental basis for LLM application development. We hope that LLMs can return stable data. With pne, you can easily perform formatted output. In the following example, we use Pydantic's BaseModel to encapsulate a data structure that needs to be returned.
 
@@ -120,6 +192,8 @@ print(resp)
 ```text
 provinces=['Anhui', 'Fujian', 'Gansu', 'Guangdong', 'Guizhou', 'Hainan', 'Hebei', 'Heilongjiang', 'Henan', 'Hubei', 'Hunan', 'Jiangsu', 'Jiangxi', 'Jilin', 'Liaoning', 'Qinghai', 'Shaanxi', 'Shandong', 'Shanxi', 'Sichuan', 'Yunnan', 'Zhejiang', 'Taiwan', 'Guangxi', 'Nei Mongol', 'Ningxia', 'Xinjiang', 'Xizang', 'Beijing', 'Chongqing', 'Shanghai', 'Tianjin', 'Hong Kong', 'Macao']
 ```
+
+### Agent with Plan, Tool-Using and Reflection
 
 Additionally, influenced by the [Plan-and-Solve](https://arxiv.org/abs/2305.04091) paper, pne also allows developers to build Agents capable of dealing with complex problems through planning, reasoning, and action. The Agent's planning abilities can be activated using the `enable_plan` parameter.
 
@@ -172,6 +246,27 @@ pne.chat("what is the hometown of the 2024 Australia open winner?", model="gpt-4
 [Revised Plan] {"goals": ["Find the hometown of the 2024 Australian Open winner"], "tasks": [], "next_task_id": null}
 [Agent Result] Jannik Sinner was born in San Candido (Italian) / Innichen (German), Italy.
 [Agent] Agent End.
+```
+
+### Atomize the Agent structure
+
+In the scenario of Agent development, we often need to split many atomic components of agents to achieve better customization. pne provides atomized Agent components, such as Planner. The following example shows the use of a separate Planner component for task planning.
+
+```python
+import promptulate as pne
+
+model = pne.LLMFactory.build("gpt-4-turbo")
+planner = pne.Planner(model, system_prompt="You are a planner")
+plans = planner.run("Plan a trip to Paris")
+print(plans)
+```
+
+**Output:**
+
+```text
+('goals', ['Plan a trip to Paris'])
+('tasks', [Task(task_id=1, description='Check passport validity', status=<TaskStatus.TODO: 'todo'>), Task(task_id=2, description='Determine travel dates', status=<TaskStatus.TODO: 'todo'>), Task(task_id=3, description='Research and book flights', status=<TaskStatus.TODO: 'todo'>), Task(task_id=4, description='Book accommodations', status=<TaskStatus.TODO: 'todo'>), Task(task_id=5, description='Plan itinerary for the trip', status=<TaskStatus.TODO: 'todo'>), Task(task_id=6, description='Investigate and purchase travel insurance', status=<TaskStatus.TODO: 'todo'>), Task(task_id=7, description='Set a budget for the trip', status=<TaskStatus.TODO: 'todo'>), Task(task_id=8, description='Pack luggage', status=<TaskStatus.TODO: 'todo'>), Task(task_id=9, description='Notify bank of international travel', status=<TaskStatus.TODO: 'todo'>), Task(task_id=10, description='Check weather forecast and pack accordingly', status=<TaskStatus.TODO: 'todo'>)])
+('next_task_id', 1)
 ```
 
 For more detailed information, please check the [Getting Started/Official Documentation](https://undertone0809.github.io/promptulate/#/).

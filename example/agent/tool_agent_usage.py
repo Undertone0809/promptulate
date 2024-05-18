@@ -7,7 +7,8 @@ def main():
         DuckDuckGoTool(),
         calculator,
     ]
-    agent = pne.ToolAgent(tools=tools, llm=pne.ChatOpenAI(model="gpt-4-1106-preview"))
+    model = pne.LLMFactory.build(model_name="gpt-4-1106-preview")
+    agent = pne.ToolAgent(tools=tools, llm=model)
     prompt = """Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?"""  # noqa
     agent.run(prompt)
 

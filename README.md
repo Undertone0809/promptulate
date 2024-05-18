@@ -83,7 +83,6 @@ For more models, please visit the [litellm documentation](https://docs.litellm.a
 
 You can easily build any third-party model calls using the following method:
 
-
 ```python
 import promptulate as pne
 
@@ -136,7 +135,7 @@ You can see how to use pne.chat in the [Getting Started/Official Documentation](
 - Open the terminal and enter the following command to install the framework:
 
 ```shell script
-pip install -U promptulate  
+pip install -U pne
 ```
 
 > Note: Your Python version should be 3.8 or higher.

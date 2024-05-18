@@ -8,7 +8,7 @@
 旧版本，那么执行此命令会更新到最新版。`promptulate`当前正处于快速发展阶段，因此你可能需要经常更新最新版以享用最新的成果。
 
 ```shell script
-pip install -U promptulate  
+pip install -U pne
 ```
 
 ## 2. 基本使用

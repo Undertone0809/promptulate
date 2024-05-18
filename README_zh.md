@@ -127,7 +127,7 @@ print(resp)
 - 打开终端，输入以下命令安装框架：
 
 ```shell script
-pip install -U promptulate  
+pip install -U pne  
 ```
 
 > 注意：Your Python version should be 3.8 or higher.
