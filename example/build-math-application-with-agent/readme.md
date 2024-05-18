@@ -1,11 +1,29 @@
-# The `chatbot.py` is an example of building a mathematical chatbot using streamlit and promptulate
+# Build a mathematical chatbot using streamlit and pne
 
-# How to run?
+The `chatbot.py` is an example of building a mathematical chatbot using streamlit and promptulate.
 
-1. First configure the package
-- `pip install -r requirements.txt`
+# Quick Start
 
-2. Switch to the directory where `chatbot.py` is located
-- cd `promptulate/example/build-math-application-with-agent`
+1. Clone the repository and install the dependencies
 
-3. Run the `streamlit run chatbot.py`  command
+```shell
+git clone https://www.github.com/Undertone0809/promptulate
+```
+
+2. Switch the current directory to the example
+
+```shell
+cd ./example/build-math-application-with-agent
+```
+
+3. Install the dependencies
+
+```shell
+pip install -r requirements.txt
+```
+
+4. Run the application
+
+```shell
+streamlit run chatbot.py
+```
