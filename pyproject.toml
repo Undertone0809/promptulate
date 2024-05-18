@@ -9,7 +9,7 @@ name = "promptulate"
 readme = "README.md"
 homepage = "https://github.com/Undertone0809/promptulate"
 repository = "https://github.com/Undertone0809/promptulate"
-version = "1.16.4"
+version = "1.16.5"
 keywords = [
     "promptulate",
     "pne",
@@ -24,7 +24,7 @@ keywords = [
     "litellm"
 ]
 
-[tool.poetry.urls]
+[project.urls]
 "Source" = "https://github.com/Undertone0809/promptulate"
 "Homepage" = "https://github.com/Undertone0809/promptulate"
 
