@@ -1,7 +1,7 @@
 """
-TODO add test: test_stream, test pne's llm, test litellm llm
+TODO add test: test pne's llm, test litellm llm
 """
-from typing import Optional
+from typing import Generator, Optional, Union
 
 import pytest
 
@@ -17,6 +17,21 @@ from promptulate.schema import (
 )
 
 
+class StreamLLM(BaseLLM):
+    def _predict(
+        self, messages: MessageSet, *args, **kwargs
+    ) -> Optional[type(BaseMessage)]:
+        messages: list = [
+            AssistantMessage(content="This", additional_kwargs={}),
+            AssistantMessage(content="is", additional_kwargs={}),
+            AssistantMessage(content="fake", additional_kwargs={}),
+            AssistantMessage(content="message", additional_kwargs={}),
+        ]
+
+        for message in messages:
+            yield message
+
+
 class FakeLLM(BaseLLM):
     llm_type: str = "fake"
 
@@ -26,13 +41,13 @@ class FakeLLM(BaseLLM):
     def __call__(self, instruction: str, *args, **kwargs):
         return "fake response"
 
-    def _predict(self, messages: MessageSet, *args, **kwargs) -> BaseMessage:
+    def _predict(
+        self, messages: MessageSet, *args, **kwargs
+    ) -> Union[BaseMessage, Generator]:
         content = "fake response"
-
         if "Output format" in messages.messages[-1].content:
             content = """{"city": "Shanghai", "temperature": 25}"""
-
-        return AssistantMessage(content=content)
+        return AssistantMessage(content=content, additional_kwargs={})
 
 
 def mock_tool():
@@ -148,12 +163,22 @@ def test_stream():
 
 
 def test_streaming():
-    llm = FakeLLM()
+    llm = StreamLLM()
 
     # test stream output
-    answer = chat(
+    answer_stream = pne.chat(
         "what's weather tomorrow in shanghai?",
         custom_llm=llm,
         stream=True,
     )
-    assert answer == "fake response"
+
+    # check if the answer is a stream of response
+    answer: list = []
+    for item in answer_stream:
+        answer.append(item)
+
+    assert len(answer) == 4
+    assert answer[0].content == "This"
+    assert answer[1].content == "is"
+    assert answer[2].content == "fake"
+    assert answer[3].content == "message"
