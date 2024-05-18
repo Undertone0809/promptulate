@@ -24,7 +24,7 @@ keywords = [
     "litellm"
 ]
 
-[project.urls]
+[tool.poetry.urls]
 "Source" = "https://github.com/Undertone0809/promptulate"
 "Homepage" = "https://github.com/Undertone0809/promptulate"
 
