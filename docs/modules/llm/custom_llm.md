@@ -14,7 +14,7 @@ from pydantic import Field
 from promptulate.llms.base import BaseLLM
 from promptulate.schema import MessageSet, AssistantMessage
 
-# os.environ["OPENAI_API_KEY"] = "your key"
+os.environ["OPENAI_API_KEY"] = "your key"
 
 
 class MyLLM(BaseLLM):

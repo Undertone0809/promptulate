@@ -26,6 +26,11 @@
   <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/promptulate_logo_new.png"/>
 </p>
 
+## News
+
+- 2024.5.19 Now you can use `import pne` to import the promptulate package. ref: [https://github.com/Undertone0809/pne](https://github.com/Undertone0809/pne)
+- 2024.5.14 OpenAI launched their newest "omni" model, offering improved speed and pricing compared to turbo.
+
 ## Overview
 
 **Promptulate** is an AI Agent application development framework crafted by **Cogit Lab**, which offers developers an extremely concise and efficient way to build Agent applications through a Pythonic development paradigm. The core philosophy of Promptulate is to borrow and integrate the wisdom of the open-source community, incorporating the highlights of various development frameworks to lower the barrier to entry and unify the consensus among developers. With Promptulate, you can manipulate components like LLM, Agent, Tool, RAG, etc., with the most succinct code, as most tasks can be easily completed with just a few lines of code. 🚀
@@ -41,6 +46,12 @@
 - 💻 Terminal Integration: Easily integrates application terminals, with built-in client support, offering rapid debugging capabilities for prompts.
 - ⏱️ Prompt Caching: Offers a caching mechanism for LLM Prompts to reduce repetitive work and enhance development efficiency.
 - 🤖 Powerful OpenAI Wrapper: With pne, you no longer need to use the openai sdk, the core functions can be replaced with pne.chat, and provides enhanced features to simplify development difficulty.
+
+The following diagram shows the core architecture of `promptulate`:
+
+![promptulate-architecture](./docs/images/pne_arch.png)
+
+The core concept of Promptulate is we hope to provide a simple, pythonic and efficient way to build AI applications, which means you don't need to spend a lot of time learning the framework. We hope to use `pne.chat()` to do most of the works, and you can easily build any AI application with just a few lines of code.
 
 > Below, `pne` stands for Promptulate, which is the nickname for Promptulate. The `p` and `e` represent the beginning and end of Promptulate, respectively, and `n` stands for 9, which is a shorthand for the nine letters between `p` and `e`.
 
@@ -79,9 +90,9 @@ Promptulate integrates the capabilities of [litellm](https://github.com/BerriAI/
 | [voyage ai](https://docs.litellm.ai/docs/providers/voyage)  |  |  |  |  | ✅ |
 | [xinference [Xorbits Inference]](https://docs.litellm.ai/docs/providers/xinference)  |  |  |  |  | ✅ |
 
-For more models, please visit the [litellm documentation](https://docs.litellm.ai/docs/providers).
+The powerful model support of pne allows you to easily build any third-party model calls.
 
-You can easily build any third-party model calls using the following method:
+Now let's see how to run local llama3 models of ollama with pne.
 
 ```python
 import promptulate as pne
@@ -108,13 +119,15 @@ messages=[
         ],
     }
 ]
-
-
 resp = pne.chat(model="gpt-4o", messages=messages)
 print(resp)
 ```
 
-You can see how to use pne.chat in the [Getting Started/Official Documentation](https://undertone0809.github.io/promptulate/#/get_started/quick_start?id=quick-start).
+Use `provider/model_name` to call the model, and you can easily build any third-party model calls.
+
+For more models, please visit the [litellm documentation](https://docs.litellm.ai/docs/providers).
+
+You can also see how to use `pne.chat()` in the [Getting Started/Official Documentation](https://undertone0809.github.io/promptulate/#/get_started/quick_start?id=quick-start).
 
 ## 📗 Related Documentation
 

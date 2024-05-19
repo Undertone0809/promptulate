@@ -1,11 +1,11 @@
 - Get started
   - [:bookmark_tabs: Introduction](README.md)
   - [:bookmark: Quick Start](get_started/quick_start.md#quick-start)
-  - [:bookmark_tabs: Awesome Chat](use_cases/chat_usage.md#chat)
 
 - Use Cases
-  - [🌟 Best practices](use_cases/intro.md#use-cases)
-  
+  - [Best practices](use_cases/intro.md#use-cases)
+  - [Awesome chat function](use_cases/chat_usage.md#chat)
+  - [Build math application with agent](use_cases/build-math-application-with-agent.md#building-a-math-application-with-promptulate-agents)
 
 - Modules
   - [:robot: Agent](modules/agent.md#agent)

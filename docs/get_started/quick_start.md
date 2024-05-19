@@ -1,23 +1,125 @@
 # Quick Start
 
-通过该部分教学，你可以快速对 promptulate 有一个整体的认知，了解一些常用模块的基本使用方式，在阅读完该部分之后，你可以继续阅读 [User Cases](modules/usercases/intro.md#user-cases) 和 [example](https://github.com/Undertone0809/promptulate/tree/main/example) 来了解 promptulate 的一些最佳实践，在遇到问题的时候，可以查看每个模块的具体使用方式，也欢迎你在 [issue](https://github.com/Undertone0809/promptulate/issues) 中为 promptulate 提供更好的建议。
+Through this section of the tutorial, you can quickly get a comprehensive understanding of Promptulate, learn the basic usage of some commonly used modules. 
 
-## 1. 安装最新版
+After reading this section, you can continue to read [Use Cases](/use_cases/intro.md#use-cases) and [example](https://github.com/Undertone0809/promptulate/tree/main/example) to learn some best practices for promptulate, to see how each module is used in case of a problem, Also welcome you in [issue](https://github.com/Undertone0809/promptulate/issues) for promptulate provide better advice.
 
-打开终端，输入下面命令下载`promptulate`最新版，`-U`表示更新到最新版，如果你已经下载`promptulate`
-旧版本，那么执行此命令会更新到最新版。`promptulate`当前正处于快速发展阶段，因此你可能需要经常更新最新版以享用最新的成果。
+## 1. Installation
+
+Open a terminal and enter the following command to download the latest version of `promptulate`. `-U` means to update to the latest version. 
+
+> If you have already downloaded the old version of `promptulate`, executing this command will update to the latest version. `promptulate` is currently in a rapid development stage, so you may need to update to the latest version frequently to enjoy the latest results.
 
 ```shell script
 pip install -U pne
 ```
 
-## 2. 基本使用
+## 2. Basic Usage And Components
 
-该部分将会介绍`promptulate`中一些常用组件的基本使用，带你快速了解`promptulate`的架构组成，快速上手部分仅仅提供最简单的使用，如果你有开发复杂应用程序的需求，请跳转至各个模块进行功能的详细阅读。
+You don't need to know all the components of `promptulate` to get started. This section will introduce the basic usage of some commonly used components in `promptulate`, helping you quickly understand the architecture of `promptulate`. The quick start section only provides the simplest usage. If you have the need to develop complex applications, please jump to each module to read the detailed functions.
 
-需要说明的是，pne 由 Agent, LLM, RAG, Memory, Output Formatter 等组件组成，但 pythonic 的开发方式让你可以 All in one，通过 `pne.chat()` 函数，你可以轻松地组合起所有的组件，构建起一个 LLM Agent 应用，这对初学者来说十分友好。
+The following diagram shows the core architecture of `promptulate`:
 
-### KEY配置
+![promptulate-architecture](../images/pne_arch.png)
+
+### 2.1 Chat something by pne.chat()
+
+`pne.chat()` is the most powerful function in pne. In actual LLM Agent application development, 90% of the functions can be built using it.
+
+Now let's see how to use `pne.chat()` to chat with the model. The following example we use `gpt-4-turbo` to chat with the model.
+
+```python
+import promptulate as pne
+
+response: str = pne.chat(messages="What is the capital of China?", model="gpt-4-turbo")
+```
+
+**Output:**
+
+```text
+Beijing
+```
+
+It's easy, right?
+
+### 2.2 Support for third-party models
+
+You may wonder how to use `pne.chat()` to chat with other models, such as cohere or deepseek.
+
+Promptulate integrates the capabilities of [litellm](https://github.com/BerriAI/litellm), supporting nearly all types of large models on the market, including but not limited to the following models:
+
+| Provider                                                                            | [Completion](https://docs.litellm.ai/docs/#basic-usage) | [Streaming](https://docs.litellm.ai/docs/completion/stream#streaming-responses)  | [Async Completion](https://docs.litellm.ai/docs/completion/stream#async-completion)  | [Async Streaming](https://docs.litellm.ai/docs/completion/stream#async-streaming)  | [Async Embedding](https://docs.litellm.ai/docs/embedding/supported_embedding)  | [Async Image Generation](https://docs.litellm.ai/docs/image_generation)  | 
+|-------------------------------------------------------------------------------------| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
+| [openai](https://docs.litellm.ai/docs/providers/openai)                             | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [azure](https://docs.litellm.ai/docs/providers/azure)                               | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [aws - sagemaker](https://docs.litellm.ai/docs/providers/aws_sagemaker)             | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [aws - bedrock](https://docs.litellm.ai/docs/providers/bedrock)                     | ✅ | ✅ | ✅ | ✅ |✅ |
+| [google - vertex_ai [Gemini]](https://docs.litellm.ai/docs/providers/vertex)        | ✅ | ✅ | ✅ | ✅ |
+| [google - palm](https://docs.litellm.ai/docs/providers/palm)                        | ✅ | ✅ | ✅ | ✅ |
+| [google AI Studio - gemini](https://docs.litellm.ai/docs/providers/gemini)          | ✅ |  | ✅ |  | |
+| [mistral ai api](https://docs.litellm.ai/docs/providers/mistral)                    | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [cloudflare AI Workers](https://docs.litellm.ai/docs/providers/cloudflare_workers)  | ✅ | ✅ | ✅ | ✅ |
+| [cohere](https://docs.litellm.ai/docs/providers/cohere)                             | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [anthropic](https://docs.litellm.ai/docs/providers/anthropic)                       | ✅ | ✅ | ✅ | ✅ |
+| [huggingface](https://docs.litellm.ai/docs/providers/huggingface)                   | ✅ | ✅ | ✅ | ✅ | ✅ |
+| [replicate](https://docs.litellm.ai/docs/providers/replicate)                       | ✅ | ✅ | ✅ | ✅ |
+| [together_ai](https://docs.litellm.ai/docs/providers/togetherai)                    | ✅ | ✅ | ✅ | ✅ |
+| [openrouter](https://docs.litellm.ai/docs/providers/openrouter)                     | ✅ | ✅ | ✅ | ✅ |
+| [ai21](https://docs.litellm.ai/docs/providers/ai21)                                 | ✅ | ✅ | ✅ | ✅ |
+| [baseten](https://docs.litellm.ai/docs/providers/baseten)                           | ✅ | ✅ | ✅ | ✅ |
+| [vllm](https://docs.litellm.ai/docs/providers/vllm)                                 | ✅ | ✅ | ✅ | ✅ |
+| [nlp_cloud](https://docs.litellm.ai/docs/providers/nlp_cloud)                       | ✅ | ✅ | ✅ | ✅ |
+| [aleph alpha](https://docs.litellm.ai/docs/providers/aleph_alpha)                   | ✅ | ✅ | ✅ | ✅ |
+| [petals](https://docs.litellm.ai/docs/providers/petals)                             | ✅ | ✅ | ✅ | ✅ |
+| [ollama](https://docs.litellm.ai/docs/providers/ollama)                             | ✅ | ✅ | ✅ | ✅ |
+| [deepinfra](https://docs.litellm.ai/docs/providers/deepinfra)                       | ✅ | ✅ | ✅ | ✅ |
+| [perplexity-ai](https://docs.litellm.ai/docs/providers/perplexity)                  | ✅ | ✅ | ✅ | ✅ |
+| [Groq AI](https://docs.litellm.ai/docs/providers/groq)                              | ✅ | ✅ | ✅ | ✅ |
+| [anyscale](https://docs.litellm.ai/docs/providers/anyscale)                         | ✅ | ✅ | ✅ | ✅ |
+| [voyage ai](https://docs.litellm.ai/docs/providers/voyage)                          |  |  |  |  | ✅ |
+| [xinference [Xorbits Inference]](https://docs.litellm.ai/docs/providers/xinference) |  |  |  |  | ✅ |
+| [deepseek](https://www.deepseek.com/)                            | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+
+The powerful model support of pne allows you to easily build any third-party model calls.
+
+Now let's see how to run local llama3 models of ollama with pne.
+
+```python
+import promptulate as pne
+
+resp: str = pne.chat(model="ollama/llama2", messages=[{"content": "Hello, how are you?", "role": "user"}])
+```
+
+🌟 2024.5.14 OpenAI launched their newest "omni" model, offering improved speed and pricing compared to turbo.
+
+You can use the available multimodal capabilities of it in any of your promptulate applications!
+
+```python
+import promptulate as pne
+
+messages=[
+    {
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "What's in this image?"},
+            {
+                "type": "image_url",
+                "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg",
+            },
+        ],
+    }
+]
+resp = pne.chat(model="gpt-4o", messages=messages)
+print(resp)
+```
+
+Use `provider/model_name` to call the model, and you can easily build any third-party model calls.
+
+For more models, please visit the [litellm documentation](https://docs.litellm.ai/docs/providers).
+
+You can easily build any third-party model calls using the following method:
+
+### Config your key
 
 在使用 pne 之前，你需要先导入你的`OPENAI_API_KEY`，你可以使用两种方式进行导入。
 

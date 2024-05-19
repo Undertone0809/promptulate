@@ -21,6 +21,11 @@
   <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/promptulate_logo_new.png"/>
 </p>
 
+## News
+
+- 2024.5.19 现在你可以直接使用 import pne 来导入 promptulate 框架，而不需要再使用 import promptulate as pne 的方式，ref: [https://github.com/Undertone0809/pne](https://github.com/Undertone0809/pne)
+- 2024.5.14 OpenAI 推出了他们最新的 “omni” 模型，与 turbo 相比，它提供了更高的速度和价格，你可以在任何 pne 应用程序中使用它的多模态功能。
+
 ## Overview
 
 **Promptulate** 是 **Cogit Lab** 打造的 AI Agent 应用开发框架，通过 Pythonic 的开发范式，旨在为开发者们提供一种极其简洁而高效的 Agent 应用构建体验。 🛠️ Promptulate 的核心理念在于借鉴并融合开源社区的智慧，集成各种开发框架的亮点，以此降低开发门槛并统一开发者的共识。通过 Promptulate，你可以用最简洁的代码来操纵 LLM, Agent, Tool, RAG 等组件，大多数任务仅需几行代码即可轻松完成。🚀
@@ -36,6 +41,12 @@
 - 🪝 生命周期与钩子: 提供丰富的 Hook 和完善的生命周期管理，允许在 Agent、Tool、LLM 的各个阶段插入自定义代码。
 - 💻 终端集成: 轻松集成应用终端，自带客户端支持，提供 prompt 的快速调试能力。
 - ⏱️ Prompt 缓存: 提供 LLM Prompt 缓存机制，减少重复工作，提升开发效率。
+
+Promptulate 的核心架构如下所示：
+
+![promptulate-architecture](./docs/images/pne_arch.png)
+
+我们希望为开发者提供更加简单、高效且灵活的应用开发体验，让开发者可以专注于业务逻辑的实现，这意味着你不需要花大量的时间来学习各种框架，只需要简单的几行代码，就可以构建出一个功能强大的 Agent 应用。
 
 > 下面用 pne 表示 promptulate，pne 是 Promptulate 的昵称，其中 p 和 e 分别代表 promptulate 的开头和结尾，n 代表 9，即 p 和 e 中间的九个字母的简写。
 
@@ -74,15 +85,19 @@ pne 集成了 [litellm](https://github.com/BerriAI/litellm) 的能力，支持�
 | [voyage ai](https://docs.litellm.ai/docs/providers/voyage)  |  |  |  |  | ✅ |
 | [xinference [Xorbits Inference]](https://docs.litellm.ai/docs/providers/xinference)  |  |  |  |  | ✅ |
 
-更多支持的模型，可以在 [litellm documentation](https://docs.litellm.ai/docs/providers) 查看。
+这种强大的模型支持能力，使得 pne 可以轻松的调用各种类型的模型，无论是文本生成、图像生成、多模态生成等，都可以通过 pne.chat 函数来调用。
 
-你可以使用下面的方式十分轻松的构建起任何第三方模型的调用。
+下面的实例展示了如何使用 pne 调用 ollama 的 llama2 模型。
 
 ```python
 import promptulate as pne
 
 resp: str = pne.chat(model="ollama/llama2", messages = [{ "content": "Hello, how are you?","role": "user"}])
 ```
+
+使用 `provider/model_name` 的方式，你可以轻松构建起任何第三方模型的调用。
+
+更多支持的模型，可以在 [litellm documentation](https://docs.litellm.ai/docs/providers) 查看，pne 声明模型名称的方式与 litellm 保持一致。
 
 ### News 
 
@@ -152,6 +167,26 @@ print(resp)
 
 ```text
 provinces=['Anhui', 'Fujian', 'Gansu', 'Guangdong', 'Guizhou', 'Hainan', 'Hebei', 'Heilongjiang', 'Henan', 'Hubei', 'Hunan', 'Jiangsu', 'Jiangxi', 'Jilin', 'Liaoning', 'Qinghai', 'Shaanxi', 'Shandong', 'Shanxi', 'Sichuan', 'Yunnan', 'Zhejiang', 'Taiwan', 'Guangxi', 'Nei Mongol', 'Ningxia', 'Xinjiang', 'Xizang', 'Beijing', 'Chongqing', 'Shanghai', 'Tianjin', 'Hong Kong', 'Macao']
+```
+
+### 像 OpenAI SDK 一样调用
+
+你可以使用与 OpenAI 相同的 message 格式和 model config 来调用任何模型，如下面的示例中，我们使用 OpenAI SDK message 的格式来调用 claude 的模型。
+
+```python
+import os
+import promptulate as pne
+
+os.environ["ANTHROPIC_API_KEY"] = "your-api-key"
+
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "How are you?"},
+]
+response = pne.chat(
+    messages=messages,
+    model="claude-2",
+)
 ```
 
 ### 取代 OpenAI SDK

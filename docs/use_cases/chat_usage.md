@@ -100,6 +100,7 @@ print(response.additional_kwargs)  # metadata
     
 
 ## Using any model
+
 You can call 100+ LLMs using the same Input/Output Format(OpenAI format) in `pne.chat()`. The follow example show how to use `claude-2`, make sure you have key ANTHROPIC_API_KEY.
 
 
@@ -116,6 +117,8 @@ messages = [
 response = pne.chat(messages=messages, model="claude-2")
 print(response)
 ```
+
+> pne declares model names in the same way litellm does.
 
 ### Deepseek
 

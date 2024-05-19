@@ -64,6 +64,7 @@ build-docs:
 	jupyter nbconvert ./example/llm/llm-factory-usage.ipynb --to markdown --output-dir ./docs/modules/llm
 	jupyter nbconvert ./example/tools/langchain_tool_usage.ipynb --to markdown --output-dir ./docs/modules/tools
 	jupyter nbconvert ./example/agent/assistant_agent_usage.ipynb --to markdown --output-dir ./docs/modules/agents
+	jupyter nbconvert ./example/build-math-application-with-agent/build-math-application-with-agent.ipynb --to markdown --output-dir ./docs/use_cases/
 
 
 start-docs:
