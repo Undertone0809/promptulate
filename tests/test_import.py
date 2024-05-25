@@ -1,3 +1,9 @@
+def test_import_init():
+    import promptulate as pne
+
+    pne.ToolTypes  # noqa
+
+
 def test_import_utils():
     from promptulate.utils import (
         StringTemplate,
