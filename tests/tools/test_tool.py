@@ -110,9 +110,32 @@ func_4_schema = {
     "type": "object",
 }
 
+func1_schema_of_define_tool = {
+    "name": "mock tool",
+    "description": "mock tool description\nmock func 0",
+    "properties": {},
+    "type": "object",
+}
+
+func2_schema_of_define_tool = {
+    "name": "mock tool",
+    "description": "mock tool description\nmock func 1",
+    "properties": {
+        "a": {
+            "type": "string",
+        },
+        "b": {
+            "type": "integer",
+        },
+    },
+    "required": ["a", "b"],
+    "type": "object",
+}
+
 
 def test_define_tool():
     """Test initialize tool by define_tool function."""
+    # test func 0
     tool = define_tool(
         name="mock tool",
         description="mock tool description",
@@ -125,7 +148,22 @@ def test_define_tool():
     resp: str = tool.run()
     assert resp == "result"
 
-    assert tool.to_schema() == func_0_schema
+    assert tool.to_schema() == func1_schema_of_define_tool
+
+    # test func 1
+    tool = define_tool(
+        name="mock tool",
+        description="mock tool description",
+        callback=func_1,
+    )
+
+    assert tool.name == "mock tool"
+    assert tool.description == "mock tool description\nmock func 1"
+
+    resp: str = tool.run(a="a", b=1)
+    assert resp == "result"
+
+    assert tool.to_schema() == func2_schema_of_define_tool
 
 
 def test_tool_cls():

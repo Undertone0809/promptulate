@@ -303,23 +303,26 @@ def web_search(keyword: str, top_k: int = 10) -> str:
         Returns:
             A ToolImpl instance.
         """
-        if not parameters:
-            schema: dict = function_to_tool_schema(callback)
-        elif isinstance(parameters, dict) and _validate_refined_schema(parameters):
-            schema: dict = parameters
-        elif isinstance(parameters, type) and issubclass(parameters, BaseModel):
-            schema: dict = _pydantic_to_refined_schema(parameters)
-        else:
-            raise TypeError(
-                f"{[cls.__name__]} parameters must be BaseModel or JSON schema."
-            )
+        _name = name or callback.__name__
+        _description = description or callback.__doc__ or ""
 
-        _description = description or ""
-        _doc = callback.__doc__ or ""
+        if parameters:
+            if isinstance(parameters, dict):
+                schema = parameters
+            elif isinstance(parameters, type) and issubclass(parameters, BaseModel):
+                schema = _pydantic_to_refined_schema(parameters)
+            else:
+                raise TypeError(
+                    f"{[cls.__name__]} parameters must be BaseModel or JSON schema."
+                )  # noqa
+        else:
+            schema = function_to_tool_schema(callback)
+            schema["name"] = _name
+            schema["description"] = _description
 
         return cls(
-            name=name or callback.__name__,
-            description=f"{_description}\n{_doc}",
+            name=schema["name"],
+            description=schema["description"],
             callback=callback,
             parameters=schema,
         )
