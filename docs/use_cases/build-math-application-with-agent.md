@@ -156,6 +156,28 @@ resp: str = agent.run("I have 3 apples and 4 oranges.I give half of my oranges a
 print(resp)
 ```
 
+    [31;1m[1;3m[Agent] Tool Agent start...[0m
+    [36;1m[1;3m[User instruction] I have 3 apples and 4 oranges.I give half of my oranges away and buy two dozen new ones,along with three packs of strawberries.Each pack of strawberry has 30 strawberries.How many total pieces of fruit do I have at the end?[0m
+    [33;1m[1;3m[Thought] To determine the total number of pieces of fruit, we calculate the number of remaining oranges after giving half away, then add the new oranges purchased and the total strawberries from the three packs. Apples remain constant at 3.[0m
+    [33;1m[1;3m[Action] word_problem_tool args: {'question': 'If a person has 4 oranges and gives half away, how many are left? They then buy 24 more oranges and acquire 3 packs of strawberries with each pack containing 30 strawberries. How many pieces of fruit do they have in total if they originally had 3 apples?'}[0m
+    [33;1m[1;3m[Observation] - Start with the number of oranges the person initially has: 4 oranges.
+    - They give away half of these oranges, so let's calculate half of 4:
+      - 4 / 2 = 2 oranges.
+    - The number of oranges the person has left after giving half away is 2.
+    - The person then buys 24 more oranges, so we add these to the remaining oranges:
+      - 2 oranges (remaining after giving away half) + 24 oranges (bought) = 26 oranges.
+    - Next, we account for the acquired strawberry packs. There are 3 packs, each with 30 strawberries.
+      - 3 packs * 30 strawberries per pack = 90 strawberries.
+    - The person originally had 3 apples, which we'll add to the total count of fruit:
+      - 3 apples (originally had).
+    - To calculate the total pieces of fruit, add the number of oranges, strawberries, and apples together:
+      - 26 oranges (after transactions) + 90 strawberries (from the packs) + 3 apples (originally had) = 119 pieces of fruit.
+    - Final answer: The person has 119 pieces of fruit in total.[0m
+    [32;1m[1;3m[Agent Result] 119[0m
+    [38;5;200m[1;3m[Agent] Agent End.[0m
+    119
+    
+
 **The app’s response to a logic question is following:**
 ![test-question-answer](./img/test-question-answer.jpg)
 

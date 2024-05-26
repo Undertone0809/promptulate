@@ -174,6 +174,11 @@ response = pne.chat(
 print(response)
 ```
 
+### How to write model name?
+For some well-known models, you can use the name of the model directly to call. For some other models, you can use the provider/model-name method. For example, deepseek's deepseek-chat model can be invoked by deepseek/deepseek-chat method.
+
+This notation is based on litellm design, so if you are not sure how to write the name of your model, you can go to [litellm documentation](https://docs.litellm.ai/docs/) to see the detail. 
+
 ### Zhipu
 
 This example show how to use Zhipu model in `pne.chat()`. Make sure you have key ZHIPUAI_API_KEY.
