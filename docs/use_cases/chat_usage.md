@@ -10,11 +10,14 @@ Here are some tips for using `pne.chat()`. Even though pne provides many modules
 `pne.chat()` integrate the ability of [litellm](https://github.com/BerriAI/litellm). It means you can call all LLM APIs using the OpenAI format. Use Bedrock, Azure, OpenAI, Cohere, Anthropic, Ollama, Sagemaker, HuggingFace, Replicate (100+ LLMs). Now let's take a look at how to use it.
 
 ## Chat like OpenAI
-You can use `pne.chat()` to chat like openai. OpenAI chat API document: [https://platform.openai.com/docs/api-reference/chat](https://platform.openai.com/docs/api-reference/chat)
+You can use `pne.chat()` to chat like openai. OpenAI chat API document: [https://platform.openai.com/docs/api-reference/chat](https://platform.openai.com/docs/api-reference/chat). `pne.chat()` API design is the same as OpenAI chat API.
 
 
 ```python
+import os
 import promptulate as pne
+
+os.environ["OPENAI_API_KEY"] = "your-api-key"
 
 messages = [
     {"role": "system", "content": "You are a helpful assistant."},
@@ -42,6 +45,35 @@ print(response)
 
     My knowledge is up to date as of March 2021. Any events or developments occurring after that date would not be included in my responses. If you're asking for any recent information or updates, I recommend checking the latest sources as my information might not be current.
     
+
+## OpenAI Proxy
+You can use `pne.chat()` to chat with OpenAI API by proxy service. The following example show how to use [AIGCAPI proxy](https://aigcapi.io/) to call OpenAI gpt-4-turbo.
+
+
+```python
+import os
+import pne
+
+os.environ["OPENAI_API_KEY"] = "your-api-key"
+response = pne.chat(
+    messages="Who are you?",
+    model="gpt-4-turbo",
+    model_config={"api_base": "https://api.aigcapi.io"}
+)
+```
+
+Or you can pass your key by the following way: 
+
+
+```python
+import pne
+
+response = pne.chat(
+    messages="Who are you?",
+    model="gpt-4-turbo",
+    model_config={"api_key": "your-api", "api_base": "https://api.aigcapi.io"}
+)
+```
 
 ## AIChat
 
@@ -129,7 +161,7 @@ This example show how to use Deepseek LLMs in `pne.chat()`. Make sure you have k
 import os
 import promptulate as pne
 
-os.environ["DEEPSEEK_API_KEY"] = "your-api-key"
+os.environ["OPENAI_API_KEY"] = "your-api-key"
 
 messages = [
     {"role": "system", "content": "You are a helpful assistant."},
