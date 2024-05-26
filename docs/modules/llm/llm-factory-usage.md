@@ -13,8 +13,7 @@ The following example show how to create an OpenAI model and chat.
 
 ```python
 import os
-
-import promptulate as pne
+import pne
 
 os.environ["OPENAI_API_KEY"] = "your_openai_api_key"
 model = pne.LLMFactory.build(model_name="gpt-3.5-turbo", model_config={
@@ -30,6 +29,37 @@ print(resp)
 
     Hello! I'm just a computer program, so I don't have feelings, but I'm here and ready to help you. How can I assist you today?
     
+
+You can also initialize the model with the following code:
+
+
+```python
+import pne
+
+pne.LLMFactory.build(
+    model_name="gpt-3.5-turbo", 
+    model_config={
+        "temperature": 0.5,
+        "api_key": "your-api_key",
+    }
+)
+```
+
+## Use OpenAI Proxy
+The following example show how to use [AIGCAPI proxy](https://aigcapi.io/) to call OpenAI gpt-4-turbo.
+
+
+```python
+import pne
+
+model = pne.LLMFactory.build(
+    model_name="gpt-4-turbo", 
+    model_config={
+        "api_key": "your-api_key",
+        "api_base": "https://api.aigcapi.io",
+    }
+)
+```
 
 ## What's different between LLMFactory and pne.chat() ? 
 
