@@ -47,6 +47,7 @@ if prompt := st.chat_input():
         model_config={"api_base": api_base, "api_key": api_key},
     )
 
+    # Stream output
     for i in response:
         st.session_state.messages.append({"role": "assistant", "content": i})
         st.chat_message("assistant").write(i)
