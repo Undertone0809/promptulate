@@ -38,7 +38,5 @@ if prompt := st.chat_input():
         model_config={"api_key": groq_api_key},
     )
 
-    st.session_state.messages.append(
-        {"role": "assistant", "content": response}
-    )
+    st.session_state.messages.append({"role": "assistant", "content": response})
     st.chat_message("assistant").write(response)
