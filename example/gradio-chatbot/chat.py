@@ -1,5 +1,6 @@
-import promptulate as pne
 import gradio as gr
+
+import promptulate as pne
 
 
 def predict(message, history):
