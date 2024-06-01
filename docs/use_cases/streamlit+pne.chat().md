@@ -95,7 +95,7 @@ The running effect is as follows:
 ## Demo
 There is a `app.py` file under the `streamlit-chatbot` file of `example` in the project folder. 
 You can run the application directly to view the effect and debug the web page. 
-Project Link: [build-math-application-with-agent](https://github.com/Undertone0809/promptulate/tree/main/example/streamlit-chatbot)
+Project Link: [streamlit+pne.chat()](https://github.com/Undertone0809/promptulate/tree/main/example/streamlit-chatbot)
 To run the application, follow the steps below:
 
 - Click [here](https://github.com/Undertone0809/promptulate/fork) to fork the project to your local machine
