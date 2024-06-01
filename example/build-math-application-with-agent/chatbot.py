@@ -78,7 +78,9 @@ def build_agent(api_key: str) -> pne.ToolAgent:
         Logically arrive at the solution, and be factual.
         In your answers, clearly detail the steps involved and give the final answer.
         Provide the response in bullet points."""  # noqa
-        model = pne.LLMFactory.build(model_name="gpt-4-1106-preview")
+        model = pne.LLMFactory.build(
+            model_name="gpt-4-1106-preview", model_config={"api_key": api_key}
+        )
         return model(f"{system_prompt}\n\nQuestion:{question}Answer:")
 
     # Wikipedia Tool
@@ -96,7 +98,9 @@ def build_agent(api_key: str) -> pne.ToolAgent:
         """
         return wikipedia_search(keyword)
 
-    llm = pne.LLMFactory.build(model_name="gpt-4-1106-preview")
+    llm = pne.LLMFactory.build(
+        model_name="gpt-4-1106-preview", model_config={"api_key": api_key}
+    )
     return pne.ToolAgent(tools=[wikipedia_tool, math_tool, word_problem_tool], llm=llm)
 
 
@@ -106,7 +110,7 @@ with st.sidebar:
         "OpenAI API Key", key="chatbot_api_key", type="password"
     )
     "[Get an OpenAI API key](https://platform.openai.com/account/api-keys)"
-    "[View the source code](https://github.com/Hizeros/LLM-Streamlit/blob/master/chatbot.py)"  # noqa
+    "[View the source code](https://github.com/Undertone0809/promptulate/blob/main/example/build-math-application-with-agent/chatbot.py)"  # noqa
 
 # Set title
 st.title("💬 Math Wiz")
