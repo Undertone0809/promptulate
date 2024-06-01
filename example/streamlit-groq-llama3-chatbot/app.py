@@ -1,5 +1,6 @@
 import streamlit as st
-from groq import Groq
+
+import promptulate as pne
 
 # Create a sidebar to place the user parameter configuration
 with st.sidebar:
@@ -31,20 +32,13 @@ if prompt := st.chat_input():
     # Display in the chat interface
     st.chat_message("user").write(prompt)
 
-    client = Groq(
-        api_key=groq_api_key,
-    )
-    chat_completion = client.chat.completions.create(
-        messages=[
-            {
-                "role": "user",
-                "content": prompt,
-            }
-        ],
-        model="llama3-8b-8192",
+    response: str = pne.chat(
+        model="groq/llama3-8b-8192",
+        messages=prompt,
+        model_config={"api_key": groq_api_key},
     )
 
     st.session_state.messages.append(
-        {"role": "assistant", "content": chat_completion.choices[0].message.content}
+        {"role": "assistant", "content": response}
     )
-    st.chat_message("assistant").write(chat_completion.choices[0].message.content)
+    st.chat_message("assistant").write(response)
