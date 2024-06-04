@@ -6,6 +6,8 @@
   - [Best practices](use_cases/intro.md#use-cases)
   - [Awesome chat function](use_cases/chat_usage.md#chat)
   - [Build math application with agent](use_cases/build-math-application-with-agent.md#building-a-math-application-with-promptulate-agents)
+  - [Build a simple chatbot with streamlit and pne.chat()](use_cases/streamlit+pne.chat().md#build-a-simple-chatbot-using-streamlit-and-pne)
+  - [Build a simple chatbot with streamlit and groq,llama3](use_cases/streamlit-groq-llama3.md#build-a-simple-chatbot-using-streamlit-and-groq-llama3)
 
 - Modules
   - [:robot: Agent](modules/agent.md#agent)
