@@ -12,11 +12,7 @@ We can start off by creating a new conda environment with python=3.11:`conda cre
 Activate the environment:`conda activate math_assistant`
 
 Next, let’s install all necessary libraries:
-- `pip install -U promptulate` 
-
-- `pip install wikipedia`
-
-- `pip install numexpr`
+- `pip install -U promptulate wikipedia numexpr`
 
 Sign up at OpenAI and obtain your own key to start making calls to the gpt model. Once you have the key, create a .env file in your repository and store the OpenAI key:
 
