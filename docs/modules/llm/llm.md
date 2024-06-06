@@ -15,5 +15,8 @@ In general, we do not use the llm module directly, because in most cases we can 
 
 ### How to use?
 
+There are some ways to teach you how to use llm module:
+
 - [Use LLMFactory to create a language model](modules/llm/llm-factory-usage#LLMFactory)
+- [How to write model name?](other/how_to_write_model_name.md#how-to-write-model-name)
 - [Custom your llm](modules/llm/custom_llm.md#custom-llm)

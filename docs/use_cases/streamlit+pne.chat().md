@@ -1,14 +1,16 @@
 # Build a simple chatbot using streamlit and pne
-This demo is how to use promptulate chat to create a simple chatbot utilising any model. 
-For the application frontend, there will be using streamlit, an easy-to-use open-source Python framework. 
+
+This demo is how to use `pne.chat()` to create a simple chatbot utilising any model. For the application frontend, there will be using streamlit, an easy-to-use open-source Python framework. 
+
+This application is a template, meaning you can create your own LLM application by this template.
 
 ## Environment Setup
-We can start off by creating a new conda environment with python=3.11:`conda create -n streamlit_chatbot python=3.11`
 
-Activate the environment:`conda activate streamlit_chatbot`
+Now, let's install all necessary libraries:
 
-Next, let’s install all necessary libraries:
-- `pip install -U promptulate streamlit`
+```bash
+pip install -U promptulate streamlit`
+```
 
 ## Step-by-Step Implementation 
 
@@ -23,13 +25,14 @@ import promptulate as pne
 ```
 
 ### Step 2
+
 Create a sidebar to place the user parameter configuration:
 
 ```python
 with st.sidebar:
     model_name: str = st.text_input(
         label="LLM Model Name",
-        help="1.gpt-4-1106-preview "
+        help="1.gpt-4-1106-previ1ew "
         "2.deepseek/deepseek-chat "
         "For more details, please click ("
         "https://www.promptulate.cn/#/use_cases/chat_usage?id=chat)",
@@ -39,6 +42,7 @@ with st.sidebar:
 ```
 
 ### Step 3 
+
 Set page style:
 
 ```python
@@ -59,6 +63,7 @@ for msg in st.session_state.messages:
 ```
 
 ### Step 4
+
 Set user input:
 
 ```python
@@ -86,14 +91,22 @@ if prompt := st.chat_input():
         st.chat_message("assistant").write(i)
 ```
 
-## Effect
-The running effect is as follows:
+## Final Effect
+
+The running effect is as follows, you can interact with the chatbot:
+
 ![streamlit+pne](./img/streamlit+pne.png)
 
-## Demo
-There is a `app.py` file under the `streamlit-chatbot` file of `example` in the project folder. 
-You can run the application directly to view the effect and debug the web page. 
-Project Link: [streamlit+pne.chat()](https://github.com/Undertone0809/promptulate/tree/main/example/streamlit-chatbot)
+## How to write model name?
+
+You can see how to write model name here: [Link](/other/how_to_write_model_name#how-to-write-model-name)
+
+## Run the demo
+
+There is a `app.py` file under the `streamlit-chatbot` file of `example` in the project folder. You can run the application directly to view the effect and debug the web page. 
+
+Project Link: [streamlit+pne.chat() application](https://github.com/Undertone0809/promptulate/tree/main/example/streamlit-chatbot)
+
 To run the application, follow the steps below:
 
 - Click [here](https://github.com/Undertone0809/promptulate/fork) to fork the project to your local machine
@@ -122,4 +135,5 @@ streamlit run app.py
 ```
 
 The running result is as follows:
+
 ![streamlit+pne](./img/streamlit+pne.png)

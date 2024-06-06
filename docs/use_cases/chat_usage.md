@@ -175,6 +175,9 @@ print(response)
 ```
 
 ### How to write model name?
+
+Click [Here](/other/how_to_write_model_name#how-to-write-model-name) to see the detail.
+
 For some well-known models, you can use the name of the model directly to call. For some other models, you can use the provider/model-name method. For example, deepseek's deepseek-chat model can be invoked by deepseek/deepseek-chat method.
 
 This notation is based on litellm design, so if you are not sure how to write the name of your model, you can go to [litellm documentation](https://docs.litellm.ai/docs/) to see the detail. 

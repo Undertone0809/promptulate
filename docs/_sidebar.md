@@ -6,8 +6,8 @@
   - [Best practices](use_cases/intro.md#use-cases)
   - [Awesome chat function](use_cases/chat_usage.md#chat)
   - [Build math application with agent](use_cases/build-math-application-with-agent.md#building-a-math-application-with-promptulate-agents)
-  - [Build a simple chatbot with streamlit and pne.chat()](use_cases/streamlit+pne.chat().md#build-a-simple-chatbot-using-streamlit-and-pne)
-  - [Build a simple chatbot with streamlit and groq,llama3](use_cases/streamlit-groq-llama3.md#build-a-simple-chatbot-using-streamlit-and-groq-llama3)
+  - [Build chatbot with streamlit and pne.chat()](use_cases/streamlit+pne.chat().md#build-a-simple-chatbot-using-streamlit-and-pne)
+  - [Groq, llama3, Streamlit to build a application](use_cases/streamlit-groq-llama3.md#groq-llama3-streamlit-to-build-a-application)
 
 - Modules
   - [:robot: Agent](modules/agent.md#agent)
@@ -37,3 +37,4 @@
   - [Roadmap](other/plan.md)
   - [Developer guidance](other/contribution.md#contributing-to-promptulate)
   - [Log system](other/log_system.md#log-system)
+  - [How to write model name?](other/how_to_write_model_name.md#how-to-write-model-name)

@@ -1,4 +1,4 @@
-# Build a simple chatbot using streamlit and groq-llama3
+# Groq, llama3, Streamlit to build a application
 This demo is how to use promptulate chat to create a simple chatbot utilising Groq and llama3 model. 
 For the application frontend, there will be using streamlit, an easy-to-use open-source Python framework. 
 
