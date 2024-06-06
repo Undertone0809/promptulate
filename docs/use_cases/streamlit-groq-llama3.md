@@ -8,9 +8,7 @@ We can start off by creating a new conda environment with python=3.11:`conda cre
 Activate the environment:`conda activate streamlit_groq_chatbot`
 
 Next, let’s install all necessary libraries:
-- `pip install -U promptulate` 
-
-- `pip install streamlit`
+- `pip install -U promptulate streamlit`
 
 ## Step-by-Step Implementation 
 
