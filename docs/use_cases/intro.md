@@ -9,3 +9,4 @@ If you're looking to build something specific or are more of a hands-on learner,
 - [Build a math application with agent [Steamlit, ToolAgent, Hooks].](use_cases/build-math-application-with-agent.md)
 - [A Mulitmodal Robot Agent framework of ROS2 and Promptulate [Agent]](https://github.com/Undertone0809/Athena)
 - [Use streamlit and pne to compare different model a playground. [Streamlit]](https://github.com/Undertone0809/pne-playground-model-comparison)
+- [gcop:Your git AI copilot, based on promptulate](https://github.com/Undertone0809/gcop)
