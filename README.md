@@ -18,6 +18,10 @@
     <a target="_blank" href=''>
         <img src="docs/images/coverage.svg"/>
     </a>
+    <a href="https://t.me/zeeland0809" target="_blank">
+      <img src="https://img.shields.io/badge/Telegram-join%20chat-2CA5E0?logo=telegram&logoColor=white" alt="chat on Telegram">
+    </a>
+
 </p>
 
 [English](/README.md) [中文](/README_zh.md)
@@ -308,6 +312,8 @@ Following these principles and applying the latest artificial intelligence techn
 ## 💌 Contact
 
 For more information, please contact: [zeeland4work@gmail.com](mailto:zeeland4work@gmail.com)
+
+See anything changelog, describe the [telegram channel](https://t.me/zeeland0809)
 
 ## ⭐ Contribution
 
