@@ -2,6 +2,8 @@
 
 The `app.py` is an example of building a simple chatbot using streamlit and promptulate.
 
+You see try the live demo [here](https://pne-chatbot.streamlit.app/).
+
 # Quick Start
 
 1. Clone the repository and install the dependencies

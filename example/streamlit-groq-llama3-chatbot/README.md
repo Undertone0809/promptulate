@@ -2,6 +2,8 @@
 
 The `app.py` is an example of building a mathematical chatbot using streamlit、groq and llama3.
 
+You see try the live demo [here](https://pne-groq-chatbot.streamlit.app/).
+
 # Quick Start
 
 1. Clone the repository and install the dependencies

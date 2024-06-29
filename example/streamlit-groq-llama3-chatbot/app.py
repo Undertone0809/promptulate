@@ -1,13 +1,12 @@
+import pne
 import streamlit as st
-
-import promptulate as pne
 
 # Create a sidebar to place the user parameter configuration
 with st.sidebar:
-    groq_api_key = st.text_input("Groq API Key", key="chatbot_api_key", type="password")
+    groq_api_key = st.text_input("Groq API Key", key="api_key", type="password")
 
 # Set title
-st.title("💬 Chat")
+st.title("💬 Chat With Groq")
 st.caption("🚀 Hi there! 👋 I am a simple chatbot by groq and llama3 to help you ")
 
 # Determine whether to initialize the message variable
@@ -39,4 +38,4 @@ if prompt := st.chat_input():
     )
 
     st.session_state.messages.append({"role": "assistant", "content": response})
-    st.chat_message("assistant").write(response)
+    st.chat_message("assistant").write_stream(response)

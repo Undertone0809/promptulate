@@ -4,12 +4,14 @@ This demo is how to use `pne.chat()` to create a simple chatbot utilising any mo
 
 This application is a template, meaning you can create your own LLM application by this template.
 
+You see try the live demo [here](https://pne-chatbot.streamlit.app/) or see the code [here](https://github.com/Undertone0809/promptulate/tree/main/example/streamlit-chatbot).
+
 ## Environment Setup
 
 Now, let's install all necessary libraries:
 
 ```bash
-pip install -U promptulate streamlit`
+pip install -U pne streamlit`
 ```
 
 ## Step-by-Step Implementation 
@@ -19,9 +21,8 @@ pip install -U promptulate streamlit`
 Create a `app.py` script and import the necessary dependencies:
 
 ```python
+import pne
 import streamlit as st
-
-import promptulate as pne
 ```
 
 ### Step 2
@@ -30,15 +31,21 @@ Create a sidebar to place the user parameter configuration:
 
 ```python
 with st.sidebar:
-    model_name: str = st.text_input(
-        label="LLM Model Name",
-        help="1.gpt-4-1106-previ1ew "
-        "2.deepseek/deepseek-chat "
-        "For more details, please click ("
-        "https://www.promptulate.cn/#/use_cases/chat_usage?id=chat)",
+    model_name: str = st.selectbox(
+        label="Language Model Name",
+        options=[
+            "openai/gpt-4o",
+            "openai/gpt-4-turbo",
+            "deepseek/deepseek-chat",
+            "zhipu/glm-4",
+            "ollama/llama2",
+        ],
+        help="For more details, please see"
+        "[how to write model name?](https://www.promptulate.cn/#/other/how_to_write_model_name)",  # noqa
     )
-    api_key = st.text_input("API Key", key="chatbot_api_key", type="password")
+    api_key = st.text_input("API Key", key="provider_api_key", type="password")
     api_base = st.text_input("OpenAI Proxy URL (Optional)")
+
 ```
 
 ### Step 3 
@@ -67,7 +74,6 @@ for msg in st.session_state.messages:
 Set user input:
 
 ```python
-# User input
 if prompt := st.chat_input():
     if not api_key:
         st.info("Please add your API key to continue.")
@@ -85,10 +91,8 @@ if prompt := st.chat_input():
         model_config={"api_base": api_base, "api_key": api_key},
     )
 
-    # Stream output
-    for i in response:
-        st.session_state.messages.append({"role": "assistant", "content": i})
-        st.chat_message("assistant").write(i)
+    st.session_state.messages.append({"role": "assistant", "content": "start"})
+    st.chat_message("assistant").write_stream(response)
 ```
 
 ## Final Effect
@@ -103,9 +107,7 @@ You can see how to write model name here: [Link](/other/how_to_write_model_name#
 
 ## Run the demo
 
-There is a `app.py` file under the `streamlit-chatbot` file of `example` in the project folder. You can run the application directly to view the effect and debug the web page. 
-
-Project Link: [streamlit+pne.chat() application](https://github.com/Undertone0809/promptulate/tree/main/example/streamlit-chatbot)
+There is a `app.py` file under the `streamlit-chatbot` file of `example` in the project folder. You can run the application directly to view the effect and debug the web page.
 
 To run the application, follow the steps below:
 
