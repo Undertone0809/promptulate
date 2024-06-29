@@ -1,17 +1,21 @@
+import pne
 import streamlit as st
-
-import promptulate as pne
 
 # Create a sidebar to place the user parameter configuration
 with st.sidebar:
-    model_name: str = st.text_input(
-        label="LLM Model Name",
-        help="1.gpt-4-1106-preview "
-        "2.deepseek/deepseek-chat "
-        "For more details, please click ("
-        "https://www.promptulate.cn/#/use_cases/chat_usage?id=chat)",
+    model_name: str = st.selectbox(
+        label="Language Model Name",
+        options=[
+            "openai/gpt-4o",
+            "openai/gpt-4-turbo",
+            "deepseek/deepseek-chat",
+            "zhipu/glm-4",
+            "ollama/llama2"
+        ],
+        help="For more details, please see"
+        "[how to write model name?](https://www.promptulate.cn/#/other/how_to_write_model_name)", # noqa
     )
-    api_key = st.text_input("API Key", key="chatbot_api_key", type="password")
+    api_key = st.text_input("API Key", key="provider_api_key", type="password")
     api_base = st.text_input("OpenAI Proxy URL (Optional)")
 
 # Set title
@@ -47,7 +51,5 @@ if prompt := st.chat_input():
         model_config={"api_base": api_base, "api_key": api_key},
     )
 
-    # Stream output
-    for i in response:
-        st.session_state.messages.append({"role": "assistant", "content": i})
-        st.chat_message("assistant").write(i)
+    st.session_state.messages.append({"role": "assistant", "content": ""})
+    st.chat_message("assistant").write_stream(response)
