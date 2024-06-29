@@ -12,7 +12,7 @@ Now let's see how to write the model name, the following example use pne.chat() 
 import pne
 
 response = pne.chat(
-    model="gpt-3.5-turbo",
+    model="gpt-3.5-turbo", # or openai/gpt-3.5-turbo
     messages="Hello, how are you?",
 )
 print(response)
@@ -37,6 +37,51 @@ response = pne.chat(
 )
 print(response)
 ```
+
+## Claude
+
+```python
+import pne
+
+response = pne.chat(
+    model="claude-2",
+    messages="Hello, how are you?",
+)
+print(response)
+```
+
+## Create ollama
+
+```python
+import pne
+
+response = pne.chat(
+    model="ollama/llama2",
+    messages="Hello, how are you?",
+    model_config={
+        "api_base": "http://localhost:11434"
+    }
+)
+print(response)
+```
+
+## Use OpenAI Proxy
+
+If you want to use Zhipu GLM4 by OpenAI proxy, you can use the following configuration:
+
+```python
+import pne
+
+response = pne.chat(
+    model="openai/glm-4",
+    messages="Hello, how are you?",
+    model_config={
+        "api_base": "https://open.bigmodel.cn/api/paas/v4/"
+    }
+)
+```
+
+Use `openai/model_name` provider means you are using OpenAI SDK to call the model.
 
 ## Why not provider name in OpenAI model?
 

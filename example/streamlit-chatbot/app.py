@@ -10,10 +10,10 @@ with st.sidebar:
             "openai/gpt-4-turbo",
             "deepseek/deepseek-chat",
             "zhipu/glm-4",
-            "ollama/llama2"
+            "ollama/llama2",
         ],
         help="For more details, please see"
-        "[how to write model name?](https://www.promptulate.cn/#/other/how_to_write_model_name)", # noqa
+        "[how to write model name?](https://www.promptulate.cn/#/other/how_to_write_model_name)",  # noqa
     )
     api_key = st.text_input("API Key", key="provider_api_key", type="password")
     api_base = st.text_input("OpenAI Proxy URL (Optional)")
@@ -51,5 +51,5 @@ if prompt := st.chat_input():
         model_config={"api_base": api_base, "api_key": api_key},
     )
 
-    st.session_state.messages.append({"role": "assistant", "content": ""})
+    st.session_state.messages.append({"role": "assistant", "content": "start"})
     st.chat_message("assistant").write_stream(response)
