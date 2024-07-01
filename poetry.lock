@@ -159,17 +159,18 @@ trio = ["trio (>=0.23)"]
 
 [[package]]
 name = "arxiv"
-version = "1.4.8"
-description = "Python wrapper for the arXiv API: http://arxiv.org/help/api/"
+version = "2.1.3"
+description = "Python wrapper for the arXiv API: https://arxiv.org/help/api/"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "arxiv-1.4.8-py3-none-any.whl", hash = "sha256:c3dbef0fb7ed85c9b4c2157b40a62f5a04ce0d2f63c3ff7caa7798abf6166378"},
-    {file = "arxiv-1.4.8.tar.gz", hash = "sha256:2a818ea749eaa62a6e24fc31d53b769b4d33ff55cfc5dda7c7b7d309a3b29373"},
+    {file = "arxiv-2.1.3-py3-none-any.whl", hash = "sha256:6f43673ab770a9e848d7d4fc1894824df55edeac3c3572ea280c9ba2e3c0f39f"},
+    {file = "arxiv-2.1.3.tar.gz", hash = "sha256:32365221994d2cf05657c1fadf63a26efc8ccdec18590281ee03515bfef8bc4e"},
 ]
 
 [package.dependencies]
-feedparser = "*"
+feedparser = ">=6.0.10,<6.1.0"
+requests = ">=2.32.0,<2.33.0"
 
 [[package]]
 name = "async-timeout"
@@ -2898,4 +2899,4 @@ test = ["big-O", "jaraco.functools", "jaraco.itertools", "jaraco.test", "more-it
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<4.0"
-content-hash = "f9740faaf01b673db3eb362b71b6c064b8ce441ab7586001d60b2c88be8463f6"
+content-hash = "d19d2b31fd328ba0131dffe7c179e74d469a4836840f017d27447a92632c405e"
