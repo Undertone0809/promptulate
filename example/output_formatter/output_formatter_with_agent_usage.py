@@ -1,4 +1,5 @@
 """This example show how to use JSONFormatter by Agent."""
+
 from promptulate.agents import WebAgent
 from promptulate.pydantic_v1 import BaseModel, Field
 

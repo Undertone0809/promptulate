@@ -60,7 +60,7 @@ def main():
                 )
 
             with gr.Column(scale=3):
-                chat_interface = gr.ChatInterface(
+                chat_interface = gr.ChatInterface(  # noqa
                     fn=predict,
                     additional_inputs=[api_key, model_selector, api_base],
                     fill_height=True,
