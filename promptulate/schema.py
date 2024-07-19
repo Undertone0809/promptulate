@@ -1,4 +1,6 @@
+import warnings
 from abc import abstractmethod
+from datetime import datetime
 from enum import Enum
 from typing import Any, Callable, Dict, Iterator, List, Optional, Union
 
@@ -198,6 +200,15 @@ class MessageSet:
         self.messages: List[BaseMessage] = messages
         self.conversation_id: Optional[str] = conversation_id
         self.additional_kwargs: dict = additional_kwargs or {}
+        self.created_at: datetime = datetime.now()
+
+        if conversation_id:
+            # show tip, this will be deprecated in v1.9.0
+            warnings.warn(
+                "The parameter 'conversation_id' is deprecated and will be removed in version 1.9.0.",  # noqa
+                DeprecationWarning,
+                stacklevel=2,
+            )
 
     @classmethod
     def from_listdict_data(
@@ -268,8 +279,33 @@ class MessageSet:
     def add_user_message(self, message: str) -> None:
         self.messages.append(UserMessage(content=message))
 
-    def add_ai_message(self, message: str) -> None:
+    def add_ai_message(self, message: Union[str, BaseModel]) -> None:
+        """Add a message from an AI model. If the message has a model_dump method, which
+        means it's a pydantic model, it will be dumped to a string and added to the
+        message set. Otherwise, it will be added as a string.
+
+        Args:
+            message(str | BaseModel): The message from the AI model.
+
+        Returns:
+            None
+        """
+        if hasattr(message, "model_dump"):
+            _: dict = message.model_dump()
+            self.messages.append(AssistantMessage(content=str(_), additional_kwargs=_))
+            return
+
         self.messages.append(AssistantMessage(content=message))
+
+    def add_from_message_set(self, message_set: "MessageSet") -> None:
+        """Add messages from another message.
+        Args:
+            message_set:
+
+        Returns:
+            None
+        """
+        self.messages.extend(message_set.messages)
 
 
 def init_chat_message_history(
