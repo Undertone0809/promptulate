@@ -135,7 +135,3 @@ pip install -r requirements.txt
 ```shell
 streamlit run app.py
 ```
-
-The running result is as follows:
-
-![streamlit+pne](./img/streamlit+pne.png)

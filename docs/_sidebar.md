@@ -1,6 +1,7 @@
 - Get started
-  - [:bookmark_tabs: Introduction](README.md)
-  - [:bookmark: Quick Start](get_started/quick_start.md#quick-start)
+  - [Introduction](README.md)
+  - [Quick Start](get_started/quick_start.md#quick-start)
+  - [How-to Guide](get_started/how-to-guide.md#how-to-guides)
 
 - Use Cases
   - [Best practices](use_cases/intro.md#use-cases)
@@ -11,9 +12,9 @@
 
 - Modules
   - [:robot: Agent](modules/agent.md#agent)
-    - [:alien: Assistant Agent](modules/agents/assistant_agent_usage.md#assistant-agent)
+    - [Assistant Agent](modules/agents/assistant_agent_usage.md#assistant-agent)
   - [:notebook_with_decorative_cover: LLMs](modules/llm/llm.md#llm)
-    - [ LLM Factory](modules/llm/llm-factory-usage.md#LLMFactory)
+    - [LLM Factory](modules/llm/llm-factory-usage.md#LLMFactory)
     - [Custom LLM](modules/llm/custom_llm.md#custom-llm)
     - [OpenAI](modules/llm/openai.md#openai)
     - [Erniebot 百度文心](modules/llm/erniebot.md#百度文心erniebot)

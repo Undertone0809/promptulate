@@ -29,7 +29,7 @@ The following diagram shows the core architecture of `promptulate`:
 Now let's see how to use `pne.chat()` to chat with the model. The following example we use `gpt-4-turbo` to chat with the model.
 
 ```python
-import promptulate as pne
+import pne
 
 response: str = pne.chat(messages="What is the capital of China?", model="gpt-4-turbo")
 ```
@@ -85,7 +85,7 @@ The powerful model support of pne allows you to easily build any third-party mod
 Now let's see how to run local llama3 models of ollama with pne.
 
 ```python
-import promptulate as pne
+import pne
 
 resp: str = pne.chat(model="ollama/llama2", messages=[{"content": "Hello, how are you?", "role": "user"}])
 ```
@@ -95,7 +95,7 @@ resp: str = pne.chat(model="ollama/llama2", messages=[{"content": "Hello, how ar
 You can use the available multimodal capabilities of it in any of your promptulate applications!
 
 ```python
-import promptulate as pne
+import pne
 
 messages=[
     {
@@ -163,7 +163,7 @@ pne.chat() 是 pne 中最强大的函数，在实际的 LLM Agent 应用开发�
 
 ```python
 from typing import List
-import promptulate as pne
+import pne
 from pydantic import BaseModel, Field
 
 class LLMResponse(BaseModel):
@@ -183,7 +183,7 @@ provinces=['Anhui', 'Fujian', 'Gansu', 'Guangdong', 'Guizhou', 'Hainan', 'Hebei'
 
 ```python
 import os
-import promptulate as pne
+import pne
 from langchain.agents import load_tools
 
 os.environ["OPENAI_API_KEY"] = "your-key"
@@ -292,7 +292,7 @@ Agent是`promptulate`的核心组件之一，其核心思想是使用llm、Tool�
 下面的示例展示了如何使用`ToolAgent`结合Tool进行使用。
 
 ```python
-import promptulate as pne
+import pne
 from promptulate.tools import (
     DuckDuckGoTool,
     Calculator,
@@ -338,7 +338,7 @@ Below is an example of how to use the promptulate and langchain libraries to cre
 > You need to set the `OPENAI_API_KEY` environment variable to your OpenAI API key. Click [here](https://undertone0809.github.io/promptulate/#/modules/tools/langchain_tool_usage?id=langchain-tool-usage) to see the detail.
 
 ```python
-import promptulate as pne
+import pne
 from langchain.agents import load_tools
 
 tools: list = load_tools(["dalle-image-generator"])
@@ -363,9 +363,8 @@ Here is the generated image: [![Halloween Night at a Haunted Museum](https://oai
 下面的示例展示了在 WebAgent 中使用格式化输出的最佳实践：
 
 ```python
+import pne
 from pydantic import BaseModel, Field
-
-import promptulate as pne
 
 
 class Response(BaseModel):
