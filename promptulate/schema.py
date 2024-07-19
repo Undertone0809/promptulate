@@ -24,6 +24,7 @@ class BaseMessage(BaseModel):
 
     content: str
     additional_kwargs: dict = Field(default_factory=dict)
+    created_at: datetime = Field(default_factory=datetime.now)
 
     @property
     @abstractmethod
