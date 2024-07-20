@@ -26,8 +26,7 @@ with st.sidebar:
 # Set title
 st.title("💬 Chat")
 st.caption(
-    "🚀 Hi there! 👋 I am a chatbot using llmapper to draw knowledge map by "
-    "Promptulate to help you."
+    "🚀 Hi there! 👋 I am a chatbot to draw knowledge map by Promptulate to help you."
 )
 # Determine whether to initialize the message variable
 # otherwise initialize a message dictionary
