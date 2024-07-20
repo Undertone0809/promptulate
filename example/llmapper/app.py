@@ -21,6 +21,7 @@ with st.sidebar:
     )
     api_key = st.text_input("API Key", key="provider_api_key", type="password")
     api_base = st.text_input("OpenAI Proxy URL (Optional)")
+    "[View the source code](https://github.com/Undertone0809/promptulate)"
 
 # Set title
 st.title("💬 Chat")
