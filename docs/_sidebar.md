@@ -9,6 +9,7 @@
   - [Build math application with agent](use_cases/build-math-application-with-agent.md#building-a-math-application-with-promptulate-agents)
   - [Build chatbot with streamlit and pne.chat()](use_cases/streamlit+pne.chat().md#build-a-simple-chatbot-using-streamlit-and-pne)
   - [Groq, llama3, Streamlit to build a application](use_cases/streamlit-groq-llama3.md#groq-llama3-streamlit-to-build-a-application)
+  - [Build knowledge map with streamlit and pne.chat()](use_cases/llmapper.md#llmapper)
 
 - Modules
   - [:robot: Agent](modules/agent.md#agent)
