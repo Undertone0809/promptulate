@@ -1,0 +1,6 @@
+streamlit>=1.28
+promptulate
+wikipedia
+matplotlib
+networkx
+pydantic
