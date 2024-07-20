@@ -48,7 +48,7 @@ class BaseAgent(ABC):
             prompt = (
                 f"{formatter.get_formatted_instructions()}\n##User input:\n{result}"
             )
-            json_response = self.get_llm()(prompt)
+            json_response: str = self.get_llm()(prompt)
             return formatter.formatting_result(json_response)
 
         Hook.call_hook(

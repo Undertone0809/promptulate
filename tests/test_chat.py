@@ -182,3 +182,17 @@ def test_streaming():
     assert answer[1].content == "is"
     assert answer[2].content == "fake"
     assert answer[3].content == "message"
+
+
+def test_aichat_memory():
+    model = FakeLLM()
+    ai = pne.AIChat(custom_llm=model, enable_memory=True)
+
+    ai.run("hello")
+    ai.run("bye")
+    assert len(ai.memory.messages) == 5
+    assert ai.memory.messages[0].content == "You are a helpful assistant"
+    assert ai.memory.messages[1].content == "hello"
+    assert ai.memory.messages[2].content == "fake response"
+    assert ai.memory.messages[3].content == "bye"
+    assert ai.memory.messages[4].content == "fake response"

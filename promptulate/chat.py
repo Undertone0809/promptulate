@@ -1,6 +1,7 @@
 from typing import Dict, List, Optional, TypeVar, Union
 
 from promptulate.agents.base import BaseAgent
+from promptulate.agents.tool_agent.agent import ToolAgent
 from promptulate.beta.agents.assistant_agent import AssistantAgent
 from promptulate.llms import BaseLLM
 from promptulate.llms.factory import LLMFactory
@@ -11,6 +12,7 @@ from promptulate.schema import (
     BaseMessage,
     MessageSet,
     StreamIterator,
+    SystemMessage,
 )
 from promptulate.tools.base import BaseTool, ToolTypes
 from promptulate.utils.logger import logger
@@ -30,7 +32,6 @@ def _convert_message(messages: Union[List, MessageSet, str]) -> MessageSet:
     """
     if isinstance(messages, str):
         messages: List[Dict] = [
-            {"content": "You are a helpful assistant", "role": "system"},
             {"content": messages, "role": "user"},
         ]
     if isinstance(messages, list):
@@ -79,6 +80,7 @@ class AIChat:
         tools: Optional[List[ToolTypes]] = None,
         custom_llm: Optional[BaseLLM] = None,
         enable_plan: bool = False,
+        enable_memory: bool = False,
     ):
         """Initialize the AIChat.
 
@@ -89,18 +91,20 @@ class AIChat:
                 will use Agent to run.
             custom_llm(Optional[BaseLLM]): custom LLM instance.
             enable_plan(bool): use Agent with plan ability if True.
+            enable_memory(bool): enable memory if True.
         """
         self.llm: BaseLLM = _get_llm(model, model_config, custom_llm)
         self.tools: Optional[List[ToolTypes]] = tools
         self.agent: Optional[BaseAgent] = None
+
+        self.enable_memory: bool = enable_memory
+        self.memory: MessageSet = MessageSet(messages=[])
 
         if tools:
             if enable_plan:
                 self.agent = AssistantAgent(tools=self.tools, llm=self.llm)
                 logger.info("[pne chat] invoke AssistantAgent with plan ability.")
             else:
-                from promptulate.agents.tool_agent.agent import ToolAgent
-
                 self.agent = ToolAgent(tools=self.tools, llm=self.llm)
                 logger.info("[pne chat] invoke ToolAgent.")
 
@@ -113,7 +117,7 @@ class AIChat:
         stream: bool = False,
         **kwargs,
     ) -> Union[str, BaseMessage, T, List[BaseMessage], StreamIterator]:
-        """Run the AIChat.
+        """Run the AIChat, AIChat use self.memory to store chat messages.
 
         Args:
             messages(Union[List, MessageSet, str]): chat messages. It can be str or
@@ -139,33 +143,51 @@ class AIChat:
                 "stream, tools and output_schema can't be True at the same time, "
                 "because stream is used to return Iterator[BaseMessage]."
             )
-        if self.agent:
-            return self.agent.run(messages, output_schema=output_schema)
 
-        messages: MessageSet = _convert_message(messages)
+        if not self.enable_memory:
+            self.memory: MessageSet = MessageSet(messages=[])
+
+        _: MessageSet = _convert_message(messages)
+        self.memory.add_from_message_set(_)
+
+        # initialize memory with system message if it is empty
+        if len(self.memory.messages) == 1:
+            self.memory.messages = [
+                SystemMessage(content="You are a helpful assistant"),
+                *self.memory.messages,
+            ]
+
+        if self.agent:
+            response: Union[str, BaseModel] = self.agent.run(
+                self.memory.string_messages, output_schema=output_schema
+            )
+            self.memory.add_ai_message(response)
+
+            return response
 
         # add output format into the last prompt if provide
         if output_schema:
             instruction: str = get_formatted_instructions(
                 json_schema=output_schema, examples=examples
             )
-            messages.messages[-1].content += f"\n{instruction}"
+            self.memory.messages[-1].content += f"\n{instruction}"
         logger.info(f"[pne chat] messages: {messages}")
 
         response: Union[AssistantMessage, StreamIterator] = self.llm.predict(
-            messages, stream=stream, **kwargs
+            self.memory, stream=stream, **kwargs
         )
 
+        # TODO: add stream memory support
         if stream:
             return response
 
-        if isinstance(response, AssistantMessage):
-            # Access additional_kwargs only if response is AssistantMessage
-            logger.info(f"[pne chat] response: {response.additional_kwargs}")
+        logger.info(
+            f"[pne chat] response: {response.additional_kwargs or response.content}"
+        )
+        self.memory.add_ai_message(response.content)
 
         # return output format if provide
         if output_schema:
-            logger.info("[pne chat] return formatted response.")
             return formatting_result(
                 pydantic_obj=output_schema, llm_output=response.content
             )
