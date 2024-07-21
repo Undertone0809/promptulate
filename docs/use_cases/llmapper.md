@@ -8,6 +8,11 @@ It's very early days. Among other things, there's no error detection or graceful
 
 You can see the code [here](https://github.com/Undertone0809/promptulate/tree/main/example).
 
+The Musk search operation effect is as follows: 
+
+![a-knowledge-graph-of-Musk](./img/a-knowledge-graph-of-Musk.png)
+
+
 ## Environment Setup
 
 We can start off by creating a new conda environment with python=3.11:`conda create -n llmapper python=3.11`
@@ -255,9 +260,6 @@ if prompt := st.chat_input():
     st.image(buf)
 ```
 
-## Effect
-The Musk search operation effect is as follows:
-![a-knowledge-graph-of-Musk](./img/a-knowledge-graph-of-Musk.png)
 
 ## Demo
 There is a `app.py` file under the `llmapper` file of `example` in the project folder. 

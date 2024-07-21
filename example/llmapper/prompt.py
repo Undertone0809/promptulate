@@ -1,3 +1,4 @@
+summary_prompt = """
 # MISSION
 
 You are an expert summarizer. You will examine an article and produce a list of concepts about the article and a list of relationships between those concepts.
@@ -45,3 +46,4 @@ Include as many relationships as necessary to represent ALL the concepts in the 
 - Do not mention the article itself
 - Do not mention references
 - Write the summary in Markdown format
+"""  # noqa
