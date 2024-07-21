@@ -1,13 +1,21 @@
 from io import BytesIO
-from typing import List
+from typing import List, Optional
 
 import matplotlib
 import matplotlib.pyplot as plt
 import networkx as nx
+import pne
+from prompt import summary_prompt
 from pydantic import BaseModel, Field
 
 # Fixed the matplotlib font display issue
 matplotlib.use("Agg")
+
+
+class AppConfig:
+    model_name: Optional[str] = None
+    api_key: Optional[str] = None
+    api_base: Optional[str] = None
 
 
 class Node(BaseModel):
@@ -21,34 +29,30 @@ class Edge(BaseModel):
     title: str = Field(..., title="Title")
 
 
-class LLMResponse(BaseModel):
+class Graph(BaseModel):
     nodes: List[Node] = Field(..., title="Nodes")
     edges: List[Edge] = Field(..., title="Edges")
 
 
-def create_knowledge_graph(data: dict):
+def create_knowledge_graph(graph: Graph):
+    graph: dict = graph.model_dump()
     G = nx.DiGraph()
-    # Add nodes and specify the layer attribute for each node
-    for node in data["nodes"]:
-        # The node ID is the number of tiers
+
+    for node in graph["nodes"]:
         layer = node["id"]
         G.add_node(node["id"], title=node["title"], layer=layer)
-    # Add a directed edge
-    for edge in data["edges"]:
+
+    for edge in graph["edges"]:
         G.add_edge(edge["from_"], edge["to"], title=edge["title"])
+
     return G
 
 
 def draw_graph(G):
-    # With spring layout,
-    # it can be arranged vertically according to the hierarchical properties of nodes
     pos = nx.spring_layout(G, weight="layer")
     fig, ax = plt.subplots(figsize=(12, 8))
 
-    # Draw nodes, where squares are used to represent nodes
     nx.draw_networkx_nodes(G, pos, node_shape="s", node_color="skyblue", ax=ax)
-
-    # Draw edge
     nx.draw_networkx_edges(
         G, pos, edge_color="gray", arrowstyle="->", arrowsize=15, ax=ax
     )
@@ -61,14 +65,22 @@ def draw_graph(G):
     edge_labels = nx.get_edge_attributes(G, "title")
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=10, ax=ax)
 
-    # Save the graph to a BytesIO object
     buf = BytesIO()
     fig.savefig(buf, format="png")
     buf.seek(0)
+
     return buf
 
 
-def read_summarize_prompt(file_path):
-    with open(file_path, "r") as file:
-        content = file.read()
-    return content
+def generate_nodes(query_result: str, app_config: AppConfig) -> Graph:
+    _prompt = f"""
+    Please generate a knowledge graph based on the requirements of {summary_prompt}
+    and the content of {query_result}
+    """
+
+    return pne.chat(
+        model=app_config.model_name,
+        messages=_prompt,
+        model_config={"api_base": app_config.api_base, "api_key": app_config.api_key},
+        output_schema=Graph,
+    )
