@@ -27,9 +27,6 @@ response: str = pne.chat(messages=messages, model="gpt-4-turbo")
 print(response)
 ```
 
-    I am a helpful assistant designed to provide information and assistance to users like you. How can I help you today?
-    
-
 Moreover, you can only pass a string to `pne.chat()`, it will automatically convert it to the OpenAI format.
 
 
@@ -42,9 +39,6 @@ response = pne.chat(
 )
 print(response)
 ```
-
-    My knowledge is up to date as of March 2021. Any events or developments occurring after that date would not be included in my responses. If you're asking for any recent information or updates, I recommend checking the latest sources as my information might not be current.
-    
 
 ## OpenAI Proxy
 You can use `pne.chat()` to chat with OpenAI API by proxy service. The following example show how to use [AIGCAPI proxy](https://aigcapi.io/) to call OpenAI gpt-4-turbo.
@@ -90,8 +84,11 @@ resp: str = ai.run("Hello")
 print(resp)
 ```
 
-    Hello! How can I assist you today?
-    
+Output:
+
+```
+I am a helpful assistant designed to provide information and assistance to users like you. How can I help you today?
+```
 
 The usage of `pne.AIChat` is the same as `pne.chat()`, you can also use OpenAI format to chat.
 
@@ -105,8 +102,25 @@ resp: str = ai.run(messages)
 print(resp)
 ```
 
-    I am an AI digital assistant designed to provide information, answer questions, and assist with various tasks to the best of my ability based on the data and algorithms I've been programmed with. How can I assist you today?
-    
+## Memory for AIChat
+By default, AIChat does not have the ability to turn on memory. Turning on Memory means that AIChat records the history of the conversation and you can use the continuous conversation feature. The follow example show how to turn on memory for AIChat.
+
+
+```python
+import pne
+
+ai = pne.AIChat(model="gpt-4-1106-preview", enable_memory=True)
+response: str = ai.run("Tell me about promptulate.")
+print(response)
+```
+
+Continuing the conversation:
+
+
+```python
+response: str = ai.run("Tell me more")
+print(response)
+```
 
 ## Return type
 `pne.chat()` return string by default.
@@ -126,10 +140,6 @@ response: pne.AssistantMessage = pne.chat(
 print(response.content)  # response string
 print(response.additional_kwargs)  # metadata
 ```
-
-    I am an AI assistant here to help you with any questions or tasks you may have. How can I assist you today?
-    {'id': 'chatcmpl-8UK0tfwlkixWyaxKJ2XWNGMVGFPo0', 'choices': [{'finish_reason': 'stop', 'index': 0, 'message': {'content': 'I am an AI assistant here to help you with any questions or tasks you may have. How can I assist you today?', 'role': 'assistant'}}], 'created': 1702237461, 'model': 'gpt-3.5-turbo-0613', 'object': 'chat.completion', 'system_fingerprint': None, 'usage': {'completion_tokens': 25, 'prompt_tokens': 20, 'total_tokens': 45}, '_response_ms': 2492.372}
-    
 
 ## Using any model
 
@@ -310,34 +320,8 @@ response = pne.chat(
 print(response)
 ```
 
-    I am a helpful assistant designed to provide information, answer questions, and assist with various tasks. How can I assist you today?
-    
-
 ## Structured Output
 The output of LLM has strong uncertainty. Pne provide the ability to get a structured object by LLM. The following example shows that if LLM strictly returns you an array listing all provinces in China. Here we use Pydantic to build a structured object.
-
-
-```python
-from typing import List
-from pydantic import BaseModel, Field
-import promptulate as pne
-
-
-class LLMResponse(BaseModel):
-    provinces: List[str] = Field(description="All provinces in China")
-
-
-resp: LLMResponse = pne.chat(
-    messages="Please tell me all provinces in China.",
-    model= "gpt-4-turbo",
-    output_schema=LLMResponse
-)
-
-print(resp)
-```
-
-    provinces=['Anhui', 'Fujian', 'Gansu', 'Guangdong', 'Guizhou', 'Hainan', 'Hebei', 'Heilongjiang', 'Henan', 'Hubei', 'Hunan', 'Jiangsu', 'Jiangxi', 'Jilin', 'Liaoning', 'Qinghai', 'Shaanxi', 'Shandong', 'Shanxi', 'Sichuan', 'Yunnan', 'Zhejiang', 'Guangxi', 'Inner Mongolia', 'Ningxia', 'Xinjiang', 'Tibet', 'Beijing', 'Chongqing', 'Shanghai', 'Tianjin', 'Hong Kong', 'Macau']
-    
 
 
 ```python
@@ -358,8 +342,11 @@ response: LLMResponse = pne.chat(
 print(response.provinces)
 ```
 
-    ['Anhui', 'Beijing', 'Chongqing', 'Fujian', 'Gansu', 'Guangdong', 'Guangxi', 'Guizhou', 'Hainan', 'Hebei', 'Heilongjiang', 'Henan', 'Hubei', 'Hunan', 'Jiangsu', 'Jiangxi', 'Jilin', 'Liaoning', 'Ningxia', 'Qinghai', 'Shaanxi', 'Shandong', 'Shanghai', 'Shanxi', 'Sichuan', 'Tianjin', 'Tibet', 'Xinjiang', 'Yunnan', 'Zhejiang']
-    
+Output:
+
+```
+['Anhui', 'Fujian', 'Gansu', 'Guangdong', 'Guizhou', 'Hainan', 'Hebei', 'Heilongjiang', 'Henan', 'Hubei', 'Hunan', 'Jiangsu', 'Jiangxi', 'Jilin', 'Liaoning', 'Qinghai', 'Shaanxi', 'Shandong', 'Shanxi', 'Sichuan', 'Yunnan', 'Zhejiang', 'Taiwan', 'Guangxi', 'Nei Mongol', 'Ningxia', 'Xinjiang', 'Xizang', 'Beijing', 'Chongqing', 'Shanghai', 'Tianjin', 'Hong Kong', 'Macao']
+```
 
 As you can see, `pne.chat()` return a LLMResponse object. The value of provinces is all provinces in China. If you are building a complex Agent project, formatting output is a necessary measure to improve system robustness. The follow example show how to use `pne.chat()` to get the weather in Shanghai tomorrow.
 
@@ -386,11 +373,6 @@ print(response.city_name)
 print(response.queried_date)
 ```
 
-    city_name='Shanghai' queried_date=datetime.datetime(2023, 12, 11, 13, 2, 35, 722348, tzinfo=datetime.timezone.utc)
-    Shanghai
-    2023-12-11 13:02:35.722348+00:00
-    
-
 ## Using tool
 
 The Tool feature in `pne.chat()` allows the language model to use specialized tools to assist in providing answers. For instance, when the language model recognizes the need to obtain weather information, it can invoke a predefined function for this purpose.
@@ -411,9 +393,6 @@ response = pne.chat(
 )
 print(response)
 ```
-
-    {"tool": {"tool_name": "web_search", "tool_params": {"query": "Weather Shanghai tomorrow"}}, "thought": "I will use the web_search tool to find the temperature in Shanghai tomorrow.", "final_answer": null}
-    
 
 ## Custom Tool
 
@@ -442,16 +421,6 @@ response = pne.chat(
 )
 print(response)
 ```
-
-    [31;1m[1;3m[Agent] Tool Agent start...[0m
-    [36;1m[1;3m[User instruction] What's the temperature in Shanghai tomorrow?[0m
-    [33;1m[1;3m[Thought] I should use the websearch tool to find the weather forecast of Shanghai tomorrow.[0m
-    [33;1m[1;3m[Action] websearch args: {'query': 'Shanghai weather forecast tomorrow'}[0m
-    [33;1m[1;3m[Observation] 25° / 14°. 1.7 mm. 7 m/s. Open hourly forecast. Updated 18:30. How often is the weather forecast updated? Forecast as PDF Forecast as SVG. Shanghai Weather Forecast. Providing a local hourly Shanghai weather forecast of rain, sun, wind, humidity and temperature. The Long-range 12 day forecast also includes detail for Shanghai weather today. Live weather reports from Shanghai weather stations and weather warnings that include risk of thunder, high UV index and forecast gales. Everything you need to know about today's weather in Shanghai, Shanghai, China. High/Low, Precipitation Chances, Sunrise/Sunset, and today's Temperature History. 上海 (Shanghai) ☀ Weather forecast for 10 days, information from meteorological stations, webcams, sunrise and sunset, wind and precipitation maps for this place ... 00:00 tomorrow 01:00 tomorrow 02:00 tomorrow 03:00 tomorrow 04:00 tomorrow 05:00 tomorrow 06:00 tomorrow 07:00 tomorrow 08:00 tomorrow 09:00 tomorrow Shanghai 7 day weather forecast including weather warnings, temperature, rain, wind, visibility, humidity and UV[0m
-    [32;1m[1;3m[Agent Result] The weather forecast for Shanghai tomorrow is 25° / 14° with 1.7 mm of rain and 7 m/s wind speed. The weather information is updated at 18:30 daily.[0m
-    [38;5;200m[1;3m[Agent] Agent End.[0m
-    The weather forecast for Shanghai tomorrow is 25° / 14° with 1.7 mm of rain and 7 m/s wind speed. The weather information is updated at 18:30 daily.
-    
 
 ## chat with Plan-Execute-Reflect Agent
 
@@ -537,9 +506,6 @@ class LLMResponse(BaseModel):
 resp: LLMResponse = pne.chat("Please tell me all provinces in China.?", model= "gpt-4-turbo", output_schema=LLMResponse)
 print(resp)
 ```
-
-    provinces=['Anhui', 'Fujian', 'Gansu', 'Guangdong', 'Guizhou', 'Hainan', 'Hebei', 'Heilongjiang', 'Henan', 'Hubei', 'Hunan', 'Jiangsu', 'Jiangxi', 'Jilin', 'Liaoning', 'Qinghai', 'Shaanxi', 'Shandong', 'Shanxi', 'Sichuan', 'Yunnan', 'Zhejiang', 'Taiwan', 'Guangxi', 'Nei Mongol', 'Ningxia', 'Xinjiang', 'Xizang', 'Beijing', 'Chongqing', 'Shanghai', 'Tianjin', 'Hong Kong', 'Macao']
-    
 
 ## Streaming
 `pne.chat()` support streaming, you can use `pne.chat()` to chat with your assistant in real time.

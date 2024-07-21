@@ -16,3 +16,11 @@ This highlights functionality that is core to using Promptulate.
 
 
 - [How to build a streamlit app by pne](use_cases/streamlit+pne.chat().md#build-a-simple-chatbot-using-streamlit-and-pne)
+
+
+- [How to use Memory in AIChat()](use_cases/chat_usage.md#memory-for-aichat)
+
+
+## Use cases
+
+Promptulate providers a wide range of use cases to help you get started with your project. You can start with the [use cases](use_cases/chat_usage.md#chat)
