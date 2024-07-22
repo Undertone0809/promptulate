@@ -35,7 +35,7 @@ def main():
     st.title("llmapper")
     st.caption(
         """
-        llmapper was an experimental project. Given a query term, llmapper would search Wikipedia for relevant content, and then generate a knowledge graph using Promptulate.\n
+        LLMapper was an experimental project. Given a query term, llmapper would search Wikipedia for relevant content, and then generate a knowledge graph using Promptulate.\n
         🚀 Power by [promptulate](https://github.com/Undertone0809/promptulate)
         """  # noqa
     )

@@ -6,7 +6,7 @@ LLMapper is a crude prototype for refining the prompts. Which is to say, this is
 
 It's very early days. Among other things, there's no error detection or graceful failures. Use at your own risk.
 
-## Demo
+## Online Demo
 
 You can see the online demo [here](https://pne-llmapper.streamlit.app/) and [source code](https://github.com/Undertone0809/promptulate/tree/main/example).
 
@@ -14,48 +14,9 @@ The Musk search operation effect is as follows:
 
 ![a-knowledge-graph-of-Musk](./img/a-knowledge-graph-of-Musk.png)
 
+## Step-by-Step Implementation
 
-## Quick Start
-
-You can use the following command to run the LLMapper project fastly:
-
-
-- Click [here](https://github.com/Undertone0809/promptulate/fork) to fork the project to your local machine
-- Clone the project locally:
-
-```bash
-git clone https://github.com/Undertone0809/promptulate.git
-```
-
-- Switch the current directory to the example
-
-```shell
-cd promptulate/example/llmapper
-```
-
-- Install the dependencies
-
-```shell
-pip install -r requirements.txt
-```
-
-- Run the application
-
-```shell
-streamlit run app.py
-```
-
-
-We can start off by creating a new conda environment with python=3.11:`conda create -n llmapper python=3.11`
-
-Activate the environment:`conda activate llmapper`
-
-Next, let’s install all necessary libraries:
-
-```shell
-pip install -U promptulate streamlit
-```
-## Step-by-Step Implementation 
+![llmapper-workflow.png.png](img/llmapper-workflow.png)
 
 ### Step 1
 
@@ -77,6 +38,12 @@ Define core classes and functions for mapping knowledge
 matplotlib.use("Agg")
 
 
+class AppConfig:
+    model_name: Optional[str] = None
+    api_key: Optional[str] = None
+    api_base: Optional[str] = None
+
+
 class Node(BaseModel):
     id: str = Field(..., title="ID")
     title: str = Field(..., title="Title")
@@ -88,57 +55,62 @@ class Edge(BaseModel):
     title: str = Field(..., title="Title")
 
 
-class LLMResponse(BaseModel):
+class Graph(BaseModel):
     nodes: List[Node] = Field(..., title="Nodes")
     edges: List[Edge] = Field(..., title="Edges")
 
 
-def create_knowledge_graph(data: dict):
+def create_knowledge_graph(graph: Graph):
+    graph: dict = graph.model_dump()
     G = nx.DiGraph()
-    # Add nodes and specify the layer attribute for each node
-    for node in data["nodes"]:
-        # The node ID is the number of tiers
+
+    for node in graph["nodes"]:
         layer = node["id"]
         G.add_node(node["id"], title=node["title"], layer=layer)
-    # Add a directed edge
-    for edge in data["edges"]:
+
+    for edge in graph["edges"]:
         G.add_edge(edge["from_"], edge["to"], title=edge["title"])
+
     return G
 
 
 def draw_graph(G):
-    # With spring layout,
-    # it can be arranged vertically according to the hierarchical properties of nodes
     pos = nx.spring_layout(G, weight="layer")
     fig, ax = plt.subplots(figsize=(12, 8))
-    
-    # Draw nodes, where squares are used to represent nodes
+
     nx.draw_networkx_nodes(G, pos, node_shape="s", node_color="skyblue", ax=ax)
-    
-    # Draw edge
     nx.draw_networkx_edges(
-    G, pos, edge_color="gray", arrowstyle="->", arrowsize=15, ax=ax
+        G, pos, edge_color="gray", arrowstyle="->", arrowsize=15, ax=ax
     )
-    
+
     # Draw node label
     labels = nx.get_node_attributes(G, "title")
     nx.draw_networkx_labels(G, pos, labels=labels, font_size=12)
-    
+
     # Draw the label of the edge
     edge_labels = nx.get_edge_attributes(G, "title")
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=10, ax=ax)
-    
-    # Save the graph to a BytesIO object
+
     buf = BytesIO()
     fig.savefig(buf, format="png")
     buf.seek(0)
+
     return buf
 
 
-def read_summarize_prompt(file_path):
-    with open(file_path, "r") as file:
-        content = file.read()
-    return content
+def generate_nodes(query_result: str, app_config: AppConfig) -> Graph:
+    _prompt = f"""
+    Please generate a knowledge graph based on the requirements of {summary_prompt}
+    and the content of {query_result}
+    """
+
+    return pne.chat(
+        model=app_config.model_name,
+        messages=_prompt,
+        model_config={"api_base": app_config.api_base, "api_key": app_config.api_key},
+        output_schema=Graph,
+    )
+
 ```
 
 ### Step 2
@@ -197,107 +169,101 @@ Include as many relationships as necessary to represent ALL the concepts in the 
 
 ### Step 3
 
-Create a `app.py` script and import the necessary dependencies:
+Create a `app.py` script and define the sidebar to place the user parameter configuration:
 
 ```python
 import streamlit as st
-from core import LLMResponse, create_knowledge_graph, draw_graph, read_summarize_prompt
-
-import promptulate as pne
-from promptulate.tools.wikipedia import wikipedia_search
-```
-
-Create a sidebar to place the user parameter configuration:
-
-```python
-# Create a sidebar to place the user parameter configuration
-with st.sidebar:
-    model_name: str = st.selectbox(
-    label="Language Model Name",
-    options=[
-    "openai/gpt-4o",
-    "openai/gpt-4-turbo",
-    "deepseek/deepseek-chat",
-    "zhipu/glm-4",
-    "ollama/llama2",
-    ],
-    help="For more details, please see"
-    "[how to write model name?]("
-    "https://www.promptulate.cn/#/other/how_to_write_model_name)",
-    )
-    api_key = st.text_input("API Key", key="provider_api_key", type="password")
-    api_base = st.text_input("OpenAI Proxy URL (Optional)")
-    "[View the source code](Your related core code link)"
-```
-
-Set page style:
-
-```python
-# Set title
-st.title("💬 Chat")
-st.caption(
-"🚀 Hi there! 👋 I am a chatbot using llmapper to draw knowledge map by "
-"Promptulate to help you."
+from core import (
+    AppConfig,
+    Graph,
+    create_knowledge_graph,
+    draw_graph,
+    generate_nodes,
 )
-# Determine whether to initialize the message variable
-# otherwise initialize a message dictionary
-if "messages" not in st.session_state:
-    st.session_state["messages"] = [
-    {"role": "assistant", "content": "How can I help you?"},]
-# Traverse messages in session state
-for msg in st.session_state.messages:
-    st.chat_message(msg["role"]).write(msg["content"])
+
+from promptulate.tools.wikipedia import wikipedia_search
+
+
+def main():
+    app_config = AppConfig()
+    with st.sidebar:
+        app_config.model_name = st.selectbox(
+            label="Language Model Name",
+            options=[
+                "openai/gpt-4o",
+                "openai/gpt-4-turbo",
+                "deepseek/deepseek-chat",
+                "zhipu/glm-4",
+                "ollama/llama2",
+            ],
+            help="For more details, please see"
+            "[how to write model name?]("
+            "https://www.promptulate.cn/#/other/how_to_write_model_name)",
+        )
+        app_config.api_key = st.text_input(
+            "API Key", key="provider_api_key", type="password"
+        )
+        app_config.api_base = st.text_input("OpenAI Proxy URL (Optional)")
+        "[View the source code](https://github.com/Undertone0809/promptulate)"
+
+    st.title("llmapper")
+    st.caption(
+        """
+        llmapper was an experimental project. Given a query term, llmapper would search Wikipedia for relevant content, and then generate a knowledge graph using Promptulate.\n
+        🚀 Power by [promptulate](https://github.com/Undertone0809/promptulate)
+        """  # noqa
+    )
+    st.chat_message("assistant").write(
+        "Input the query you want to generate a knowledge graph for."
+    )
+
+    if prompt := st.chat_input():
+        if not app_config.api_key:
+            st.info("Please add your API key to continue.")
+            st.stop()
+
+        st.chat_message("user").write(prompt)
+
+        st.chat_message("assistant").write(f"Querying {prompt} from Wikipedia...")
+
+        query_result: str = wikipedia_search(prompt, top_k_results=1)
+
+        st.chat_message("assistant").write(
+            f"Found the following content from Wikipedia:\n{query_result}"
+        )
+        st.chat_message("assistant").write(
+            "Generating knowledge graph based on the query result..."
+        )
+
+        graph: Graph = generate_nodes(query_result, app_config)
+
+        # generate and draw the knowledge graph
+        G = create_knowledge_graph(graph)
+        buf = draw_graph(G)
+
+        st.chat_message("assistant").write(
+            "The following is the generated knowledge map:"
+        )
+        st.image(buf)
+
+
+if __name__ == "__main__":
+    main()
 ```
 
-Set user input:
+Finally, run the application:
 
-```python
-# User input
-if prompt := st.chat_input():
-    if not api_key:
-        st.info("Please add your API key to continue.")
-        st.stop()
-    # Display the user's message
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    st.chat_message("user").write(prompt)
-    
-    query_result: str = wikipedia_search(prompt, top_k_results=1)
-    # display search results in the chatbot panel
-    # st.chat_message("assistant").write(query_result)
-    
-    summarize_prompt_path = "prompt-summarize.md"
-    summarize_prompt = read_summarize_prompt(summarize_prompt_path)
-    _prompt = f"""
-    Please generate a knowledge graph based on the requirements of {summarize_prompt}
-    and the content of {query_result}
-    """
-    
-    llm_response: LLMResponse = pne.chat(
-                                    model=model_name,
-                                    messages=_prompt,
-                                    model_config={"api_base": api_base, "api_key": api_key},
-                                    output_schema=LLMResponse,)
-    # Display the summarized concept list in the chatbot panel
-    # st.chat_message("assistant").write(str(llm_response.model_dump()))
-    
-    # generate and draw the knowledge graph
-    G = create_knowledge_graph(llm_response.model_dump())
-    buf = draw_graph(G)
-    # Convert the graph to a base64 image and display it
-    st.session_state.messages.append({
-        "role": "assistant",
-        "content": "The following is the generated knowledge map:",})
-    st.chat_message("assistant").write("The following is the generated knowledge map:")
-    st.image(buf)
+```shell
+streamlit run app.py
 ```
 
 
-## Demo
-There is a `app.py` file under the `llmapper` file of `example` in the project folder. 
-You can run the application directly to view the effect and debug the web page.
-To run the application, follow the steps below:
+## Quick Start
+
+You can use the following command to run the LLMapper project quickly:
 
 - Click [here](https://github.com/Undertone0809/promptulate/fork) to fork the project to your local machine
+
 - Clone the project locally:
 
 ```bash
@@ -307,7 +273,7 @@ git clone https://github.com/Undertone0809/promptulate.git
 - Switch the current directory to the example
 
 ```shell
-cd ./example/llmapper
+cd promptulate/example/llmapper
 ```
 
 - Install the dependencies
