@@ -18,7 +18,7 @@ git clone https://www.github.com/Undertone0809/promptulate
 2. Switch the current directory to the example
 
 ```shell
-cd ./example/llmapper
+cd promptulate/example/llmapper
 ```
 
 3. Install the dependencies

@@ -32,10 +32,10 @@ def main():
         app_config.api_base = st.text_input("OpenAI Proxy URL (Optional)")
         "[View the source code](https://github.com/Undertone0809/promptulate)"
 
-    st.title("llmapper")
+    st.title("LLMapper")
     st.caption(
         """
-        llmapper was an experimental project. Given a query term, llmapper would search Wikipedia for relevant content, and then generate a knowledge graph using Promptulate.\n
+        LLMapper was an experimental project. Given a query term, LLMapper would search Wikipedia for relevant content, and then generate a knowledge graph using Promptulate.\n
         🚀 Power by [promptulate](https://github.com/Undertone0809/promptulate)
         """  # noqa
     )
