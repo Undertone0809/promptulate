@@ -6,14 +6,45 @@ LLMapper is a crude prototype for refining the prompts. Which is to say, this is
 
 It's very early days. Among other things, there's no error detection or graceful failures. Use at your own risk.
 
-You can see the code [here](https://github.com/Undertone0809/promptulate/tree/main/example).
+## Demo
+
+You can see the online demo [here](https://pne-llmapper.streamlit.app/) and [source code](https://github.com/Undertone0809/promptulate/tree/main/example).
 
 The Musk search operation effect is as follows: 
 
 ![a-knowledge-graph-of-Musk](./img/a-knowledge-graph-of-Musk.png)
 
 
-## Environment Setup
+## Quick Start
+
+You can use the following command to run the LLMapper project fastly:
+
+
+- Click [here](https://github.com/Undertone0809/promptulate/fork) to fork the project to your local machine
+- Clone the project locally:
+
+```bash
+git clone https://github.com/Undertone0809/promptulate.git
+```
+
+- Switch the current directory to the example
+
+```shell
+cd promptulate/example/llmapper
+```
+
+- Install the dependencies
+
+```shell
+pip install -r requirements.txt
+```
+
+- Run the application
+
+```shell
+streamlit run app.py
+```
+
 
 We can start off by creating a new conda environment with python=3.11:`conda create -n llmapper python=3.11`
 

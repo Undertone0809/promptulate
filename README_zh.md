@@ -23,6 +23,7 @@
 
 ## News
 
+- 2024.7.20 llmapper: A experimental project for generating knowledge graph by LLM workflow. See [here](https://www.promptulate.cn/#/use_cases/llmapper)
 - 2024.5.19 现在你可以直接使用 import pne 来导入 promptulate 框架，而不需要再使用 import promptulate as pne 的方式，ref: [https://github.com/Undertone0809/pne](https://github.com/Undertone0809/pne)
 - 2024.5.14 OpenAI 推出了他们最新的 “omni” 模型，与 turbo 相比，它提供了更高的速度和价格，你可以在任何 pne 应用程序中使用它的多模态功能。
 
