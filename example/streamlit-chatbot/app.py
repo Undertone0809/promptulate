@@ -3,18 +3,36 @@ import streamlit as st
 
 # Create a sidebar to place the user parameter configuration
 with st.sidebar:
-    model_name: str = st.selectbox(
+    model_options = [
+        "openai/gpt-4o",
+        "openai/gpt-4-turbo",
+        "deepseek/deepseek-chat",
+        "zhipu/glm-4",
+        "ollama/llama2",
+        "groq/llama-3.1-70b-versatile",
+        "claude-3-5-sonnet-20240620",
+    ]
+
+    # Add a placeholder for custom model name entry
+    model_options.insert(0, "Custom Model")
+
+    selected_option = st.selectbox(
         label="Language Model Name",
-        options=[
-            "openai/gpt-4o",
-            "openai/gpt-4-turbo",
-            "deepseek/deepseek-chat",
-            "zhipu/glm-4",
-            "ollama/llama2",
-        ],
-        help="For more details, please see"
-        "[how to write model name?](https://www.promptulate.cn/#/other/how_to_write_model_name)",  # noqa
+        options=model_options,
     )
+
+    model_name = selected_option
+    if selected_option == "Custom Model":
+        # Show a text input field for custom model name when "Custom Model" is selected
+        model_name = st.text_input(
+            "Enter Custom Model Name",
+            placeholder="Custom model name, eg: groq/llama3-70b-8192",
+            help=(
+                "For more details, please see "
+                "[how to write model name?](https://www.promptulate.cn/#/other/how_to_write_model_name)" # noqa
+            ),
+        )
+
     api_key = st.text_input("API Key", key="provider_api_key", type="password")
     api_base = st.text_input("OpenAI Proxy URL (Optional)")
 
