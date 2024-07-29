@@ -44,6 +44,7 @@ def _get_llm(
     model: Optional[str] = None,
     model_config: Optional[dict] = None,
     custom_llm: Optional[BaseLLM] = None,
+    max_retry: int = 5,
 ) -> BaseLLM:
     """Get LLM instance.
 
@@ -51,6 +52,7 @@ def _get_llm(
         model(str): LLM model.
         model_config(dict): LLM model config.
         custom_llm(BaseLLM): custom LLM instance.
+        max_retry(int): Maximum number of retries.
 
     Returns:
         Return LLM instance.
@@ -69,7 +71,7 @@ def _get_llm(
     if custom_llm:
         return custom_llm
 
-    return LLMFactory.build(model, model_config=model_config)
+    return LLMFactory.build(model, model_config=model_config, max_retry=max_retry)
 
 
 class AIChat:
@@ -81,6 +83,7 @@ class AIChat:
         custom_llm: Optional[BaseLLM] = None,
         enable_plan: bool = False,
         enable_memory: bool = False,
+        max_retry: int = 5,
     ):
         """Initialize the AIChat.
 
@@ -92,8 +95,9 @@ class AIChat:
             custom_llm(Optional[BaseLLM]): custom LLM instance.
             enable_plan(bool): use Agent with plan ability if True.
             enable_memory(bool): enable memory if True.
+            max_retry(int): Maximum number of retries.
         """
-        self.llm: BaseLLM = _get_llm(model, model_config, custom_llm)
+        self.llm: BaseLLM = _get_llm(model, model_config, custom_llm, max_retry)
         self.tools: Optional[List[ToolTypes]] = tools
         self.agent: Optional[BaseAgent] = None
 
@@ -207,6 +211,7 @@ def chat(
     custom_llm: Optional[BaseLLM] = None,
     enable_plan: bool = False,
     stream: bool = False,
+    max_retry: int = 5,
     **kwargs,
 ) -> Union[str, BaseMessage, T, List[BaseMessage], StreamIterator]:
     """A universal chat method, you can chat any model like OpenAI completion.
@@ -226,6 +231,7 @@ def chat(
         custom_llm(BaseLLM): You can use custom LLM if you have.
         enable_plan(bool): use Agent with plan ability if True.
         stream(bool): return stream iterator if True.
+        max_retry(int): Maximum number of retries.
         **kwargs: litellm kwargs
 
     Returns:
@@ -240,6 +246,7 @@ def chat(
         tools=tools,
         custom_llm=custom_llm,
         enable_plan=enable_plan,
+        max_retry=max_retry,
     ).run(
         messages=messages,
         output_schema=output_schema,
