@@ -32,7 +32,6 @@ with st.sidebar:
                 "[how to write model name?](https://www.promptulate.cn/#/other/how_to_write_model_name)"  # noqa
             ),
         )
-
     api_key = st.text_input("API Key", key="provider_api_key", type="password")
     api_base = st.text_input("OpenAI Proxy URL (Optional)")
 
