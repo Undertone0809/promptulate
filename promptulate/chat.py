@@ -15,8 +15,8 @@ from promptulate.schema import (
     SystemMessage,
 )
 from promptulate.tools.base import BaseTool, ToolTypes
-from promptulate.utils.logger import logger
 from promptulate.utils.jsonFix import stream_fix
+from promptulate.utils.logger import logger
 
 T = TypeVar("T", bound=BaseModel)
 
@@ -180,7 +180,7 @@ class AIChat:
 
         if output_schema and stream:
             return stream_fix(response, output_schema)
-        
+
         # TODO: add stream memory support
         if stream:
             return response

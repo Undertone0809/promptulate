@@ -29,7 +29,7 @@ with st.sidebar:
             placeholder="Custom model name, eg: groq/llama3-70b-8192",
             help=(
                 "For more details, please see "
-                "[how to write model name?](https://www.promptulate.cn/#/other/how_to_write_model_name)" # noqa
+                "[how to write model name?](https://www.promptulate.cn/#/other/how_to_write_model_name)"  # noqa
             ),
         )
 

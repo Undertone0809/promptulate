@@ -68,10 +68,6 @@ def test_init():
         chat("hello")
         assert str(e.value) == "model or custom_llm must be provided."
 
-    # stream and output_schema and not exist at the same time.
-    with pytest.raises(ValueError):
-        chat(messages="hello", custom_llm=llm, output_schema=LLMResponse, stream=True)
-
     # stream and tools and not exist at the same time.
     with pytest.raises(ValueError):
         chat("hello", custom_llm=llm, tools=[mock_tool], stream=True)

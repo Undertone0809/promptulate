@@ -1,16 +1,23 @@
 import json
+from json.decoder import (
+    JSONDecodeError as PyJSONDecodeError,
+)
+from json.decoder import (
+    JSONDecoder,
+    py_scanstring,
+)
 from json.scanner import py_make_scanner
+from typing import Any, Dict, List, NamedTuple, Optional, Tuple, Union
 
-from typing import NamedTuple, Tuple, List, Optional, Dict, Any, Union
-from json.decoder import JSONDecodeError as PyJSONDecodeError, JSONDecoder, py_scanstring
-
-from pydantic import BaseModel
 from httpcore import stream
+from pydantic import BaseModel
+
 
 class FixResult(NamedTuple):
     success: bool
     line: str
     origin: bool
+
 
 class JSONDecodeError:
     def __init__(self, parser, message):
@@ -20,16 +27,25 @@ class JSONDecodeError:
     def __eq__(self, err):
         return err.parser == self.parser and self.message in err.message
 
+
 class errors:
-    StringInvalidUXXXXEscape = JSONDecodeError("py_scanstring", "Invalid \\uXXXX escape")
+    StringInvalidUXXXXEscape = JSONDecodeError(
+        "py_scanstring", "Invalid \\uXXXX escape"
+    )
     # 2 different case
-    StringUnterminatedString = JSONDecodeError("py_scanstring", "Unterminated string starting at")
-    StringInvalidControlCharacter = JSONDecodeError("py_scanstring", "Invalid control character")
+    StringUnterminatedString = JSONDecodeError(
+        "py_scanstring", "Unterminated string starting at"
+    )
+    StringInvalidControlCharacter = JSONDecodeError(
+        "py_scanstring", "Invalid control character"
+    )
     StringInvalidEscape = JSONDecodeError("py_scanstring", "Invalid \\escape")
     ObjectExceptColon = JSONDecodeError("JSONObject", "Expecting ':' delimiter")
     ObjectExceptObject = JSONDecodeError("JSONObject", "Expecting value")
     # 2 different case
-    ObjectExceptKey = JSONDecodeError("JSONObject", "Expecting property name enclosed in double quotes")
+    ObjectExceptKey = JSONDecodeError(
+        "JSONObject", "Expecting property name enclosed in double quotes"
+    )
     ObjectExceptComma = JSONDecodeError("JSONObject", "Expecting ',' delimiter")
     ArrayExceptObject = JSONDecodeError("JSONArray", "Expecting value")
     ArrayExceptComma = JSONDecodeError("JSONArray", "Expecting ',' delimiter")
@@ -43,6 +59,7 @@ class errors:
                     return value
         return None
 
+
 def errmsg_inv(e: ValueError) -> Dict[str, Any]:
     assert isinstance(e, PyJSONDecodeError)
     parser = e.__dict__.get("parser", "")
@@ -55,6 +72,7 @@ def errmsg_inv(e: ValueError) -> Dict[str, Any]:
         "colno": e.colno,
         "pos": e.pos,
     }
+
 
 def record_parser_name(parser: Any) -> Any:
     def new_parser(*args: Any, **kwargs: Any) -> Any:
@@ -70,6 +88,7 @@ def record_parser_name(parser: Any) -> Any:
 
     return new_parser
 
+
 def make_decoder(*, strict: bool = True) -> JSONDecoder:
     json.decoder.scanstring = record_parser_name(py_scanstring)
 
@@ -82,13 +101,16 @@ def make_decoder(*, strict: bool = True) -> JSONDecoder:
     decoder.scan_once = py_make_scanner(decoder)
     return decoder
 
+
 class DecodeResult(NamedTuple):
     success: bool
     exception: Optional[Exception]
     err_info: Optional[Union[Dict[str, Any], Tuple[Any, Any]]]
 
+
 decoder = make_decoder()
 decoder_unstrict = make_decoder(strict=False)
+
 
 def decode_line(line: str, *, strict: bool = True) -> DecodeResult:
     try:
@@ -100,6 +122,7 @@ def decode_line(line: str, *, strict: bool = True) -> DecodeResult:
     except ValueError as e:
         err_info = errmsg_inv(e)
         return DecodeResult(success=False, exception=e, err_info=err_info)
+
 
 # TODO better name
 def patch_lastest_left_object_and_array(line: str) -> str:
@@ -131,51 +154,56 @@ def patch_guess_left(line: str) -> str:
         return "["
     return ""
 
+
 def insert_line(line: str, value: str, pos: int) -> str:
     return line[:pos] + value + line[pos:]
+
 
 def remove_line(line: str, start: int, end: int) -> str:
     return line[:start] + line[end:]
 
+
 class JSONFixer:
-    def __init__(self, max_try: int = 20, max_stack: int = 3, *, js_style: bool = False) -> None:
-            self._max_try = max_try
-            self._max_stack = max_stack
-            self._js_style = js_style
-            self.last_fix: Optional[bool] = None
-            self.fix_stack: List[str] = []
+    def __init__(
+        self, max_try: int = 20, max_stack: int = 3, *, js_style: bool = False
+    ) -> None:
+        self._max_try = max_try
+        self._max_stack = max_stack
+        self._js_style = js_style
+        self.last_fix: Optional[bool] = None
+        self.fix_stack: List[str] = []
 
     def fix(self, line: str, *, strict: bool = True):
-            try:
-                json.loads(line, strict=strict)
-                return FixResult(success=True, line=line, origin=True)
-            except Exception:
-                pass
+        try:
+            json.loads(line, strict=strict)
+            return FixResult(success=True, line=line, origin=True)
+        except Exception:
+            pass
 
-            ok, new_line = self.fixwithtry(line, strict=strict)
-            return FixResult(success=ok, line=new_line, origin=False)
+        ok, new_line = self.fixwithtry(line, strict=strict)
+        return FixResult(success=ok, line=new_line, origin=False)
 
     def fixwithtry(self, line: str, *, strict: bool = True) -> Tuple[bool, str]:
-            if self._max_try <= 0:
-                return False, line
+        if self._max_try <= 0:
+            return False, line
 
-            self.fix_stack = []
-            self.last_fix = None
+        self.fix_stack = []
+        self.last_fix = None
 
-            ok = False
-            for _ in range(self._max_try):
-                ok, new_line = self.patch_line(line, strict=strict)
-                if ok:
-                    return ok, new_line
+        ok = False
+        for _ in range(self._max_try):
+            ok, new_line = self.patch_line(line, strict=strict)
+            if ok:
+                return ok, new_line
 
-                self.last_fix = line != new_line
-                if self.last_fix:
-                    self.fix_stack.insert(0, new_line)
-                    self.fix_stack = self.fix_stack[: self._max_stack]
+            self.last_fix = line != new_line
+            if self.last_fix:
+                self.fix_stack.insert(0, new_line)
+                self.fix_stack = self.fix_stack[: self._max_stack]
 
-                line = new_line
-            return ok, line
-    
+            line = new_line
+        return ok, line
+
     def patch_line(self, line: str, *, strict: bool = True) -> Tuple[bool, str]:
         result = decode_line(line, strict=strict)
         if result.success:
@@ -191,7 +219,7 @@ class JSONFixer:
             return self.patch_half_parse(line, result.err_info)
 
         return False, line
-    
+
     def patch_value_error(self, line: str, err_info: Any) -> Tuple[bool, str]:
         if err_info["error"] is None:
             return False, line
@@ -306,13 +334,14 @@ class JSONFixer:
         new_line = left + line[:end] + nextline
         return False, new_line
 
+
 def match_keys(line: str, model: BaseModel) -> dict:
     """json line to model instance
 
     Args:
         line (str): json line
         model (BaseModel): pydantic model
-    
+
     Returns:
         dict: model instance
     """
@@ -326,9 +355,10 @@ def match_keys(line: str, model: BaseModel) -> dict:
             result[key] = None
     return result
 
+
 def stream_fix(response: stream, model: BaseModel) -> stream:
     """stream response to model instance
-    
+
     Args:
         response (stream): stream response
         model (BaseModel): pydantic model
@@ -340,15 +370,15 @@ def stream_fix(response: stream, model: BaseModel) -> stream:
     str = ""
     json_started = False
     for i in response:
-        if i == '{':
+        if i == "{":
             json_started = True
-        if i == '}':
+        if i == "}":
             json_started = False
         if json_started:
             str += i
             try:
                 source = Util.fix(str)
-                result = match_keys(source.line,model)
+                result = match_keys(source.line, model)
                 yield result
             except Exception as e:
                 raise e
