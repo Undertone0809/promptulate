@@ -356,6 +356,22 @@ def match_keys(line: str, model: BaseModel) -> dict:
     return result
 
 
+def change_model(model: BaseModel) -> BaseModel:
+    """change pydantic model to BaseModel
+
+    Args:
+        model (BaseModel): pydantic model
+
+    Returns:
+        BaseModel: BaseModel
+    """
+    annotations = {
+        field: Optional[type_] for field, type_ in model.__annotations__.items()
+    }
+    new_model = type(model.__name__, (BaseModel,), {"__annotations__": annotations})
+    return new_model
+
+
 def stream_fix(response: stream, model: BaseModel) -> stream:
     """stream response to model instance
 
@@ -366,6 +382,7 @@ def stream_fix(response: stream, model: BaseModel) -> stream:
     Returns:
         stream: stream response
     """
+    response_model = change_model(model)
     Util = JSONFixer()
     str = ""
     json_started = False
@@ -379,6 +396,7 @@ def stream_fix(response: stream, model: BaseModel) -> stream:
             try:
                 source = Util.fix(str)
                 result = match_keys(source.line, model)
+                result = response_model(**result)
                 yield result
             except Exception as e:
                 raise e
