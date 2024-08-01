@@ -15,6 +15,7 @@ from promptulate.schema import (
     SystemMessage,
 )
 from promptulate.tools.base import BaseTool, ToolTypes
+from promptulate.utils.jsonFix import stream_fix
 from promptulate.utils.logger import logger
 
 T = TypeVar("T", bound=BaseModel)
@@ -138,7 +139,7 @@ class AIChat:
             Return List[BaseMessage] if stream is True.
             Return T if output_schema is provided.
         """
-        if stream and (output_schema or self.tools):
+        if stream and self.tools:
             raise ValueError(
                 "stream, tools and output_schema can't be True at the same time, "
                 "because stream is used to return Iterator[BaseMessage]."
@@ -176,6 +177,9 @@ class AIChat:
         response: Union[AssistantMessage, StreamIterator] = self.llm.predict(
             self.memory, stream=stream, **kwargs
         )
+
+        if output_schema and stream:
+            return stream_fix(response, output_schema)
 
         # TODO: add stream memory support
         if stream:

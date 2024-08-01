@@ -32,6 +32,22 @@ class StreamLLM(BaseLLM):
             yield message
 
 
+class StreamJSONLLM(BaseLLM):
+    def _predict(
+        self, messages: MessageSet, *args, **kwargs
+    ) -> Optional[type(BaseMessage)]:
+        messages: str = (
+            "```json{ 'province':",
+            "beijing, ",
+            "'capital':",
+            "beijing1",
+            "}```",
+        )
+
+        for message in messages:
+            yield message
+
+
 class FakeLLM(BaseLLM):
     llm_type: str = "fake"
 
@@ -67,10 +83,6 @@ def test_init():
     with pytest.raises(ValueError) as e:
         chat("hello")
         assert str(e.value) == "model or custom_llm must be provided."
-
-    # stream and output_schema and not exist at the same time.
-    with pytest.raises(ValueError):
-        chat(messages="hello", custom_llm=llm, output_schema=LLMResponse, stream=True)
 
     # stream and tools and not exist at the same time.
     with pytest.raises(ValueError):
@@ -153,13 +165,26 @@ def test_custom_llm_chat_response():
     assert getattr(answer, "temperature", None) == 25
 
 
-def test_stream():
-    class LLMResponse(BaseModel):
-        data: Optional[str] = None
+def test_stream_llm_chat_response():
+    llm = StreamJSONLLM()
 
-    # stream and output_schema and not exist at the same time.
-    with pytest.raises(ValueError):
-        pne.chat("hello", stream=True, output_schema=LLMResponse)
+    class LLMResponse(BaseModel):
+        province: str = Field(description="province in China")
+        capital: str = Field(description="Capital of the province")
+
+    # test stream output
+    answer_stream = pne.chat(
+        "Please tell me a provinces and Capital in China.",
+        custom_llm=llm,
+        stream=True,
+        output_schema=LLMResponse,
+    )
+
+    # check if the answer is a stream of response
+    for answer in answer_stream:
+        assert isinstance(answer, LLMResponse)
+        assert getattr(answer, "province", None) == "beijing"
+        assert getattr(answer, "capital", None) == "beijing1"
 
 
 def test_streaming():
