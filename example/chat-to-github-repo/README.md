@@ -26,6 +26,8 @@ pip install -r requirements.txt
 ```shell
 streamlit run app.py
 ```
+## Sample Output
+![example of chat to github repo](./img/example-of-chat-to-githubrepo.png)
 
 # Role of each document 
 1. `app.py`: This is the main entry point of the application. It uses streamlit to build a chatbot interface. The chatbot is built using promptulate. The chatbot is able to chat with GitHub repo.
