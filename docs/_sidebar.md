@@ -11,6 +11,7 @@
   - [Build a Simple Chatbot Using pne and gradio](use_cases/pne-gradio.md#build-a-simple-chatbot-using-pne-and-gradio)
   - [Groq, llama3, Streamlit to build a application](use_cases/streamlit-groq-llama3.md#groq-llama3-streamlit-to-build-a-application)
   - [Build knowledge map with streamlit and pne.chat()](use_cases/llmapper.md#llmapper)
+  - [Build a chatbot using pne+streamlit to chat with GitHub repo](use_cases/chat-to-github-repo.md#build-a-chatbot-using-pne-streamlit-to-chat-with-GitHub-repo)
 
 - Modules
   - [:robot: Agent](modules/agent.md#agent)
