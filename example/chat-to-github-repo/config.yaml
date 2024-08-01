@@ -1,0 +1,9 @@
+# config.yaml
+repos_dir: "./repos" # Directory to store the downloaded repositories
+
+# logging
+log_level: "INFO" # Log level
+log_file: "repo_stats.log" # Log file
+
+# download method
+download_method: "auto" # Download method:auto (both git or http) / git / http
