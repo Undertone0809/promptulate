@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable, List, Optional, Generator
 
 from promptulate.hook import Hook, HookTable
 from promptulate.llms import BaseLLM
@@ -25,6 +25,7 @@ class BaseAgent(ABC):
         instruction: str,
         output_schema: Optional[type(BaseModel)] = None,
         examples: Optional[List[BaseModel]] = None,
+        stream: bool = False,
         *args,
         **kwargs,
     ) -> Any:
@@ -38,6 +39,9 @@ class BaseAgent(ABC):
             agent_type=self._agent_type,
             **kwargs,
         )
+
+        if stream:
+            return self._run_stream(instruction, output_schema, examples, *args, **kwargs)
 
         # get original response from LLM
         result: str = self._run(instruction, *args, **kwargs)
@@ -59,6 +63,45 @@ class BaseAgent(ABC):
             _from=self._from,
         )
         return result
+
+    def _run_stream(
+        self,
+        instruction: str,
+        output_schema: Optional[type(BaseModel)] = None,
+        examples: Optional[List[BaseModel]] = None,
+        *args,
+        **kwargs,
+    ) -> Generator[Any, None, None]:
+        """Run the tool including specified function and hooks with streaming output"""
+        Hook.call_hook(
+            HookTable.ON_AGENT_START,
+            self,
+            instruction,
+            output_schema,
+            *args,
+            agent_type=self._agent_type,
+            **kwargs,
+        )
+
+        for result in self._run(instruction, *args, **kwargs):
+            # TODO： need to optimize
+            # if output_schema:
+            #     formatter = OutputFormatter(output_schema, examples)
+            #     prompt = (
+            #         f"{formatter.get_formatted_instructions()}\n##User input:\n{result}"
+            #     )
+            #     json_response: str = self.get_llm()(prompt)
+            #     yield formatter.formatting_result(json_response)
+            # else:
+            yield result
+
+        Hook.call_hook(
+            HookTable.ON_AGENT_RESULT,
+            mounted_obj=self,
+            result=result,
+            agent_type=self._agent_type,
+            _from=self._from,
+        )
 
     @abstractmethod
     def _run(self, instruction: str, *args, **kwargs) -> str:

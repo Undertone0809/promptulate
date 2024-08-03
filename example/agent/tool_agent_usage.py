@@ -10,7 +10,8 @@ def main():
     model = pne.LLMFactory.build(model_name="gpt-4-1106-preview")
     agent = pne.ToolAgent(tools=tools, llm=model)
     prompt = """Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?"""  # noqa
-    agent.run(prompt)
+    for response in agent.run(prompt, stream=True):
+        print(response)
 
 
 if __name__ == "__main__":
