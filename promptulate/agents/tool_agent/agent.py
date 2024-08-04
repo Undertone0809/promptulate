@@ -69,23 +69,17 @@ class ToolAgent(BaseAgent):
 
         super().__init__(hooks=hooks, agent_type="Tool Agent", _from=_from)
         self.llm: BaseLLM = llm or ChatOpenAI(model="gpt-4-1106-preview")
-        """llm provider"""
         self.tool_manager: ToolManager = (
             tool_manager if tool_manager is not None else ToolManager(tools or [])
         )
-        """Used to manage all tools, Only create a new ToolManager if 'tool_manager' is
-        not provided."""
+
         self.system_prompt_template: StringTemplate = REACT_SYSTEM_PROMPT_TEMPLATE
-        """Preset system prompt template."""
         self.prefix_prompt_template: StringTemplate = prefix_prompt_template
-        """Prefix system prompt template."""
         self.conversation_prompt: str = ""
-        """Store all conversation message when conversation. ToolAgent use dynamic
-        system prompt."""
+
         self.max_iterations: Optional[int] = 15
-        """The maximum number of executions."""
         self.max_execution_time: Optional[float] = None
-        """The longest running time. """
+
         self.enable_role: bool = enable_role
         self.agent_name: str = agent_name
         self.agent_identity: str = agent_identity

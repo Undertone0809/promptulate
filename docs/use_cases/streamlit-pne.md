@@ -1,4 +1,4 @@
-# Build a simple chatbot using streamlit and pne
+# Build a chatbot using streamlit
 
 This demo is how to use `pne.chat()` to create a simple chatbot utilising any model. For the application frontend, there will be using streamlit, an easy-to-use open-source Python framework. 
 
@@ -74,25 +74,25 @@ for msg in st.session_state.messages:
 Set user input:
 
 ```python
-if prompt := st.chat_input():
+if prompt := st.chat_input("How can I help you?"):
     if not api_key:
         st.info("Please add your API key to continue.")
         st.stop()
 
-    # Add the message entered by the user to the list of messages in the session state
     st.session_state.messages.append({"role": "user", "content": prompt})
-    # Display in the chat interface
-    st.chat_message("user").write(prompt)
 
-    response: str = pne.chat(
-        model=model_name,
-        stream=True,
-        messages=prompt,
-        model_config={"api_base": api_base, "api_key": api_key},
-    )
+    with st.chat_message("user"):
+        st.markdown(prompt)
 
-    st.session_state.messages.append({"role": "assistant", "content": "start"})
-    st.chat_message("assistant").write_stream(response)
+    with st.chat_message("assistant"):
+        stream = pne.chat(
+            model=model_name,
+            stream=True,
+            messages=st.session_state.messages,
+            model_config={"api_base": api_base, "api_key": api_key},
+        )
+        response = st.write_stream(stream)
+    st.session_state.messages.append({"role": "assistant", "content": response})
 ```
 
 ## Final Effect
