@@ -90,29 +90,6 @@ import pne
 resp: str = pne.chat(model="ollama/llama2", messages=[{"content": "Hello, how are you?", "role": "user"}])
 ```
 
-🌟 2024.5.14 OpenAI launched their newest "omni" model, offering improved speed and pricing compared to turbo.
-
-You can use the available multimodal capabilities of it in any of your promptulate applications!
-
-```python
-import pne
-
-messages=[
-    {
-        "role": "user",
-        "content": [
-            {"type": "text", "text": "What's in this image?"},
-            {
-                "type": "image_url",
-                "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg",
-            },
-        ],
-    }
-]
-resp = pne.chat(model="gpt-4o", messages=messages)
-print(resp)
-```
-
 Use `provider/model_name` to call the model, and you can easily build any third-party model calls.
 
 For more models, please visit the [litellm documentation](https://docs.litellm.ai/docs/providers).
