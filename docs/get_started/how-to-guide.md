@@ -6,7 +6,10 @@ Here you’ll find answers to “How do I….?” types of questions. These guid
 
 This highlights functionality that is core to using Promptulate.
 
-- [How to: return structured data from a model](use_cases/chat_usage.md#structured-output)
+- [How to return structured data from a model](use_cases/chat_usage.md#structured-output)
+
+
+- [How to use stream + structured data from a model](use_cases/chat_usage.md#stream-json-parser)
 
 
 - [How to write model name in pne](other/how_to_write_model_name.md)
@@ -15,7 +18,7 @@ This highlights functionality that is core to using Promptulate.
 - [How to use pne.chat() and AIChat()](use_cases/chat_usage.md#chat)
 
 
-- [How to build a streamlit app by pne](use_cases/streamlit+pne.chat().md#build-a-simple-chatbot-using-streamlit-and-pne)
+- [How to build a streamlit app quickly by pne](use_cases/streamlit-chatbot.md#build-a-chatbot-using-streamlit)
 
 
 - [How to use Memory in AIChat()](use_cases/chat_usage.md#memory-for-aichat)

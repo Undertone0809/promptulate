@@ -535,6 +535,55 @@ for chuck in response:
     print(chuck.additional_kwargs)
 ```
 
+## Stream JSON parser
+
+For stream-type json data, we built a json parser to parse it
+
+
+```python
+from typing import List
+import promptulate as pne
+from pydantic import BaseModel, Field
+
+class LLMResponse(BaseModel):
+    province: str = Field(description="province in China")
+    capital: str = Field(description="Capital of the province")
+
+response = pne.chat(
+    messages="Please tell me a provinces and Capital in China.",
+    model="gpt-4-turbo",
+    output_schema=LLMResponse,
+    stream=True
+)
+
+for chuck in response:
+    print(chuck)
+```
+
+The results are as follows
+```shell
+    province=None capital=None
+    province=None capital=None
+    province=None capital=None
+    province=None capital=None
+    province=None capital=None
+    province=None capital=None
+    province='' capital=None
+    province='Be' capital=None
+    province='Beijing' capital=None
+    province='Beijing' capital=None
+    province='Beijing' capital=None
+    province='Beijing' capital=None
+    province='Beijing' capital=None
+    province='Beijing' capital=None
+    province='Beijing' capital=None
+    province='Beijing' capital=''
+    province='Beijing' capital='Be'
+    province='Beijing' capital='Beijing'
+    province='Beijing' capital='Beijing'    
+    province='Beijing' capital='Beijing'
+```
+
 ## Retrieve && RAG
 **RAG(Retrieval-Augmented Generation)** is a important data retrieve method. You can use `pne.chat()` to retrieve data from your database.
 
