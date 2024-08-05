@@ -76,7 +76,7 @@ in the one of the following two formats:
 
 ```json
 {
-"thought": "The thought of what to do and why.",
+"analysis": "The thought of what to do and why.",
 "action": {
     "name": "finish",
     "args": {"content": "Sorry, I cannot answer your query, because (Summary all the upper steps, and explain)"}
