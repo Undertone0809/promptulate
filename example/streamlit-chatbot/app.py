@@ -2,69 +2,58 @@ import pne
 import streamlit as st
 
 
-def main():
-    with st.sidebar:
-        model_options = [
-            "openai/gpt-4o",
-            "openai/gpt-4-turbo",
-            "deepseek/deepseek-chat",
-            "zhipu/glm-4",
-            "ollama/llama2",
-            "groq/llama-3.1-70b-versatile",
-            "claude-3-5-sonnet-20240620",
+def initialize_session_state():
+    if "messages" not in st.session_state:
+        st.session_state.messages = [
+            {"role": "assistant", "content": "How can I help you?"}
         ]
 
-        # Add a placeholder for custom model name entry
-        model_options.insert(0, "Custom Model")
 
-        selected_option = st.selectbox(
-            label="Language Model Name",
-            options=model_options,
+def render_chat_history():
+    for msg in st.session_state.messages:
+        st.chat_message(msg["role"]).write(msg["content"])
+
+
+def get_user_input() -> str:
+    return st.chat_input("How can I help you?")
+
+
+def update_chat(role: str, content: str):
+    """Update the chat history with the new message from the user or assistant."""
+    st.session_state.messages.append({"role": role, "content": content})
+    with st.chat_message(role):
+        st.markdown(content)
+
+
+def generate_response(model_name: str, api_base: str, api_key: str) -> str:
+    """Generate a response using the specified model."""
+    with st.chat_message("assistant"):
+        stream = pne.chat(
+            model=model_name,
+            stream=True,
+            messages=st.session_state.messages,
+            model_config={"api_base": api_base, "api_key": api_key},
         )
+        response = st.write_stream(stream)
+    return response
 
-        model_name = selected_option
-        if selected_option == "Custom Model":
-            model_name = st.text_input(
-                "Enter Custom Model Name",
-                placeholder="Custom model name, eg: groq/llama3-70b-8192",
-                help=(
-                    "For more details, please see "
-                    "[how to write model name?](https://www.promptulate.cn/#/other/how_to_write_model_name)"  # noqa
-                ),
-            )
-        api_key = st.text_input("API Key", key="provider_api_key", type="password")
-        api_base = st.text_input("OpenAI Proxy URL (Optional)")
+
+def main():
+    initialize_session_state()
+    config = pne.beta.st.sidebar.model_sidebar()
 
     st.title("💬 Chat")
     st.caption("🚀 Hi there! 👋 I am a simple chatbot by Promptulate to help you.")
 
-    if "messages" not in st.session_state:
-        st.session_state["messages"] = [
-            {"role": "assistant", "content": "How can I help you?"}
-        ]
+    render_chat_history()
 
-    for msg in st.session_state.messages:
-        st.chat_message(msg["role"]).write(msg["content"])
-
-    if prompt := st.chat_input("How can I help you?"):
-        if not api_key:
+    if prompt := get_user_input():
+        if not config["api_key"]:
             st.info("Please add your API key to continue.")
             st.stop()
 
-        st.session_state.messages.append({"role": "user", "content": prompt})
-
-        with st.chat_message("user"):
-            st.markdown(prompt)
-
-        with st.chat_message("assistant"):
-            stream = pne.chat(
-                model=model_name,
-                stream=True,
-                messages=st.session_state.messages,
-                model_config={"api_base": api_base, "api_key": api_key},
-            )
-            response = st.write_stream(stream)
-        st.session_state.messages.append({"role": "assistant", "content": response})
+        update_chat("user", prompt)
+        generate_response(**config)
 
 
 if __name__ == "__main__":
