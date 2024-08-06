@@ -41,6 +41,7 @@
 - 💻 Terminal Integration: Easily integrates application terminals, with built-in client support, offering rapid debugging capabilities for prompts.
 - ⏱️ Prompt Caching: Offers a caching mechanism for LLM Prompts to reduce repetitive work and enhance development efficiency.
 - 🤖 Powerful OpenAI Wrapper: With pne, you no longer need to use the openai sdk, the core functions can be replaced with pne.chat, and provides enhanced features to simplify development difficulty.
+- 🧰 Streamlit Component Integration: Quickly prototype and provide many out-of-the-box examples and reusable streamlit components.
 
 The following diagram shows the core architecture of `promptulate`:
 

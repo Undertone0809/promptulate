@@ -42,7 +42,7 @@ def predict(message, history, api_key, model, api_base):
 
 def main():
     with gr.Blocks() as demo:
-        gr.Markdown("# Promptulate + Gradio Demo")
+        gr.Markdown("# Promptulate Gradio Playground")
         with gr.Row():
             with gr.Column(scale=1):
                 api_key = gr.Textbox(
@@ -56,7 +56,7 @@ def main():
 
                 api_base = gr.Textbox(
                     label="API Base",
-                    placeholder="Enter your OpenAI API base here (optional)",
+                    placeholder="Enter your OpenAI API proxy here (optional)",
                 )
 
             with gr.Column(scale=3):
@@ -68,7 +68,7 @@ def main():
         gr.Markdown("## Instructions")
         gr.Markdown(
             """
-            1. Enter your OpenAI API key.\n
+            1. Enter your API key.\n
             2. Select the model you want to use.\n
             3. Start chatting!\n
             4. Use the 'Clear History' button to clear the chat history.

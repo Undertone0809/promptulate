@@ -4,7 +4,9 @@ This demo is how to use `pne.chat()` to create a simple chatbot utilising any mo
 
 This application is a template, meaning you can create your own LLM application by this template.
 
-You see try the live demo [here](https://pne-chatbot.streamlit.app/) or see the code [here](https://github.com/Undertone0809/promptulate/tree/main/example/streamlit-chatbot).
+You see try the live demo at [https://pne-chatbot.streamlit.app/](https://pne-chatbot.streamlit.app/) or see the code [https://github.com/Undertone0809/promptulate/tree/main/example/streamlit-chatbot](https://github.com/Undertone0809/promptulate/tree/main/example/streamlit-chatbot).
+
+<iframe src="https://pne-chatbot.streamlit.app/?embed=true" width="100%" height="600" style="border: none; border-radius: 4px; overflow: hidden;" allowfullscreen></iframe>
 
 ## Environment Setup
 
