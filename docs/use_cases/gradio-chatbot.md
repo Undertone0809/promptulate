@@ -1,6 +1,10 @@
-# Build a Simple Chatbot Using `pne` and `gradio`
+# Build gradio chatbot by pne
 
 This document guides you through building a simple chatbot using the `pne` library for OpenAI API interactions and `gradio` for the user interface. This chatbot will prompt the user for their OpenAI API key and model selection, allowing flexible and interactive conversations.
+
+You can see the demo [https://huggingface.co/spaces/Zeeland2hf/pne-gradio](https://huggingface.co/spaces/Zeeland2hf/pne-gradio) and see the [source code]()
+
+<iframe src="https://zeeland2hf-pne-gradio.hf.space" width="100%" height="600" style="border: none; border-radius: 4px; overflow: hidden;" allowfullscreen></iframe>
 
 ## Prerequisites
 
@@ -11,7 +15,7 @@ Before you start, ensure you have Python installed on your system. You will also
 You can install these packages using pip:
 
 ```bash
-pip install gradio promptulate
+pip install gradio pne
 ```
 
 ## Code Overview
@@ -204,7 +208,7 @@ if __name__ == "__main__":
 To run the application, save the code to a file (e.g., `chat.py`) and execute it:
 
 ```bash
-python chat.py
+python app.py
 ```
 
 This will launch the Gradio app, and you will receive a URL to access the chatbot in your browser.
