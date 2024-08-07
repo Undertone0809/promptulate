@@ -32,7 +32,7 @@
 
 ## News
 
-- 2024.8.5 stream structured output: Now pne support structured output.
+- 2024.8.5 stream structured output: Now pne support structured output. ref: [https://x.com/kfhedRk3lXofRIB/status/1820489301299540346](https://x.com/kfhedRk3lXofRIB/status/1820489301299540346)
 - 2024.7.20 llmapper: A experimental project for generating knowledge graph by LLM workflow. See [here](https://www.promptulate.cn/#/use_cases/llmapper)
 - 2024.5.19 Now you can use `import pne` to import the promptulate package. ref: [https://github.com/Undertone0809/pne](https://github.com/Undertone0809/pne)
 - 2024.5.14 OpenAI launched their newest "omni" model, offering improved speed and pricing compared to turbo.
