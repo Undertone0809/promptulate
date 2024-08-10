@@ -53,3 +53,12 @@ def test_init_by_tool_and_kit():
     llm = FakeLLM()
     agent = ToolAgent(llm=llm, tools=[MockToolKit(), fake_tool_1, fake_tool_2])
     assert len(agent.tool_manager.tools) == 4
+
+
+def test_stream_mode():
+    llm = FakeLLM()
+    agent = ToolAgent(llm=llm, tools=[fake_tool_1, fake_tool_2])
+    prompt = "What is the temperature in Shanghai?"
+    responses = list(agent.run(prompt, stream=True))
+    assert len(responses) > 0
+    assert all(isinstance(response, str) for response in responses)

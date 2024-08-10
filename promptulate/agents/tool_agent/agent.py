@@ -113,17 +113,21 @@ class ToolAgent(BaseAgent):
         return f"Current date: {time.strftime('%Y-%m-%d %H:%M:%S')}"
 
     def _run(
-        self, instruction: str, return_raw_data: bool = False, **kwargs
+        self, instruction: str, return_raw_data: bool = False, stream: bool = False, **kwargs
     ) -> Union[str, ActionResponse]:
         """Run the tool agent. The tool agent will interact with the LLM and the tool.
 
         Args:
             instruction(str): The instruction to the tool agent.
             return_raw_data(bool): Whether to return raw data. Default is False.
+            stream(bool): Whether to enable streaming output. Default is False.
 
         Returns:
             The output of the tool agent.
         """
+        if stream and "output_schema" not in kwargs:
+            raise ValueError("output_schema must be provided when stream=True")
+
         self.conversation_prompt = self._build_system_prompt(instruction)
         logger.info(f"[pne] ToolAgent system prompt: {self.conversation_prompt}")
 
@@ -167,6 +171,9 @@ class ToolAgent(BaseAgent):
                 HookTable.ON_AGENT_OBSERVATION, self, observation=tool_result
             )
             self.conversation_prompt += f"Observation: {tool_result}\n"
+
+            if stream:
+                yield tool_result
 
             iterations += 1
             used_time += time.time() - start_time
