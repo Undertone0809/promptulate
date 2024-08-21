@@ -1,6 +1,7 @@
 """
 This demo show how to use QianFan model in promptulate.
 """
+
 import os
 
 import promptulate as pne

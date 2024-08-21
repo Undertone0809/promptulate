@@ -9,7 +9,7 @@ name = "promptulate"
 readme = "README.md"
 homepage = "https://github.com/Undertone0809/promptulate"
 repository = "https://github.com/Undertone0809/promptulate"
-version = "1.18.1"
+version = "1.18.2"
 keywords = [
     "promptulate",
     "pne",
