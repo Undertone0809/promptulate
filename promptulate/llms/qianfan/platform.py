@@ -77,7 +77,6 @@ class QianFan(BaseLLM, ABC):
         system: str = "",
         return_raw_response: bool = False,
         stream: bool = False,
-        *args,
         **kwargs,
     ) -> Union[str, BaseMessage, T, List[BaseMessage], StreamIterator]:
         """
@@ -104,8 +103,6 @@ class QianFan(BaseLLM, ABC):
                 "This is needed in order to for QianFan. "
                 "Please install it with `pip install qianfan`."
             )
-        os.environ["QIANFAN_ACCESS_KEY"] = pne_config.get_qianfan_ak()
-        os.environ["QIANFAN_SECRET_KEY"] = pne_config.get_qianfan_sk()
 
         chat_comp = qianfan.ChatCompletion()
         response = chat_comp.do(

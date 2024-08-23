@@ -19,7 +19,7 @@ def test_init_litellm():
 
 
 def test_init_zhipu():
-    with pytest.raises(ValueError) as e:
+    with pytest.raises(KeyError) as e:
         model = pne.LLMFactory.build(model_name="zhipu/glm4")
         model("hello")
         assert (

@@ -132,6 +132,10 @@ class Config(metaclass=Singleton):
         raise ValueError("ERNIE_API_SECRET is not provided. Please set your secret.")
 
     def get_zhipuai_api_key(self) -> str:
+        logger.warning(
+            "ZHIPUAI_API_KEY is deprecated when v1.20.0. Please use ZHIPUAI_API_KEY_ID and ZHIPUAI_API_KEY_SECRET instead."  # noqa: E501
+        )
+
         if "ZHIPUAI_API_KEY" in os.environ.keys():
             if self.enable_cache:
                 get_cache()["ZHIPUAI_API_KEY"] = os.getenv("ZHIPUAI_API_KEY")
@@ -141,6 +145,10 @@ class Config(metaclass=Singleton):
         raise ValueError("ZHIPUAI_API_KEY is not provided. Please set your key.")
 
     def get_qianfan_ak(self):
+        logger.warning(
+            "QIANFAN_ACCESS_KEY is deprecated when v1.20.0. Please use QIANFAN_ACCESS_KEY_ID and QIANFAN_ACCESS_KEY_SECRET instead."  # noqa: E501
+        )
+
         if "QIANFAN_ACCESS_KEY" in os.environ.keys():
             if self.enable_cache:
                 get_cache()["QIANFAN_ACCESS_KEY"] = os.getenv("QIANFAN_ACCESS_KEY")
@@ -150,6 +158,10 @@ class Config(metaclass=Singleton):
         raise ValueError("QIANFAN_ACCESS_KEY is not provided. Please set your key.")
 
     def get_qianfan_sk(self):
+        logger.warning(
+            "QIANFAN_SECRET_KEY is deprecated when v1.20.0. Please use QIANFAN_SECRET_KEY_ID and QIANFAN_SECRET_KEY_SECRET instead."  # noqa: E501
+        )
+
         if "QIANFAN_SECRET_KEY" in os.environ.keys():
             if self.enable_cache:
                 get_cache()["QIANFAN_SECRET_KEY"] = os.getenv("QIANFAN_SECRET_KEY")
@@ -159,6 +171,10 @@ class Config(metaclass=Singleton):
         raise ValueError("QIANFAN_SECRET_KEY is not provided. Please set your secret.")
 
     def get_ernie_token(self) -> str:
+        logger.warning(
+            "ERNIE_API_KEY is deprecated when v1.20.0. Please use ERNIE_API_KEY_ID and ERNIE_API_KEY_SECRET instead."  # noqa
+        )
+
         url = self.ernie_bot_token_url
         params = {
             "grant_type": "client_credentials",

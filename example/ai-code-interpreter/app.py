@@ -52,7 +52,7 @@ def handle_code_block(
                     },
                     {
                         "role": "user",
-                        "content": f"The code execution resulted in an error: {error_message}. Can you explain what went wrong and provide a corrected version of the code?",
+                        "content": f"The code execution resulted in an error: {error_message}. Can you explain what went wrong and provide a corrected version of the code?",  # noqa
                     },
                 ],
                 model_config={

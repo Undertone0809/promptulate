@@ -1,4 +1,5 @@
 """This example show how to use JSONFormatter by ChatOpenAI."""
+
 from typing import List
 
 from promptulate.llms import ChatOpenAI

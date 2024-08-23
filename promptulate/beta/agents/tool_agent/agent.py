@@ -21,9 +21,9 @@ from promptulate.utils.logger import logger
 
 class ReActResponse(BaseModel):
     thought: str = Field(description="The thought of what to do and why.")
-    self_criticism: str = Field(
-        description="Constructive self-criticism of the thought"
-    )
+    # self_criticism: str = Field(
+    #     description="Constructive self-criticism of the thought"
+    # )
     tool_name: str = Field(description="The name of tool name.")
     tool_parameters: dict = Field(
         description="The input parameters of tool, string type json parameters."
@@ -31,7 +31,7 @@ class ReActResponse(BaseModel):
 
 
 # Finish tool for ToolAgent
-def finish(result: str):
+def finish(result: str) -> str:
     """Use final answer until you think you have the final answer and can return the
     result.
 
@@ -41,7 +41,7 @@ def finish(result: str):
     return result
 
 
-def _build_output_format_instruction():
+def _build_output_format_instruction() -> str:
     return get_formatted_instructions(
         json_schema=ReActResponse,
         examples=[
@@ -78,6 +78,8 @@ class ToolAgent(BaseAgent):
         self.max_execution_time: Optional[float] = None
         self.current_time_elapsed: float = 0.0
 
+        # TODO: add system prompt
+
         self.system_prompt: str = ""
         self.current_process: str = ""
         self.task: str = ""
@@ -101,7 +103,7 @@ Here is what you have already done. You need to infer what the next task needs t
 
         self.current_process += f"Step {self.current_iteration}:\n"
         self.current_process += f"Thought: {result.thought}\n"
-        self.current_process += f"Self Criticism: {result.self_criticism}\n"
+        # self.current_process += f"Self Criticism: {result.self_criticism}\n"
         self.current_process += f"Tool: {result.tool_name}\n"
         self.current_process += f"Tool Parameters: {result.tool_parameters}\n"
         self.current_process += f"Observation: {tool_result}\n\n"
@@ -124,7 +126,7 @@ Here is what you have already done. You need to infer what the next task needs t
             Hook.call_hook(
                 HookTable.ON_AGENT_ACTION,
                 self,
-                thought=f"{result.thought}\n{result.self_criticism}",
+                thought=f"{result.thought}",
                 action=result.tool_name,
                 action_input=result.tool_parameters,
             )

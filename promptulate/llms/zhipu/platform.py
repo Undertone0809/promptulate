@@ -1,8 +1,9 @@
 import json
+import os
 import time
 from abc import ABC
 from json import JSONDecodeError
-from typing import Any, Dict, Iterator, List, Optional, TypeVar, Union
+from typing import Any, Dict, List, Optional, TypeVar, Union
 
 import jwt
 import requests
@@ -59,7 +60,7 @@ class ZhiPu(BaseLLM, ABC):
         optional."""
         if self.enable_private_api_key and self.private_api_key != "":
             return self.private_api_key
-        return pne_config.get_zhipuai_api_key()
+        return os.environ["ZHIPUAI_API_KEY"]
 
     def set_private_api_key(self, value: str):
         self.enable_private_api_key = True
