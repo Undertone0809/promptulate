@@ -34,12 +34,9 @@ install-docs:
 pre-commit-install:
 	poetry run pre-commit install
 
-polish-codestyle:
+format:
 	poetry run ruff format --config pyproject.toml promptulate tests example
 	poetry run ruff check --fix --config pyproject.toml promptulate tests example
-
-formatting: polish-codestyle
-format: polish-codestyle
 
 test:
 	$(TEST_COMMAND)
@@ -51,6 +48,8 @@ test-prod:
 check-codestyle:
 	poetry run ruff format --check --config pyproject.toml promptulate tests example
 	poetry run ruff check --config pyproject.toml promptulate tests example
+
+check-format: check-codestyle
 
 lint: check-codestyle test
 
@@ -95,10 +94,11 @@ help:
 	@echo "install-docs: Install the dependencies for building docs"
 	@echo "pre-commit-install: Install the pre-commit hooks"
 	@echo "polish-codestyle: Format the code"
-	@echo "formatting: Format the code"
+	@echo "format: Format the code"
+	@echo "check-format: Check the code format"
+	@echo "check-codestyle: Check the code style, the same as make check-format"
 	@echo "test: Run the tests"
 	@echo "test-prod: Run the tests for production"
-	@echo "check-codestyle: Check the code style"
 	@echo "lint: Run the tests and check the code style"
 	@echo "build-docs: Build the docs"
 	@echo "start-docs: Start the docs server"
@@ -109,4 +109,4 @@ help:
 	@echo "build-remove: Remove the build directory"
 	@echo "cleanup: Remove all the cache files"
 
-.PHONY: lock install install-integration install-docs pre-commit-install polish-codestyle formatting format test test-prod check-codestyle lint build-docs start-docs pycache-remove dsstore-remove ipynbcheckpoints-remove pytestcache-remove build-remove cleanup help
+.PHONY: lock install install-integration install-docs pre-commit-install polish-codestyle formatting format test test-prod check-codestyle lint build-docs start-docs pycache-remove dsstore-remove ipynbcheckpoints-remove pytestcache-remove build-remove cleanup help check-format

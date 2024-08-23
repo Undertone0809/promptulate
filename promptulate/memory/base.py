@@ -16,6 +16,7 @@
 # GitHub Link: https://github.com/Undertone0809/
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
+
 from abc import abstractmethod
 from typing import Any, Dict, Optional
 
