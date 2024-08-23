@@ -111,6 +111,3 @@ venv.bak/
 .mypy_cache/
 _trial_temp
 .idea
-
-# vscode
-.vscode
