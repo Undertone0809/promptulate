@@ -1,4 +1,5 @@
 """This example will show how to use a specified key in OpenAI model."""
+
 from promptulate.llms import ChatOpenAI
 
 

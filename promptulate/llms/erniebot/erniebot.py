@@ -1,4 +1,5 @@
 import json
+import os
 import warnings
 from abc import ABC
 from typing import Any, Dict, List, Optional
@@ -96,7 +97,7 @@ class ErnieBot(BaseLLM, ABC):
 
         body: Dict[str, Any] = self._build_api_params_dict(prompts, stop)
         response = requests.post(
-            url=url + "?access_token=" + pne_config.get_ernie_token(),
+            url=url + "?access_token=" + os.environ["ERNIE_API_KEY"],
             headers=headers,
             json=body,
             proxies=pne_config.proxies,

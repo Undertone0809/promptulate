@@ -1,13 +1,20 @@
-from typing import List, TypedDict
+from typing import Any, Callable, Dict, List, Optional
 
 
-class ModelConfig(TypedDict):
-    model_name: str
-    api_key: str
-    api_base: str
+class ModelConfig:
+    def __init__(
+        self, model_name: str, api_key: str, api_base: Optional[str] = None, **kwargs
+    ):
+        self.model_name: str = model_name
+        self.api_key: str = api_key
+        self.api_base: Optional[str] = api_base
+        self.__dict__.update(kwargs)
 
 
-def model_sidebar(model_options: List[str] = None) -> ModelConfig:
+def model_sidebar(
+    model_options: Optional[List[str]] = None,
+    additional_sidebar_fn: Optional[Callable[[], Dict[str, Any]]] = None,
+) -> ModelConfig:
     import streamlit as st
 
     model_options = model_options or [
@@ -34,5 +41,14 @@ def model_sidebar(model_options: List[str] = None) -> ModelConfig:
 
         api_key = st.text_input("API Key", key="provider_api_key", type="password")
         api_base = st.text_input("OpenAI Proxy URL (Optional)")
+        additional_config = {}
 
-    return ModelConfig(model_name=selected_model, api_key=api_key, api_base=api_base)
+        if additional_sidebar_fn:
+            additional_config: dict = additional_sidebar_fn()
+
+    return ModelConfig(
+        model_name=selected_model,
+        api_key=api_key,
+        api_base=api_base,
+        **additional_config,
+    )

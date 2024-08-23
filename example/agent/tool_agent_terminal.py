@@ -1,4 +1,5 @@
 """A Agent with duckduckgo search"""
+
 from promptulate.agents import ToolAgent
 from promptulate.tools import DuckDuckGoTool
 

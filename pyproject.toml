@@ -9,7 +9,7 @@ name = "promptulate"
 readme = "README.md"
 homepage = "https://github.com/Undertone0809/promptulate"
 repository = "https://github.com/Undertone0809/promptulate"
-version = "1.18.1"
+version = "1.18.2"
 keywords = [
     "promptulate",
     "pne",
@@ -50,7 +50,7 @@ pre-commit = "^3.5.0"
 pytest = ">=7.4.4,<9.0.0"
 pytest-cov = "^4.1.0"
 pytest-html = ">=3.1.1,<5.0.0"
-ruff = "^0.1.13"
+ruff = "^0.6.2"
 pytest-mock = "^3.12.0"
 
 [tool.poetry.group.test_integration.dependencies]
@@ -67,16 +67,10 @@ pne-chat = "promptulate.client.chat:main"
 #name = "tsinghua"
 #priority = "default"
 #url = "https://pypi.tuna.tsinghua.edu.cn/simple"
-
 [tool.ruff]
 # https://beta.ruff.rs/docs/settings/
 # https://docs.astral.sh/ruff/configuration/
 line-length = 88
-
-# https://beta.ruff.rs/docs/rules/
-extend-select = ["I"]
-ignore = ["F401"]
-select = ["E", "W", "F", "I"]
 
 # Exclude a variety of commonly ignored directories.
 exclude = [
@@ -102,20 +96,23 @@ exclude = [
     "node_modules",
     "venv",
 ]
-ignore-init-module-imports = true
 respect-gitignore = true
 
+[tool.ruff.lint]
+# https://beta.ruff.rs/docs/rules/
+extend-select = ["I"]
+exclude = ["*.ipynb"]
+ignore = ["F401"]
+select = ["E", "W", "F", "I"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"  # Accepts: "google", "numpy", or "pep257".
+
 [tool.ruff.format]
-# Like Black, use double quotes for strings.
 quote-style = "double"
-
-# Like Black, indent with spaces, rather than tabs.
 indent-style = "space"
-
-# Like Black, respect magic trailing commas.
+exclude = ["*.ipynb"]
 skip-magic-trailing-comma = false
-
-# Like Black, automatically detect the appropriate line ending.
 line-ending = "auto"
 
 [tool.coverage.run]
