@@ -67,16 +67,10 @@ pne-chat = "promptulate.client.chat:main"
 #name = "tsinghua"
 #priority = "default"
 #url = "https://pypi.tuna.tsinghua.edu.cn/simple"
-
 [tool.ruff]
 # https://beta.ruff.rs/docs/settings/
 # https://docs.astral.sh/ruff/configuration/
 line-length = 88
-
-# https://beta.ruff.rs/docs/rules/
-extend-select = ["I"]
-ignore = ["F401"]
-select = ["E", "W", "F", "I"]
 
 # Exclude a variety of commonly ignored directories.
 exclude = [
@@ -102,8 +96,13 @@ exclude = [
     "node_modules",
     "venv",
 ]
-ignore-init-module-imports = true
 respect-gitignore = true
+
+[tool.ruff.lint]
+# https://beta.ruff.rs/docs/rules/
+extend-select = ["I"]
+ignore = ["F401"]
+select = ["E", "W", "F", "I"]
 
 [tool.ruff.format]
 # Like Black, use double quotes for strings.
