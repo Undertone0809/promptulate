@@ -1,3 +1,14 @@
+---
+title: Pne Gradio
+emoji: 🏃
+colorFrom: green
+colorTo: purple
+sdk: gradio
+sdk_version: 4.40.0
+app_file: app.py
+pinned: false
+---
+
 # Build a gradio+ pne.chat simple chat app 
 
 The `chat.py` is an example of building a gradio+ pne.chat simple chat app .
@@ -28,7 +39,7 @@ The `chat.py` is an example of building a gradio+ pne.chat simple chat app .
 3. Run the application
 
    ```shell
-   python chat.py
+   python app.py
    ```
 
    

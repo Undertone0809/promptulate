@@ -1,7 +1,5 @@
 from typing import Any, Callable, Dict, List, Optional
 
-import streamlit as st
-
 
 class ModelConfig:
     def __init__(
@@ -17,6 +15,8 @@ def model_sidebar(
     model_options: Optional[List[str]] = None,
     additional_sidebar_fn: Optional[Callable[[], Dict[str, Any]]] = None,
 ) -> ModelConfig:
+    import streamlit as st
+
     model_options = model_options or [
         "Custom Model",
         "openai/gpt-4o",

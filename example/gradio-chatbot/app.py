@@ -1,6 +1,5 @@
 import gradio as gr
-
-import promptulate as pne
+import pne
 
 # # 定义模型选项
 MODEL_OPTIONS = ["gpt-3.5-turbo", "gpt-4", "deepseek/deepseek-chat"]
