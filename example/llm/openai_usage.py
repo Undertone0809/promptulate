@@ -21,7 +21,7 @@ import promptulate as pne
 
 
 def main():
-    llm = pne.ChatOpenAI()
+    llm = pne.LLMFactory.build(model_name="gpt-3.5-turbo")
 
     while True:
         prompt = input("[User Input] ")

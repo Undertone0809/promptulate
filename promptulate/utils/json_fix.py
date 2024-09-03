@@ -140,7 +140,7 @@ def patch_lastest_left_object_and_array(line: str) -> str:
 
 
 # TODO better name
-# TODO 改成 lastest
+# TODO change to latest
 # TODO {}}]]]] --> { not [
 def patch_guess_left(line: str) -> str:
     miss_object = line.count("}") - line.count("{")
@@ -300,9 +300,9 @@ class JSONFixer:
         # TODO fix
         # 1. }]
         # 2. ]}
-        # 3. constans
+        # 3. constants
         # 4. -
-        # 先 patch 完 {[]}
+        # First patch {[]}
         # TODO: process number
         if line.startswith("-."):
             new_line = "-0." + line[2:]
@@ -372,7 +372,7 @@ def change_model(model: BaseModel) -> BaseModel:
     return new_model
 
 
-def stream_fix(response: stream, model: BaseModel) -> stream:
+def stream_to_model(response: stream, model: BaseModel) -> stream:
     """stream response to model instance
 
     Args:

@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, TypeVar, Union
+from typing import Dict, List, Optional, Type, TypeVar, Union
 
 from promptulate.agents.base import BaseAgent
 from promptulate.agents.tool_agent.agent import ToolAgent
@@ -15,7 +15,7 @@ from promptulate.schema import (
     SystemMessage,
 )
 from promptulate.tools.base import BaseTool, ToolTypes
-from promptulate.utils.jsonFix import stream_fix
+from promptulate.utils.json_fix import stream_to_model
 from promptulate.utils.logger import logger
 
 T = TypeVar("T", bound=BaseModel)
@@ -112,7 +112,7 @@ class AIChat:
     def run(
         self,
         messages: Union[List[Dict[str, str]], MessageSet, str],
-        output_schema: Optional[type(BaseModel)] = None,
+        output_schema: Optional[Type[BaseModel]] = None,
         examples: Optional[List[BaseModel]] = None,
         return_raw_response: bool = False,
         stream: bool = False,
@@ -179,7 +179,7 @@ class AIChat:
         )
 
         if output_schema and stream:
-            return stream_fix(response, output_schema)
+            return stream_to_model(response, output_schema)
 
         # TODO: add stream memory support
         if stream:
