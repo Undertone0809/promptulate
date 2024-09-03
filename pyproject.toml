@@ -67,6 +67,7 @@ pne-chat = "promptulate.client.chat:main"
 #name = "tsinghua"
 #priority = "default"
 #url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+
 [tool.ruff]
 # https://beta.ruff.rs/docs/settings/
 # https://docs.astral.sh/ruff/configuration/

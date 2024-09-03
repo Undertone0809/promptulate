@@ -40,7 +40,7 @@ def generate_response(model_name: str, api_base: str, api_key: str) -> str:
 
 def main():
     initialize_session_state()
-    config = pne.beta.st.sidebar.model_sidebar()
+    config = pne.beta.st.model_sidebar()
 
     st.title("💬 Chat")
     st.caption("🚀 Hi there! 👋 I am a simple chatbot by Promptulate to help you.")
