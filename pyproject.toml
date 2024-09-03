@@ -9,7 +9,7 @@ name = "promptulate"
 readme = "README.md"
 homepage = "https://github.com/Undertone0809/promptulate"
 repository = "https://github.com/Undertone0809/promptulate"
-version = "1.18.2"
+version = "1.18.3"
 keywords = [
     "promptulate",
     "pne",
@@ -67,6 +67,7 @@ pne-chat = "promptulate.client.chat:main"
 #name = "tsinghua"
 #priority = "default"
 #url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+
 [tool.ruff]
 # https://beta.ruff.rs/docs/settings/
 # https://docs.astral.sh/ruff/configuration/

@@ -16,11 +16,6 @@ def extract_code(text) -> list:
     return matches
 
 
-def render_model() -> dict:
-    e2b_key = st.text_input("E2B Key")
-    return {"e2b_key": e2b_key}
-
-
 def handle_code_block(
     code: str, config, code_interpreter: Optional[CodeInterpreter] = None
 ):
