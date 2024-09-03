@@ -203,9 +203,6 @@ and policy implications. ;
 
 ```python
 from promptulate.tools.paper.tools import PaperSummaryTool
-from promptulate.utils.logger import enable_log
-
-enable_log()
 
 
 def main():

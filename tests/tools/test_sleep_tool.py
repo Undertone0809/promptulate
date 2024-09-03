@@ -1,10 +1,7 @@
 import time
 from unittest import TestCase
 
-from promptulate import enable_log
 from promptulate.tools import sleep_tool
-
-enable_log()
 
 
 class TestSleepTool(TestCase):

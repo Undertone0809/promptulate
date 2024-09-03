@@ -4,9 +4,6 @@ from promptulate.agents import ToolAgent
 from promptulate.tools import DuckDuckGoTool, calculator, sleep_tool
 from promptulate.tools.human_feedback import HumanFeedBackTool
 from promptulate.tools.iot_swith_mqtt import IotSwitchTool
-from promptulate.utils.logger import enable_log
-
-enable_log()
 
 
 def main():

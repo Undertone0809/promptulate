@@ -2,14 +2,11 @@
 
 # import paho.mqtt.client as mqtt
 
-# from promptulate import enable_log
 # from promptulate.tools.iot_swith_mqtt import IotSwitchTool
 # from promptulate.tools.iot_swith_mqtt.api_wrapper import IotSwitchAPIWrapper
-# from promptulate.utils import get_logger
+# from promptulate.utils.logger import  get_logger
 
-# enable_log()
 # logger = get_logger()
-
 
 # class TestIotSwitchAPIWrapper(TestCase):
 #     def test_run(self):

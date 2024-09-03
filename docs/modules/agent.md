@@ -82,7 +82,6 @@ turn_off_stdout_hook()
 
 如果你想要定制自己的独特Print或者对关键步骤进行逻辑处理，跳转 [Hook的使用](modules/hook.md#what-is-hook)
 
-> 如果你当前正处在开发模式，十分推荐你使用enable_log()开启debug模式，从而查看最详细的底层日志信息，以便更好地记录运行过程。
 
 
 ## WebAgent

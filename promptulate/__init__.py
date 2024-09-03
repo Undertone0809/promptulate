@@ -37,11 +37,9 @@ from promptulate.schema import (
     UserMessage,
 )
 from promptulate.tools.base import BaseTool, Tool, ToolTypes, define_tool
-from promptulate.utils.logger import enable_log
 from promptulate.utils.string_template import StringTemplate
 
 _util_fields = [
-    "enable_log",
     "OutputFormatter",
     "StringTemplate",
 ]

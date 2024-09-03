@@ -1,9 +1,8 @@
 # from unittest import TestCase
 
 # from promptulate.tools.paper.tools import PaperSummaryTool
-# from promptulate.utils.logger import enable_log, get_logger
+# from promptulate.utils.logger import  get_logger
 
-# enable_log()
 # logger = get_logger()
 
 

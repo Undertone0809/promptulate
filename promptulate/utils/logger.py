@@ -15,7 +15,7 @@
 # Copyright Owner: Zeeland
 # GitHub Link: https://github.com/Undertone0809/
 # Project Link: https://github.com/Undertone0809/promptulate
-# Contact Email: zeeland@foxmail.com
+# Contact Email: zeeland4work@gmail.com
 
 import datetime
 import logging
@@ -31,10 +31,6 @@ def get_log_path() -> str:
     log_directory = get_default_storage_path("logs")
     current_time = datetime.datetime.now().strftime("%Y%m%d")
     return f"{log_directory}/{current_time}.log"
-
-
-def enable_log():
-    pass
 
 
 class LogManager(metaclass=Singleton):

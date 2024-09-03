@@ -6,9 +6,6 @@ from promptulate.tools.semantic_scholar.tools import (
     SemanticScholarQueryTool,
     SemanticScholarReferenceTool,
 )
-from promptulate.utils.logger import enable_log
-
-enable_log()
 
 
 class TestSemanticScholarApiWrapper(TestCase):
