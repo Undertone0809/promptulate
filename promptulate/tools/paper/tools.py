@@ -51,8 +51,10 @@ class PaperSummaryTool(BaseTool):
     class Config:
         """Configuration for this pydantic object."""
 
-        extra = Extra.forbid
-        arbitrary_types_allowed = True
+        model_config = {
+            "extra": "forbid",
+            "arbitrary_types_allowed": True,
+        }
 
     def _run(self, query: str, **kwargs) -> str:
         """A paper summary tool that passes in the article name (or arxiv id) and
