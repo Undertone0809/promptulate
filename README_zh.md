@@ -1,6 +1,6 @@
-<h1 align="center">
-    Promptulate
-</h1>
+<p align="center">
+    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20240907030128.png" alt="promptulate"/>
+</p>
 
 <p align="center">
     <a target="_blank" href="">
@@ -9,20 +9,20 @@
     <a target="_blank" href=''>
         <img src="https://img.shields.io/github/release/Undertone0809/promptulate/all.svg?style=flat-square"/>
     </a>
-    <a target="_blank" href=''>
-        <img src="https://bestpractices.coreinfrastructure.org/projects/3018/badge"/>
-   </a>
+    <a href="https://pypi.org/project/promptulate" target="_blank">
+        <img src="https://img.shields.io/pypi/pyversions/promptulate.svg?color=%2334D058" alt="Supported Python versions">
+    </a>
+    <a href="https://t.me/zeeland0809" target="_blank">
+      <img src="https://img.shields.io/badge/Telegram-join%20chat-2CA5E0?logo=telegram&logoColor=white" alt="chat on Telegram">
+    </a>
     <a target="_blank" href=''>
         <img src="https://static.pepy.tech/personalized-badge/promptulate?period=month&units=international_system&left_color=grey&right_color=blue&left_text=Downloads/Week"/>
     </a>
 </p>
 
-<p align="center">
-  <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/promptulate_logo_new.png"/>
-</p>
-
 ## News
 
+- 2024.9.7 add mem0 memory use cases
 - 2024.8.5 流式结构化输出: pne 允许你在流式输出中获取 pydantic object 的输出内容. ref: [https://x.com/kfhedRk3lXofRIB/status/1820489301299540346](https://x.com/kfhedRk3lXofRIB/status/1820489301299540346)
 - 2024.7.20 llmapper: A experimental project for generating knowledge graph by LLM workflow. See [here](https://www.promptulate.cn/#/use_cases/llmapper)
 - 2024.5.19 现在你可以直接使用 import pne 来导入 promptulate 框架，而不需要再使用 import promptulate as pne 的方式，ref: [https://github.com/Undertone0809/pne](https://github.com/Undertone0809/pne)
