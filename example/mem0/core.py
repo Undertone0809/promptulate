@@ -9,8 +9,8 @@ class PersonalHealingAssistant:
             {"role": "system", "content": "You are a personal healing AI Assistant."}
         ]
 
-    def set_mem_api_key(self, mem_api_key: str):
-        self.memory = MemoryClient(api_key=mem_api_key)
+    def set_mem0_api_key(self, mem0_api_key: str):
+        self.memory = MemoryClient(api_key=mem0_api_key)
 
     def ask_question(self, question: str, user_id: str, config) -> str:
         # Fetch previous related memories

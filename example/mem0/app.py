@@ -8,7 +8,7 @@ def main():
     # todo llm default answer with cn
     with st.sidebar:
         mem0_user_id = st.text_input("mem0 user id", type="password")
-        mem_api_key = st.text_input(
+        mem0_api_key = st.text_input(
             "mem0 API Key", key="provider_mem0_api_key", type="password"
         )
 
@@ -30,11 +30,11 @@ def main():
             st.info("Please add your model API key to continue.")
             st.stop()
 
-        if not mem_api_key:
+        if not mem0_api_key:
             st.error("Please provide your mem0 API Key to continue.")
             st.stop()
 
-        ai_assistant.set_mem_api_key(mem_api_key)
+        ai_assistant.set_mem0_api_key(mem0_api_key)
 
         answer = ai_assistant.ask_question(
             question=prompt, user_id=mem0_user_id, config=config
