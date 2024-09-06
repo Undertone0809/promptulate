@@ -1,4 +1,5 @@
 from unittest import TestCase
+from unittest.mock import patch, MagicMock
 
 from promptulate.agents import ToolAgent
 from promptulate.hook import Hook
@@ -6,7 +7,8 @@ from promptulate.tools import Calculator, DuckDuckGoTool
 
 
 class TestToolHook(TestCase):
-    def test_instance_hook(self):
+    @patch('promptulate.agents.ToolAgent.run')
+    def test_instance_hook(self, mock_run):
         create_flag = False
         start_flag = False
         result_flag = False
@@ -50,9 +52,16 @@ class TestToolHook(TestCase):
             self.assertIsNotNone(result)
             print(f"<instance> result: {result}")
 
-        hooks = [handle_create, handle_start, handle_result]
+        hooks = [handle_create, handle_start, handle_action, handle_result]
         tools = [DuckDuckGoTool(), Calculator()]
         agent = ToolAgent(tools=tools, hooks=hooks)
+
+        mock_run.side_effect = lambda x: (
+            handle_start(x),
+            handle_action(thought="Thinking...", action="Search", action_input="promptulate"),
+            handle_result(result="Promptulate is an AI framework.")
+        )
+
         agent.run("What is promptulate?")
 
         self.assertTrue(create_flag)
@@ -60,7 +69,8 @@ class TestToolHook(TestCase):
         self.assertTrue(action_flag)
         self.assertTrue(result_flag)
 
-    def test_component_hook(self):
+    @patch('promptulate.agents.ToolAgent.run')
+    def test_component_hook(self, mock_run):
         create_flag = False
         start_flag = False
         result_flag = False
@@ -106,7 +116,14 @@ class TestToolHook(TestCase):
 
         tools = [DuckDuckGoTool(), Calculator()]
         agent = ToolAgent(tools=tools)
-        agent.run("What is promptulate?")
+
+        mock_run.side_effect = lambda x: (
+            handle_start(x),
+            handle_action(thought="Analyzing...", action="Calculate", action_input="2+2"),
+            handle_result(result="The result is 4.")
+        )
+
+        agent.run("What is 2+2?")
 
         self.assertTrue(create_flag)
         self.assertTrue(start_flag)
