@@ -4,6 +4,7 @@ log
 gpt_output.md
 private
 litellm_uuid.txt
+node_modules
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

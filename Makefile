@@ -70,7 +70,7 @@ build-docs:
 
 
 start-docs:
-	docsify serve docs
+	cd docs && npm run docs:dev
 
 #* Cleaning
 pycache-remove:
