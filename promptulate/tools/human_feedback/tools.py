@@ -1,3 +1,4 @@
+import warnings
 from typing import Callable
 
 from promptulate.tools import Tool
@@ -19,6 +20,16 @@ class HumanFeedBackTool(Tool):
         "is lacking or reasoning cannot continue. Please enter the content you wish for"
         "human feedback and interaction, but do not ask for knowledge or let humans reason."  # noqa
     )
+    parameters: dict = {
+        "type": "object",
+        "properties": {
+            "content": {
+                "type": "string",
+                "description": "The content to be presented for human feedback",
+            }
+        },
+        "required": ["content"],
+    }
 
     def __init__(
         self,
@@ -27,6 +38,13 @@ class HumanFeedBackTool(Tool):
         *args,
         **kwargs,
     ):
+        warnings.warn(
+            (
+                "HumanFeedBackTool will be removed in v1.21.0. "
+                "You can custom tool if you want to get human feedback"
+            ),
+            DeprecationWarning,
+        )
         super().__init__(*args, **kwargs)
         self.output_func = output_func
         self.input_func = input_func

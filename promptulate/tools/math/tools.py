@@ -2,8 +2,6 @@ import json
 import math
 import re
 
-import numexpr
-
 from promptulate.llms.base import BaseLLM
 from promptulate.llms.openai import ChatOpenAI
 from promptulate.tools.base import Tool
@@ -27,6 +25,13 @@ def _evaluate_expression(expression: str) -> str:
     Raises:
         ValueError: If the evaluation fails.
     """
+    try:
+        import numexpr
+    except ImportError:
+        raise ValueError(
+            " Please install the numexpr package using `pip install numexpr`."
+        )
+
     try:
         local_dict = {"pi": math.pi, "e": math.e}
         output = str(
