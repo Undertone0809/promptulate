@@ -4,9 +4,13 @@ from mem0 import MemoryClient
 
 class PersonalHealingAssistant:
     def __init__(self):
-        self.memory = MemoryClient(api_key="your-api-key")
+        self.memory = None
         self.messages = [
-            {"role": "system", "content": "You are a personal healing AI Assistant."}]
+            {"role": "system", "content": "You are a personal healing AI Assistant."}
+        ]
+
+    def set_mem_api_key(self, mem_api_key: str):
+        self.memory = MemoryClient(api_key=mem_api_key)
 
     def ask_question(self, question: str, user_id: str, config) -> str:
         # Fetch previous related memories
@@ -16,13 +20,11 @@ class PersonalHealingAssistant:
             prompt = f"User input: {question}\n Previous memories: {previous_memories}"
         self.messages.append({"role": "user", "content": prompt})
 
-        # Generate response using GPT-4o
         response = pne.chat(
             model=config.model_name,
             stream=True,
             messages=self.messages,
-            model_config={"api_base": config.api_base,
-                          "api_key": config.api_key},
+            model_config={"api_base": config.api_base, "api_key": config.api_key},
         )
         self.messages.append({"role": "assistant", "content": response})
 
@@ -37,4 +39,3 @@ class PersonalHealingAssistant:
     def search_memories(self, query, user_id):
         memories = self.memory.search(query, user_id=user_id)
         return memories
-
