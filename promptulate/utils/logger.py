@@ -44,7 +44,8 @@ class LogManager(metaclass=Singleton):
         file_handler.setLevel(logging.DEBUG)
 
         formatter = logging.Formatter(
-            "%(asctime)s | %(levelname)s | %(name)s:%(funcName)s:%(lineno)d - %(message)s",  # noqa
+            "%(asctime)s | %(levelname)s | %(name)s:%(funcName)s:%(lineno)d - %(message)s",
+            # noqa
             "%Y-%m-%d %H:%M:%S",
         )
         file_handler.setFormatter(formatter)
