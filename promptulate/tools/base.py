@@ -134,7 +134,7 @@ class BaseTool(ABC, BaseModel):
                 hooks(List[Callable]): for adding to hook_manager
         """
         warnings.warn(
-            "BaseTool is deprecated at v1.7.0. promptulate.tools.base.Tool is recommended.",  # noqa: E501
+            "BaseTool is deprecated at v1.7.0. promptulate.tools.base.Tool and function type declaration is recommended.",  # noqa: E501
             DeprecationWarning,
         )
         super().__init__(**kwargs)
@@ -232,6 +232,30 @@ class Tool(ABC):
         raise TypeError(
             f"The 'parameters' attribute of {self.__class__.__name__} must be either a subclass of BaseModel or a dictionary representing a schema."  # noqa: E501
         )
+
+    def _args_to_kwargs(self, *args, **kwargs) -> Dict:
+        """Converts positional arguments to keyword arguments based on tool parameters.
+
+        This method takes in both positional and keyword arguments. It then attempts to
+        match the positional arguments to the tool's parameters, converting them to
+        keyword arguments. Any additional keyword arguments are also included in the
+        final dictionary.
+
+        Returns:
+            Dict: A dictionary containing the converted keyword arguments.
+        """
+        all_kwargs = {}
+
+        if isinstance(self.parameters, dict) and "properties" in self.parameters:
+            all_kwargs.update(dict(zip(self.parameters["properties"].keys(), args)))
+        elif isinstance(self.parameters, type) and issubclass(
+            self.parameters, BaseModel
+        ):
+            all_kwargs.update(dict(zip(self.parameters.__fields__.keys(), args)))
+
+        all_kwargs.update(kwargs)
+
+        return all_kwargs
 
 
 class ToolImpl(Tool):
