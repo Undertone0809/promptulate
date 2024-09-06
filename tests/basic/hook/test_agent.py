@@ -1,5 +1,5 @@
 from unittest import TestCase
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 from promptulate.agents import ToolAgent
 from promptulate.hook import Hook
@@ -7,7 +7,7 @@ from promptulate.tools import Calculator, DuckDuckGoTool
 
 
 class TestToolHook(TestCase):
-    @patch('promptulate.agents.ToolAgent.run')
+    @patch("promptulate.agents.ToolAgent.run")
     def test_instance_hook(self, mock_run):
         create_flag = False
         start_flag = False
@@ -58,8 +58,10 @@ class TestToolHook(TestCase):
 
         mock_run.side_effect = lambda x: (
             handle_start(x),
-            handle_action(thought="Thinking...", action="Search", action_input="promptulate"),
-            handle_result(result="Promptulate is an AI framework.")
+            handle_action(
+                thought="Thinking...", action="Search", action_input="promptulate"
+            ),
+            handle_result(result="Promptulate is an AI framework."),
         )
 
         agent.run("What is promptulate?")
@@ -69,7 +71,7 @@ class TestToolHook(TestCase):
         self.assertTrue(action_flag)
         self.assertTrue(result_flag)
 
-    @patch('promptulate.agents.ToolAgent.run')
+    @patch("promptulate.agents.ToolAgent.run")
     def test_component_hook(self, mock_run):
         create_flag = False
         start_flag = False
@@ -119,8 +121,10 @@ class TestToolHook(TestCase):
 
         mock_run.side_effect = lambda x: (
             handle_start(x),
-            handle_action(thought="Analyzing...", action="Calculate", action_input="2+2"),
-            handle_result(result="The result is 4.")
+            handle_action(
+                thought="Analyzing...", action="Calculate", action_input="2+2"
+            ),
+            handle_result(result="The result is 4."),
         )
 
         agent.run("What is 2+2?")
