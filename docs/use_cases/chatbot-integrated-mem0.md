@@ -1,4 +1,4 @@
-# Build a chatbot using streamlit and mem0
+# Crafting your PersonalHealingAssistant with Streamlit and Mem0
 Mem0 (pronounced “mem-zero”) enhances AI assistants and agents with an intelligent memory layer, enabling personalized AI interactions. 
 Mem0 remembers user preferences, adapts to individual needs, and continuously improves over time, making it ideal for customer support chatbots, AI assistants, and autonomous systems.
 
