@@ -13,7 +13,7 @@ Here are some tips for using `pne.chat()`. Even though pne provides many modules
 You can use `pne.chat()` to chat like openai. OpenAI chat API document: [https://platform.openai.com/docs/api-reference/chat](https://platform.openai.com/docs/api-reference/chat). `pne.chat()` API design is the same as OpenAI chat API.
 
 
-```python
+```python{6-10}
 import os
 import promptulate as pne
 
@@ -30,7 +30,7 @@ print(response)
 Moreover, you can only pass a string to `pne.chat()`, it will automatically convert it to the OpenAI format.
 
 
-```python
+```python{3-6}
 import promptulate as pne
 
 response = pne.chat(

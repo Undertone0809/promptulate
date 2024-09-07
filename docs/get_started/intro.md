@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20240907031414.png" alt="promptulate"/>
+    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20240907170327.png" alt="promptulate"/>
 </p>
 
 <p align="center">
@@ -147,7 +147,7 @@ You can also see how to use `pne.chat()` in the [Getting Started/Official Docume
 - [Use streamlit and pne to compare different model a playground. [Streamlit]](https://github.com/Undertone0809/pne-playground-model-comparison)
 - [gcop:Your git AI copilot, based on promptulate](https://github.com/Undertone0809/gcop)
 
-## 🛠 Quick Start
+## 🛠Quick Start
 
 - Open the terminal and enter the following command to install the framework:
 
@@ -303,14 +303,14 @@ plans = planner.run("Plan a trip to Paris")
 print(plans)
 ```
 
-<output data-lang="output">
+```python
 ('goals', ['Plan a trip to Paris'])
 
 ('tasks', [Task(task_id=1, description='Check passport validity', status=<TaskStatus.TODO: 'todo'>), Task(task_id=2, description='Determine travel dates', status=<TaskStatus.TODO: 'todo'>), Task(task_id=3, description='Research and book flights', status=<TaskStatus.TODO: 'todo'>), Task(task_id=4, description='Book accommodations', status=<TaskStatus.TODO: 'todo'>), Task(task_id=5, description='Plan itinerary for the trip', status=<TaskStatus.TODO: 'todo'>), Task(task_id=6, description='Investigate and purchase travel insurance', status=<TaskStatus.TODO: 'todo'>), Task(task_id=7, description='Set a budget for the trip', status=<TaskStatus.TODO: 'todo'>), Task(task_id=8, description='Pack luggage', status=<TaskStatus.TODO: 'todo'>), Task(task_id=9, description='Notify bank of international travel', status=<TaskStatus.TODO: 'todo'>), Task(task_id=10, description='Check weather forecast and pack accordingly', status=<TaskStatus.TODO: 'todo'>)])
 
 ('next_task_id', 1)
 
-</output>
+```
 
 For more detailed information, please check the [Getting Started/Official Documentation](https://undertone0809.github.io/promptulate/#/).
 

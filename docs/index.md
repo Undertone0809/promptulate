@@ -4,22 +4,28 @@ layout: home
 
 hero:
   name: "Promptulate"
-  text: "🚀Lightweight Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way!"
-  tagline: My great project tagline
+  text: "🚀Lightweight AI Native development framework."
+  tagline: Build your LLM Agent Application in a pythonic way.
+  image:
+    src: images/logo.png
+    alt: Promptulate
   actions:
     - theme: brand
-      text: Markdown Examples
+      text: What's pne
       link: /markdown-examples
     - theme: alt
-      text: API Examples
+      text: Quick Start
       link: /api-examples
+    - theme: alt
+      text: Github
+      link: https://github.com/undertone0809/promptulate
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: 📖 Easy to learn
+    details: Consolidates all capabilities into a single, intuitive function, making it effortless to grasp and implement complex AI functionalities.
+  - title: 🚀 Fast to code
+    details: Employs straightforward logic and clear syntax, enabling rapid development and easy comprehension for efficient AI application building.
+  - title: 🧰 Ready for production
+    details: Offers seamless compatibility with popular language models and provides a comprehensive suite of production-ready components for robust, scalable AI solutions.
 ---
 

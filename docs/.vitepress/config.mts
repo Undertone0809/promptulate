@@ -6,6 +6,9 @@ export default defineConfig({
   description: "🚀Lightweight Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way!",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
+    search: {
+      provider: 'local'
+    },
     nav: [
       { text: 'Guide', link: '/get_started/intro' },
       { text: 'Use cases', link: '/use_cases/intro' }
@@ -62,10 +65,14 @@ export default defineConfig({
         ]
       }
     ],
-
     socialLinks: [
       { icon: 'github', link: 'https://github.com/undertone0809/promptulate' },
       { icon: 'twitter', link: 'https://x.com/kfhedRk3lXofRIB' }
-    ]
+    ],
+    footer: {
+      message: 'Released under the Apache 2.0 License.',
+      copyright: 'Copyright © 2023-present Zeeland'
+    }
+
   }
 })
