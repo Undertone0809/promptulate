@@ -126,7 +126,9 @@ if __name__ == "__main__":
 
 ## Output effect
 ```shell
-cd path:/mem0 # Switch to your mem0 project directory 
+# Switch to your mem0 project directory
+cd path/to/project-directory
+ 
 streamlit run app.py
 ```
 
