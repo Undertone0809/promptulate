@@ -4,6 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Promptulate",
   description: "🚀Lightweight Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way!",
+  head: [['link', { rel: 'icon', href: '/images/logo.ico' }]],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     search: {

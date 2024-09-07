@@ -44,6 +44,20 @@
  * -------------------------------------------------------------------------- */
 
  :root {
+  --vp-c-bg: #f0efea;
+  --vp-c-bg-alt: #fafaf8;
+  --vp-c-bg-elv: #ffffff;
+  --vp-c-bg-soft: #ffffff;
+}
+
+.dark {
+  --vp-c-bg: #2b2a27;
+  --vp-c-bg-alt: #393937;
+  --vp-c-bg-elv: #1c1c19;
+  --vp-c-bg-soft: #383735;
+}
+
+ :root {
   --vp-c-default-1: var(--vp-c-gray-1);
   --vp-c-default-2: var(--vp-c-gray-2);
   --vp-c-default-3: var(--vp-c-gray-3);
