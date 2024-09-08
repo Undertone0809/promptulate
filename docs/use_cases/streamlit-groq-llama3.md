@@ -5,6 +5,12 @@ For the application frontend, there will be using streamlit, an easy-to-use open
 
 You see try the live demo [here](https://pne-groq-chatbot.streamlit.app/) or see the code [here](https://github.com/Undertone0809/promptulate/tree/main/example/streamlit-groq-llama3-chatbot).
 
+<script setup>
+import IFrame from '/components/iframe.vue'
+</script>
+
+<IFrame src="https://pne-groq-chatbot.streamlit.app/?embed=true" />
+
 ## Environment Setup
 
 We can start off by creating a new conda environment with python=3.11:`conda create -n streamlit_groq_chatbot python=3.11`

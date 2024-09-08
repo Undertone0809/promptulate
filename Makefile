@@ -32,7 +32,7 @@ install-integration:
 	poetry install --with dev,test_integration
 
 install-docs:
-	npm i docsify-cli -g
+	cd docs && pnpm i
 
 pre-commit-install:
 	poetry run pre-commit install
@@ -70,7 +70,7 @@ build-docs:
 
 
 start-docs:
-	docsify serve docs
+	cd docs && npm run docs:dev
 
 #* Cleaning
 pycache-remove:

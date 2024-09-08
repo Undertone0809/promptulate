@@ -1,6 +1,8 @@
 # LLMFactory
 
-> We recommend use pne.chat() to create your LLM application after v1.16.0. pne.ChatOpenAI, pne.ZhipuAI and pne.Qianfan... will be deprecated in the future. Now we use LLMFactory to create any LLM.
+::: info
+We recommend use pne.chat() to create your LLM application after v1.16.0. pne.ChatOpenAI, pne.ZhipuAI and pne.Qianfan... will be deprecated in the future. Now we use LLMFactory to create any LLM.
+:::
 
 ## Features
 

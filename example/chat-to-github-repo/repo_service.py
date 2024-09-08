@@ -36,7 +36,7 @@ def convert_ipynb_to_text(ipynb_content):
                         text += "".join(output["data"].get("text/plain", "")) + "\n"
                     elif output["output_type"] == "error":
                         text += "".join(output["traceback"]) + "\n"
-                text += "</output>\n\n"
+                text += "```\n\n"
 
     return text.strip()
 
