@@ -12,10 +12,10 @@ hero:
   actions:
     - theme: brand
       text: What's pne
-      link: /markdown-examples
+      link: /get_started/intro
     - theme: alt
       text: Quick Start
-      link: /api-examples
+      link: /get_started/quick_start
     - theme: alt
       text: Github
       link: https://github.com/undertone0809/promptulate

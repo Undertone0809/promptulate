@@ -14,7 +14,9 @@ export default defineConfig({
       { text: 'Guide', link: '/get_started/intro' },
       { text: 'Use cases', link: '/use_cases/intro' }
     ],
-
+    outline: {
+      level: [2, 3],
+    },
     sidebar: [
       {
         text: 'Get started',
@@ -40,19 +42,43 @@ export default defineConfig({
       {
         text: 'Modules',
         items: [
-          { text: 'Agent', link: '/modules/agent' },
-          { text: 'LLMs', link: '/modules/llm/llm' },
-          { text: 'Tool', link: '/modules/tools/index' },
-          { text: 'Format Output', link: '/modules/formatter' },
+          {
+            text: 'Agent',
+            link: '/modules/agent',
+            items: [
+              { text: 'Assistant Agent', link: '/modules/agents/assistant_agent_usage' }
+            ]
+          },
+          {
+            text: 'LLMs',
+            link: '/modules/llm/llm',
+            items: [
+              { text: 'LLM Factory', link: '/modules/llm/llm-factory-usage' },
+              { text: 'Custom LLM', link: '/modules/llm/custom_llm' },
+              { text: 'OpenAI', link: '/modules/llm/openai' },
+              { text: 'Erniebot 百度文心', link: '/modules/llm/erniebot' },
+              { text: 'GLM 智谱AI', link: '/modules/llm/zhipu' }
+            ]
+          },
+          {
+            text: 'Tool',
+            link: '/modules/tools/index',
+            items: [
+              { text: 'Custom Tool', link: '/modules/tools/custom_tool_usage' },
+              { text: 'LangChain Tool Usage', link: '/modules/tools/langchain_tool_usage' }
+            ]
+          },
+          { text: 'Structured Output', link: '/modules/formatter' },
           { text: 'Hook & Lifecycle', link: '/modules/hook' },
           { text: 'Memory', link: '/modules/memory' },
-          { text: 'Provider', link: '/modules/provider' },
+          // { text: 'Provider', link: '/modules/provider' },
           { text: 'Client', link: '/modules/client' },
           { text: 'String Template', link: '/modules/other/string_template' },
           { text: 'Schema', link: '/modules/schema' },
           // { text: 'Framework', link: '/modules/framework' },
           // { text: 'Preset', link: '/modules/preset' }
-        ]
+        ],
+        collapsed: true,
       },
       {
         text: 'Other',

@@ -4,5 +4,5 @@ When you run promptulate components, all the logs are stored in a log folder. Pr
 
 You can find the logs in the following path:
 
-- windows: /Users/username/.pne/logs
-- linux: /home/username/.pne/logs
+- windows: /Users/username/.zeeland/pne/logs
+- linux: /home/username/.zeeland/pne/logs

@@ -1,9 +1,10 @@
 # LLM
 
-> Attention:
-> 1. pne will separate the meaning of LLM from llm, LLM stands for large language model, llm stands for llm module in 'promptulate'.
-> 2. Starting with v1.11.0, we recommend that you use  [pne.chat()](use_cases/chat_usage.md#chat)  for LLM calls.
-> 3. Starting from v1.16.0, the concept of llm is no longer used, and all functions of LLM can be replaced by  [pne.chat()](use_cases/chat_usage.md#chat). Only when you need to customize the model, You need to learn how to use [Custom LLM](modules/llm/custom_llm.md#custom-llm) and [LLMFactory](modules/llm/llm-factory-usage#LLMFactory).
+::: info
+1. pne will separate the meaning of LLM from llm, LLM stands for large language model, llm stands for llm module in 'promptulate'.
+2. Starting with v1.11.0, we recommend that you use  [pne.chat()](use_cases/chat_usage.md#chat)  for LLM calls.
+3. Starting from v1.16.0, the concept of llm is no longer used, and all functions of LLM can be replaced by  [pne.chat()](use_cases/chat_usage.md#chat). Only when you need to customize the model, You need to learn how to use [Custom LLM](modules/llm/custom_llm.md#custom-llm) and [LLMFactory](modules/llm/llm-factory-usage#LLMFactory).
+:::
 
 ## Introduction
 

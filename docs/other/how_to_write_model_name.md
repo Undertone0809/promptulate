@@ -38,7 +38,7 @@ response = pne.chat(
 print(response)
 ```
 
-## Claude
+## Create Claude model
 
 ```python
 import pne
@@ -50,7 +50,7 @@ response = pne.chat(
 print(response)
 ```
 
-## Create ollama
+## Create ollama model
 
 ```python
 import pne
@@ -111,5 +111,4 @@ response = pne.chat(
     model_config={"api_base": "https://my-endpoint.huggingface.cloud"}
 )
 ```
-
-## Zhipu
+    

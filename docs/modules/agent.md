@@ -1,10 +1,10 @@
 # Agent
 
-Agent是`promptulate`的核心组件之一，其核心思想是使用llm、Tool、Memory、Provider,Output Formatter等组件来构建起的一个可以处理复杂能力的代理。
+The Agent is one of the core components of `promptulate`, its core idea is to build a proxy that can handle complex capabilities using components such as llm, Tool, Memory, Provider, and Output Formatter.
 
 ## ToolAgent
 
-下面的示例展示了如何使用`ToolAgent`结合Tool进行使用。
+The following example demonstrates how to use `ToolAgent` in conjunction with Tool.
 
 ```python
 import promptulate as pne
@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
 ```
 
-运行结果如下：
+The output is as follows:
 
 <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230828030207.png"/>
 
@@ -43,7 +43,7 @@ Agent Start...
 Agent End.
 ```
 
-Agent默认使用OpenAI的`gpt-3.5-turbo-16k`模型，如果你想要切换为其他模型，你可以使用如下方式进行配置：
+If you want to switch to another model, you can configure it as follows using the latest `pne.LLMFactory` usage:
 
 ```python
 import promptulate as pne
@@ -51,28 +51,26 @@ from promptulate.tools import DuckDuckGoTool, Calculator
 
 
 def main():
-    llm = pne.llms.ErnieBot(temperature=0.1)
+    model = pne.LLMFactory.build(model_name="deepseek/deepseek", model_config={"temperature": 0.1})
     tools = [
         DuckDuckGoTool(),
         Calculator(),
     ]
-    agent = pne.ToolAgent(tools=tools,llm=llm)
+    agent = pne.ToolAgent(tools=tools, llm=model)
     prompt = """Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?"""
     agent.run(prompt)
 
 
 if __name__ == "__main__":
     main()
-```
 
 ## Tool
 
-关于Tool的使用以及Promptulate兼容的工具，详情请查看[Tool 外部工具扩展](modules/tools.md#简介)
+For more information on using Tool and compatible tools with Promptulate, please refer to [Tool External Tool Extension](modules/tools.md#简介)
 
+## Other
 
-## 其他
-
-控制台带有颜色输出的内容由`StdOutHook`驱动，你可以使用如下方式关闭：
+The console output with color is driven by `StdOutHook`, which can be disabled as follows:
 
 ```python
 from promptulate.config import turn_off_stdout_hook
@@ -80,13 +78,11 @@ from promptulate.config import turn_off_stdout_hook
 turn_off_stdout_hook()
 ```
 
-如果你想要定制自己的独特Print或者对关键步骤进行逻辑处理，跳转 [Hook的使用](modules/hook.md#what-is-hook)
-
-
+If you want to customize your own unique print or handle key steps logically, jump to [Hook Usage](modules/hook.md#what-is-hook)
 
 ## WebAgent
 
-promptulate封装的WebAgent可以让你轻松的访问搜索引擎，并查询相关的数据，下面展示其使用方式：
+The WebAgent encapsulated by `promptulate` allows you to easily access search engines and query related data. The following demonstrates its usage:
 
 ```python
 import promptulate as pne
@@ -102,14 +98,13 @@ if __name__ == "__main__":
 
 ```
 
-输出结果如下所示：
+The output is as follows:
 
 ![](../images/agent_webagent_output.png)
 
+## Custom Agent
 
-## 自定义Agent
-
-通过如下方式可以自定义Agent，Agent的自定义自由度较高，继承BaseAgent你可以得到Hook相关生命周期，让你的自定义Agent天然具有AgentHook的生命周期，下面的示例展示了一个简单的自定义Agent:
+You can customize an Agent as follows, which has a high degree of freedom. By inheriting `BaseAgent`, you can get the Hook lifecycle, making your custom Agent naturally have the AgentHook lifecycle. The following example demonstrates a simple custom Agent:
 
 ```python
 import promptulate as pne
@@ -129,17 +124,17 @@ class CustomAgent(pne.BaseAgent):
 def main():
     llm = pne.ChatOpenAI()
     agent = CustomAgent(llm=llm)
-    agent.run("引力波的放射与广义相对论的必然关系")
+    agent.run("The inevitable relationship between gravitational wave radiation and general relativity")
 
 
 if __name__ == "__main__":
     main()
 ```
 
-在继承 BaseAgent 之后，还需要实现 get_llm() 和 _run() 方法，其中 get_llm() 方法返回一个 LLM 对象，_run() 方法接收一个 prompt 字符串，为 agent.run() 运行时用户输入的 prompt，返回值为最终 Agent 输出给用户的结果。
+Inheriting `BaseAgent` requires implementing the `get_llm()` and `_run()` methods. The `get_llm()` method returns an LLM object, and the `_run()` method receives a prompt string, which is the user's input prompt for `agent.run()`, and returns the final result output by the Agent to the user.
 
-运行结果如下：
+The output is as follows:
 
 ![](../images/agent_custom_agent_output.png)
 
-> 在实际项目中，你可以根据自己的业务需要随意的扩展Agent的能力与边界。
+> In actual projects, you can freely extend the capabilities and boundaries of the Agent according to your business needs.

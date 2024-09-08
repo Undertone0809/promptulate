@@ -37,9 +37,9 @@ os.environ["OPENAI_API_KEY"] = "your-api-key"
 response: str = pne.chat(messages="What is the capital of China?", model="gpt-4-turbo")
 ```
 
-<output data-lang="output">
+```python
 Beijing
-</output>
+```
 
 It's easy, right?
 
@@ -75,10 +75,10 @@ response: LLMResponse = pne.chat(
 print(response.provinces)
 ```
 
-<output data-lang="output">
+```python
 ['Anhui', 'Fujian', 'Gansu', 'Guangdong', 'Guizhou', 'Hainan', 'Hebei', 'Heilongjiang', 'Henan', 'Hubei', 'Hunan', 'Jiangsu', 'Jiangxi', 'Jilin', 'Liaoning', 'Qinghai', 'Shaanxi', 'Shandong', 'Shanxi', 'Sichuan', 'Yunnan', 'Zhejiang', 'Taiwan', 'Guangxi', 'Nei Mongol', 'Ningxia', 'Xinjiang', 'Xizang', 'Beijing', 'Chongqing', 'Shanghai', 'Tianjin', 'Hong Kong', 'Macao']
 
-</output>
+```
 
 ### 2.3 Support for third-party models
 
@@ -152,9 +152,9 @@ resp: str = pne.chat(model="gpt-4-1106-preview", messages = [{ "content": "What 
 
 In this example, pne internally integrates the [ReAct](https://arxiv.org/abs/2210.03629) research with reasoning and reflection capabilities, encapsulated as ToolAgent, which has powerful reasoning and tool invocation capabilities. It can choose appropriate tools to call, thereby obtaining more accurate results.
 
-<output data-lang="output">
+```python
 The temperature tomorrow in Shanghai is expected to be 23°C.
-</output>
+```
 
 Furthermore, influenced by the [Plan-and-Solve](https://arxiv.org/abs/2305.04091) paper, pne also allows developers to build Agents with the ability to plan, reason, and act to handle complex problems. Through the enable_plan parameter, you can enable the Agent's planning capability.
 
@@ -184,7 +184,7 @@ pne.chat("what is the hometown of the 2024 Australia open winner?", model="gpt-4
 ```
 
 
-<output data-lang="output">
+```python
 [Agent] Assistant Agent start...
 
 [User instruction] what is the hometown of the 2024 Australia open winner?
@@ -227,7 +227,7 @@ pne.chat("what is the hometown of the 2024 Australia open winner?", model="gpt-4
 
 [Agent] Agent End.
 
-</output>
+```
 
 ### Client
 
@@ -294,7 +294,7 @@ The running result is as follows:
 
 <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230828030207.png"/>
 
-<output data-lang="output">
+```python
 Agent Start...
 
 [user] Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?
@@ -315,7 +315,7 @@ Agent Start...
 
 Agent End.
 
-</output>
+```
 
 To integrate a variety of external tools, including web search, calculators, and more, into your Python application, you can use the promptulate library alongside langchain. The langchain library allows you to build a ToolAgent with a collection of tools, such as an image generator based on OpenAI's DALL-E model. 
 
@@ -332,10 +332,10 @@ agent = pne.ToolAgent(tools=tools)
 output = agent.run("Create an image of a halloween night at a haunted museum")
 ```
 
-<output data-lang="output">
+```python
 Here is the generated image: [![Halloween Night at a Haunted Museum](https://oaidalleapiprodscus.blob.core.windows.net/private/org-OyRC1wqD0EP6oWMS2n4kZgVi/user-JWA0mHqDqYh3oPpQtXbWUPgu/img-SH09tWkWZLJVltxifLi6jFy7.png)]
 
-</output>
+```
 
 ![Halloween Night at a Haunted Museum](./docs/images/dall-e-gen.png)
 
@@ -362,10 +362,10 @@ response: LLMResponse = pne.chat(
 print(response.provinces)
 ```
 
-<output data-lang="output">
+```python
 ['Anhui', 'Fujian', 'Gansu', 'Guangdong', 'Guizhou', 'Hainan', 'Hebei', 'Heilongjiang', 'Henan', 'Hubei', 'Hunan', 'Jiangsu', 'Jiangxi', 'Jilin', 'Liaoning', 'Qinghai', 'Shaanxi', 'Shandong', 'Shanxi', 'Sichuan', 'Yunnan', 'Zhejiang', 'Taiwan', 'Guangxi', 'Nei Mongol', 'Ningxia', 'Xinjiang', 'Xizang', 'Beijing', 'Chongqing', 'Shanghai', 'Tianjin', 'Hong Kong', 'Macao']
 
-</output>
+```
 
 
 For Agent, you can use the `output_schema` parameter to specify the output schema. The following example demonstrates the best practice of using formatted output in WebAgent:

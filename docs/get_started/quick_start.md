@@ -1,14 +1,16 @@
 # Quick Start
 
-Through this section of the tutorial, you can quickly get a comprehensive understanding of Promptulate, learn the basic usage of some commonly used modules. 
+Through this section of the tutorial, you can quickly get a comprehensive understanding of Promptulate, learn the basic usage of some commonly used modules.
 
 After reading this section, you can continue to read [Use Cases](/use_cases/intro.md#use-cases) and [example](https://github.com/Undertone0809/promptulate/tree/main/example) to learn some best practices for promptulate, to see how each module is used in case of a problem, Also welcome you in [issue](https://github.com/Undertone0809/promptulate/issues) for promptulate provide better advice.
 
 ## 1. Installation
 
-Open a terminal and enter the following command to download the latest version of `promptulate`. `-U` means to update to the latest version. 
+Open a terminal and enter the following command to download the latest version of `promptulate`. `-U` means to update to the latest version.
 
-> If you have already downloaded the old version of `promptulate`, executing this command will update to the latest version. `promptulate` is currently in a rapid development stage, so you may need to update to the latest version frequently to enjoy the latest results.
+::: info
+If you have already downloaded the old version of `promptulate`, executing this command will update to the latest version. `promptulate` is currently in a rapid development stage, so you may need to update to the latest version frequently to enjoy the latest results.
+:::
 
 ```shell script
 pip install -U pne
@@ -37,9 +39,9 @@ os.environ["OPENAI_API_KEY"] = "your-api-key"
 response: str = pne.chat(messages="What is the capital of China?", model="gpt-4-turbo")
 ```
 
-<output data-lang="output">
+```python
 Beijing
-</output>
+```
 
 It's easy, right?
 
@@ -57,7 +59,7 @@ OPENAI_API_KEY=sk-xxx
 
 The output of LLM has strong uncertainty. Pne provide the ability to get a structured object by LLM. The following example shows that if LLM strictly returns you an array listing all provinces in China. Here we use Pydantic to build a structured object.
 
-```python
+```python{6-7}
 from typing import List
 import promptulate as pne
 from pydantic import BaseModel, Field
@@ -75,10 +77,12 @@ response: LLMResponse = pne.chat(
 print(response.provinces)
 ```
 
-<output data-lang="output">
+Output as follows, you will get a list.
+
+```python
 ['Anhui', 'Fujian', 'Gansu', 'Guangdong', 'Guizhou', 'Hainan', 'Hebei', 'Heilongjiang', 'Henan', 'Hubei', 'Hunan', 'Jiangsu', 'Jiangxi', 'Jilin', 'Liaoning', 'Qinghai', 'Shaanxi', 'Shandong', 'Shanxi', 'Sichuan', 'Yunnan', 'Zhejiang', 'Taiwan', 'Guangxi', 'Nei Mongol', 'Ningxia', 'Xinjiang', 'Xizang', 'Beijing', 'Chongqing', 'Shanghai', 'Tianjin', 'Hong Kong', 'Macao']
 
-</output>
+```
 
 ### 2.3 Support for third-party models
 
@@ -86,7 +90,7 @@ You may wonder how to use `pne.chat()` to chat with other models, such as cohere
 
 Promptulate integrates the capabilities of [litellm](https://github.com/BerriAI/litellm), supporting nearly all types of large models on the market, including but not limited to the following models:
 
-| Provider                                                                            | [Completion](https://docs.litellm.ai/docs/#basic-usage) | [Streaming](https://docs.litellm.ai/docs/completion/stream#streaming-responses)  | [Async Completion](https://docs.litellm.ai/docs/completion/stream#async-completion)  | [Async Streaming](https://docs.litellm.ai/docs/completion/stream#async-streaming)  | [Async Embedding](https://docs.litellm.ai/docs/embedding/supported_embedding)  | [Async Image Generation](https://docs.litellm.ai/docs/image_generation)  | 
+| Provider                                                                            | [Completion](https://docs.litellm.ai/docs/#basic-usage) | [Streaming](https://docs.litellm.ai/docs/completion/stream#streaming-responses)  | [Async Completion](https://docs.litellm.ai/docs/completion/stream#async-completion)  | [Async Streaming](https://docs.litellm.ai/docs/completion/stream#async-streaming)  | [Async Embedding](https://docs.litellm.ai/docs/embedding/supported_embedding)  | [Async Image Generation](https://docs.litellm.ai/docs/image_generation)  |
 |-------------------------------------------------------------------------------------| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
 | [openai](https://docs.litellm.ai/docs/providers/openai)                             | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | [azure](https://docs.litellm.ai/docs/providers/azure)                               | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -134,8 +138,7 @@ For more models, please visit the [litellm documentation](https://docs.litellm.a
 
 You can easily build any third-party model calls using the following method:
 
-
-### Using tools
+### 2.4 Using tools
 
 In pne, you can easily integrate various types of tools from different frameworks (such as LangChain, llama-index) as external tools, such as web search, calculators, etc. In the example below, we use LangChain's duckduckgo search tool to get tomorrow's weather in Shanghai.
 
@@ -152,9 +155,9 @@ resp: str = pne.chat(model="gpt-4-1106-preview", messages = [{ "content": "What 
 
 In this example, pne internally integrates the [ReAct](https://arxiv.org/abs/2210.03629) research with reasoning and reflection capabilities, encapsulated as ToolAgent, which has powerful reasoning and tool invocation capabilities. It can choose appropriate tools to call, thereby obtaining more accurate results.
 
-<output data-lang="output">
+```python
 The temperature tomorrow in Shanghai is expected to be 23°C.
-</output>
+```
 
 Furthermore, influenced by the [Plan-and-Solve](https://arxiv.org/abs/2305.04091) paper, pne also allows developers to build Agents with the ability to plan, reason, and act to handle complex problems. Through the enable_plan parameter, you can enable the Agent's planning capability.
 
@@ -183,8 +186,7 @@ import promptulate as pne
 pne.chat("what is the hometown of the 2024 Australia open winner?", model="gpt-4-1106-preview", enable_plan=True)
 ```
 
-
-<output data-lang="output">
+```python
 [Agent] Assistant Agent start...
 
 [User instruction] what is the hometown of the 2024 Australia open winner?
@@ -227,9 +229,9 @@ pne.chat("what is the hometown of the 2024 Australia open winner?", model="gpt-4
 
 [Agent] Agent End.
 
-</output>
+```
 
-### Client
+### 2.5 Client
 
 `promptulate` provides a simple terminal for large language model conversations. After installing `promptulate`, you can easily use this simple terminal for some conversations, including:
 
@@ -261,7 +263,7 @@ What's the temperature in Shanghai tomorrow?
  at 89 °F. Sun protection is strongly recommended as the UV index will be 8.
 ```
 
-### Agent
+### 2.6 Agent
 
 Agent is one of the core components of `promptulate`. Its core idea is to build a proxy that can handle complex capabilities using components such as llm, Tool, Memory, Provider, Output Formatter, etc.
 
@@ -294,7 +296,7 @@ The running result is as follows:
 
 <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20230828030207.png"/>
 
-<output data-lang="output">
+```python
 Agent Start...
 
 [user] Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?
@@ -315,9 +317,9 @@ Agent Start...
 
 Agent End.
 
-</output>
+```
 
-To integrate a variety of external tools, including web search, calculators, and more, into your Python application, you can use the promptulate library alongside langchain. The langchain library allows you to build a ToolAgent with a collection of tools, such as an image generator based on OpenAI's DALL-E model. 
+To integrate a variety of external tools, including web search, calculators, and more, into your Python application, you can use the promptulate library alongside langchain. The langchain library allows you to build a ToolAgent with a collection of tools, such as an image generator based on OpenAI's DALL-E model.
 
 Below is an example of how to use the promptulate and langchain libraries to create an image from a text description:
 
@@ -332,17 +334,16 @@ agent = pne.ToolAgent(tools=tools)
 output = agent.run("Create an image of a halloween night at a haunted museum")
 ```
 
-<output data-lang="output">
+```python
 Here is the generated image: [![Halloween Night at a Haunted Museum](https://oaidalleapiprodscus.blob.core.windows.net/private/org-OyRC1wqD0EP6oWMS2n4kZgVi/user-JWA0mHqDqYh3oPpQtXbWUPgu/img-SH09tWkWZLJVltxifLi6jFy7.png)]
 
-</output>
+```
 
 ![Halloween Night at a Haunted Museum](./docs/images/dall-e-gen.png)
 
-### Structured Output
+### 2.7 Structured Output
 
 The output of LLM has strong uncertainty. Pne provide the ability to get a structured object by LLM. The following example shows that if LLM strictly returns you an array listing all provinces in China. Here we use Pydantic to build a structured object.
-
 
 ```python
 from typing import List
@@ -362,11 +363,10 @@ response: LLMResponse = pne.chat(
 print(response.provinces)
 ```
 
-<output data-lang="output">
+```python
 ['Anhui', 'Fujian', 'Gansu', 'Guangdong', 'Guizhou', 'Hainan', 'Hebei', 'Heilongjiang', 'Henan', 'Hubei', 'Hunan', 'Jiangsu', 'Jiangxi', 'Jilin', 'Liaoning', 'Qinghai', 'Shaanxi', 'Shandong', 'Shanxi', 'Sichuan', 'Yunnan', 'Zhejiang', 'Taiwan', 'Guangxi', 'Nei Mongol', 'Ningxia', 'Xinjiang', 'Xizang', 'Beijing', 'Chongqing', 'Shanghai', 'Tianjin', 'Hong Kong', 'Macao']
 
-</output>
-
+```
 
 For Agent, you can use the `output_schema` parameter to specify the output schema. The following example demonstrates the best practice of using formatted output in WebAgent:
 
@@ -398,13 +398,13 @@ if __name__ == "__main__":
 > You can go to [here](/other/contribution.md#contributing-to-promptulate) to see the detail.
 
 **Environment Requirements**
+
 - Python >= 3.8
 - make
 
 > This project uses make to build project supporting facilities, easily integrating running test, lint and other modules through the capability of makefile. Please make sure your computer has installed make.
-> 
+>
 > [how to install and use make in windows?](https://stackoverflow.com/questions/32127524/how-to-install-and-use-make-in-windows)
-
 
 Run the following command:
 

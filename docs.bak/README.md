@@ -211,9 +211,9 @@ resp: LLMResponse = pne.chat("Please tell me all provinces in China.", output_sc
 print(resp)
 ```
 
-<output data-lang="output">
+```python
 provinces=['Anhui', 'Fujian', 'Gansu', 'Guangdong', 'Guizhou', 'Hainan', 'Hebei', 'Heilongjiang', 'Henan', 'Hubei', 'Hunan', 'Jiangsu', 'Jiangxi', 'Jilin', 'Liaoning', 'Qinghai', 'Shaanxi', 'Shandong', 'Shanxi', 'Sichuan', 'Yunnan', 'Zhejiang', 'Taiwan', 'Guangxi', 'Nei Mongol', 'Ningxia', 'Xinjiang', 'Xizang', 'Beijing', 'Chongqing', 'Shanghai', 'Tianjin', 'Hong Kong', 'Macao']
-</output>
+```
 
 ### Agent with Plan, Tool-Using and Reflection
 
@@ -244,7 +244,7 @@ import promptulate as pne
 pne.chat("what is the hometown of the 2024 Australia open winner?", model="gpt-4-1106-preview", enable_plan=True)
 ```
 
-<output data-lang="output">
+```python
 [Agent] Assistant Agent start...
 
 [User instruction] what is the hometown of the 2024 Australia open winner?
@@ -288,7 +288,7 @@ pne.chat("what is the hometown of the 2024 Australia open winner?", model="gpt-4
 
 [Agent] Agent End.
 
-</output>
+```
 
 ### Atomize the Agent structure
 
@@ -303,14 +303,14 @@ plans = planner.run("Plan a trip to Paris")
 print(plans)
 ```
 
-<output data-lang="output">
+```python
 ('goals', ['Plan a trip to Paris'])
 
 ('tasks', [Task(task_id=1, description='Check passport validity', status=<TaskStatus.TODO: 'todo'>), Task(task_id=2, description='Determine travel dates', status=<TaskStatus.TODO: 'todo'>), Task(task_id=3, description='Research and book flights', status=<TaskStatus.TODO: 'todo'>), Task(task_id=4, description='Book accommodations', status=<TaskStatus.TODO: 'todo'>), Task(task_id=5, description='Plan itinerary for the trip', status=<TaskStatus.TODO: 'todo'>), Task(task_id=6, description='Investigate and purchase travel insurance', status=<TaskStatus.TODO: 'todo'>), Task(task_id=7, description='Set a budget for the trip', status=<TaskStatus.TODO: 'todo'>), Task(task_id=8, description='Pack luggage', status=<TaskStatus.TODO: 'todo'>), Task(task_id=9, description='Notify bank of international travel', status=<TaskStatus.TODO: 'todo'>), Task(task_id=10, description='Check weather forecast and pack accordingly', status=<TaskStatus.TODO: 'todo'>)])
 
 ('next_task_id', 1)
 
-</output>
+```
 
 For more detailed information, please check the [Getting Started/Official Documentation](https://undertone0809.github.io/promptulate/#/).
 

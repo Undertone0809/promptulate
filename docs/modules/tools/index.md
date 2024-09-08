@@ -1,38 +1,35 @@
 # Tool
 
-## 简介
+The tools module provides LLM with the ability to extend external tools, which can be said to be the first step towards intelligence. Through tools, a perception feedback system can be built for LLM, providing more possibilities for LLM application development. Currently, Tool only serves Agent for pairing use. This article will introduce the external tools currently supported by `promptulate`, as well as the basic usage of external tools and toolkits, and finally introduce some toolkits that are currently under development.
 
-tools模块为LLM提供了调用外部工具扩展的能力，可以说tools是走向智能化的第一步，通过tools来为LLM构建一套感知反馈系统，可以为LLM应用开发提供更多的可能性，当前，Tool只服务于Agent进行搭配使用。本文将会介绍`promptulate`当前支持的外部工具，以及外部工具、工具套件的基本使用方式，最后还会介绍当前正在开发的一些工具套件。
+## Supported Tools
 
-## 支持的工具
+Currently, `promptulate` has integrated the following tools:
 
-当前`promptulate`支持以下工具：
+- DuckDuckGo Search: DDG search engine
+- Calculator: calculator
+- Shell: can execute shell commands (compatible with Windows, Mac, and Linux operating systems)
+- LangchainTool: ported Langchain-related tools, can be perfectly compatible for use
+- HuggingFaceTool: HuggingFace-related tools, can be perfectly compatible for use
+- IotSwitchMqtt: iot tool, can send mqtt messages to iot devices
+- HumanFeedBackTool: introduces human feedback at appropriate times
+- Arxiv: Arxiv paper search tool
+- Semantic Scholar: Semantic Scholar paper search tool, can search papers, query paper references, and query papers citing this paper
+- Python REPL: can execute python scripts
+- FileManager: can perform file read and write operations
+- Sleep: can pause, which is very helpful for users who need time control in the agent to control the time interval of event execution
 
-- DuckDuckGo Search: DDG搜索引擎
-- Calculator: 计算器
-- Shell: 可以执行shell命令（适配windows，mac和linux操作系统）
-- LangchainTool: 移植Langchain相关的工具，可以完美兼容引入使用
-- HuggingFaceTool: HuggingFace相关的工具，可以完美兼容引入使用
-- IotSwitchMqtt: iot工具，可以发送mqtt信息到iot设备
-- HumanFeedBackTool: 在适当的时候引入人类反馈
-- Arxiv: Arxiv论文检索工具
-- Semantic Scholar: Semantic Scholar论文检索工具，可以检索论文、查询论文参考文献、查询引用该论文的文献
-- Python REPL: 可以执行python脚本
-- FileManager: 可以进行文件读写
-- Sleep: 可以进行暂停，以便在agent中控制事件执行的时间间隔，这对有时间控制需求的用户很有帮助
+## Using Tool in Agent
 
-
-## 在Agent中使用Tool
-
-Tool模块的主要作用就是为Agent提供tool能力支持，详情查看[Agent](modules/agent.md#agent)
+The primary function of the Tool module is to provide tool capability support for Agent, see details in [Agent](/modules/agent.md#agent).
 
 ## Custom Tool
 
-See detail in [Custom Tool](modules/tools/custom_tool_usage.md#custom-tool)
+See details in [Custom Tool](/modules/tools/custom_tool_usage.md#custom-tool).
 
-## 工具的使用
+## Tool Usage
 
-在大多数情况下，工具用于给Agent使用，而Tool也可以剥离Agent单独进行使用，下面的示例展示了如何使用一个DuckDuckGo进行外部搜索。
+In most cases, tools are used for Agent usage, and Tool can also be separated from Agent for standalone use. The following example demonstrates how to use a DuckDuckGo for external search.
 
 ```python
 from promptulate.tools import DuckDuckGoTool
@@ -41,9 +38,9 @@ tool = DuckDuckGoTool()
 tool.run("what is promptulate?")
 ```
 
-在promptulate中，所有tool都可以使用tool.run()的方式进行运行。
+In promptulate, all tools can be run using the tool.run() method.
 
-此外，相同的导入方式，你还可以导入以下工具：
+Additionally, with the same import method, you can also import the following tools:
 
 ```python
 from promptulate.tools import (
@@ -64,42 +61,31 @@ from promptulate.tools import (
 )
 ```
 
-所有的工具都继承`Tool`，因此你可以使用`tool.run(prompt)`的方式进行调用。
+All tools inherit from `Tool`, so you can use the `tool.run(prompt)` method to call them.
 
-## Langchain Tool的使用
+## Using LangChain Tool
 
-promptulate兼容langchain所有的tool，并且完美兼容promptulate的hooks系统。 See the detail in [LangChain Tool usage](modules/tools/langchain_tool_usage.md)
+Promptulate is compatible with all LangChain tools and perfectly compatible with Promptulate's hooks system. See the details in [LangChain Tool usage](/modules/tools/langchain_tool_usage.md)
 
-## 有LLM能力的Tool
+## Tools with LLM Capabilities
 
-在`promptulate`中，为了构建更加智能的Agent，一些提供给Agent的Tool也是有大语言模型调用权限的，它们一般有一些简单的能力处理功能。如果你有需要，你可以直接使用这些带有LLM的Tool，下一章节会演示如何使用Tool。
+In Promptulate, some tools provided to the Agent also have the ability to call large language models, which generally have some simple capability processing functions. If you need to, you can directly use these tools with LLM capabilities, and the next section will demonstrate how to use them.
 
-下面是一些有`LLM能力`的Tools：
+Here are some tools with LLM capabilities:
 
-- ArxivSummaryTool: Arxiv论文总结工具，可以提供该论文的摘要、关键见解、经验教训、参考文献、相关建议
-- PaperSummaryTool: 一个强大的论文总结工具，从Semantic Scholar和Arxiv中检索数据，可以提供该论文的摘要、关键见解、经验教训、参考文献、相关建议
-- EnhancedSearchTool: 增强型搜索引擎总结工具，可以同时调用多种搜索引擎进行数据处理。
-- IotSwitchMqtt: 可以智能识别输入的自然语言是否符合控制规则表。
-- Calculator: 计算器，主要用于准确识别分析用户输入
+- ArxivSummaryTool: Arxiv paper summary tool, can provide the paper's summary, key insights, lessons learned, references, and related suggestions
+- PaperSummaryTool: A powerful paper summary tool, retrieves data from Semantic Scholar and Arxiv, can provide the paper's summary, key insights, lessons learned, references, and related suggestions
+- EnhancedSearchTool: Enhanced search engine summary tool, can call multiple search engines for data processing at the same time.
+- IotSwitchMqtt: Can intelligently recognize whether the input natural language conforms to the control rule table.
+- Calculator: Calculator, mainly used for accurate recognition and analysis of user input
 
-## 单独使用Tool
+## Using Tool Independently
 
-如果你想做一些有趣的其他应用，你也可以直接执行该工具。使用`promptulate`执行工具十分简单，对于所有的工具，你都可以使用run()
-方法运行。
+If you want to do some other interesting applications, you can also execute the tool directly. Using Promptulate to execute tools is very simple, and for all tools, you can use the `run()` method to run them.
 
-### 只有基础能力的Tool
+### Basic Capability Tools
 
-下面的示例展示了使用ArxivQueryTool进行Arxiv相关论文的检索。
-
-```python
-from promptulate.tools.arxiv import ArxivQueryTool
-
-tool = ArxivQueryTool()
-result: str = tool.run("LLM")
-print(result)
-```
-
-输出如下:
+The following example demonstrates using ArxivQueryTool to search for Arxiv-related papers.
 
 ```text
 entry_id:http://arxiv.org/abs/2306.05212v1 title:RETA-LLM: A Retrieval-Augmented Large Language Model Toolkit authors:[arxiv.Result.Author('Jiongnan Liu'), arxiv.Result.Author('Jiajie Jin'), arxiv.Result.Author('Zihan Wang'), arxiv.Result.Author('Jiehan Cheng'), arxiv.Result.Author('Zhicheng Dou'), arxiv.Result.Author('Ji-Rong Wen')] summary:Although Large Language Models (LLMs) have demonstrated extraordinary
