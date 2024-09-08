@@ -33,6 +33,7 @@ export default defineConfig({
           { text: 'Awesome chat function', link: '/use_cases/chat_usage' },
           { text: 'Build streamlit chatbot by pne', link: '/use_cases/streamlit-chatbot' },
           { text: 'Build gradio chatbot by pne', link: '/use_cases/gradio-chatbot' },
+          { text: 'Personal Healing Assistant with mem0', link: '/use_cases/mem0-streamlit' },
           { text: 'Build math application with agent', link: '/use_cases/build-math-application-with-agent' },
           { text: 'Groq, llama3, Streamlit to build a application', link: '/use_cases/streamlit-groq-llama3' },
           { text: 'Build knowledge map with streamlit', link: '/use_cases/llmapper' },

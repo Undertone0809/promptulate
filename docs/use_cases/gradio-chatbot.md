@@ -220,8 +220,6 @@ python app.py
 
 This will launch the Gradio app, and you will receive a URL to access the chatbot in your browser.
 
-## Example Screenshot
-
 Here demonstrate the working chatbot interface.
 
 ![image-20240716175616736](.\img\pne.chat()+gradio.png)

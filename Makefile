@@ -32,7 +32,7 @@ install-integration:
 	poetry install --with dev,test_integration
 
 install-docs:
-	cd docs && npm i
+	cd docs && pnpm i
 
 pre-commit-install:
 	poetry run pre-commit install

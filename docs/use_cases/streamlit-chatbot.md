@@ -12,7 +12,9 @@ You see try the live demo at [https://pne-chatbot.streamlit.app/](https://pne-ch
 
 <IFrame src="https://pne-chatbot.streamlit.app/?embed=true" />
 
-## Environment Setup
+## Step-by-Step Implementation
+
+### Environment Setup
 
 Now, let's install all necessary libraries:
 
@@ -20,9 +22,7 @@ Now, let's install all necessary libraries:
 pip install -U pne streamlit
 ```
 
-## Step-by-Step Implementation
-
-### Step 1
+### Create sidebar
 
 Create a `app.py` script and import the necessary dependencies:
 
@@ -30,8 +30,6 @@ Create a `app.py` script and import the necessary dependencies:
 import pne
 import streamlit as st
 ```
-
-### Step 2
 
 Create a sidebar to place the user parameter configuration. Pne has the streamlit model configuration UI built in, you can use it to quickly configure the model use the following code:
 
@@ -99,7 +97,7 @@ def model_sidebar(model_options: List[str] = None) -> ModelConfig:
     return ModelConfig(model_name=selected_model, api_key=api_key, api_base=api_base)
 ```
 
-### Step 3
+### Set page UI
 
 Set page style:
 
@@ -119,8 +117,6 @@ if "messages" not in st.session_state:
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
 ```
-
-### Step 4
 
 Set user input:
 
@@ -146,21 +142,23 @@ if prompt := st.chat_input("How can I help you?"):
     st.session_state.messages.append({"role": "assistant", "content": response})
 ```
 
-## Final Effect
+### Run the application
 
-The running effect is as follows, you can interact with the chatbot:
+Finally, run the following example to startup the application:
+
+```shell
+streamlit run app.py
+```
 
 ![streamlit+pne](./img/streamlit+pne.png)
 
 ## How to write model name?
 
-You can see how to write model name here: [Link](/other/how_to_write_model_name#how-to-write-model-name)
+If you want to custom your model, you can see how to write model names here: [How to write model name?](/other/how_to_write_model_name)
 
 ## Run the demo
 
-There is a `app.py` file under the `streamlit-chatbot` file of `example` in the project folder. You can run the application directly to view the effect and debug the web page.
-
-To run the application, follow the steps below:
+You can see the project [here](https://github.com/Undertone0809/promptulate/tree/main/example/streamlit-chatbot). To run the application, follow the steps below:
 
 - Click [here](https://github.com/Undertone0809/promptulate/fork) to fork the project to your local machine
 - Clone the project locally:
@@ -186,3 +184,5 @@ pip install -r requirements.txt
 ```shell
 streamlit run app.py
 ```
+
+By following these instructions, you can easily set up and run your own chatbot using pne and streamlit. Enjoy building!

@@ -104,7 +104,7 @@ You can also see how to use `pne.chat()` in the [Getting Started/Official Docume
 - [Use streamlit and pne to compare different model a playground. [Streamlit]](https://github.com/Undertone0809/pne-playground-model-comparison)
 - [gcop:Your git AI copilot, based on promptulate](https://github.com/Undertone0809/gcop)
 
-For more detailed information, please check the [Getting Started/Official Documentation](https://undertone0809.github.io/promptulate/#/).
+For more detailed information, please check the [Quick Start](https://undertone0809.github.io/promptulate/#/get_started/quick_start.html).
 
 ## 📚 Design Principles
 
