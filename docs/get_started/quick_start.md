@@ -22,7 +22,7 @@ You don't need to know all the components of `promptulate` to get started. This 
 
 The following diagram shows the core architecture of `promptulate`:
 
-![promptulate-architecture](../images/pne_arch.png)
+![promptulate-architecture](/images/pne_arch.png)
 
 ### 2.1 Chat something by pne.chat()
 
@@ -161,7 +161,7 @@ The temperature tomorrow in Shanghai is expected to be 23°C.
 
 Furthermore, influenced by the [Plan-and-Solve](https://arxiv.org/abs/2305.04091) paper, pne also allows developers to build Agents with the ability to plan, reason, and act to handle complex problems. Through the enable_plan parameter, you can enable the Agent's planning capability.
 
-![plan-and-execute.png](./docs/images/plan-and-execute.png)
+![plan-and-execute.png](/images/plan-and-execute.png)
 
 In this example, we use [Tavily](https://app.tavily.com/) as the search engine. It's a powerful search engine that can search for information from the web. To use Tavily, you need to obtain an API key from Tavily.
 
@@ -239,7 +239,7 @@ pne.chat("what is the hometown of the 2024 Australia open winner?", model="gpt-4
 - **Agent conversations** using specific tools
 - **Web search-based conversations** using LLM + WebSearch
 
-![](../images/client_result_2.png)
+![](/images/client_result_2.png)
 
 **Quick Start**
 
@@ -251,7 +251,7 @@ pne-chat
 
 - Then you can follow `pne`'s guidance to operate
 
-![](../images/client_result_1.png)
+![](/images/client_result_1.png)
 
 ```text
 Hi there, here is promptulate chat terminal.
@@ -339,7 +339,7 @@ Here is the generated image: [![Halloween Night at a Haunted Museum](https://oai
 
 ```
 
-![Halloween Night at a Haunted Museum](./docs/images/dall-e-gen.png)
+![Halloween Night at a Haunted Museum](/images/dall-e-gen.png)
 
 ### 2.7 Structured Output
 
@@ -391,7 +391,7 @@ if __name__ == "__main__":
     main()
 ```
 
-![img.png](../images/output_formatter_webagent_output.png)
+![img.png](/images/output_formatter_webagent_output.png)
 
 ## 3. Local Development
 

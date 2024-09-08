@@ -78,7 +78,7 @@ from promptulate.config import turn_off_stdout_hook
 turn_off_stdout_hook()
 ```
 
-If you want to customize your own unique print or handle key steps logically, jump to [Hook Usage](modules/hook.md#what-is-hook)
+If you want to customize your own unique print or handle key steps logically, jump to [Hook Usage](/modules/hook.md#what-is-hook)
 
 ## WebAgent
 

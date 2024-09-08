@@ -1,7 +1,7 @@
 # 智谱系列模型
 
 ::: danger
-从 `v1.16.0` 版本开始，不再使用 llm 的概念，LLM 所有的功能都可以用 [pne.chat()](use_cases/chat_usage.md#chat) 来代替。只有当你需要自定义模型的时候，需要学习 [Custom LLM](modules/llm/custom_llm.md#custom-llm) 的使用方式。
+从 `v1.16.0` 版本开始，不再使用 llm 的概念，LLM 所有的功能都可以用 [pne.chat()](/use_cases/chat_usage.md#chat) 来代替。只有当你需要自定义模型的时候，需要学习 [Custom LLM](/modules/llm/custom_llm.md#custom-llm) 的使用方式。
 :::
 
 本文将会介绍智谱系列大模型的使用，要使用其能力，你需要前往[智谱AI大模型MaaS开放平台](https://maas.aminer.cn)创建大模型应用并获取相应的key

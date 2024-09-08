@@ -7,9 +7,7 @@ After accomplishing a particular task, you can then revisit the plan and modify 
 
 The general computational graph looks like the following:
 
-![plan-and-execute diagram](../../images/plan-and-execute.png)
-
-![plan-and-execute diagram](./img/plan-and-execute.png)
+![plan-and-execute diagram](/images/plan-and-execute.png)
 
 This compares to a typical [ReAct](https://arxiv.org/abs/2210.03629) style agent where you think one step at a time.
 The advantages of this "plan-and-execute" style agent are:
@@ -22,12 +20,12 @@ The following example show how to use Assistant Agent to solve a simple problem.
 > Current Assistant Agent is in beta version, and it is still under development. So you need to get Assistant Agent from beta.
 
 Firstly, we need to install necessary packages.
+
 ```bash
 pip install langchain, langchain_community
 ```
 
 Now we import the necessary packages:
-
 
 ```python
 import os
@@ -37,8 +35,8 @@ from promptulate.llms.openai import ChatOpenAI
 ```
 
 ## Define the tools and LLMs
-This example we use [Tavily](https://app.tavily.com/) as a search engine, which is a powerful search engine that can search for information from the web. To use Tavily, you need to get an API key from Tavily.
 
+This example we use [Tavily](https://app.tavily.com/) as a search engine, which is a powerful search engine that can search for information from the web. To use Tavily, you need to get an API key from Tavily.
 
 ```python
 os.environ["TAVILY_API_KEY"] = "your_tavily_api_key"
@@ -46,7 +44,6 @@ os.environ["OPENAI_API_KEY"] = "your_openai_api_key"
 ```
 
 However, it is really easy to create your own tools - see documentation [here](https://undertone0809.github.io/promptulate/#/modules/tools/custom_tool_usage?id=custom-tool) on how to do that.
-
 
 ```python
 from langchain_community.tools.tavily_search import TavilySearchResults
@@ -56,14 +53,12 @@ tools = [TavilySearchResults(max_results=5)]
 
 ## Create the Assistant Agent
 
-
 ```python
 llm = ChatOpenAI(model="gpt-4-1106-preview", temperature=0.0)
 agent = AssistantAgent(tools=tools, llm=llm)
 ```
 
 ## Run it
-
 
 ```python
 agent.run("what is the hometown of the 2024 Australia open winner?")
@@ -99,7 +94,7 @@ agent.run("what is the hometown of the 2024 Australia open winner?")
 
 You can see the detail in log information, let's explain it step by step.
 
-> You can see more detail data in the log file, see [here](other/log_system.md) to find it.
+> You can see more detail data in the log file, see [here](/other/log_system.md) to find it.
 
 When AssistantAgent receives the question, it first creates a plan to solve the question. The plan is a list of tasks that need to be done to solve the question. In this case, the plan result is as follows:
 

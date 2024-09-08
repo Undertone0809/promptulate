@@ -1,7 +1,7 @@
 # OpenAI
 
 ::: danger
-从 `v1.16.0` 版本开始，不再使用 llm 的概念，LLM 所有的功能都可以用 [pne.chat()](use_cases/chat_usage.md#chat) 来代替。只有当你需要自定义模型的时候，需要学习 [Custom LLM](modules/llm/custom_llm.md#custom-llm) 的使用方式。
+从 `v1.16.0` 版本开始，不再使用 llm 的概念，LLM 所有的功能都可以用 [pne.chat()](/use_cases/chat_usage.md#chat) 来代替。只有当你需要自定义模型的时候，需要学习 [Custom LLM](/modules/llm/custom_llm.md#custom-llm) 的使用方式。
 :::
 
 本教程重点介绍OpenAI中GPT-3.5, GPT-4.0, text-davinci-003等模型的使用。
@@ -168,7 +168,7 @@ llm("请介绍一下引力波的放射与广义相对论的必然关系")
 
 上面的示例中，使用`OpenAI(model="gpt-4", temperature=0.9, top_p=1, stream=False, presence_penalty=0, n=1)` 进行初始化一个大模型，里面是OpenAI需要传入的一些参数，具体可以查看[https://platform.openai.com/docs/api-reference/chat/create](https://platform.openai.com/docs/api-reference/chat/create) 查看具体含义，这里不做详细讲解，如果你不想理会这些参数，你也可以直接`llm = ChatOpenAI()`就好了，默认使用`gpt-3.5-turbo` 作为大语言模型，其他参数使用默认的就好了。
 
-LLM为`promptulate`中最基础的组件，为框架提供大语言模型交互能力，如果你想构建更加复杂的大语言模型应用，请跳转[Framework](modules/framework.md#Framework)和[Agent](modules/agent.md#Agent)。按照顺序阅读`promptulate`官方文档是一个很好的学习方式。
+LLM为`promptulate`中最基础的组件，为框架提供大语言模型交互能力，如果你想构建更加复杂的大语言模型应用，请跳转[Framework](/modules/framework.md#Framework)和[Agent](/modules/agent.md#Agent)。按照顺序阅读`promptulate`官方文档是一个很好的学习方式。
 
 ### stop停词
 你也许知道使用OpenAI的LLM的时候，可以进行stop(停词)，什么是stop呢？

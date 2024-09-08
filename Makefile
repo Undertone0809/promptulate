@@ -34,6 +34,9 @@ install-integration:
 install-docs:
 	cd docs && pnpm i
 
+build-docs-prod:
+	cd docs && pnpm docs:build
+
 pre-commit-install:
 	poetry run pre-commit install
 

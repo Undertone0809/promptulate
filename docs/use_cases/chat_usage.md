@@ -1,7 +1,8 @@
 > All your need is a `pne.chat()` function.
 
 # Chat
-`pne.chat()` is an awesome function, you can use **tools, formatted output, different llm** in this function. 
+
+`pne.chat()` is an awesome function, you can use **tools, formatted output, different llm** in this function.
 
 ## Best Practice
 
@@ -10,8 +11,8 @@ Here are some tips for using `pne.chat()`. Even though pne provides many modules
 `pne.chat()` integrate the ability of [litellm](https://github.com/BerriAI/litellm). It means you can call all LLM APIs using the OpenAI format. Use Bedrock, Azure, OpenAI, Cohere, Anthropic, Ollama, Sagemaker, HuggingFace, Replicate (100+ LLMs). Now let's take a look at how to use it.
 
 ## Chat like OpenAI
-You can use `pne.chat()` to chat like openai. OpenAI chat API document: [https://platform.openai.com/docs/api-reference/chat](https://platform.openai.com/docs/api-reference/chat). `pne.chat()` API design is the same as OpenAI chat API.
 
+You can use `pne.chat()` to chat like openai. OpenAI chat API document: [https://platform.openai.com/docs/api-reference/chat](https://platform.openai.com/docs/api-reference/chat). `pne.chat()` API design is the same as OpenAI chat API.
 
 ```python{6-10}
 import os
@@ -29,7 +30,6 @@ print(response)
 
 Moreover, you can only pass a string to `pne.chat()`, it will automatically convert it to the OpenAI format.
 
-
 ```python{3-6}
 import promptulate as pne
 
@@ -41,8 +41,8 @@ print(response)
 ```
 
 ## OpenAI Proxy
-You can use `pne.chat()` to chat with OpenAI API by proxy service. The following example show how to use [AIGCAPI proxy](https://aigcapi.io/) to call OpenAI gpt-4-turbo.
 
+You can use `pne.chat()` to chat with OpenAI API by proxy service. The following example show how to use [AIGCAPI proxy](https://aigcapi.io/) to call OpenAI gpt-4-turbo.
 
 ```python
 import os
@@ -56,8 +56,7 @@ response = pne.chat(
 )
 ```
 
-Or you can pass your key by the following way: 
-
+Or you can pass your key by the following way:
 
 ```python
 import pne
@@ -75,7 +74,6 @@ If you have multi-conversation and only use one LLM, you can use `pne.AIChat` in
 
 The follow example show how to use `pne.AIChat` to chat.
 
-
 ```python
 import promptulate as pne
 
@@ -86,12 +84,11 @@ print(resp)
 
 Output:
 
-```
+```text
 I am a helpful assistant designed to provide information and assistance to users like you. How can I help you today?
 ```
 
 The usage of `pne.AIChat` is the same as `pne.chat()`, you can also use OpenAI format to chat.
-
 
 ```python
 messages = [
@@ -103,8 +100,8 @@ print(resp)
 ```
 
 ## Memory for AIChat
-By default, AIChat does not have the ability to turn on memory. Turning on Memory means that AIChat records the history of the conversation and you can use the continuous conversation feature. The follow example show how to turn on memory for AIChat.
 
+By default, AIChat does not have the ability to turn on memory. Turning on Memory means that AIChat records the history of the conversation and you can use the continuous conversation feature. The follow example show how to turn on memory for AIChat.
 
 ```python
 import pne
@@ -116,20 +113,18 @@ print(response)
 
 Continuing the conversation:
 
-
 ```python
 response: str = ai.run("Tell me more")
 print(response)
 ```
 
 ## Return type
+
 `pne.chat()` return string by default.
 
 If you want to do more complex thing, metadata is important. You can use `return_raw_response=True` to get the raw response wrapped by `pne.AssistantMessage`. Metadata will store in `pne.AssistantMessage.additional_kwargs`.
 
-
-> About `pne.AssistantMessage`, you can see [here](modules/schema.md#Schema).
-
+> About `pne.AssistantMessage`, you can see [here](/modules/schema.md#Schema).
 
 ```python
 import promptulate as pne
@@ -144,7 +139,6 @@ print(response.additional_kwargs)  # metadata
 ## Using any model
 
 You can call 100+ LLMs using the same Input/Output Format(OpenAI format) in `pne.chat()`. The follow example show how to use `claude-2`, make sure you have key ANTHROPIC_API_KEY.
-
 
 ```python
 import os
@@ -165,7 +159,6 @@ print(response)
 ### Deepseek
 
 This example show how to use Deepseek LLMs in `pne.chat()`. Make sure you have key DEEPSEEK_API_KEY.
-
 
 ```python
 import os
@@ -190,12 +183,11 @@ Click [Here](/other/how_to_write_model_name#how-to-write-model-name) to see the 
 
 For some well-known models, you can use the name of the model directly to call. For some other models, you can use the provider/model-name method. For example, deepseek's deepseek-chat model can be invoked by deepseek/deepseek-chat method.
 
-This notation is based on litellm design, so if you are not sure how to write the name of your model, you can go to [litellm documentation](https://docs.litellm.ai/docs/) to see the detail. 
+This notation is based on litellm design, so if you are not sure how to write the name of your model, you can go to [litellm documentation](https://docs.litellm.ai/docs/) to see the detail.
 
 ### Zhipu
 
 This example show how to use Zhipu model in `pne.chat()`. Make sure you have key ZHIPUAI_API_KEY.
-
 
 ```python
 import os
@@ -218,7 +210,6 @@ print(response)
 
 This example show how to use Baidu Ernie model in `pne.chat()`. Make sure you have key QIANFAN_ACCESS_KEY and QIANFAN_SECRET_KEY.
 
-
 ```python
 import os
 import promptulate as pne
@@ -238,8 +229,8 @@ print(response)
 ```
 
 ### HuggingFace
-This example show how to use HuggingFace LLMs in `pne.chat()`. Make sure you have key HUGGINGFACE_API_KEY.
 
+This example show how to use HuggingFace LLMs in `pne.chat()`. Make sure you have key HUGGINGFACE_API_KEY.
 
 ```python
 import os
@@ -260,8 +251,8 @@ print(response)
 ```
 
 ### Azure OpenAI
-This example show how to use Azure OpenAI LLMs in `pne.chat()`. Make sure you have relevant key.
 
+This example show how to use Azure OpenAI LLMs in `pne.chat()`. Make sure you have relevant key.
 
 ```python
 import os
@@ -283,8 +274,8 @@ print(response)
 ```
 
 ### Custom LLM
-You can use `pne.llms.BaseLLM` to create your own LLM. The follow example show how to create a custom LLM and use it in `pne.chat()`.
 
+You can use `pne.llms.BaseLLM` to create your own LLM. The follow example show how to create a custom LLM and use it in `pne.chat()`.
 
 ```python
 import promptulate as pne
@@ -321,8 +312,8 @@ print(response)
 ```
 
 ## Structured Output
-The output of LLM has strong uncertainty. Pne provide the ability to get a structured object by LLM. The following example shows that if LLM strictly returns you an array listing all provinces in China. Here we use Pydantic to build a structured object.
 
+The output of LLM has strong uncertainty. Pne provide the ability to get a structured object by LLM. The following example shows that if LLM strictly returns you an array listing all provinces in China. Here we use Pydantic to build a structured object.
 
 ```python
 from typing import List
@@ -349,7 +340,6 @@ Output:
 ```
 
 As you can see, `pne.chat()` return a LLMResponse object. The value of provinces is all provinces in China. If you are building a complex Agent project, formatting output is a necessary measure to improve system robustness. The follow example show how to use `pne.chat()` to get the weather in Shanghai tomorrow.
-
 
 ```python
 from datetime import datetime
@@ -381,7 +371,6 @@ This is facilitated by a ToolAgent, which operates within the ReAct framework. T
 
 To illustrate, if the language model needs to find out the weather forecast for Shanghai tomorrow, it can make use of the DuckDuckGoTool through the ToolAgent to retrieve this information.
 
-
 ```python
 import promptulate as pne
 
@@ -397,7 +386,6 @@ print(response)
 ## Custom Tool
 
 Moreover, you can customize your function easily. The follow example show how to create a custom tool and use it in `pne.chat()`. Here we also we ddg websearch to wrap the function.
-
 
 ```python
 import promptulate as pne
@@ -431,6 +419,7 @@ This example we need to solve the problem of "what is the hometown of the 2024 A
 > pne support all LangChain Tools, you can see [here](/modules/tools/langchain_tool_usage?id=langchain-tool-usage). Of course, it is really easy to create your own tools - see documentation [here](https://undertone0809.github.io/promptulate/#/modules/tools/custom_tool_usage?id=custom-tool) on how to do that.
 
 Firstly, we need to install necessary packages.
+
 ```bash
 pip install langchain_community
 ```
@@ -444,13 +433,11 @@ os.environ["TAVILY_API_KEY"] = "your_tavily_api_key"
 os.environ["OPENAI_API_KEY"] = "your_openai_api_key"
 ```
 
-
 ```python
 from langchain_community.tools.tavily_search import TavilySearchResults
 
 websearch = TavilySearchResults()
 ```
-
 
 ```python
 import promptulate as pne
@@ -487,11 +474,9 @@ print(response)
 [Agent] Agent End.
 The temperature in Shanghai for tomorrow, March 30, 2024, is expected to be a high of +17 °C and a low of +11 °C.
 
-
 ## Output Formatter
 
 The output formatter is a powerful feature in pne. It can help you format the output of LLM. The follow example show how to use the output formatter to format the output of LLM.
-
 
 ```python
 from typing import List
@@ -508,8 +493,8 @@ print(resp)
 ```
 
 ## Streaming
-`pne.chat()` support streaming, you can use `pne.chat()` to chat with your assistant in real time.
 
+`pne.chat()` support streaming, you can use `pne.chat()` to chat with your assistant in real time.
 
 ```python
 import promptulate as pne
@@ -524,7 +509,6 @@ for chuck in response:
 
 If you want to get metadata, you can use `return_raw_response=True` to get the raw response wrapped by `pne.AssistantMessage`. Metadata will store in `pne.AssistantMessage.additional_kwargs`.
 
-
 ```python
 import promptulate as pne
 
@@ -538,7 +522,6 @@ for chuck in response:
 ## Stream JSON parser
 
 For stream-type json data, we built a json parser to parse it
-
 
 ```python
 from typing import List
@@ -561,6 +544,7 @@ for chuck in response:
 ```
 
 The results are as follows
+
 ```shell
     province=None capital=None
     province=None capital=None
@@ -585,17 +569,19 @@ The results are as follows
 ```
 
 ## Retrieve && RAG
+
 **RAG(Retrieval-Augmented Generation)** is a important data retrieve method. You can use `pne.chat()` to retrieve data from your database.
 
 You can use lots of methods to retrieve data, pne plan to support the following source:
+
 - [ ] VectorStore Retrieval
 - [ ] Relational Database Retrieval
 - [ ] Web Search Retrieval
 - [ ] Knowledge Graph Retrieval
 - [ ] Document Retrieval
-    - [ ] PDF Retrieval
-    - [ ] Docx Retrieval
-    - [ ] CSV/Excel Retrieval
+  - [ ] PDF Retrieval
+  - [ ] Docx Retrieval
+  - [ ] CSV/Excel Retrieval
 - [ ] Image Retrieval
 
 🌟**We are currently building infrastructure, please stay tuned!**

@@ -8,7 +8,7 @@ This demo shows how to use `pne.chat()` to create a simple chatbot utilizing any
 
 This application serves as a template, meaning you can create your own LLM application based on this template.
 
-You can try the live demo at [https://huggingface.co/spaces/Zeeland2hf/pne-gradio](https://huggingface.co/spaces/Zeeland2hf/pne-gradio) or see the code [here]().
+You can try the live demo at [https://huggingface.co/spaces/Zeeland2hf/pne-gradio](https://huggingface.co/spaces/Zeeland2hf/pne-gradio) or see the code [here](https://github.com/Undertone0809/promptulate/tree/main/example/gradio-chatbot).
 
 <IFrame src="https://zeeland2hf-pne-gradio.hf.space" />
 
@@ -222,6 +222,6 @@ This will launch the Gradio app, and you will receive a URL to access the chatbo
 
 Here demonstrate the working chatbot interface.
 
-![image-20240716175616736](.\img\pne.chat()+gradio.png)
+![image-20240716175616736](/use_cases/img/pne.chat()+gradio.png)
 
 By following these instructions, you can easily set up and run your own chatbot using `pne` and `gradio`. Enjoy chatting!

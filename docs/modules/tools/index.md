@@ -183,9 +183,9 @@ technologies, indicating that they could have considerable economic, social,
 and policy implications. ;
 ```
 
-### 有LLM能力的Tool
+### Tool with LLM Capability
 
-接下来我们使用PaperSummaryTool来演示一下给Tool赋能LLM之后的表现，下面的示例展示了使用PaperSummaryTool搜索论文`attention is all you need`
+Next, we will demonstrate the performance of a Tool after being empowered with LLM using the PaperSummaryTool. The following example shows the result of searching for the paper "Attention Is All You Need" using the PaperSummaryTool:
 
 ```python
 from promptulate.tools.paper.tools import PaperSummaryTool
@@ -203,33 +203,33 @@ if __name__ == "__main__":
     main()
 ```
 
-输出结果如下
+The output result is as follows
 
 ```text
-标题：注意力就是你所需要的
+Title: Attention Is All You Need
 
-摘要：目前主流的序列转换模型基于复杂的循环或卷积神经网络，采用编码器-解码器结构。表现最好的模型还通过注意力机制连接编码器和解码器。我们提出了一种新的简单网络架构——Transformer，仅基于注意力机制，完全摒弃了循环和卷积。在两个机器翻译任务上的实验表明，这些模型在质量上优于其他模型，同时更易于并行化，训练时间显著缩短。我们的模型在WMT 2014年英德翻译任务上实现了28.4 BLEU的成绩，超过了现有最佳结果，包括集成模型，提高了2个BLEU。在WMT 2014年英法翻译任务中，我们的模型在8个GPU上训练3.5天后，实现了新的单模型最优BLEU得分41.8，训练成本仅为文献中最佳模型的一小部分。我们证明Transformer在其他任务上具有很好的泛化能力，成功地将其应用于英语成分句法分析，无论是大规模还是有限的训练数据。
+Summary: The current mainstream sequence transformation models are based on complex recurrent or convolutional neural networks, adopting an encoder-decoder structure. The best-performing models also use attention mechanisms to connect the encoder and decoder. We propose a new simple network architecture—the Transformer, which is solely based on attention mechanisms, completely discarding recurrence and convolution. Experiments on two machine translation tasks demonstrate that these models outperform other models in quality, while being easier to parallelize, significantly reducing training time. Our model achieves a score of 28.4 BLEU on the WMT 2014 English-to-German translation task, surpassing the current best result, including ensemble models, by 2 BLEU points. On the WMT 2014 English-to-French translation task, our model achieves a new single-model best BLEU score of 41.8 after training for 3.5 days on 8 GPUs, with training costs being only a fraction of the best model in the literature. We prove that the Transformer has good generalization capabilities, successfully applying it to English constituent parsing, regardless of the scale or limitation of the training data.
 
-关键词：Transformer, attention mechanism, machine translation, BLEU score, parallelizable, training time, generalization.
+Keywords: Transformer, attention mechanism, machine translation, BLEU score, parallelizable, training time, generalization.
 
-关键见解：
-- 传统的序列转换模型基于复杂的循环或卷积神经网络，而最好的模型通过注意力机制连接编码器和解码器。
-- 本文提出了一种新的简单网络架构——Transformer，仅基于注意力机制，完全摒弃了循环和卷积。在机器翻译任务上，这种模型在质量上表现更好，同时更易于并行化，训练时间显著缩短。
-- 本文的模型在WMT 2014英德翻译任务上取得了28.4 BLEU的成绩，在WMT 2014英法翻译任务上取得了41.8 BLEU的成绩，成为了单模型下的最佳结果。
+Key Insights:
+- Traditional sequence transformation models are based on complex recurrent or convolutional neural networks, while the best models use attention mechanisms to connect the encoder and decoder.
+- This paper proposes a new simple network architecture—the Transformer, which is solely based on attention mechanisms, completely discarding recurrence and convolution. On machine translation tasks, this model performs better in quality, while being easier to parallelize, significantly reducing training time.
+- This paper's model achieves a score of 28.4 BLEU on the WMT 2014 English-to-German translation task and a score of 41.8 BLEU on the WMT 2014 English-to-French translation task, becoming the best single-model result.
 
-经验教训：
-- 注意力机制是一种有效的连接编码器和解码器的方式，可以提高序列转换模型的性能。
-- 简单的网络架构也可以取得很好的效果，不一定需要复杂的循环或卷积结构。
-- Transformer模型具有很好的泛化能力，可以成功应用于其他任务，如英语成分句法分析。
+Lessons Learned:
+- Attention mechanisms are an effective way to connect the encoder and decoder, which can improve the performance of sequence transformation models.
+- Simple network architectures can also achieve good results, not necessarily requiring complex recurrent or convolutional structures.
+- The Transformer model has good generalization capabilities, successfully applying it to other tasks, such as English constituent parsing.
 
-相关建议：
-- 进一步探究Transformer网络结构的优化方法，提高其在不同任务上的表现。
-- 尝试将Transformer应用于其他自然语言处理任务，如文本分类、命名实体识别等。
-- 研究如何在Transformer中引入外部知识，如知识图谱等，以提高其对语义的理解和表达能力。
-- 探索如何将Transformer应用于多语言翻译任务，以实现更加高效和准确的跨语言翻译。
-- 研究如何在Transformer中引入对抗训练等方法，以提高其对抗攻击的鲁棒性。
+Recommendations:
+- Further explore the optimization methods of the Transformer network structure to improve its performance on different tasks.
+- Attempt to apply the Transformer to other natural language processing tasks, such as text classification, named entity recognition, etc.
+- Research how to introduce external knowledge, such as knowledge graphs, into the Transformer to improve its understanding and expression of semantics.
+- Explore how to apply the Transformer to multilingual translation tasks to achieve more efficient and accurate cross-language translation.
+- Research how to introduce adversarial training methods into the Transformer to improve its robustness against adversarial attacks.
 
-相关论文：
+Related Papers:
 
 [1] [Convolutional Sequence to Sequence Learning](https://www.semanticscholar.org/paper/43428880d75b3a14257c3ee9bda054e61eb869c0)
 
@@ -254,9 +254,8 @@ if __name__ == "__main__":
 
 ```
 
-输出结果已经被排版成markdown格式的数据，因此很适合被渲染出来显示。
+The output result is formatted in markdown format, making it suitable for rendering and display.
 
-此外，上面的例子中，含有多步的LLM推理（四次推理过程）和多次API调用（从Arxiv和Semantic
-Scholar中获取论文、引用等相关数据），但是`prompulate`的事件总线并行机制大大化简了推理总时间，平均推理时间保持在十几秒（具体事件取决于网络环境）。
+Furthermore, the example above involves multiple steps of LLM inference (four inference processes) and multiple API calls (retrieving paper and citation data from Arxiv and Semantic Scholar), but the event bus parallel mechanism of `prompulate` greatly simplifies the total inference time, maintaining an average inference time of around ten seconds (specific events depend on the network environment).
 
-因为采用并行机制，因此在使用有LLM能力的Tool或者Agent时会在同一时间内快速地多次调用API，如果你的key有限速问题，推荐你使用[key-pool](modules/llm/llm.md#key池)来解决key限速的问题（如果你是5美元的key）。
+Due to the use of parallel mechanisms, when using a Tool or Agent with LLM capabilities, you will rapidly make multiple API calls simultaneously. If you encounter rate limit issues with your key, we recommend using the [key-pool](/modules/llm/llm.md#key-pool) to solve key rate limit problems (if you have a $5 key).

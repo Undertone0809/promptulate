@@ -92,14 +92,14 @@ You can also see how to use `pne.chat()` in the [Getting Started/Official Docume
 
 ## 📝 Examples
 
-- [Build streamlit chatbot by pne](use_cases/streamlit-chatbot#build-a-simple-chatbot-using-streamlit-and-pne)
-- [Build gradio chatbot by pne](use_cases/gradio-chatbot#build-gradio-chatbot-by-pne)
-- [Build math application with agent](use_cases/build-math-application-with-agent.md#building-a-math-application-with-promptulate-agents)
-- [Groq, llama3, Streamlit to build a application](use_cases/streamlit-groq-llama3.md#groq-llama3-streamlit-to-build-a-application)
-- [Build knowledge map with streamlit and pne](use_cases/llmapper.md#llmapper)
-- [Build a chatbot using pne+streamlit to chat with GitHub repo](use_cases/chat-to-github-repo.md#build-a-chatbot-using-pne-streamlit-to-chat-with-GitHub-repo)
+- [Build streamlit chatbot by pne](/use_cases/streamlit-chatbot#build-a-simple-chatbot-using-streamlit-and-pne)
+- [Build gradio chatbot by pne](/use_cases/gradio-chatbot#build-gradio-chatbot-by-pne)
+- [Build math application with agent](/use_cases/build-math-application-with-agent.md#building-a-math-application-with-promptulate-agents)
+- [Groq, llama3, Streamlit to build a application](/use_cases/streamlit-groq-llama3.md#groq-llama3-streamlit-to-build-a-application)
+- [Build knowledge map with streamlit and pne](/use_cases/llmapper.md#llmapper)
+- [Build a chatbot using pne+streamlit to chat with GitHub repo](/use_cases/chat-to-github-repo.md#build-a-chatbot-using-pne-streamlit-to-chat-with-GitHub-repo)
 
-- [Build a math application with agent [Steamlit, ToolAgent, Hooks].](use_cases/build-math-application-with-agent.md)
+- [Build a math application with agent [Steamlit, ToolAgent, Hooks].](/use_cases/build-math-application-with-agent.md)
 - [A Mulitmodal Robot Agent framework of ROS2 and Promptulate [Agent]](https://github.com/Undertone0809/Athena)
 - [Use streamlit and pne to compare different model a playground. [Streamlit]](https://github.com/Undertone0809/pne-playground-model-comparison)
 - [gcop:Your git AI copilot, based on promptulate](https://github.com/Undertone0809/gcop)
