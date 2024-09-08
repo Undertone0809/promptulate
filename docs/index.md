@@ -7,7 +7,7 @@ hero:
   text: "🚀Lightweight AI Native development framework."
   tagline: Build your LLM Agent Application in a pythonic way.
   image:
-    src: /images/logo.png
+    src: https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/logo.png
     alt: Promptulate
   actions:
     - theme: brand
