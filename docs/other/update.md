@@ -8,6 +8,6 @@ Please update the latest version.
 pip install -U promptulate
 ```
 
-## Change Log
+## Changelog
 
 Go [Release Version](https://github.com/Undertone0809/promptulate/releases) to see the change log.
