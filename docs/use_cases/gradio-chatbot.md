@@ -1,13 +1,19 @@
-# Build gradio chatbot by pne
+<script setup>
+import IFrame from '/components/iframe.vue'
+</script>
 
-This document guides you through building a simple chatbot using the `pne` library for OpenAI API interactions and `gradio` for the user interface. This chatbot will prompt the user for their OpenAI API key and model selection, allowing flexible and interactive conversations.
+# Build a chatbot using gradio
 
-You can see the demo [https://huggingface.co/spaces/Zeeland2hf/pne-gradio](https://huggingface.co/spaces/Zeeland2hf/pne-gradio) and see the [source code]()
+This demo shows how to use `pne.chat()` to create a simple chatbot utilizing any model. For the application frontend, we will be using gradio, an easy-to-use open-source Python framework.
 
-<iframe src="https://zeeland2hf-pne-gradio.hf.space" width="100%" height="600" style="border: none; border-radius: 4px; overflow: hidden;" allowfullscreen></iframe>
+This application serves as a template, meaning you can create your own LLM application based on this template.
+
+You can try the live demo at [https://huggingface.co/spaces/Zeeland2hf/pne-gradio](https://huggingface.co/spaces/Zeeland2hf/pne-gradio) or see the code [here]().
+
+<IFrame src="https://zeeland2hf-pne-gradio.hf.space" />
 
 ## Prerequisites
-
+    
 Before you start, ensure you have Python installed on your system. You will also need the following Python packages:
 - `gradio`
 - `pne` 

@@ -1,22 +1,26 @@
+<script setup>
+import IFrame from '/components/iframe.vue'
+</script>
+
 # Build a chatbot using streamlit
 
-This demo is how to use `pne.chat()` to create a simple chatbot utilising any model. For the application frontend, there will be using streamlit, an easy-to-use open-source Python framework. 
+This demo is how to use `pne.chat()` to create a simple chatbot utilising any model. For the application frontend, there will be using streamlit, an easy-to-use open-source Python framework.
 
 This application is a template, meaning you can create your own LLM application by this template.
 
-You see try the live demo at [https://pne-chatbot.streamlit.app/](https://pne-chatbot.streamlit.app/) or see the code [https://github.com/Undertone0809/promptulate/tree/main/example/streamlit-chatbot](https://github.com/Undertone0809/promptulate/tree/main/example/streamlit-chatbot).
+You see try the live demo at [https://pne-chatbot.streamlit.app/](https://pne-chatbot.streamlit.app/) or see the code [here](https://github.com/Undertone0809/promptulate/tree/main/example/streamlit-chatbot).
 
-<iframe src="https://pne-chatbot.streamlit.app/?embed=true" width="100%" height="600" style="border: none; border-radius: 4px; overflow: hidden;" allowfullscreen></iframe>
+<IFrame src="https://pne-chatbot.streamlit.app/?embed=true" />
 
 ## Environment Setup
 
 Now, let's install all necessary libraries:
 
 ```bash
-pip install -U pne streamlit`
+pip install -U pne streamlit
 ```
 
-## Step-by-Step Implementation 
+## Step-by-Step Implementation
 
 ### Step 1
 
@@ -95,7 +99,7 @@ def model_sidebar(model_options: List[str] = None) -> ModelConfig:
     return ModelConfig(model_name=selected_model, api_key=api_key, api_base=api_base)
 ```
 
-### Step 3 
+### Step 3
 
 Set page style:
 

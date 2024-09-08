@@ -11,26 +11,10 @@ It's very early days. Among other things, there's no error detection or graceful
 You can see the online demo [https://pne-llmapper.streamlit.app/](https://pne-llmapper.streamlit.app/) and [source code](https://github.com/Undertone0809/promptulate/tree/main/example).
 
 <script setup>
-import { ref, onMounted } from 'vue'
-
-const iframeLoaded = ref(false)
-
-onMounted(() => {
-  const iframe = document.querySelector('iframe')
-  iframe.onload = () => {
-    iframeLoaded.value = true
-  }
-})
+import IFrame from '/components/iframe.vue'
 </script>
 
-<template>
-  <div v-if="iframeLoaded">
-    <iframe src="https://pne-llmapper.streamlit.app/?embed=true" width="100%" height="600" style="border: none; border-radius: 4px; overflow: hidden;" allowfullscreen></iframe>
-  </div>
-  <div v-else>
-    Loading iframe...
-  </div>
-</template>
+<IFrame src="https://pne-llmapper.streamlit.app/?embed=true" />
 
 The Musk search operation effect is as follows: 
 

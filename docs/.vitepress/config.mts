@@ -35,8 +35,8 @@ export default defineConfig({
           { text: 'Build gradio chatbot by pne', link: '/use_cases/gradio-chatbot' },
           { text: 'Build math application with agent', link: '/use_cases/build-math-application-with-agent' },
           { text: 'Groq, llama3, Streamlit to build a application', link: '/use_cases/streamlit-groq-llama3' },
-          { text: 'Build knowledge map with streamlit and pne.chat()', link: '/use_cases/llmapper' },
-          { text: 'Build a chatbot using pne+streamlit to chat with GitHub repo', link: '/use_cases/chat-to-github-repo' }
+          { text: 'Build knowledge map with streamlit', link: '/use_cases/llmapper' },
+          { text: 'Chat with GitHub repo', link: '/use_cases/chat-to-github-repo' }
         ]
       },
       {
@@ -71,7 +71,6 @@ export default defineConfig({
           { text: 'Structured Output', link: '/modules/formatter' },
           { text: 'Hook & Lifecycle', link: '/modules/hook' },
           { text: 'Memory', link: '/modules/memory' },
-          // { text: 'Provider', link: '/modules/provider' },
           { text: 'Client', link: '/modules/client' },
           { text: 'String Template', link: '/modules/other/string_template' },
           { text: 'Schema', link: '/modules/schema' },
