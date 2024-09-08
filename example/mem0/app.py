@@ -5,7 +5,6 @@ from core import PersonalHealingAssistant
 
 def main():
     config = pne.beta.st.model_sidebar()
-    # todo llm default answer with cn
     with st.sidebar:
         mem0_user_id = st.text_input("mem0 user id", type="password")
         mem0_api_key = st.text_input(
