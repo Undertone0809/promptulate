@@ -13,10 +13,11 @@ You can try the live demo at [https://huggingface.co/spaces/Zeeland2hf/pne-gradi
 <IFrame src="https://zeeland2hf-pne-gradio.hf.space" />
 
 ## Prerequisites
-    
+
 Before you start, ensure you have Python installed on your system. You will also need the following Python packages:
+
 - `gradio`
-- `pne` 
+- `pne`
 
 You can install these packages using pip:
 

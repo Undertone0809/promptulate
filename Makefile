@@ -32,7 +32,7 @@ install-integration:
 	poetry install --with dev,test_integration
 
 install-docs:
-	npm i docsify-cli -g
+	cd docs && npm i
 
 pre-commit-install:
 	poetry run pre-commit install
