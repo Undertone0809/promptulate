@@ -20,25 +20,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # not needed if lastUpdated is not enabled
-      - uses: pnpm/action-setup@v3
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
         with:
           version: 8
+          run_install: false
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
+          cache: 'pnpm'
+          cache-dependency-path: '**/pnpm-lock.yaml'
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
+
       - name: Install dependencies
         run: |
           cd docs
           pnpm install
+
       - name: Build with VitePress
         run: |
           cd docs
           pnpm run docs:build
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
