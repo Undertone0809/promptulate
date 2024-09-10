@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20240907170327.png" alt="promptulate"/>
+    <img src="./docs/public/banner.png" alt="promptulate"/>
 </p>
 
 <p align="center">

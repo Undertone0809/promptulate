@@ -5,20 +5,20 @@ export default defineConfig({
   title: "Promptulate",
   description: "🚀Lightweight Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way!",
   head: [
-    ['link', { rel: 'icon', href: '/images/logo.ico' }],
+    ['link', { rel: 'icon', href: '/logo.ico' }],
     ['meta', { property: 'description', content: '🚀Lightweight Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way!' }],
     ['meta', { property: 'keywords', content: 'Promptulate, pne, LLM, Large language model, Autonomous Language Agents, development framework' }],
     ['meta', { property: 'og:title', content: 'Promptulate' }],
     ['meta', { property: 'og:description', content: '🚀Lightweight Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way!' }],
-    ['meta', { property: 'og:image', content: 'https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20240907170327.png' }],
+    ['meta', { property: 'og:image', content: '/banner.png' }],
     ['meta', { property: 'twitter:card', content: 'summary_large_image' }],
-    ['meta', { property: 'twitter:image', content: 'https://zeeland-bucket.oss-cn-beijing.aliyuncs.com/images/20240907170327.png' }],
+    ['meta', { property: 'twitter:image', content: '/banner.png' }],
     ['meta', { property: 'twitter:title', content: 'Promptulate' }],
     ['meta', { property: 'twitter:description', content: '🚀Lightweight Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way!' }],
   ],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-    logo: '/images/logo.png',
+    logo: '/logo.png',
     search: {
       provider: 'local'
     },
