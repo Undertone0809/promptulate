@@ -1,7 +1,8 @@
 import { defineConfig } from 'vitepress'
+import { withPwa } from '@vite-pwa/vitepress'
 
 // https://vitepress.dev/reference/site-config
-export default defineConfig({
+export default withPwa(defineConfig({
   title: "Promptulate",
   description: "🚀Lightweight Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way!",
   head: [
@@ -16,6 +17,26 @@ export default defineConfig({
     ['meta', { property: 'twitter:title', content: 'Promptulate' }],
     ['meta', { property: 'twitter:description', content: '🚀Lightweight Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way!' }],
   ],
+  pwa: {
+    manifest: {
+      name: "Promptulate",
+      short_name: "promptulate",
+      theme_color: "#35155D",
+      background_color: "#ffffff",
+      display: "standalone",
+      orientation: "portrait",
+      scope: "/",
+      start_url: "/",
+      icons: [
+        {
+          src: "/logo.png",
+          sizes: "192x192",
+          type: "image/png",
+          purpose: "maskable any"
+        }
+      ]
+    },
+  },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     logo: '/logo.png',
@@ -118,4 +139,4 @@ export default defineConfig({
       text: 'Edit this page on GitHub'
     },
   }
-})
+}))
