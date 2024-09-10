@@ -5,7 +5,7 @@ Below, `pne` stands for Promptulate, which is the nickname for Promptulate. The 
 :::
 
 <p align="center">
-    <img src="/banner.png" alt="promptulate"/>
+    <img src="/banner.png" alt="promptulate" style="border-radius: 15px;"/>
 </p>
 
 ## Overview

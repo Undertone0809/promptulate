@@ -151,3 +151,12 @@
   --docsearch-primary-color: var(--vp-c-brand-1) !important;
 }
 
+ .VPFeature * {
+  transition: transform 0.25s ease;
+ }
+ 
+ .VPFeature:hover * {
+  color: var(--vp-c-text-1);
+  transform: scale(1.01);
+  border-color: var(--vp-c-brand-1);
+ }
