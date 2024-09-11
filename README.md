@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="/banner.png" alt="promptulate" style="border-radius: 15px;"/>
+    <img src="./docs/public/banner.png" alt="promptulate" style="border-radius: 15px;"/>
 </p>
 
 <p align="center">
