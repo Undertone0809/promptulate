@@ -21,7 +21,7 @@ export default withPwa(defineConfig({
     manifest: {
       name: "Promptulate",
       short_name: "promptulate",
-      theme_color: "#35155D",
+      theme_color: "#2b2a27",
       background_color: "#ffffff",
       display: "standalone",
       orientation: "portrait",
