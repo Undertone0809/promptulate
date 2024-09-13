@@ -6,14 +6,32 @@ export default withPwa(defineConfig({
   title: "Promptulate",
   description: "🚀Lightweight Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way!",
   head: [
+    [
+      'script',
+      {
+        defer: 'true',
+        'data-website-id': '628f906e-71c9-4ad5-b0a0-ff86e778b861',
+        src: 'https://umami.zeeland.top/script.js'
+      }
+    ],
+    [
+      'script',
+      {
+        defer: 'true',
+        'data-website-id': '87a6bbc8-4134-4496-80d0-2f926075dd53',
+        src: 'https://umami.zeeland.top/script.js'
+      }
+    ],
     ['link', { rel: 'icon', href: '/logo.ico' }],
     ['meta', { property: 'description', content: '🚀Lightweight Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way!' }],
     ['meta', { property: 'keywords', content: 'Promptulate, pne, LLM, Large language model, Autonomous Language Agents, development framework' }],
+    ['meta', { property: 'og:site_name', content: 'Promptulate' }],
+    ['meta', { property: 'og:url', content: 'https://www.promptulate.cn' }],
     ['meta', { property: 'og:title', content: 'Promptulate' }],
     ['meta', { property: 'og:description', content: '🚀Lightweight Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way!' }],
-    ['meta', { property: 'og:image', content: '/banner.png' }],
+    ['meta', { property: 'og:image', content: 'https://r2.zeeland.top/images/2024/09/e84b5053274f7f82d1645ad240f7727f.png' }],
     ['meta', { property: 'twitter:card', content: 'summary_large_image' }],
-    ['meta', { property: 'twitter:image', content: '/banner.png' }],
+    ['meta', { property: 'twitter:image', content: 'https://r2.zeeland.top/images/2024/09/e84b5053274f7f82d1645ad240f7727f.png' }],
     ['meta', { property: 'twitter:title', content: 'Promptulate' }],
     ['meta', { property: 'twitter:description', content: '🚀Lightweight Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way!' }],
   ],
