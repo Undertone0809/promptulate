@@ -142,7 +142,7 @@ You can also see how to use `pne.chat()` in the [Getting Started/Official Docume
 - [Build streamlit chatbot by pne](use_cases/streamlit-chatbot#build-a-simple-chatbot-using-streamlit-and-pne)
 - [Build gradio chatbot by pne](use_cases/gradio-chatbot#build-gradio-chatbot-by-pne)
 - [Build math application with agent](use_cases/build-math-application-with-agent.md#building-a-math-application-with-promptulate-agents)
-- [Groq, llama3, Streamlit to build a application](use_cases/streamlit-groq-llama3.md#groq-llama3-streamlit-to-build-a-application)
+- [Groq, llama3, Streamlit to build an application](use_cases/streamlit-groq-llama3.md#groq-llama3-streamlit-to-build-a-application)
 - [Build knowledge map with streamlit and pne](use_cases/llmapper.md#llmapper)
 - [Build a chatbot using pne+streamlit to chat with GitHub repo](use_cases/chat-to-github-repo.md#build-a-chatbot-using-pne-streamlit-to-chat-with-GitHub-repo)
 
