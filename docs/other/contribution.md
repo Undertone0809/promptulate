@@ -141,14 +141,20 @@ Any question, please contact us or create an [issue](https://github.com/Underton
 
 ### 2.3 Edit the documentation
 
-This project utilizes [docsify](https://docsify.js.org/#/) to build documentation. 
+This project utilizes [vitepress](https://vitepress.dev/) to build documentation. 
 
 If you want to edit the documentation, you can edit `/docs` directory. After that, if you want to startup the documentation server and see the effect, you can run the following command:
 
 ```bash
-# install docsify
-npm i -g docsify-cli
-make start-docs
+# install vitepress
+cd docs
+npm i # or pnpm i
+```
+
+Run the following command to startup the documentation server:
+
+```bash
+npm run dev
 ```
 
 When you add a new feature, you are recommended to add a demo notebook in `example/`. Moreover, you can add corresponding documentation in `docs/`.

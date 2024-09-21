@@ -43,7 +43,7 @@
  *   in custom container, badges, etc.
  * -------------------------------------------------------------------------- */
 
- :root {
+:root {
   --vp-c-bg: #f0efea;
   --vp-c-bg-alt: #fafaf8;
   --vp-c-bg-elv: #ffffff;
@@ -57,14 +57,14 @@
   --vp-c-bg-soft: #383735;
 }
 
- :root {
+:root {
   --vp-c-default-1: var(--vp-c-gray-1);
   --vp-c-default-2: var(--vp-c-gray-2);
   --vp-c-default-3: var(--vp-c-gray-3);
   --vp-c-default-soft: var(--vp-c-gray-soft);
 
   --vp-c-brand-1: #d77a59;
-  --vp-c-brand-2: #dfa691 ;
+  --vp-c-brand-2: #dfa691;
   --vp-c-brand-3: #b15f3b;
   --vp-c-brand-soft: #8b4424;
 
@@ -151,12 +151,12 @@
   --docsearch-primary-color: var(--vp-c-brand-1) !important;
 }
 
- .VPFeature * {
+.VPFeature * {
   transition: transform 0.25s ease;
- }
- 
- .VPFeature:hover * {
+}
+
+.VPFeature:hover * {
   color: var(--vp-c-text-1);
   transform: scale(1.01);
   border-color: var(--vp-c-brand-1);
- }
+}
