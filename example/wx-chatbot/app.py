@@ -45,7 +45,7 @@ def qrCallback(uuid, status, qrcode):
 
 def startup():
     try:
-        itchat.instance.receivingRetryCount = 600  # 修改断线超时时间
+        # itchat.instance.receivingRetryCount = 600  # 修改断线超时时间
         hotReload = False
         itchat.auto_login(
             enableCmdQR=2,
