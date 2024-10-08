@@ -1,13 +1,13 @@
-from enum import Enum
+from enum import Enum, auto
 from typing import Any, Dict, List, Optional
 
 from promptulate.pydantic_v1 import BaseModel, Field
 
 
 class Status(Enum):
-    created = "created"
-    running = "running"
-    completed = "completed"
+    created = auto()
+    running = auto()
+    completed = auto()
 
 
 class StepOutput(BaseModel):
