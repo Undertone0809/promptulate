@@ -88,7 +88,8 @@ export default withPwa(defineConfig({
           { text: 'Build math application with agent', link: '/use_cases/build-math-application-with-agent' },
           { text: 'Groq, llama3, Streamlit to build a application', link: '/use_cases/streamlit-groq-llama3' },
           { text: 'Build knowledge map with streamlit', link: '/use_cases/llmapper' },
-          { text: 'Chat with GitHub repo', link: '/use_cases/chat-to-github-repo' }
+          { text: 'Chat with GitHub repo', link: '/use_cases/chat-to-github-repo' },
+          { text: 'Build Wechat-bot with itchat', link: '/use_cases/wx-chatbot' },
         ]
       },
       {
