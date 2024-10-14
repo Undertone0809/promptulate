@@ -1,7 +1,7 @@
 import argparse
 
-from example.tot.methods.bfs import solve
-from example.tot.tasks.game24 import Game24Task
+from example.ToT.methods.bfs import solve
+from example.ToT.tasks.game24 import Game24Task
 
 args = argparse.Namespace(
     backend="deepseek/deepseek-chat",

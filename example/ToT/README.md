@@ -21,7 +21,13 @@ git clone https://www.github.com/Undertone0809/promptulate
 cd ./example/ToT
 ```
 
-3. Run the application
+3. Install the dependencies
+
+```shell
+pip install -r requirements.txt
+```
+
+4. Run the application
 
 ```shell
 python app.py
