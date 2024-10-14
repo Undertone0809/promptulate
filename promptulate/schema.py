@@ -1,7 +1,7 @@
 import warnings
 from abc import abstractmethod
 from datetime import datetime
-from enum import Enum
+from enum import Enum, auto
 from typing import Any, Callable, Dict, Iterator, List, Optional, Union
 
 from promptulate.pydantic_v1 import BaseModel, Field
@@ -180,11 +180,11 @@ MESSAGE_TYPE = {
 class LLMType(str, Enum):
     """All LLM type here"""
 
-    OpenAI = "OpenAI"
-    ChatOpenAI = "ChatOpenAI"
-    ErnieBot = "ErnieBot"
-    QianFan = "QianFan"
-    ZhiPu = "ZhiPu"
+    OpenAI = auto()
+    ChatOpenAI = auto()
+    ErnieBot = auto()
+    QianFan = auto()
+    ZhiPu = auto()
 
 
 class MessageSet:

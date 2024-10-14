@@ -126,7 +126,7 @@ make lint
 `make lint` will run the code formatting and unit test. If the code formatting is not correct, you can run the following command to format the code:
 
 ```shell
-make formatting
+make format
 ```
 
 You can run the `make test` command to run the unit test. If you add new code, you need to add the corresponding unit test in `tests/`.

@@ -20,14 +20,6 @@
     </a>
 </p>
 
-## News
-
-- 2024.9.7 add mem0 memory use cases
-- 2024.8.5 流式结构化输出: pne 允许你在流式输出中获取 pydantic object 的输出内容. ref: [https://x.com/kfhedRk3lXofRIB/status/1820489301299540346](https://x.com/kfhedRk3lXofRIB/status/1820489301299540346)
-- 2024.7.20 llmapper: A experimental project for generating knowledge graph by LLM workflow. See [here](https://www.promptulate.cn/#/use_cases/llmapper)
-- 2024.5.19 现在你可以直接使用 import pne 来导入 promptulate 框架，而不需要再使用 import promptulate as pne 的方式，ref: [https://github.com/Undertone0809/pne](https://github.com/Undertone0809/pne)
-- 2024.5.14 OpenAI 推出了他们最新的 “omni” 模型，与 turbo 相比，它提供了更高的速度和价格，你可以在任何 pne 应用程序中使用它的多模态功能。
-
 ## Overview
 
 **Promptulate** 是 **Cogit Lab** 打造的 AI Agent 应用开发框架，通过 Pythonic 的开发范式，旨在为开发者们提供一种极其简洁而高效的 Agent 应用构建体验。 🛠️ Promptulate 的核心理念在于借鉴并融合开源社区的智慧，集成各种开发框架的亮点，以此降低开发门槛并统一开发者的共识。通过 Promptulate，你可以用最简洁的代码来操纵 LLM, Agent, Tool, RAG 等组件，大多数任务仅需几行代码即可轻松完成。🚀

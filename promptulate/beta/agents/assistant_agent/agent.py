@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, auto
 from typing import Callable, Dict, List, Optional, TypedDict
 
 from typing_extensions import NotRequired
@@ -17,9 +17,9 @@ from promptulate.utils.logger import logger
 
 
 class StepTypes(str, Enum):
-    PLAN = "plan"
-    EXECUTE = "execute"
-    REVISE = "revise"
+    PLAN = auto()
+    EXECUTE = auto()
+    REVISE = auto()
 
 
 class AdditionalProperties(TypedDict):

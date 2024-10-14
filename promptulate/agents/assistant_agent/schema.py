@@ -1,14 +1,14 @@
-from enum import Enum
+from enum import Enum, auto
 from typing import List, Optional
 
 from promptulate.pydantic_v1 import BaseModel, Field
 
 
 class TaskStatus(str, Enum):
-    TODO = "todo"
-    DONE = "done"
-    ERROR = "error"
-    DISCARDED = "discarded"
+    TODO = auto()
+    DONE = auto()
+    ERROR = auto()
+    DISCARDED = auto()
 
 
 class Task(BaseModel):
