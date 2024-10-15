@@ -90,6 +90,7 @@ export default withPwa(defineConfig({
           { text: 'Build knowledge map with streamlit', link: '/use_cases/llmapper' },
           { text: 'Chat with GitHub repo', link: '/use_cases/chat-to-github-repo' },
           { text: 'Build Wechat-bot with itchat', link: '/use_cases/wx-chatbot' },
+          { text: 'Combined with ToT in-depth reasoning Game24', link: '/use_cases/game24-with-tot' },
         ]
       },
       {

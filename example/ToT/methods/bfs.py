@@ -3,7 +3,7 @@ from functools import partial
 
 import numpy as np
 
-from example.tot.model import gpt
+from example.ToT.model import gpt
 
 
 def get_value(task, x, y, n_evaluate_sample, cache_value=True):

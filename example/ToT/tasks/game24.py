@@ -4,7 +4,7 @@ import re
 import pandas as pd
 import sympy
 
-from example.tot.prompts.game24_prompts import (
+from example.ToT.prompts.game24_prompts import (
     cot_prompt,
     propose_prompt,
     standard_prompt,
