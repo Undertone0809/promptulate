@@ -158,3 +158,19 @@ npm run dev
 ```
 
 When you add a new feature, you are recommended to add a demo notebook in `example/`. Moreover, you can add corresponding documentation in `docs/`.
+
+Moreover, you need add sidebar information in `docs/.vitepress/config.mts` after you add the new documentation. eg:
+
+```ts
+export const sidebar = [
+  {
+    text: 'Guide',
+    items: [
+      // add your sidebar information in relevant directory
+      { text: 'Getting Started', link: '/guide/getting-started' },
+      { text: 'How to write model name', link: '/guide/how-to-write-model-name' },
+      ... // other sidebar information
+    ],
+  },
+]
+```
