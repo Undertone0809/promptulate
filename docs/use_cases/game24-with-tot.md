@@ -1,16 +1,25 @@
-# Combined with ToT in-depth reasoning Game24 
-This demo shows using bfs+ToT+pne to implement Game24 with input data of 4, 5, 6, 10.
+# Combined with ToT in-depth reasoning Game24
+Language models are increasingly being deployed for general problem-solving across a wide range of tasks, but are still confined to token-level, left-to-right decision-making processes during inference.This means they can fall short in tasks that require exploration, strategic lookahead, or where initial decisions play a pivotal role.  
 
-ToT (Tree of Thoughts) is an inference framework based on DFS(Depth First Search). 
-After the introduction of ToT, LM will systematically explore a series of interrelated and most potential intermediate steps in a DFS manner when solving problems, namely "Thought". 
-These thoughts are seen as the path to the final solution. 
-If the current state is evaluated as unsolvable, the model will go back to the parent state and continue to explore other possibilities to ensure that effective solutions can be found to complex problems.
+To surmount these challenges, we introduce a new framework for language model inference, “Tree of Thoughts” (ToT), which generalizes over the popular “Chain of Thought” approach to prompting LM, and enables exploration over coherent units of text (“thoughts”) that serve as intermediate steps toward problem-solving.  
 
-You see try the live demo [here](https://github.com/Undertone0809/promptulate/tree/main/example/tot).
+ToT allows LMs to perform deliberate decision-making by considering multiple different reasoning paths and self-evaluating choices to decide the next course of action, as well as looking ahead or backtracking when necessary to make global choices.
 
+
+Currently, there are four methodologies through which LLMs can address the issue, as illustrated in the following diagram.Each rectangle box represents a thought, which is a coherent language sequence that serves as an intermediate step toward problem-solving. 
+
+![tot-schematic-drawing](./img/tot-schematic-drawing.png)
+
+**Ref link(The concrete realization principle of tot):**
+- [Paper](http://arxiv.org/abs/2305.10601)
+- [Paper interpretation](https://f01iu0yewg8.feishu.cn/wiki/GsmnwFWNYiEra9kahsJcF9jFnZb?from=from_copylink)
+
+This demo demonstrates the mathematical reasoning challenge of Game24 when the input 4 numbers are 4、5、6、10, combined with the tot. You can see the complete code [here](https://github.com/Undertone0809/promptulate/tree/main/example/tot).
+
+<a name="output"></a>
 ## Output Effect
 
-When you run the `./example/ToT/app.py`, you'll see an interface similar to the following:
+If you run the `app.py` file in the example [code](https://github.com/Undertone0809/promptulate/tree/main/example/tot), you'll see an interface similar to the following in the terminal:
 ```plaintext
 ys: [
     '10 - 6 = 4 (left: 4 5 4)\n5 * 4 = 20 (left: 4 20)\nInput: 4 20\nInput: 4 20\n', 
@@ -25,9 +34,11 @@ Answer: (5 * (10 - 6)) + 4 = 24
 
 ## Step-by-Step Implementation
 
-### Environment Setup
+Next, let's try to build a local inference program that implements Game24 with bfs+tot+pne.
 
-First, let's install all necessary libraries:
+### Step1 Environment Setup
+
+First, let's install all necessary libraries.Create a `requirements.txt` file in the root directory of your local tot project and fill it with the following contents:
 
 ```text
 # requirements.txt
@@ -53,18 +64,22 @@ pandas==2.0.3
 pne
 ```
 
-```bash
+Then run the following command in your terminal to install all the libraries:
+```shell
 pip install -r requirements.txt
 ```
 
-### Statistical table of Game24
+### Step2 Prepare Statistical table of Game24
 
-Create a `./ToT/data/24.csv` statistical table for Game24 that contains multiple different indicators to evaluate and describe the difficulty and resolution time of different number combinations. Please refer to [here](https://github.com/Undertone0809/promptulate/tree/main/example/tot/data) for details
+Create a `data` folder in the root directory and create the `24.csv` file.This file is used to store the data set that Game24 will use, including multiple different indicators to evaluate and describe the difficulty and resolution time of different number combinations. Please refer to [here](https://github.com/Undertone0809/promptulate/tree/main/example/tot/data) for details
 
-### Create the Game24 class
+### Step3 Create the Game24 task class
 
-Create a `./ToT/tasks/game24.py` script and implement the `Game24Task` class:
+Create a `tasks` folder in the root directory and create the `game24.py` file.This class is used to load data and generate prompts.
+
 ```python
+# game24.py
+
 import os
 import re
 
@@ -175,10 +190,12 @@ class Game24Task:
 
 ```
 
-### Create prompt for evaluating and generating mathematical problems
+### Step4 Create prompt for evaluating and generating mathematical problems
 
-Create a `./ToT/prompts/game24_prompts.py` prompt template for evaluating and generating mathematical problems, mainly used to determine whether a given number can be obtained by basic arithmetic operations (addition, subtraction, multiplication, division) to obtain 24.
+Create a `prompts` folder in the root directory and create the `game24_prompts.py` file for evaluating and generating mathematical problems, mainly used to determine whether a given number can be obtained by basic arithmetic operations (addition, subtraction, multiplication, division) to obtain 24.
 ```python
+# game24_prompts.py
+
 # 5-shot
 standard_prompt = """Use numbers and basic arithmetic operations (+ - * /) to obtain 24.
 Input: 4 4 6 8
@@ -314,17 +331,19 @@ Input: {input}
 Answer: {answer}
 Judge:"""
 ```
-Among them:
+Among prompts:
 - Standard Prompt: Generates a straightforward answer that shows how to use a given number to get 24 through basic arithmetic operations
 - CoT Prompt: Demonstrate the reasoning process at each step, step by step using a given number to get 24 through arithmetic operation
 - Propose Prompt: Generates possible next steps and shows how to select two numbers from the current set of numbers to operate on
 - Value Prompt: Assessing whether it is possible to get 24 through arithmetic operations for a given set of numbers
 - Value Last Step Prompt: Evaluate whether the given answer is correct, i.e. whether each input number is used once and only once, and get 24 through arithmetic operation
 
-### Create model for evaluating plan and generating text
+### Step5 Create model for evaluating plan and generating text
 
-Create a `./ToT/model.py` prompt template for evaluating and generating mathematical problems, mainly used to determine whether a given number can be obtained by basic arithmetic operations (addition, subtraction, multiplication, division) to obtain 24.
+Create a `model.py` file in the root directory for evaluating and generating mathematical problems, mainly used to determine whether a given number can be obtained by basic arithmetic operations (addition, subtraction, multiplication, division) to obtain 24.
 ```python
+# model.py
+
 import os
 
 import promptulate as pne
@@ -380,10 +399,12 @@ def chatgpt(
         outputs.extend([res])
     return outputs
 ```
-### Create Breadth-first search (BFS) algorithm
+### Step6 Create Breadth-first search (BFS) algorithm
 
-Create a `./ToT/methods/bfs.py` Call the Game24Task class, model, and BFS to generate an evaluation solution
+Create a `methods` folder in the root directory and create the `bfs.py` file to write BFS algorithm and call the Game24Task class, model to generate an evaluation solution.
 ```python
+# bfs.py
+
 import itertools
 from functools import partial
 
@@ -516,9 +537,13 @@ def naive_solve(args, task, idx, to_print=True):
     ys = get_samples(task, x, "", args.n_generate_sample, args.prompt_sample, stop=None)
     return ys, {}
 ```
-### Create the app
-Create a `./ToT/app.py` to test effect
+### Step7 Create the app
+
+Finally, create a `app.py` file in the root directory to run the application and test effect.
+
 ```python
+# app.py
+
 import argparse
 
 from example.ToT.methods.bfs import solve
@@ -543,34 +568,45 @@ ys, infos = solve(args, task, 900)
 print(ys[0])
 ```
 
+Let's try it out and type the following command into the terminal:
+
+```shell
+cd ./app.py
+
+python app.py
+```
+
+The output should be like [this](#output-effect).
+
 ## Run the demo
 
-You can find the project [here](https://github.com/Undertone0809/promptulate/tree/main/example/ToT). To run the application, follow these steps:
+There is a complete demo implementation.You can find the project [here](https://github.com/Undertone0809/promptulate/tree/main/example/ToT). To run the application, follow these steps:
 
 1. Fork the project by clicking [here](https://github.com/Undertone0809/promptulate/fork).
+
 2. Clone the project locally:
 
-   ```bash
-   git clone https://github.com/Undertone0809/promptulate.git
-   ```
+```bash
+git clone https://github.com/Undertone0809/promptulate.git
+```
 
 3. Switch to the example directory:
 
-   ```shell
-   cd ./example/ToT
-   ```
+```shell
+cd ./example/ToT
+```
 
 4. Install the dependencies:
 
-   ```shell
-   pip install -r requirements.txt
-   ```
+```shell
+pip install -r requirements.txt
+```
 
 5. Run the application:
 
-   ```shell
-   python app.py
-   ```
+```shell
+python app.py
+```
 
 By following these instructions, you can easily set up and run ToT to solve in-depth reasoning Game24
 
