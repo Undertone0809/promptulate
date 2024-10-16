@@ -1,104 +1,228 @@
-# WeChat Chatbot
+# Building a WeChat Chatbot with Pne and ItChat
 
-## Overview
+This guide will walk you through the steps to create a basic WeChat chatbot using the Pne framework, an AI agent tool, and the ItChat library for handling WeChat messages. By following this tutorial, even beginners can build a chatbot from scratch.
 
-This code implements a WeChat chatbot that interacts with WeChat using the `itchat` library and generates replies using OpenAI's GPT-3.5-turbo model. The bot can receive text messages and process them accordingly.
+#### Prerequisites
 
-## Main Features
+Before starting, ensure you have the following installed:
 
-1. **Message Handling**: Receives text messages from WeChat and generates replies using the GPT-3.5-turbo model.
-2. **QR Code Login**: Generates a QR code for users to scan and log in to WeChat.
-3. **Error Handling**: Captures and logs exceptions during message processing.
+- Python 3.x
+- Basic understanding of Python
+- A WeChat account
+- The following Python packages:
+  - itchat
+  - pne
+  - promptulate
 
-## Code Structure
+You can install the necessary packages by running:
 
-### 1. Import Necessary Libraries
+```bash
+pip install -r requirements.txt
+```
+
+### Step 1: Import Necessary Libraries
+
+To get started, import the required libraries:
 
 ```python
 import time
-import chat_message
-import itchat
-import pne
+import chat_message  # custom module for handling chat messages
+import itchat        # WeChat interaction library
+import pne           # Pne framework for AI-driven message handling
 from itchat.content import TEXT
 from itchat.storage.messagequeue import Message
 from promptulate.utils import logger
 ```
 
-- `time`: Used to control the program's runtime.
-- `chat_message`: A custom module for handling chat messages.
-- `itchat`: Used for interacting with WeChat.
-- `pne`: Used to call OpenAI's chat interface.
-- `logger`: Used for logging.
+### Step 2: Define the Message Handler
 
-### 2. Message Handling Function
+We use itchat.msg_register to define how the bot will respond to text messages. This method registers the message handler for incoming messages:
 
 ```python
 @itchat.msg_register([TEXT])
 def handler_single_msg(msg: Message):
-    ...
+    try:
+        print("Get a new message: {}".format(msg.Content))
+        handler.handle(chat_message.ReceiveMessage(msg))
+    except NotImplementedError as e:
+        logger.debug("[WX] single message {} skipped: {}".format(msg["MsgId"], e))
+        return None
+    return None
 ```
 
-- This function is registered as a message handler, receiving text messages and calling the `handle` method of the `MessageHandler` class for processing.
+This function:
 
-### 3. QR Code Callback Function
+- Logs the message content
+- Uses a handler (which we define later) to process the incoming message and generate a response
+- Handles potential exceptions with logging
+
+### Step 3: Generate a QR Code for WeChat Login
+
+WeChat login requires scanning a QR code. Here, we provide several QR code generation options:
 
 ```python
 def qrCallback(uuid, status, qrcode):
-    ...
+    if status == "0":
+        url = f"https://login.weixin.qq.com/l/{uuid}"
+
+        qr_api1 = "https://api.isoyu.com/qr/?m=1&e=L&p=20&url={}".format(url)
+        qr_api2 = (
+            "https://api.qrserver.com/v1/create-qr-code/?size=400x400&data={}".format(url)
+        )
+        qr_api3 = "https://api.pwmqr.com/qrcode/create/?url={}".format(url)
+        qr_api4 = "https://my.tv.sohu.com/user/a/wvideo/getQRCode.do?text={}".format(url)
+
+        print("You can scan the QRCode on one of these websites:")
+        print(qr_api3)
+        print(qr_api4)
+        print(qr_api2)
+        print(qr_api1)
 ```
 
-- This function is called after the QR code is generated, providing multiple QR code links for the user to scan and log in.
+This function generates multiple QR codes from different services, allowing the user to scan one for WeChat login.
 
-### 4. Startup Function
+### Building a WeChat Chatbot with Pne and ItChat
+
+This guide will walk you through the steps to create a basic WeChat chatbot using the Pne framework, an AI agent tool, and the ItChat library for handling WeChat messages. By following this tutorial, even beginners can build a chatbot from scratch.
+
+Prerequisites
+
+Before starting, ensure you have the following installed:
+
+    •	Python 3.x
+    •	Basic understanding of Python
+    •	A WeChat account
+    •	The following Python packages:
+    •	itchat
+    •	pne
+    •	promptulate
+
+You can install the necessary packages by running:
+
+pip install itchat pne promptulate
+
+Step 1: Import Necessary Libraries
+
+To get started, import the required libraries:
+
+import time
+import chat_message # custom module for handling chat messages
+import itchat # WeChat interaction library
+import pne # Pne framework for AI-driven message handling
+from itchat.content import TEXT
+from itchat.storage.messagequeue import Message
+from promptulate.utils import logger
+
+Step 2: Define the Message Handler
+
+We use itchat.msg_register to define how the bot will respond to text messages. This method registers the message handler for incoming messages:
+
+@itchat.msg_register([TEXT])
+def handler_single_msg(msg: Message):
+try:
+print("Get a new message: {}".format(msg.Content))
+handler.handle(chat_message.ReceiveMessage(msg))
+except NotImplementedError as e:
+logger.debug("[WX] single message {} skipped: {}".format(msg["MsgId"], e))
+return None
+return None
+
+This function:
+
+    •	Logs the message content
+    •	Uses a handler (which we define later) to process the incoming message and generate a response
+    •	Handles potential exceptions with logging
+
+Step 3: Generate a QR Code for WeChat Login
+
+WeChat login requires scanning a QR code. Here, we provide several QR code generation options:
+
+def qrCallback(uuid, status, qrcode):
+if status == "0":
+url = f"https://login.weixin.qq.com/l/{uuid}"
+
+        qr_api1 = "https://api.isoyu.com/qr/?m=1&e=L&p=20&url={}".format(url)
+        qr_api2 = (
+            "https://api.qrserver.com/v1/create-qr-code/?size=400x400&data={}".format(url)
+        )
+        qr_api3 = "https://api.pwmqr.com/qrcode/create/?url={}".format(url)
+        qr_api4 = "https://my.tv.sohu.com/user/a/wvideo/getQRCode.do?text={}".format(url)
+
+        print("You can scan the QRCode on one of these websites:")
+        print(qr_api3)
+        print(qr_api4)
+        print(qr_api2)
+        print(qr_api1)
+
+This function generates multiple QR codes from different services, allowing the user to scan one for WeChat login.
+
+### Step 4: Initialize and Run the Chatbot
+
+The startup() function initializes the WeChat login process and begins listening for messages:
 
 ```python
 def startup():
-    ...
+    try:
+        itchat.auto_login(
+            enableCmdQR=2,
+            hotReload=False,   # Set to True to avoid logging in every time
+            qrCallback=qrCallback
+        )
+        user_id = itchat.instance.storageClass.userName
+        name = itchat.instance.storageClass.nickName
+        logger.info(
+            "WeChat login success, user_id: {}, nickname: {}".format(user_id, name)
+        )
+        itchat.run()
+    except Exception as e:
+        logger.exception(e)
 ```
 
-- This function initializes `itchat`, logs in to WeChat, and starts receiving messages.
+### Step 5: Define the AI Response Logic
 
-### 5. Message Handling Class
+Here’s where we leverage Pne to generate AI-driven responses using the GPT-3.5 model. When a message is received, Pne processes it and returns a response that is sent back to the user.
 
 ```python
 class MessageHandler:
-    ...
+    def __init__(self):
+        pass
+
+    def handle(self, msg: chat_message.ReceiveMessage):
+        receiver = msg.FromUserName
+        response = pne.chat(
+            messages=msg.Content,
+            model="gpt-3.5-turbo",
+            model_config={
+                "api_key": "sk-xxxxxx",  # Replace with your API key
+                "base_url": "https://api.openai.com/v1",
+            },
+        )
+        itchat.send(response.result, toUserName=receiver)
+
+handler = MessageHandler()
 ```
 
-- This class is responsible for processing received messages and generating replies using OpenAI's API.
+This class processes incoming messages and sends the AI-generated responses back to the user via WeChat.
 
-### 6. Main Program Entry
+### Step 6: Main Loop to Keep the Bot Running
+
+Finally, to ensure the bot runs continuously, we keep the process alive in a loop:
 
 ```python
 if __name__ == "__main__":
-    startup()
+    startup()  # Log into WeChat
     while True:
-        time.sleep(1)
+        time.sleep(1)  # Keep the program running
 ```
 
-- The main entry point of the program, calling the `startup` function and keeping the program running.
+### Running the Chatbot
 
-## Usage Instructions
+To run the bot, simply execute the script in your terminal:
 
-1. **Install Dependencies**:
-   Ensure that the `itchat` and `pne` libraries are installed. You can use the following command:
+```bash
+python app.py
+```
 
-   ```bash
-   pip install itchat pne
-   ```
+After running the script, a QR code will be generated. Scan it with WeChat to log in, and your bot will start receiving and responding to messages!
 
-2. **Configure API Key**:
-   In the `MessageHandler` class, replace `api_key` with your OpenAI API key.
-
-3. **Run the Program**:
-   Execute the `app.py` file, and the program will generate a QR code for the user to scan and log in.
-
-4. **Send Messages**:
-   After logging in, users can send text messages, and the bot will automatically reply.
-
-## Notes
-
-- Ensure a stable internet connection to access OpenAI's API.
-- Be cautious when handling sensitive information, such as protecting the API key and user data.
-
-
+This simple chatbot example shows how to integrate the Pne framework for AI-generated responses and the ItChat library for handling WeChat messages. You can further enhance the bot by implementing more sophisticated message handling, custom responses, and integrating other APIs.
