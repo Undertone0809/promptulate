@@ -207,7 +207,6 @@ class Hook(ToolHookMixin, AgentHookMixin, LLMHookMixin):
             callback=callback,
             component_type=hook_table[0],
         )
-        logger.debug(f"[pne hook registry] instance hook: {hook}")
         cls.component_hook_store.append(hook)
 
     @classmethod
@@ -235,7 +234,6 @@ class Hook(ToolHookMixin, AgentHookMixin, LLMHookMixin):
             component_type=hook_table[0],
             unique_id=unique_id,
         )
-        logger.debug(f"[pne hook registry] instance hook: {hook}")
         cls.unmounted_hook_store.append(hook)
 
     @classmethod
