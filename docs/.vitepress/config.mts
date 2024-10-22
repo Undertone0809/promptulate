@@ -5,6 +5,16 @@ import { withPwa } from '@vite-pwa/vitepress'
 export default withPwa(defineConfig({
   title: "Promptulate",
   description: "🚀Lightweight Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way!",
+  sitemap: {
+    hostname: "https://promptulate.cn",
+    transformItems: (items) => {
+      return items.map(item => ({
+        ...item,
+        changefreq: 'weekly',
+        priority: 0.8,
+      }))
+    }
+  },
   head: [
     [
       'script',
