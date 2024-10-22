@@ -44,6 +44,21 @@ export default withPwa(defineConfig({
     ['meta', { property: 'twitter:image', content: 'https://r2.zeeland.top/images/2024/09/e84b5053274f7f82d1645ad240f7727f.png' }],
     ['meta', { property: 'twitter:title', content: 'Promptulate' }],
     ['meta', { property: 'twitter:description', content: '🚀Lightweight Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way!' }],
+    [
+      'script',
+      {
+        async: 'true',
+        src: 'https://www.googletagmanager.com/gtag/js?id=G-8K40Y823SC'
+      }
+    ],
+    [
+      'script',
+      {},
+      `window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-8K40Y823SC');`
+    ],
   ],
   pwa: {
     manifest: {
