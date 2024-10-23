@@ -33,7 +33,7 @@ def parse_content(chunk) -> (str, str):
 
 class LiteLLM(BaseLLM):
     def __init__(self, model: str, model_config: Optional[dict] = None, **kwargs):
-        logger.info(f"[pne chat] init LiteLLM, model: {model} config: {model_config}")
+        logger.info(f"[pne chat] init LiteLLM, model: {model}")
         super().__init__(**kwargs)
         self._model: str = model
         self._model_config: dict = model_config or {}

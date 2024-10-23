@@ -17,10 +17,7 @@
 # Project Link: https://github.com/Undertone0809/promptulate
 # Contact Email: zeeland@foxmail.com
 
-from promptulate.utils.color_print import print_text
 from promptulate.utils.logger import logger
-from promptulate.utils.openai_key_pool import export_openai_key_pool
-from promptulate.utils.singleton import AbstractSingleton, Singleton
 from promptulate.utils.string_template import StringTemplate
 
-__all__ = ["logger", "export_openai_key_pool", "StringTemplate"]
+__all__ = ["logger", "StringTemplate"]
