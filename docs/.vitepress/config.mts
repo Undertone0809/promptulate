@@ -89,7 +89,14 @@ export default withPwa(defineConfig({
     },
     nav: [
       { text: 'Guide', link: '/get_started/intro' },
-      { text: 'Use cases', link: '/use_cases/intro' }
+      { text: 'Use cases', link: '/use_cases/intro' },
+      { 
+        text: 'Version', 
+        items: [
+          { text: 'v1.18.4', link: 'https://v1.promptulate.cn' },
+          { text: 'v2', link: '/' }
+        ]
+      }
     ],
     outline: {
       level: [2, 3],
