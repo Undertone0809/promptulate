@@ -44,7 +44,7 @@ export default withPwa(defineConfig({
     ['meta', { property: 'twitter:image', content: 'https://r2.zeeland.top/images/2024/09/e84b5053274f7f82d1645ad240f7727f.png' }],
     ['meta', { property: 'twitter:title', content: 'Promptulate' }],
     ['meta', { property: 'twitter:description', content: '🚀Lightweight Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way!' }],
-    ['meta', { name: 'baidu-site-verification', content: 'codeva-Ye9UTlO2mp' }],
+    ['meta', { name: 'baidu-site-verification', content: 'codeva-NkjDCTdsXS' }],
     [
       'script',
       {
