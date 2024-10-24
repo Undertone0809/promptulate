@@ -169,13 +169,6 @@ class AssistantMessage(BaseMessage):
         return "assistant"
 
 
-MESSAGE_TYPE = {
-    "completion": CompletionMessage,
-    "system": SystemMessage,
-    "user": UserMessage,
-    "assistant": AssistantMessage,
-}
-
 
 class LLMType(str, Enum):
     """All LLM type here"""
@@ -228,8 +221,15 @@ class MessageSet:
         Returns:
             initialized MessageSet
         """
+        type_map = {
+            "completion": CompletionMessage,
+            "system": SystemMessage,
+            "user": UserMessage,
+            "assistant": AssistantMessage,
+        }
+
         messages: List[BaseMessage] = [
-            MESSAGE_TYPE[item["role"]](content=item["content"]) for item in value
+            type_map[item["role"]](content=item["content"]) for item in value
         ]
         return cls(messages=messages, additional_kwargs=additional_kwargs)
 
@@ -299,20 +299,3 @@ class MessageSet:
             None
         """
         self.messages.extend(message_set.messages)
-
-
-def init_chat_message_history(
-    system_content: str, user_content: str, llm: LLMType
-) -> MessageSet:
-    if llm == llm.ChatOpenAI or llm == llm.OpenAI:
-        messages = [
-            SystemMessage(content=system_content),
-            UserMessage(content=user_content),
-        ]
-    else:
-        messages = [
-            UserMessage(content=system_content),
-            AssistantMessage(content="OK"),
-            UserMessage(content=user_content),
-        ]
-    return MessageSet(messages=messages)
