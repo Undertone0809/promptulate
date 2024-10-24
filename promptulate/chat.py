@@ -205,7 +205,7 @@ def chat(
     model: Optional[str] = None,
     model_config: Optional[dict] = None,
     tools: Optional[List[ToolTypes]] = None,
-    output_schema: Optional[type(BaseModel)] = None,
+    output_schema: Optional[Type[BaseModel]] = None,
     examples: Optional[List[BaseModel]] = None,
     return_raw_response: bool = False,
     custom_llm: Optional[BaseLLM] = None,

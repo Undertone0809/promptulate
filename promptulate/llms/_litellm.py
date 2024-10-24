@@ -1,7 +1,7 @@
 """Docs: https://docs.litellm.ai/docs/"""
 
 import json
-from typing import Optional, TypeVar, Union
+from typing import Optional, Tuple, TypeVar, Union
 
 import litellm
 
@@ -17,7 +17,7 @@ from promptulate.utils.logger import logger
 T = TypeVar("T", bound=BaseModel)
 
 
-def parse_content(chunk) -> (str, str):
+def parse_content(chunk) -> Tuple[str, dict]:
     """Parse the litellm chunk.
     Args:
         chunk: litellm chunk.
