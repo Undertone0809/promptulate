@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  name: "Promptulate"
+  name: "Promptulate v2"
   text: "🚀Lightweight AI Native development framework."
   tagline: Build your LLM Agent Application in a pythonic way.
   image:

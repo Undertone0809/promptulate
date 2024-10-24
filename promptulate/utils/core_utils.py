@@ -15,7 +15,7 @@
 # Copyright Owner: Zeeland
 # GitHub Link: https://github.com/Undertone0809/
 # Project Link: https://github.com/Undertone0809/promptulate
-# Contact Email: zeeland@foxmail.com
+# Contact Email: zeeland4work@gmail.com
 
 import logging
 import os

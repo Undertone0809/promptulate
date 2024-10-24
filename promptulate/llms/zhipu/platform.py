@@ -163,7 +163,7 @@ class ZhiPu(BaseLLM, ABC):
 
     def _build_api_params_dict(self, prompts: MessageSet) -> Dict[str, Any]:
         dic = {
-            "messages": prompts.to_llm_prompt(self.llm_type),
+            "messages": prompts.listdict_messages,
         }
         dic.update({"model": self.model})
         for key in self.model_config:

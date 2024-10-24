@@ -86,8 +86,7 @@ class TestLLMHook(TestCase):
             self.assertIsNotNone(result)
             print(result)
 
-        llm = ChatOpenAI()
-        llm.set_private_api_key("my key")
+        llm = ChatOpenAI(api_key="mock key")
         llm("What is LLM?")
 
         self.assertTrue(create_flag)

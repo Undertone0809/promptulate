@@ -133,7 +133,7 @@ class ErnieBot(BaseLLM, ABC):
         """Build api parameters to put it inside the body."""
         # print(prompts.type_)
         dic = {
-            "messages": prompts.to_llm_prompt(self.llm_type),
+            "messages": prompts.listdict_messages,
         }
 
         if stop:
@@ -143,3 +143,4 @@ class ErnieBot(BaseLLM, ABC):
             if key in self.__dict__:
                 dic.update({key: self.__dict__[key]})
         return dic
+
