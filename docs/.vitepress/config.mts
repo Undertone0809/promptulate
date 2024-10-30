@@ -149,8 +149,8 @@ export default withPwa(
         {
           text: "Version",
           items: [
-            { text: "v1.18.4", link: "https://v1.promptulate.cn" },
             { text: "v2", link: "/" },
+            { text: "v1.18.4", link: "https://v1.promptulate.cn" },
           ],
         },
       ],
@@ -210,7 +210,7 @@ export default withPwa(
           ],
         },
         {
-          text: "Modules",
+          text: "Concepts",
           items: [
             {
               text: "Agent",
