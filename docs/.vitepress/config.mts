@@ -85,7 +85,16 @@ export default withPwa(defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     logo: '/logo.png',
     search: {
-      provider: 'local'
+      provider: 'local',
+      options: {
+        // @ts-ignore
+        onSearch: ({ query }: { query: string }) => {
+          // @ts-ignore
+          gtag('event', 'search', {
+            search_term: query
+          });
+        }
+      }
     },
     nav: [
       { text: 'Guide', link: '/get_started/intro' },
