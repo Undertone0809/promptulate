@@ -43,11 +43,26 @@
  *   in custom container, badges, etc.
  * -------------------------------------------------------------------------- */
 
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("/fonts/PlusJakartaSans-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+}
+
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("/fonts/PlusJakartaSans-Italic-VariableFont_wght.ttf")
+    format("truetype");
+  font-weight: 100 900;
+  font-style: italic;
+}
+
 :root {
   --vp-c-bg: #f0efea;
   --vp-c-bg-alt: #fafaf8;
   --vp-c-bg-elv: #ffffff;
   --vp-c-bg-soft: #ffffff;
+  --vp-font-family-base: "Plus Jakarta Sans", sans-serif;
 }
 
 .dark {
