@@ -160,3 +160,12 @@
   transform: scale(1.01);
   border-color: var(--vp-c-brand-1);
 }
+
+.VPSidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.VPSidebar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
