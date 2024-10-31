@@ -27,5 +27,7 @@ features:
     details: Employs straightforward logic and clear syntax, enabling rapid development and easy comprehension for efficient AI application building.
   - title: 🧰 Ready for production
     details: Offers seamless compatibility with popular language models and provides a comprehensive suite of production-ready components for robust, scalable AI solutions.
+  - title: 🚧 Best Practices
+    details: While know-how is important, know-why is even more important. There is no better documentation to learn best practices than promptulate.
 ---
 
