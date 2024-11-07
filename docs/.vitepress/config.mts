@@ -103,7 +103,7 @@ export default withPwa(
         "meta",
         {
           property: "og:image",
-          content: "/banner.png",
+          content: "https://r2.zeeland.top/images/2024/09/e84b5053274f7f82d1645ad240f7727f.png",
         },
       ] as [string, Record<string, string>],
       [
@@ -114,7 +114,7 @@ export default withPwa(
         "meta",
         {
           property: "twitter:image",
-          content: "/banner.png",
+          content: "https://r2.zeeland.top/images/2024/09/e84b5053274f7f82d1645ad240f7727f.png",
         },
       ] as [string, Record<string, string>],
       ["meta", { property: "twitter:title", content: "Promptulate" }] as [
