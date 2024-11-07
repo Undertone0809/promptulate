@@ -1,6 +1,46 @@
 import { defineConfig } from "vitepress";
 import { withPwa } from "@vite-pwa/vitepress";
 
+const getAnalyticsScripts = () => {
+  if (process.env.NODE_ENV === "development") {
+    return [];
+  }
+
+  return [
+    [
+      "script",
+      {
+        defer: "true",
+        "data-website-id": "628f906e-71c9-4ad5-b0a0-ff86e778b861",
+        src: "https://umami.zeeland.top/script.js",
+      },
+    ] as [string, Record<string, string>],
+    [
+      "script",
+      {
+        defer: "true",
+        "data-website-id": "87a6bbc8-4134-4496-80d0-2f926075dd53",
+        src: "https://umami.zeeland.top/script.js",
+      },
+    ] as [string, Record<string, string>],
+    [
+      "script",
+      {
+        async: "true",
+        src: "https://www.googletagmanager.com/gtag/js?id=G-8K40Y823SC",
+      },
+    ] as [string, Record<string, string>],
+    [
+      "script",
+      {},
+      `window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-8K40Y823SC');`,
+    ] as [string, Record<string, string>, string],
+  ];
+};
+
 // https://vitepress.dev/reference/site-config
 export default withPwa(
   defineConfig({
@@ -18,23 +58,11 @@ export default withPwa(
       },
     },
     head: [
-      [
-        "script",
-        {
-          defer: "true",
-          "data-website-id": "628f906e-71c9-4ad5-b0a0-ff86e778b861",
-          src: "https://umami.zeeland.top/script.js",
-        },
+      ...getAnalyticsScripts(),
+      ["link", { rel: "icon", href: "/logo.ico" }] as [
+        string,
+        Record<string, string>
       ],
-      [
-        "script",
-        {
-          defer: "true",
-          "data-website-id": "87a6bbc8-4134-4496-80d0-2f926075dd53",
-          src: "https://umami.zeeland.top/script.js",
-        },
-      ],
-      ["link", { rel: "icon", href: "/logo.ico" }],
       [
         "meta",
         {
@@ -42,7 +70,7 @@ export default withPwa(
           content:
             "🚀Lightweight Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way!",
         },
-      ],
+      ] as [string, Record<string, string>],
       [
         "meta",
         {
@@ -50,10 +78,19 @@ export default withPwa(
           content:
             "Promptulate, pne, LLM, Large language model, Autonomous Language Agents, development framework",
         },
+      ] as [string, Record<string, string>],
+      ["meta", { property: "og:site_name", content: "Promptulate" }] as [
+        string,
+        Record<string, string>
       ],
-      ["meta", { property: "og:site_name", content: "Promptulate" }],
-      ["meta", { property: "og:url", content: "https://www.promptulate.cn" }],
-      ["meta", { property: "og:title", content: "Promptulate" }],
+      [
+        "meta",
+        { property: "og:url", content: "https://www.promptulate.cn" },
+      ] as [string, Record<string, string>],
+      ["meta", { property: "og:title", content: "Promptulate" }] as [
+        string,
+        Record<string, string>
+      ],
       [
         "meta",
         {
@@ -61,25 +98,29 @@ export default withPwa(
           content:
             "🚀Lightweight Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way!",
         },
-      ],
+      ] as [string, Record<string, string>],
       [
         "meta",
         {
           property: "og:image",
-          content:
-            "https://r2.zeeland.top/images/2024/09/e84b5053274f7f82d1645ad240f7727f.png",
+          content: "/banner.png",
         },
-      ],
-      ["meta", { property: "twitter:card", content: "summary_large_image" }],
+      ] as [string, Record<string, string>],
+      [
+        "meta",
+        { property: "twitter:card", content: "summary_large_image" },
+      ] as [string, Record<string, string>],
       [
         "meta",
         {
           property: "twitter:image",
-          content:
-            "https://r2.zeeland.top/images/2024/09/e84b5053274f7f82d1645ad240f7727f.png",
+          content: "/banner.png",
         },
+      ] as [string, Record<string, string>],
+      ["meta", { property: "twitter:title", content: "Promptulate" }] as [
+        string,
+        Record<string, string>
       ],
-      ["meta", { property: "twitter:title", content: "Promptulate" }],
       [
         "meta",
         {
@@ -87,26 +128,11 @@ export default withPwa(
           content:
             "🚀Lightweight Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way!",
         },
-      ],
+      ] as [string, Record<string, string>],
       [
         "meta",
         { name: "baidu-site-verification", content: "codeva-NkjDCTdsXS" },
-      ],
-      [
-        "script",
-        {
-          async: "true",
-          src: "https://www.googletagmanager.com/gtag/js?id=G-8K40Y823SC",
-        },
-      ],
-      [
-        "script",
-        {},
-        `window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-8K40Y823SC');`,
-      ],
+      ] as [string, Record<string, string>],
     ],
     pwa: {
       manifest: {
