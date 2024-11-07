@@ -24,18 +24,11 @@ import requests
 from dotenv import load_dotenv
 
 from promptulate.hook.stdout_hook import StdOutHook
-from promptulate.utils.core_utils import get_cache
 from promptulate.utils.logger import logger
-from promptulate.utils.openai_key_pool import OpenAIKeyPool
 from promptulate.utils.singleton import Singleton
 
 PROXY_MODE = ["off", "custom", "promptulate"]
 load_dotenv()
-
-
-def set_enable_cache(value: bool):
-    """Caching is enabled by default. Disabling caching is not recommended."""
-    Config().enable_cache = value
 
 
 def turn_off_stdout_hook():
@@ -47,7 +40,6 @@ class Config(metaclass=Singleton):
     Configuration class for managing application settings.
 
     Attributes:
-        enable_cache (bool): Flag indicating whether caching is enabled.
         _proxy_mode (str): The current proxy mode.
         _proxies (Optional[dict]): Dictionary of proxy settings.
         openai_chat_api_url (str): URL for OpenAI chat API.
@@ -58,13 +50,12 @@ class Config(metaclass=Singleton):
         ernie_bot_token_url (str): URL for Ernie bot token API.
         ernie_bot_4_url (str): URL for Ernie bot 4 API.
         ernie_embedding_v1_url (str): URL for Ernie embedding v1 API.
-        key_default_retry_times (int): Default number of key retry times.
+        max_retries (int): Maximum number of retries for llm if it fails.
         enable_stdout_hook (bool): Flag indicating whether stdout hook is enabled.
     """
 
     def __init__(self):
         logger.info("[pne config] Config initialization")
-        self.enable_cache: bool = True
         self._proxy_mode: str = PROXY_MODE[0]
         self._proxies: Optional[dict] = None
 
@@ -80,8 +71,7 @@ class Config(metaclass=Singleton):
 
         self.zhipu_model_url = "https://open.bigmodel.cn/api/paas/v4/chat/completions"
 
-        self.key_default_retry_times = 5
-        """If llm(like OpenAI) unable to obtain data, retry request until the data is obtained."""  # noqa: E501
+        self.max_retries = 3
         self.enable_stdout_hook = True
 
         if self.enable_stdout_hook:
@@ -92,43 +82,21 @@ class Config(metaclass=Singleton):
             self.enable_stdout_hook = False
             StdOutHook.unregister_stdout_hooks()
 
-    def get_openai_api_key(self, model: str = "gpt-3.5-turbo") -> str:
-        """Get openai key from KeyPool and environment variable. The priority of
-        obtaining the key: environment variable, cache of OpenAIKeyPool, cache of
-        OEPNAI_API_KEY."""
+    def get_openai_api_key(self) -> str:
+        """Get OpenAI API key from environment variable."""
         if "OPENAI_API_KEY" in os.environ.keys():
-            if self.enable_cache:
-                get_cache()["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
             return os.getenv("OPENAI_API_KEY")
-
-        if self.enable_cache:
-            openai_key_pool: OpenAIKeyPool = OpenAIKeyPool()
-            key = openai_key_pool.get(model)
-            if key:
-                return key
-
-        if self.enable_cache and "OPENAI_API_KEY" in get_cache():
-            return get_cache()["OPENAI_API_KEY"]
-
         raise ValueError("OPENAI API key is not provided. Please set your key.")
 
     def get_ernie_api_key(self) -> str:
         if "ERNIE_API_KEY" in os.environ.keys():
-            if self.enable_cache:
-                get_cache()["ERNIE_API_KEY"] = os.getenv("ERNIE_API_KEY")
             return os.getenv("ERNIE_API_KEY")
-        if self.enable_cache and "ERNIE_API_KEY" in get_cache():
-            return get_cache()["ERNIE_API_KEY"]
         raise ValueError("ERNIE_API_KEY is not provided. Please set your key.")
 
     @property
     def get_ernie_api_secret(self) -> str:
         if "ERNIE_API_SECRET" in os.environ.keys():
-            if self.enable_cache:
-                get_cache()["ERNIE_API_SECRET"] = os.getenv("ERNIE_API_SECRET")
             return os.getenv("ERNIE_API_SECRET")
-        if self.enable_cache and "ERNIE_API_SECRET" in get_cache():
-            return get_cache()["ERNIE_API_SECRET"]
         raise ValueError("ERNIE_API_SECRET is not provided. Please set your secret.")
 
     def get_zhipuai_api_key(self) -> str:
@@ -137,11 +105,7 @@ class Config(metaclass=Singleton):
         )
 
         if "ZHIPUAI_API_KEY" in os.environ.keys():
-            if self.enable_cache:
-                get_cache()["ZHIPUAI_API_KEY"] = os.getenv("ZHIPUAI_API_KEY")
             return os.getenv("ZHIPUAI_API_KEY")
-        if self.enable_cache and "ZHIPUAI_API_KEY" in get_cache():
-            return get_cache()["ZHIPUAI_API_KEY"]
         raise ValueError("ZHIPUAI_API_KEY is not provided. Please set your key.")
 
     def get_qianfan_ak(self):
@@ -150,11 +114,7 @@ class Config(metaclass=Singleton):
         )
 
         if "QIANFAN_ACCESS_KEY" in os.environ.keys():
-            if self.enable_cache:
-                get_cache()["QIANFAN_ACCESS_KEY"] = os.getenv("QIANFAN_ACCESS_KEY")
             return os.getenv("QIANFAN_ACCESS_KEY")
-        if self.enable_cache and "QIANFAN_ACCESS_KEY" in get_cache():
-            return get_cache()["QIANFAN_ACCESS_KEY"]
         raise ValueError("QIANFAN_ACCESS_KEY is not provided. Please set your key.")
 
     def get_qianfan_sk(self):
@@ -163,11 +123,7 @@ class Config(metaclass=Singleton):
         )
 
         if "QIANFAN_SECRET_KEY" in os.environ.keys():
-            if self.enable_cache:
-                get_cache()["QIANFAN_SECRET_KEY"] = os.getenv("QIANFAN_SECRET_KEY")
             return os.getenv("QIANFAN_SECRET_KEY")
-        if self.enable_cache and "QIANFAN_SECRET_KEY" in get_cache():
-            return get_cache()["QIANFAN_SECRET_KEY"]
         raise ValueError("QIANFAN_SECRET_KEY is not provided. Please set your secret.")
 
     def get_ernie_token(self) -> str:
@@ -183,35 +139,21 @@ class Config(metaclass=Singleton):
         }
         return str(requests.post(url, params=params).json().get("access_token"))
 
-    def get_key_retry_times(self, model: str) -> int:
-        if self.enable_cache:
-            openai_key_pool: OpenAIKeyPool = OpenAIKeyPool()
-            return openai_key_pool.get_num(model)
-        return self.key_default_retry_times
-
     @property
     def proxy_mode(self) -> str:
-        if self.enable_cache and "PROXY_MODE" in get_cache():
-            return get_cache()["PROXY_MODE"]
         return self._proxy_mode
 
     @proxy_mode.setter
     def proxy_mode(self, value):
         self._proxy_mode = value
-        if self.enable_cache:
-            get_cache()["PROXY_MODE"] = value
 
     @property
     def proxies(self) -> Optional[dict]:
-        if self.enable_cache and "PROXIES" in get_cache():
-            return get_cache()["PROXIES"] if self.proxy_mode == "custom" else None
-        return self._proxies
+        return self._proxies if self.proxy_mode == "custom" else None
 
     @proxies.setter
     def proxies(self, value):
         self._proxies = value
-        if self.enable_cache:
-            get_cache()["PROXIES"] = value
 
     @property
     def openai_chat_request_url(self) -> str:

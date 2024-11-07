@@ -2,7 +2,7 @@ import warnings
 from abc import abstractmethod
 from datetime import datetime
 from enum import Enum, auto
-from typing import Any, Callable, Dict, Iterator, List, Optional, Union
+from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple, Union
 
 from promptulate.pydantic_v1 import BaseModel, Field
 
@@ -48,10 +48,10 @@ class StreamIterator:
     def __init__(
         self,
         response_stream,
-        parse_content: callable([[Any], [str, str]]),
+        parse_content: Callable[[Any], Tuple[Optional[str], Dict[str, Any]]],
         return_raw_response: bool = False,
-        additional_kwargs: dict = None,
-        content: str = None,
+        additional_kwargs: Optional[Dict[str, Any]] = None,
+        content: Optional[str] = None,
     ):
         """
         The constructor for BaseStreamIterator class.
@@ -169,13 +169,6 @@ class AssistantMessage(BaseMessage):
         return "assistant"
 
 
-MESSAGE_TYPE = {
-    "completion": CompletionMessage,
-    "system": SystemMessage,
-    "user": UserMessage,
-    "assistant": AssistantMessage,
-}
-
 
 class LLMType(str, Enum):
     """All LLM type here"""
@@ -228,8 +221,15 @@ class MessageSet:
         Returns:
             initialized MessageSet
         """
+        type_map = {
+            "completion": CompletionMessage,
+            "system": SystemMessage,
+            "user": UserMessage,
+            "assistant": AssistantMessage,
+        }
+
         messages: List[BaseMessage] = [
-            MESSAGE_TYPE[item["role"]](content=item["content"]) for item in value
+            type_map[item["role"]](content=item["content"]) for item in value
         ]
         return cls(messages=messages, additional_kwargs=additional_kwargs)
 
@@ -250,14 +250,6 @@ class MessageSet:
                 {"role": message.type, "content": message.content}
             )
         return converted_messages
-
-    def to_llm_prompt(self, llm_type: LLMType) -> Any:
-        """Convert the MessageSet messages to specified llm prompt"""
-        if not llm_type:
-            ValueError(
-                "Missing llm_type, llm_type is needed if you want to use llm_prompt."
-            )
-        return _to_llm_prompt[llm_type](self)
 
     @property
     def string_messages(self) -> str:
@@ -307,49 +299,3 @@ class MessageSet:
             None
         """
         self.messages.extend(message_set.messages)
-
-
-def init_chat_message_history(
-    system_content: str, user_content: str, llm: LLMType
-) -> MessageSet:
-    if llm == llm.ChatOpenAI or llm == llm.OpenAI:
-        messages = [
-            SystemMessage(content=system_content),
-            UserMessage(content=user_content),
-        ]
-    else:
-        messages = [
-            UserMessage(content=system_content),
-            AssistantMessage(content="好的"),
-            UserMessage(content=user_content),
-        ]
-    return MessageSet(messages=messages)
-
-
-def _to_openai_llm_prompt(message_set: MessageSet) -> str:
-    return message_set.string_messages
-
-
-def _to_chat_openai_llm_prompt(message_set: MessageSet) -> List[Dict]:
-    return message_set.listdict_messages
-
-
-def _to_ernie_bot_llm_prompt(message_set: MessageSet) -> List[Dict]:
-    return message_set.listdict_messages
-
-
-def _to_qian_fan_llm_prompt(message_set: MessageSet) -> List[Dict]:
-    return message_set.listdict_messages
-
-
-def _to_zhipu_llm_prompt(message_set: MessageSet) -> List[Dict]:
-    return message_set.listdict_messages
-
-
-_to_llm_prompt: Dict[LLMType, Callable] = {
-    LLMType.OpenAI: _to_openai_llm_prompt,
-    LLMType.ChatOpenAI: _to_chat_openai_llm_prompt,
-    LLMType.ErnieBot: _to_ernie_bot_llm_prompt,
-    LLMType.QianFan: _to_qian_fan_llm_prompt,
-    LLMType.ZhiPu: _to_zhipu_llm_prompt,
-}

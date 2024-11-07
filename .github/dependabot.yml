@@ -7,7 +7,7 @@ updates:
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     allow:
       - dependency-type: "all"
     commit-message:
@@ -17,7 +17,7 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     allow:
       - dependency-type: "all"
     commit-message:
@@ -27,7 +27,7 @@ updates:
   - package-ecosystem: "docker"
     directory: "/docker"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     allow:
       - dependency-type: "all"
     commit-message:

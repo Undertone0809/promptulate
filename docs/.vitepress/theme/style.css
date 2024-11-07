@@ -43,11 +43,26 @@
  *   in custom container, badges, etc.
  * -------------------------------------------------------------------------- */
 
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("/fonts/PlusJakartaSans-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+}
+
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("/fonts/PlusJakartaSans-Italic-VariableFont_wght.ttf")
+    format("truetype");
+  font-weight: 100 900;
+  font-style: italic;
+}
+
 :root {
   --vp-c-bg: #f0efea;
   --vp-c-bg-alt: #fafaf8;
   --vp-c-bg-elv: #ffffff;
   --vp-c-bg-soft: #ffffff;
+  --vp-font-family-base: "Plus Jakarta Sans", sans-serif;
 }
 
 .dark {
@@ -66,7 +81,7 @@
   --vp-c-brand-1: #d77a59;
   --vp-c-brand-2: #dfa691;
   --vp-c-brand-3: #b15f3b;
-  --vp-c-brand-soft: #8b4424;
+  --vp-c-brand-soft: #844c33;
 
   --vp-c-tip-1: var(--vp-c-brand-1);
   --vp-c-tip-2: var(--vp-c-brand-2);
@@ -159,4 +174,13 @@
   color: var(--vp-c-text-1);
   transform: scale(1.01);
   border-color: var(--vp-c-brand-1);
+}
+
+.VPSidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.VPSidebar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

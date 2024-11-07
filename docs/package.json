@@ -10,6 +10,7 @@
     "docs:preview": "vitepress preview"
   },
   "dependencies": {
+    "@types/node": "^22.8.5",
     "vue-demi": "^0.14.10"
   }
 }

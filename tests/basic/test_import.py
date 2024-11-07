@@ -7,7 +7,6 @@ def test_import_init():
 def test_import_utils():
     from promptulate.utils import (
         StringTemplate,
-        export_openai_key_pool,
         logger,
     )
 

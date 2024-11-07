@@ -8,7 +8,6 @@ This highlights functionality that is core to using Promptulate.
 
 - [How to return structured data from a model](/use_cases/chat_usage.md#structured-output)
 
-
 - [How to use stream + structured data from a model](/use_cases/chat_usage.md#stream-json-parser)
 
 
@@ -17,6 +16,7 @@ This highlights functionality that is core to using Promptulate.
 
 - [How to use pne.chat() and AIChat()](/use_cases/chat_usage.md#chat)
 
+- [How to define a good tool function](/modules/tools/index.md#best-practices)
 
 - [How to build a streamlit app quickly by pne](/use_cases/streamlit-chatbot.md#build-a-chatbot-using-streamlit)
 
