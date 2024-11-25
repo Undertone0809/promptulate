@@ -1532,13 +1532,13 @@ requests = ">=2,<3"
 
 [[package]]
 name = "litellm"
-version = "1.52.9"
+version = "1.52.15"
 description = "Library to easily interface with LLM API providers"
 optional = false
 python-versions = "!=2.7.*,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,!=3.7.*,>=3.8"
 files = [
-    {file = "litellm-1.52.9-py3-none-any.whl", hash = "sha256:a1ef5561d220d77059a359da497f0ab04c721205c6795f151b07be5bbe51fe45"},
-    {file = "litellm-1.52.9.tar.gz", hash = "sha256:73a05fed76cfac4357ee4117f28608209db891223fb9c6e03dddfe1723666437"},
+    {file = "litellm-1.52.15-py3-none-any.whl", hash = "sha256:8a2d8e2526c5e7afb3006b0214d3c348778462fefafd582fd76bb7f5c35d28d0"},
+    {file = "litellm-1.52.15.tar.gz", hash = "sha256:11a61b1b033ddff9d480da66c00acc9d3e4fbfeed166d1b0de8eda16c684116e"},
 ]
 
 [package.dependencies]
