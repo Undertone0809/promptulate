@@ -136,11 +136,18 @@ Use `provider/model_name` to call the model, and you can easily build any third-
 
 For more models, please visit the [litellm documentation](https://docs.litellm.ai/docs/providers).
 
+Pay attention to write the model name,please visit the [how_to_write_model_name](../other/how_to_write_model_name.md).
+
 You can easily build any third-party model calls using the following method:
 
 ### 2.4 Using tools
 
 In pne, you can easily integrate various types of tools from different frameworks (such as LangChain, llama-index) as external tools, such as web search, calculators, etc. In the example below, we use LangChain's duckduckgo search tool to get tomorrow's weather in Shanghai.
+
+Before getting started, please install the following dependencies, paying special attention to the version of Langchain.
+```
+pip install langchain==0.1.5 langchain-community arxiv duckduckgo-search
+```
 
 ```python
 import os

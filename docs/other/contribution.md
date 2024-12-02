@@ -154,7 +154,7 @@ npm i # or pnpm i
 Run the following command to startup the documentation server:
 
 ```bash
-npm run dev
+npm run docs:dev
 ```
 
 When you add a new feature, you are recommended to add a demo notebook in `example/`. Moreover, you can add corresponding documentation in `docs/`.

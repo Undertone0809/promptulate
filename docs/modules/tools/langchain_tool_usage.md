@@ -11,8 +11,7 @@ Now, let's see how to use LangChain tool in ToolAgent. The following example, we
 Before we start, we need to install the LangChain tool package and ArXiv.
 
 ```bash
-pip install langchain
-pip install arxiv
+pip install langchain==0.1.5 langchain-community arxiv
 ```
 
 
