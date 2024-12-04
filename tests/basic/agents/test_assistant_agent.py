@@ -37,5 +37,5 @@ def test_schema():
     json_data = json.loads(raw_data)
     plan_resp = AgentPlanResponse(**json_data)
 
-    plan = Plan.parse_obj({**plan_resp.dict(), "next_task_id": 1})
+    plan = Plan.parse_obj({**plan_resp.model_dump(), "next_task_id": 1})
     assert plan.next_task_id == 1

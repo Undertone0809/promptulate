@@ -1,8 +1,8 @@
 from typing import Optional
 
 import pytest
+from pydantic import BaseModel, Field
 
-from promptulate.pydantic_v1 import BaseModel, Field
 from promptulate.tools.base import (
     BaseTool,
     Tool,
@@ -314,8 +314,8 @@ def test_base_tool_with_params_to_tool():
 
 
 class FakerBaseToolWithNOParams(BaseTool):
-    name = "fake tool"
-    description = "fake tool description"
+    name: str = "fake tool"
+    description: str = "fake tool description"
 
     def _run(self, *args, **kwargs):
         return "fake tool result"

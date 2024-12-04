@@ -1,8 +1,8 @@
 from unittest.mock import patch
 
 import pytest
+from pydantic import ValidationError
 
-from promptulate.pydantic_v1 import ValidationError
 from promptulate.tools.arxiv.api_wrapper import ArxivAPIWrapper
 
 

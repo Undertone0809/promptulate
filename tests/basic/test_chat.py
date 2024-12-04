@@ -5,11 +5,11 @@ TODO add test: test pne's llm, test litellm llm
 from typing import Generator, Optional, Union
 
 import pytest
+from pydantic import BaseModel, Field
 
 import promptulate as pne
 from promptulate import chat
 from promptulate.llms import BaseLLM
-from promptulate.pydantic_v1 import BaseModel, Field
 from promptulate.schema import (
     AssistantMessage,
     BaseMessage,

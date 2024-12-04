@@ -1,6 +1,494 @@
 # Tool
 
-The tools module provides LLM with the ability to extend external tools, which can be said to be the first step towards intelligence. Through tools, a perception feedback system can be built for LLM, providing more possibilities for LLM application development. Currently, Tool only serves Agent for pairing use. This article will introduce the external tools currently supported by `promptulate`, as well as the basic usage of external tools and toolkits, and finally introduce some toolkits that are currently under development.
+## What is Tool?
+
+The tools module provides LLM with the ability to extend external tools, which can be said to be the first step towards intelligence. Through tools, a perception feedback system can be built for LLM, providing more possibilities for LLM application development.
+
+For example, when you want to `let LLM query the weather in Shanghai tomorrow`, you can define a python function, then let the large model output the word "Shanghai", and pass it as a parameter to the function you defined, and call it back to the large model.
+
+The prompt maybe like this:
+
+`"You are a weather query assistant. When the user inputs the city name, please return the weather information of that city."`
+
+At this point, you need to use a tool to implement this functionality
+
+:::info
+You can refer to the function call and tool call in the [OpenAI Documentation](https://platform.openai.com/docs/guides/function-calling). The tool module in `pne` can implement these two functions more simply.
+:::
+
+## Usage
+
+### Basic Usage
+
+Using a tool in `pne` is very simple. To solve the problem of `What is the temperature in Shanghai tomorrow?`, the following code is enough.
+
+Here we use `wttr.in` to get weather information.
+
+```python
+import pne
+import requests
+
+
+def query_weather(city: str) -> str:
+    """
+    Query the weather information of the specified city through wttr.in.
+    Ref: https://github.com/chubin/wttr.in
+
+    Args:
+        city(str): City name, eg: London, Shanghai
+
+    Returns:
+        str: Weather information description
+    """
+    # wttr.in supports Chinese city names, use format=j1 to get JSON format data
+    try:
+        response = requests.get(f"https://wttr.in/{city}?format=j1")
+        data = response.json()
+
+        tomorrow = data["weather"][1]  # Index 1 is tomorrow's forecast
+        temp_min = tomorrow["mintempC"]
+        temp_max = tomorrow["maxtempC"]
+        weather_desc = tomorrow["hourly"][4]["weatherDesc"][0]["value"]
+
+        return (
+            f"Tomorrow's weather in {city}:\n"
+            f"Temperature: {temp_min}°C to {temp_max}°C\n"
+            f"Weather: {weather_desc}"
+        )
+
+    except Exception as e:
+        return f"An error occurred while getting weather information: {str(e)}"
+
+
+response: str = pne.chat(
+    model="gpt-4o",
+    messages="What is the temperature in Shanghai tomorrow?",
+    tools=[query_weather],
+)
+
+print(response)
+
+```
+
+Output:
+
+```
+The temperature in Shanghai tomorrow will be between 18°C and 22°C.
+```
+
+Easy to use, right?
+
+`pne` will automatically convert your function into parameters that LLM can recognize, and then call the function you defined.
+
+### Best Practices
+
+How to write a good function, so that the large model can better understand your function? The most important concept is to `introduce your function to the large model just like you would to a human, and introduce it as detailed as possible.
+`
+::: info TIP
+It is very important that you write a good function comment, formal parameter and corresponding data type, this way you can make LLM understand your function better.
+:::
+
+**Bad example 1: No function comment**
+
+```python
+def query_weather(city: str):
+    ...
+```
+
+::: warning WARN
+Lack of function comments will make the large model very confused. It can only guess the specific function of this function through the function name and the meaning of the parameters.
+
+However, when the function becomes complex, LLM will find it difficult to understand the function of this function.
+:::
+
+**Bad example 2: No parameter type**
+
+```python
+def get_user_by_id(id):
+    ...
+```
+
+::: warning WARN
+Lack of parameter type will make the large model unable to determine the specific type of the parameter, and it will be difficult to pass the parameter correctly.
+
+Here, the parameter `id` is a `string` or an `integer`, but the large model cannot determine which one it is.
+
+**If pass a error id type, the function will report an error.**
+:::
+
+**Good example1: detailed function and parameter comments, data types**
+
+```python{2-11}
+def query_weather(city): # [!code --]
+def query_weather(city: str) -> str: # [!code ++]
+    """ # [!code ++]
+    Query the weather information of the specified city through wttr.in.  # [!code ++]
+    Ref: https://github.com/chubin/wttr.in  # [!code ++]
+
+    Args:  # [!code ++]
+        city(str): City name, eg: London, Shanghai  # [!code ++]
+
+    Returns:  # [!code ++]
+        str: Weather information description  # [!code ++]
+    """  # [!code ++]
+    ...
+```
+
+In the function comments, examples of possible parameters are explained, which will better help LLM understand your function. Here we use `eg: London, Shanghai` to explain the possible parameters.
+
+Some time you can also `add some bad case` examples to help LLM understand your function better. For example:
+
+```python
+def query_weather(city: str) -> str:
+    """
+    Query the weather information of the specified city through wttr.in.
+    Ref: https://github.com/chubin/wttr.in
+
+    Args:
+        city(str): City name, eg: London, Shanghai  # [!code --]
+        city(str): City name, eg: London, Shanghai, bad case: 上海. # [!code ++]
+        English only, do not input other languages. # [!code ++]
+
+    Returns:
+        str: Weather information description
+    """
+    ...
+```
+
+**Please introduce your function to LLM in detail, just like you would to a human.**
+
+**Good example2: Provide return value**
+
+```python
+def write_file(file_path: str, content: str) -> str:
+    """Write content to a file in current workspace path.
+
+    Args:
+        file_path (str): The absolute file path to write to. Eg: /Users/user/workspace/main.py
+        content (str): The content to write to the file.
+    """
+    with open(file_path, "a+") as file:
+        file.write(content)
+
+    return f"File {file_path} has been written successfully." # [!code ++]
+```
+
+When your function doesn't have a clear return value, such as when writing to a file, you can return a fixed string to indicate success. For example, `"File has been written successfully."` informs LLM that the operation was completed.
+
+**Good example3: Record exceptions**
+
+```python
+def get_user_by_id(id: str) -> str:
+    try:
+        ...
+    except Exception as e:
+        return f"User with id {id} not found."
+```
+
+When executing a function, unexpected situations may arise. For instance, the function above might throw an exception indicating that the user ID does not exist. In such cases, customizing the exception's return information can significantly improve LLM's understanding of your function.
+
+Although `pne` has built-in exception handling, which allows the program to return exception information to LLM for retry when an exception occurs, it is still recommended to handle exceptions manually. This approach provides more detailed exception handling information, enabling LLM to better comprehend your function.
+
+In many cases, the issue lies with the function itself, rather than LLM's input. Therefore, simply retrying the function may not resolve the error. To avoid low-level errors, it is essential to ensure that your function is thoroughly covered by unit tests.
+
+::: info TIP
+You don't need to care how `pne` convert your function into a tool.
+
+If you really want to know, you can use the following method to get the data transmitted to the bottom layer of the large model.
+
+```python
+from promptulate.tools import function_to_tool_schema
+
+schema = function_to_tool_schema(query_weather)
+print(schema)
+```
+
+Then you can see the following output:
+
+```json
+{
+    "properties": {
+        "city": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "city"
+    ],
+    "type": "object",
+    "description": "\n    Query trequestser information of the specified city through wttr.in.\n    Ref: https://github.com/chubin/wttr.in\n\n    Args:\n        city(str): City name, eg: London, Shanghai\n\n    Returns:\n        str: Weather information description\n    ",
+    "name": "query_weather"
+}
+```
+
+:::
+
+### Usage with AIChat
+
+You can also use `pne.AIChat()` to run tools.
+
+```python{7-15}
+import pne
+
+# use the same function as above
+def query_weather(city: str):
+    ...
+
+ai = pne.AIChat(
+    model="deepseek/deepseek-chat",
+    model_config={
+        "api_base": "https://api.deepseek.com",
+        "api_key": "sk-6414d63db95844beaf2fc264d2a0acc1",
+    },
+    tools=[query_weather],
+)
+response: str = ai.run(messages="What is the temperature in Shanghai tomorrow?")
+
+print(response)
+```
+
+Output:
+
+```text
+The temperature in Shanghai tomorrow will be between 18°C and 22°C.
+```
+
+### Tool State Management
+
+Sometimes, your tools require state management, `such as file read and write operations, which require declaring a workspace first.`
+
+At this point, you may need to declare a class instance to maintain this state, and this functional declaration can also be used on class methods.
+
+The example below demonstrates how to write a Python file to the current directory workspace.
+
+::: info TIP
+Remember the best practices we mentioned above, including a clear function name, detailed function comments, parameter types, and return value types.
+:::
+
+```python
+import pne
+from typing import Callable, List
+
+
+class FileToolKit:
+    def __init__(self, workspace: str) -> None:
+        """Initialize the FileToolKit.
+
+        Args:
+            workspace (str): The workspace path of the tool.
+        """
+        self.workspace: str = workspace
+
+    def write_file(self, file_name: str, content: str):
+        """Write content to a file in current workspace path.
+
+        Args:
+            file_name (str): The file name to write to. Eg: main.py, src/main.py
+            content (str): The content to write to the file.
+        """
+        with open(f"{self.workspace}/{file_name}", "a+") as file:
+            file.write(content)
+
+        return f"File {file_name} has been written successfully."
+
+    def read_file(self, file_name: str) -> str:
+        """Read content from a file in current workspace path.
+
+        Args:
+            file_name (str): The file name to read from. Eg: main.py, src/main.py
+
+        Returns:
+            str: The content of the file
+        """
+        with open(f"{self.workspace}/{file_name}", "r") as file:
+            return file.read()
+
+    def get_tools(self) -> List[Callable]:
+        return [self.write_file, self.read_file]
+
+
+tool_kit = FileToolKit("./")
+ai = pne.AIChat(
+    model="deepseek/deepseek-chat",
+    tools=tool_kit.get_tools(),
+)
+
+instruction = "Write a python bubble sort algorithm in bubble_sort.py and show me the content of the file."
+response: str = ai.run(messages=instruction)
+
+print(response)
+```
+
+### ReAct Reasoning
+
+**ReAct is a prompting technique** that combines reasoning and acting. It is a simple but effective way to improve the performance of LLMs.
+
+::: info TIP
+You can see [Paper](https://arxiv.org/abs/2210.03629) or [Prompting Guide](https://www.promptingguide.ai/techniques/react) for more information about ReAct.
+:::
+
+You can easily use `pne` to solve problems with the ReAct framework. But before that, let me show the difference between solving a problem with and without the ReAct framework.
+
+::: info Problem
+Calculate how many apples and bananas can be bought with $20 if apples cost $2 each and bananas cost $1.50 each. Buy equal numbers of each fruit.
+:::
+
+**Without ReAct**
+
+```text
+Since we need equal numbers, let's say we buy x of each.
+Cost equation: 2x + 1.50x = 20
+3.50x = 20
+x = 5.71
+Since we can't buy partial fruits, we'll buy 5 of each.
+Final answer: 5 apples and 5 bananas for $17.50 total.
+```
+
+**With ReAct**
+
+```text
+Thought: Need to set up equation with equal quantities
+Action: Write equation 2x + 1.50x = 20 (where x is number of each fruit)
+Observation: Combined term is 3.50x = 20
+
+Thought: Solve for x
+Action: Divide 20 by 3.50
+Observation: x = 5.71 fruits
+
+Thought: Can't buy partial fruits
+Action: Round down to 5 fruits each
+Observation: 5 apples ($10) + 5 bananas ($7.50) = $17.50
+
+Thought: Check if under budget
+Action: Verify $17.50 < $20
+Observation: Solution valid
+
+Final answer: Buy 5 apples and 5 bananas for $17.50
+```
+
+The ReAct approach makes the reasoning process explicit and systematic, breaking down the problem into clear steps of thinking, acting, and observing results.
+
+The following example demonstrates how to use the ReAct framework to solve the problem.
+
+Firstly, we need to define a calculator tool:
+
+```python
+def calculator(expression: str) -> str:
+    """
+    A simple calculator that evaluates mathematical expressions.
+    
+    Args:
+        expression (str): A mathematical expression to evaluate, e.g. "2 + 2" or "3.50 * 5"
+        
+    Returns:
+        str: The result of the calculation
+    """
+    try:
+        # Safely evaluate the mathematical expression
+        result = eval(expression)
+        return f"{result}"
+    except Exception as e:
+        return f"Error calculating {expression}: {str(e)}"
+```
+
+Then, we need to define the problem:
+
+```python
+question = """
+Calculate how many apples and bananas can be bought with $20 if apples cost $2 each 
+and bananas cost $1.50 each. Buy equal numbers of each fruit.
+"""
+```
+
+Finally, we can use the `pne.chat()` method to solve the problem, here we use `normal chat`:
+
+```python
+import pne
+
+response: str = pne.chat(
+    model="gpt-4o",
+    messages=question,
+    tools=[calculator],
+)
+print(response) # With $20, you can buy 5 apples and 5 bananas.
+```
+
+Output:
+
+```text
+With $20, you can buy 5 apples and 5 bananas.
+```
+
+If we don't pass the `mode` parameter, `pne` will use the `normal chat` mode by default.
+
+Now, we use the `ReAct` mode to solve the problem:
+
+```python
+import pne
+
+response: str = pne.chat(
+    model="gpt-4o",
+    tools=[calculator],
+    messages=question,
+    mode=pne.Mode.REACT,
+)
+
+print(response) # With $20, you can buy 5 apples and 5 bananas.
+```
+
+Output:
+
+> The last line is the print output, while the rest are agent outputs to the terminal for debugging purposes
+
+```text{1-12}
+[Agent] Tool Agent start...
+[User instruction] You are a helpful assistant
+
+Calculate how many apples and bananas can be bought with $20 if apples cost $2 each 
+and bananas cost $1.50 each. Buy equal numbers of each fruit.
+
+
+[Thought] To determine how many apples and bananas can be bought with $20, given that apples cost $2 each and bananas cost $1.50 each, and we need to buy equal numbers of each fruit, we can set up the equation: 2x + 1.5x = 20, where x is the number of apples and bananas. We need to solve for x.
+[Action] calculator args: {'expression': '20 / (2 + 1.5)'}
+[Observation] 5.714285714285714
+[Agent Result] With $20, you can buy 5 apples and 5 bananas.
+[Agent] Agent End.
+With $20, you can buy 5 apples and 5 bananas.
+```
+
+### Plan and ReAct Reasoning
+
+::: info TIP
+You can see [https://arxiv.org/abs/2305.04091](https://arxiv.org/abs/2305.04091) for more information about it.
+:::
+
+::: info Problem
+What is the hometown of the 2024 Australia open winner?
+:::
+
+To address this, we first need to identify the winner of the 2024 Australia Open. Subsequently, we need to determine the hometown of this player. Utilizing a web search is sufficient to resolve this issue.
+
+```text
+[Agent] Assistant Agent start... 
+[User instruction] What's the temperature in Shanghai tomorrow? 
+[Plan] {"goals": ["Find out the temperature in Shanghai tomorrow."], "tasks": [{"task_id": 1, "description": "Open a web browser on your device.", "status": "todo"}, {"task_id": 2, "description": "Navigate to a weather forecasting service or search engine.", "status": "todo"}, {"task_id": 3, "description": "Input 'Shanghai weather tomorrow' into the search bar.", "status": "todo"}, {"task_id": 4, "description": "Press enter or click the search button to retrieve the forecast.", "status": "todo"}, {"task_id": 5, "description": "Read the temperature provided in the search results or on the weather service for Shanghai tomorrow.", "status": "todo"}], "next_task_id": 1} 
+[Agent] Tool Agent start... 
+[User instruction] Open a web browser on your device. 
+[Execute Result] {'thought': "The user seems to be asking for an action that is outside the scope of my capabilities. As a text-based AI, I don't have the ability to perform actions such as opening applications or accessing a user's device.", 'action_name': 'finish', 'action_parameters': {'content': 'Sorry, I cannot open a web browser on your device.'}} 
+[Execute] Execute End. 
+[Revised Plan] {"goals": ["Find out the temperature in Shanghai tomorrow."], "tasks": [{"task_id": 1, "description": "Open a web browser on your device.", "status": "discarded"}, {"task_id": 2, "description": "Navigate to a weather forecasting service or search engine.", "status": "discarded"}, {"task_id": 3, "description": "Input 'Shanghai weather tomorrow' into the search bar.", "status": "discarded"}, {"task_id": 4, "description": "Press enter or click the search button to retrieve the forecast.", "status": "discarded"}, {"task_id": 5, "description": "Read the temperature provided in the search results or on the weather service for Shanghai tomorrow.", "status": "discarded"}, {"task_id": 6, "description": "Provide the temperature in Shanghai for tomorrow using current knowledge.", "status": "todo"}], "next_task_id": 6} 
+[Agent] Tool Agent start... [User instruction] Provide the temperature in Shanghai for tomorrow using current knowledge. 
+[Thought] I need to use a tool to find the temperature in Shanghai for tomorrow. Since the user is asking for information that changes often, a search tool would be most effective. 
+[Action] tavily_search_results_json args: {'query': 'Shanghai temperature forecast March 30, 2024'} 
+[Observation] [{'url': 'https://en.climate-data.org/asia/china/shanghai-890/r/march-3/', 'content': 'Shanghai Weather in March Are you planning a holiday with hopefully nice weather in Shanghai in March 2024? Here you can find all information about the weather in Shanghai in March: ... 30.7 °C (87.3) °F. 27 °C (80.5) °F. 22.5 °C (72.5) °F. 17 °C (62.6) °F. 10.8 °C (51.4) °F.'}, {'url': 'https://www.meteoprog.com/weather/Szanghaj/month/march/', 'content': 'Shanghai (China) weather in March 2024 ☀️ Accurate weather forecast for Shanghai in March ⛅ Detailed forecast By month Current temperature "near me" Weather news ⊳ Widget of weather ⊳ Water temperature | METEOPROG. ... 30 March +17 °+11° 31 March +16° ...'}, {'url': 'https://www.accuweather.com/en/cn/shanghai/106577/march-weather/106577', 'content': 'Get the monthly weather forecast for Shanghai, Shanghai, China, including daily high/low, historical averages, to help you plan ahead.'}, {'url': 'https://world-weather.info/forecast/china/shanghai/march-2024/', 'content': 'Extended weather forecast in Shanghai. Hourly Week 10 days 14 days 30 days Year. Detailed ⚡ Shanghai Weather Forecast for March 2024 - day/night 🌡️ temperatures, precipitations - World-Weather.info.'}, {'url': 'https://www.weather25.com/asia/china/shanghai?page=month&month=March', 'content': "Our weather forecast can give you a great sense of what weather to expect in Shanghai in March 2024. If you're planning to visit Shanghai in the near future, we highly recommend that you review the 14 day weather forecast for Shanghai before you arrive. Temperatures. 59 ° / 44 °. Rainy Days."}] 
+[Thought] The search results provided URLs with general March weather information and historical data for Shanghai, but haven't provided a specific forecast for tomorrow's temperature. I need to refine my search to get the weather forecast specifically for March 30, 2024, in Shanghai. 
+[Action] tavily_search_results_json args: {'query': 'Shanghai weather forecast for March 30, 2024'} 
+[Observation] [{'url': 'https://www.accuweather.com/en/cn/shanghai/106577/march-weather/106577', 'content': 'Get the monthly weather forecast for Shanghai, Shanghai, China, including daily high/low, historical averages, to help you plan ahead.'}, {'url': 'https://world-weather.info/forecast/china/shanghai/march-2024/', 'content': 'Extended weather forecast in Shanghai. Hourly Week 10 days 14 days 30 days Year. Detailed ⚡ Shanghai Weather Forecast for March 2024 - day/night 🌡️ temperatures, precipitations - World-Weather.info.'}, {'url': 'https://www.weather-atlas.com/en/china/shanghai-weather-march', 'content': "In Shanghai, China, in March, the average water temperature is 8°C (46.4°F). Swimming in 8°C (46.4°F) is considered life-threatening. Even a few minutes in 13°C (55.4°F) water is uncomfortable, and swimming below 10°C (50°F) may cause total loss of breathing control and cold shock, depending on a person's physique."}, {'url': 'https://www.meteoprog.com/weather/Szanghaj/month/march/', 'content': 'Shanghai (China) weather in March 2024 ☀️ Accurate weather forecast for Shanghai in March ⛅ Detailed forecast By month Current temperature "near me" Weather news ⊳ Widget of weather ⊳ Water temperature | METEOPROG. ... 30 March +17 °+11° 31 March +16° ...'}, {'url': 'https://www.weather25.com/asia/china/shanghai?page=month&month=March', 'content': "Our weather forecast can give you a great sense of what weather to expect in Shanghai in March 2024. If you're planning to visit Shanghai in the near future, we highly recommend that you review the 14 day weather forecast for Shanghai before you arrive. Temperatures. 59 ° / 44 °. Rainy Days."}] 
+[Execute Result] {'thought': "The search has returned a specific forecast for March 30, 2024, which indicates that the temperatures are expected to be +17 °C for the high and +11 °C for the low. This information is sufficient to answer the user's question.", 'action_name': 'finish', 'action_parameters': {'content': 'The temperature in Shanghai for tomorrow, March 30, 2024, is expected to be a high of +17 °C and a low of +11 °C.'}} 
+[Execute] Execute End. 
+[Revised Plan] {"goals": ["Find out the temperature in Shanghai tomorrow."], "tasks": [{"task_id": 6, "description": "Provide the temperature in Shanghai for tomorrow using current knowledge.", "status": "done"}], "next_task_id": null} [Agent Result] The temperature in Shanghai for tomorrow, March 30, 2024, is expected to be a high of +17 °C and a low of +11 °C. 
+[Agent] Agent End. The temperature in Shanghai for tomorrow, March 30, 2024, is expected to be a high of +17 °C and a low of +11 °C.
+```
 
 ## Supported Tools
 

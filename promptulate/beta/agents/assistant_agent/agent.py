@@ -117,7 +117,7 @@ class AssistantAgent(BaseAgent):
             name=StepTypes.EXECUTE,
             input=current_plan.tasks[0].description,
             additional_properties=AdditionalProperties(
-                current_plan=current_plan.dict()
+                current_plan=current_plan.model_dump()
             ),
         )
         step.output = current_plan.json()
@@ -148,7 +148,7 @@ class AssistantAgent(BaseAgent):
             name=StepTypes.REVISE,
             input=resp["action_parameters"]["content"],
             additional_properties=AdditionalProperties(
-                current_plan=self.current_plan.dict(),
+                current_plan=self.current_plan.model_dump(),
                 past_steps=str(resp),
             ),
         )
@@ -191,7 +191,7 @@ class AssistantAgent(BaseAgent):
                 name=StepTypes.EXECUTE,
                 input=revised_plan.get_next_task().description,
                 additional_properties=AdditionalProperties(
-                    current_plan=revised_plan.dict()
+                    current_plan=revised_plan.model_dump()
                 ),
             )
 

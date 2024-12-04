@@ -1,11 +1,11 @@
 from typing import Optional
 
 import pytest
+from pydantic import BaseModel, Field
 
 from promptulate.agents import BaseAgent
 from promptulate.llms import BaseLLM
 from promptulate.output_formatter import OutputFormatter, formatting_result
-from promptulate.pydantic_v1 import BaseModel, Field
 from promptulate.schema import BaseMessage, MessageSet
 
 
@@ -81,7 +81,7 @@ def test_formatter_with_agent_and_pydantic_v2():
     assert isinstance(response.temperature, float)
 
 
-# FIXME: can not assert pydantic type: promptulate.pydantic_v1.BaseModel or pydantic.BaseModel # noqa
+# FIXME: can not assert pydantic type: pydantic.BaseModel or pydantic.BaseModel # noqa
 # def test_init_outputformatter_with_error_pydantic_type():
 #     """Test the error when the pydantic_obj of OutputFormatter is not a Pydantic
 #     object."""

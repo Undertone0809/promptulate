@@ -22,7 +22,7 @@ def plan(llm: BaseLLM, user_target: str) -> Plan:
     resp: str = llm(instruction=system_prompt)
     plan_resp: AgentPlanResponse = formatter.formatting_result(resp)
 
-    return Plan.parse_obj({**plan_resp.dict(), "next_task_id": 1})
+    return Plan.parse_obj({**plan_resp.model_dump(), "next_task_id": 1})
 
 
 def execute(tool_agent: ToolAgent, user_target: str) -> ActionResponse:
@@ -42,4 +42,4 @@ def revise(llm: BaseLLM, user_target: str, original_plan: str, past_steps: str) 
     resp: str = llm(instruction=system_prompt)
     plan_resp: AgentReviseResponse = formatter.formatting_result(resp)
 
-    return Plan.parse_obj({**plan_resp.dict()})
+    return Plan.parse_obj({**plan_resp.model_dump()})

@@ -1,6 +1,8 @@
 import time
 from typing import Callable, List, Optional, Union
 
+from pydantic import BaseModel, Field
+
 from promptulate.agents.base import BaseAgent
 from promptulate.agents.tool_agent.prompt import (
     SYSTEM_PROMPT_TEMPLATE,
@@ -12,7 +14,6 @@ from promptulate.output_formatter import (
     formatting_result,
     get_formatted_instructions,
 )
-from promptulate.pydantic_v1 import BaseModel, Field
 from promptulate.schema import MessageSet
 from promptulate.tools.base import BaseTool, Tool
 from promptulate.tools.manager import ToolManager
