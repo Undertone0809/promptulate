@@ -39,7 +39,7 @@ python-dotenv = "^1.0.0"
 questionary = "^2.0.1"
 requests = "^2.31.0"
 typing-extensions = "^4.10.0"
-
+zeeland = ">=0.3.0,<1.0.0"
 
 [tool.poetry.group.dev.dependencies]
 coverage = "^7.3.4"
@@ -48,7 +48,7 @@ pre-commit = "^3.5.0"
 pytest = ">=7.4.4,<9.0.0"
 pytest-cov = "^4.1.0"
 pytest-html = ">=3.1.1,<5.0.0"
-ruff = "^0.6.2"
+ruff = "^0.7.2"
 pytest-mock = "^3.12.0"
 
 [tool.poetry.group.test_integration.dependencies]
