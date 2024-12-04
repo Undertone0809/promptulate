@@ -24,7 +24,7 @@ install-docs:
 run-docs:
 	cd docs && pnpm docs:dev
 
-build-docs:
+build-docs-prod:
 	cd docs && pnpm docs:build
 
 pre-commit-install:
@@ -49,18 +49,6 @@ check-format: check-codestyle
 
 lint: check-codestyle test
 
-# https://github.com/Maxlinn/linn-jupyter-site-template/blob/main/.github/workflows/linn-jupyter-site-template-deploy.yml
-# Any notebook will be converted here.
-# If there are any notebook will be changed, then the notebook will be converted to markdown and pushed to the repo.
-build-docs:
-	jupyter nbconvert ./example/chat_usage.ipynb --to markdown --output-dir ./docs/use_cases/
-	jupyter nbconvert ./example/tools/custom_tool_usage.ipynb --to markdown --output-dir ./docs/modules/tools
-	jupyter nbconvert ./example/llm/custom_llm.ipynb --to markdown --output-dir ./docs/modules/llm
-	jupyter nbconvert ./example/llm/llm-factory-usage.ipynb --to markdown --output-dir ./docs/modules/llm
-	jupyter nbconvert ./example/tools/langchain_tool_usage.ipynb --to markdown --output-dir ./docs/modules/tools
-	jupyter nbconvert ./example/agent/assistant_agent_usage.ipynb --to markdown --output-dir ./docs/modules/agents
-	jupyter nbconvert ./example/build-math-application-with-agent/build-math-application-with-agent.ipynb --to markdown --output-dir ./docs/use_cases/
-
 help:
 	@echo "lock: Lock the dependencies and export to requirements.txt"
 	@echo "install: Install the dependencies"
@@ -77,4 +65,4 @@ help:
 	@echo "build-docs: Build the docs"
 	@echo "start-docs: Start the docs server"
 
-.PHONY: lock install install-integration install-docs pre-commit-install polish-codestyle format check-format test test-prod lint build-docs start-docs pycache-remove dsstore-remove ipynbcheckpoints-remove pytestcache-remove build-remove cleanup help
+.PHONY: lock install install-integration install-docs pre-commit-install polish-codestyle format check-format test test-prod lint build-docs start-docs pycache-remove dsstore-remove ipynbcheckpoints-remove pytestcache-remove build-remove cleanup help build-docs-prod
