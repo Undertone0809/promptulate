@@ -32,8 +32,9 @@ jobs:
 
     - name: Run tests
       run: |
+        cd ./libs/pne
         make test
 
     - name: Run style checks
       run: |
-        make check-codestyle
+        make lint

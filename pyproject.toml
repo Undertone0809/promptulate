@@ -1,102 +1,20 @@
-[build-system]
-build-backend = "poetry.core.masonry.api"
-requires = ["poetry-core"]
-
 [tool.poetry]
-authors = ["Zeeland <zeeland4work@gmail.com>"]
-description = "🚀Large language model automation and Autonomous Language Agents development framework. Build your LLM Agent Application in a pythonic way."
-name = "promptulate"
+name = "pne-monorepo"
+version = "0.0.1"
+description = "pne mono-repo"
+authors = ["zeeland <zeeland4work@gmail.com>"]
 readme = "README.md"
-homepage = "https://github.com/Undertone0809/promptulate"
-repository = "https://github.com/Undertone0809/promptulate"
-version = "2.0.0"
-keywords = [
-    "promptulate",
-    "pne",
-    "prompt",
-    "agent",
-    "openai",
-    "chatgpt",
-    "gpt",
-    "llm",
-    "openai",
-    "langchain",
-    "litellm"
-]
-
-[tool.poetry.urls]
-"Source" = "https://github.com/Undertone0809/promptulate"
-"Homepage" = "https://github.com/Undertone0809/promptulate"
 
 [tool.poetry.dependencies]
-python = ">=3.8.1,<4.0"
-litellm = "^1.39.6"
-pydantic = ">=2,<3"
-python-dotenv = "^1.0.0"
-typing-extensions = "^4.10.0"
-zeeland = ">=0.3.0,<1.0.0"
+python = ">=3.9,<4.0"
 
 [tool.poetry.group.dev.dependencies]
-coverage = "^7.3.4"
-coverage-badge = "^1.1.0"
-pre-commit = "^3.5.0"
-pytest = ">=7.4.4,<9.0.0"
-pytest-cov = "^4.1.0"
-pytest-html = ">=3.1.1,<5.0.0"
+pne = { path = "libs/pne/", develop = true }
+pne-client = { path = "libs/client/", develop = true }
+pne-experimental = { path = "libs/experimental/", develop = true }
 ruff = "^0.7.2"
-pytest-mock = "^3.12.0"
 
-[tool.ruff]
-# https://beta.ruff.rs/docs/settings/
-# https://docs.astral.sh/ruff/configuration/
-line-length = 88
 
-# Exclude a variety of commonly ignored directories.
-exclude = [
-    ".bzr",
-    ".direnv",
-    ".eggs",
-    ".git",
-    ".git-rewrite",
-    ".hg",
-    ".mypy_cache",
-    ".nox",
-    ".pants.d",
-    ".pytype",
-    ".ruff_cache",
-    ".svn",
-    ".tox",
-    ".venv",
-    "__pypackages__",
-    "_build",
-    "buck-out",
-    "build",
-    "dist",
-    "node_modules",
-    "venv",
-]
-respect-gitignore = true
-
-[tool.ruff.lint]
-# https://beta.ruff.rs/docs/rules/
-extend-select = ["I"]
-exclude = ["*.ipynb"]
-ignore = ["F401"]
-select = ["E", "W", "F", "I"]
-
-[tool.ruff.lint.pydocstyle]
-convention = "google"  # Accepts: "google", "numpy", or "pep257".
-
-[tool.ruff.format]
-quote-style = "double"
-indent-style = "space"
-exclude = ["*.ipynb"]
-skip-magic-trailing-comma = false
-line-ending = "auto"
-
-[tool.coverage.run]
-source = ["tests"]
-
-[coverage.report]
-fail_under = 50
-show_missing = true
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
