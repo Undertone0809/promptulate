@@ -85,7 +85,7 @@ ignore = ["F401"]
 select = ["E", "W", "F", "I"]
 
 [tool.ruff.lint.pydocstyle]
-convention = "google"  # Accepts: "google", "numpy", or "pep257".
+convention = "google"
 
 [tool.ruff.format]
 quote-style = "double"

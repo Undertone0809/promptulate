@@ -12,3 +12,6 @@ install:
 
 lint:
 	poetry run ruff check libs
+
+format:
+	poetry run ruff format libs
