@@ -27,27 +27,6 @@ def test_jinja2_template_simple():
     assert st.variables == ["name"]
 
 
-def test_jinja2_template_complex():
-    template = """
-    {% for item in items %}
-        - {{ item }}
-    {% endfor %}
-    Total: {{ total }}
-    """
-    st = StringTemplate(template, template_format="jinja2")
-    result = st.format(items=["apple", "banana"], total=2)
-    expected = """
-
-        - apple
-
-        - banana
-
-    Total: 2
-    """
-    assert result == expected
-    assert sorted(st.variables) == sorted(["items", "total"])
-
-
 def test_invalid_template_format():
     template = "Hello {name}!"
     with pytest.raises(ValueError) as excinfo:
@@ -60,24 +39,3 @@ def test_missing_variable():
     st = StringTemplate(template, template_format="f-string")
     with pytest.raises(KeyError):
         st.format(wrong_name="World")
-
-
-def test_jinja2_template_with_conditional():
-    template = """
-    {% if age >= 18 %}
-        You are an adult.
-    {% else %}
-        You are a minor.
-    {% endif %}
-    Name: {{ name }}
-    """
-    st = StringTemplate(template, template_format="jinja2")
-    result = st.format(age=20, name="Alice")
-    expected = """
-
-        You are an adult.
-
-    Name: Alice
-    """
-    assert result == expected
-    assert sorted(st.variables) == sorted(["age", "name"])

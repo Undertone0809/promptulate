@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from message import (
+from pne.message import (
     AssistantMessage,
     FunctionMessage,
     MessageSet,
@@ -179,3 +179,35 @@ def test_message_set_with_tool_calls():
     assert tool_msg.name == "search"
     assert tool_msg.tool_call_id == "call_123"
     assert tool_msg.arguments["query"] == "weather London"
+
+
+def test_user_message_with_multimodal_content():
+    content = [
+        {"type": "text", "text": "What's in this image?"},
+        {
+            "type": "image_url",
+            "image_url": {
+                "url": "https://example.com/image.jpg",
+            },
+        },
+    ]
+    msg = UserMessage(content=content)
+    assert msg.content == content
+    assert msg.type == "user"
+    assert isinstance(msg.content, list)
+    assert len(msg.content) == 2
+    assert msg.content[0]["type"] == "text"
+    assert msg.content[1]["type"] == "image_url"
+
+
+def test_system_message_with_list_content():
+    content = [
+        {"type": "text", "text": "You are a helpful assistant"},
+        {"type": "text", "text": "You can process both text and images"},
+    ]
+    msg = SystemMessage(content=content)
+    assert msg.content == content
+    assert msg.type == "system"
+    assert isinstance(msg.content, list)
+    assert len(msg.content) == 2
+    assert all(item["type"] == "text" for item in msg.content)
