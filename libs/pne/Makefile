@@ -31,8 +31,8 @@ pre-commit-install:
 	poetry run pre-commit install
 
 format:
-	poetry run ruff format --config pyproject.toml pne
-	poetry run ruff check --fix --config pyproject.toml pne
+	poetry run ruff format --config pyproject.toml pne tests
+	poetry run ruff check --fix --config pyproject.toml pne tests
 
 test:
 	$(TEST_COMMAND)

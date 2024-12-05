@@ -37,11 +37,11 @@ def test_jinja2_template_complex():
     st = StringTemplate(template, template_format="jinja2")
     result = st.format(items=["apple", "banana"], total=2)
     expected = """
-    
+
         - apple
-    
+
         - banana
-    
+
     Total: 2
     """
     assert result == expected
@@ -74,9 +74,9 @@ def test_jinja2_template_with_conditional():
     st = StringTemplate(template, template_format="jinja2")
     result = st.format(age=20, name="Alice")
     expected = """
-    
+
         You are an adult.
-    
+
     Name: Alice
     """
     assert result == expected
