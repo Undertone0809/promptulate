@@ -1,6 +1,5 @@
 # https://testdriven.io/tips/810f9bb5-c9df-479d-baa4-290c7e0779f1/
 # https://github.com/abatilo/actions-poetry
-
 name: Release Python Package
 
 on:
@@ -11,7 +10,23 @@ permissions:
   contents: read
 
 jobs:
+  get-package-info:
+    runs-on: ubuntu-latest
+    outputs:
+      package-name: ${{ steps.extract-info.outputs.package-name }}
+      version: ${{ steps.extract-info.outputs.version }}
+    steps:
+      - id: extract-info
+        run: |
+          RELEASE_NAME="${{ github.event.release.name }}"
+          PACKAGE_NAME=$(echo $RELEASE_NAME | cut -d'=' -f1)
+          VERSION=$(echo $RELEASE_NAME | cut -d'=' -f2)
+          echo "package-name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
   publish:
+    needs: get-package-info
+    if: needs.get-package-info.outputs.package-name != '' && needs.get-package-info.outputs.version != ''
     strategy:
       fail-fast: false
       matrix:
@@ -28,9 +43,14 @@ jobs:
         uses: abatilo/actions-poetry@v3
         with:
           poetry-version: ${{ matrix.poetry-version }}
+      - name: Update version
+        run: |
+          cd libs/${{ needs.get-package-info.outputs.package-name }}
+          poetry version ${{ needs.get-package-info.outputs.version }}
       - name: Publish
         env:
           PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
         run: |
+          cd libs/${{ needs.get-package-info.outputs.package-name }}
           poetry config pypi-token.pypi $PYPI_API_TOKEN
           poetry publish --build

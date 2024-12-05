@@ -1,54 +1,40 @@
-name: Release Python Package
+name: Check
 
-on:
-  release:
-    types: [published]
-
-permissions:
-  contents: read
+on: [push, pull_request]
 
 jobs:
-  get-package-info:
+  build:
     runs-on: ubuntu-latest
-    outputs:
-      package-name: ${{ steps.extract-info.outputs.package-name }}
-      version: ${{ steps.extract-info.outputs.version }}
-    steps:
-      - id: extract-info
-        run: |
-          RELEASE_NAME="${{ github.event.release.name }}"
-          PACKAGE_NAME=$(echo $RELEASE_NAME | cut -d'=' -f1)
-          VERSION=$(echo $RELEASE_NAME | cut -d'=' -f2)
-          echo "package-name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-  publish:
-    needs: get-package-info
-    if: needs.get-package-info.outputs.package-name != '' && needs.get-package-info.outputs.version != ''
     strategy:
-      fail-fast: false
       matrix:
-        python-version: [3.9]
-        poetry-version: [1.7.1]
-        os: [ubuntu-latest]
-    runs-on: ${{ matrix.os }}
+        os: [ubuntu-20.04, macOS-10.15, windows-2019]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install poetry
-        uses: abatilo/actions-poetry@v3
-        with:
-          poetry-version: ${{ matrix.poetry-version }}
-      - name: Update version
-        run: |
-          cd libs/${{ needs.get-package-info.outputs.package-name }}
-          poetry version ${{ needs.get-package-info.outputs.version }}
-      - name: Publish
-        env:
-          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-        run: |
-          cd libs/${{ needs.get-package-info.outputs.package-name }}
-          poetry config pypi-token.pypi $PYPI_API_TOKEN
-          poetry publish --build
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install poetry
+      run: pip install poetry
+
+    - name: Set up cache
+      uses: actions/cache@v4.0.0
+      with:
+        path: .venv
+        key: venv-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('poetry.lock') }}
+    - name: Install dependencies
+      run: |
+        poetry config virtualenvs.in-project true
+        make install
+
+    - name: Run tests
+      run: |
+        cd ./libs/pne
+        make test
+
+    - name: Run style checks
+      run: |
+        make lint
