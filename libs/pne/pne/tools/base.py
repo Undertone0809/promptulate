@@ -2,15 +2,18 @@ import inspect
 import json
 from abc import ABC, abstractmethod
 from collections import OrderedDict
-from typing import Any, Callable, Dict, List, Literal, TypeVar, Union
+from typing import Any, Callable, Dict, List, Union
 
 from docstring_parser import parse
 from pydantic import BaseModel
 
+# TODO: add langchain tool support
 ToolTypes = Union[Callable, "Tool", "ToolKit"]
 
 
 class ToolParameters(BaseModel):
+    """Defines the schema of a tool's parameters."""
+
     type: str = "object"
     properties: Dict[str, Any]
     required: List[str] = []
@@ -18,9 +21,16 @@ class ToolParameters(BaseModel):
 
 
 class Tool(BaseModel):
+    """Represents a functional tool with metadata for usage in an automated system."""
+
     name: str
     description: str
     parameters: ToolParameters
+    function: Callable
+
+    def run(self, *args, **kwargs) -> str:
+        """Run the tool."""
+        return self.function(*args, **kwargs)
 
     def to_function_call(self) -> Dict[str, Any]:
         """Convert the tool to OpenAI function call type JSON schema."""
@@ -39,63 +49,28 @@ class Tool(BaseModel):
 
     @classmethod
     def from_function(cls, func: Callable) -> "Tool":
-        """Create a Tool instance from a function.
+        """
+        Create a Tool instance from a callable.
 
         Args:
-            func: Function to create the Tool instance from.
+            func: Callable to create the Tool instance from.
 
         Returns:
             A Tool instance.
+
+        Raises:
+            ValueError: If the callable lacks a docstring or parameter type hints.
         """
         if not func.__doc__:
-            err_msg = """Please add docstring and variable type declarations for your function. Here is a best practice:
-def web_search(keyword: str, top_k: int = 10) -> str:
-    \"""search by keyword in web.
-    Args:
-        keyword: keyword to search
-        top_k: top k results to return
-
-    Returns:
-        str: search result
-    \"""
-    return "result"
-            """  # noqa
-            raise ValueError(err_msg)
-
-        name = func.__name__
-        description = func.__doc__
-
-        # Parse docstring
-        parsed_doc = parse(description)
-        parameter_docs = {p.arg_name: p.description for p in parsed_doc.params}
-
-        sig = inspect.signature(func)
-
-        parameters = {}
-        for param_name, param in sig.parameters.items():
-            if param_name == "self":
-                continue
-
-            param_type = param.annotation
-            if param_type == inspect.Parameter.empty:
-                raise ValueError(
-                    f"Parameter {param_name} in {func.__name__} must have type hints"
-                    "Suppoerted type: str, int, float, bool, list, dict"
-                )
-
-            json_type = cls._python_type_to_json_type(param_type)
-            param_description = parameter_docs.get(
-                param_name, f"Parameter {param_name}"
+            raise ValueError(
+                "Function must have a docstring describing its parameters and return values."
             )
 
-            parameters[param_name] = {
-                "type": json_type,
-                "description": param_description,
-            }
-
-        # Finalize description based on parsed docstring
-        if not parameter_docs:  # If no specific style detected, use full docstring
-            description = description.strip()
+        # Extract metadata
+        name = func.__name__
+        description = cls._parse_description(func.__doc__)
+        sig = inspect.signature(func)
+        parameters = cls._parse_parameters(sig, func)
 
         return cls(
             name=name,
@@ -110,27 +85,87 @@ def web_search(keyword: str, top_k: int = 10) -> str:
                 ],
                 additionalProperties=False,
             ),
+            function=func,
         )
 
     @staticmethod
-    def _python_type_to_json_type(py_type):
-        """Convert Python types to JSON schema types."""
-        if py_type in {str, int, float, bool, list, dict}:
-            return {
-                str: "string",
-                int: "integer",
-                float: "number",
-                bool: "boolean",
-                list: "array",
-                dict: "object",
-            }[py_type]
-        raise TypeError(f"Unsupported type: {py_type}")
+    def _parse_description(docstring: str) -> str:
+        """Parse and clean the function's docstring."""
+        parsed_doc = parse(docstring)
+        return parsed_doc.short_description or docstring.strip()
+
+    @classmethod
+    def _parse_parameters(
+        cls, sig: inspect.Signature, func: Callable
+    ) -> Dict[str, Dict[str, Any]]:
+        """
+        Parse and convert function parameters to JSON schema.
+
+        Args:
+            sig: Function signature object.
+            func: Original callable.
+
+        Returns:
+            Dictionary of parameters in JSON schema format.
+        """
+        parameters = {}
+        for param_name, param in sig.parameters.items():
+            if param_name == "self":  # Skip self for instance methods
+                continue
+
+            if param.annotation == inspect.Parameter.empty:
+                raise ValueError(
+                    f"Parameter {param_name} in function '{func.__name__}' must have type hints. "
+                    "Supported types: str, int, float, bool, list, dict."
+                )
+
+            parameters[param_name] = {
+                "type": cls._python_type_to_json_type(param.annotation),
+                "description": f"Parameter {param_name}",  # Placeholder, improve if needed.
+            }
+        return parameters
+
+    @staticmethod
+    def _python_type_to_json_type(py_type: Any) -> str:
+        """
+        Convert Python types to JSON schema types.
+
+        Args:
+            py_type: Python type.
+
+        Returns:
+            JSON schema type.
+
+        Raises:
+            TypeError: If the type is not supported.
+        """
+        type_mapping = {
+            str: "string",
+            int: "integer",
+            float: "number",
+            bool: "boolean",
+            list: "array",
+            dict: "object",
+        }
+        if py_type not in type_mapping:
+            raise TypeError(
+                f"Unsupported type: {py_type}. Supported types are: {list(type_mapping.keys())}"  # noqa: E501
+            )
+        return type_mapping[py_type]
 
 
 class ToolKit(ABC):
+    """Abstract base class for a collection of tools."""
+
     def __init__(self):
         self.tools: Dict[str, Tool] = OrderedDict()
 
     def register(self, func: Callable) -> None:
+        """
+        Register a callable as a Tool in the toolkit.
+
+        Args:
+            func: Callable to register.
+        """
         tool = Tool.from_function(func)
         self.tools[tool.name] = tool
