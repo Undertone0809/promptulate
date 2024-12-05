@@ -12,7 +12,7 @@ lock:
 	poetry lock -n && poetry export --without-hashes > requirements.txt
 
 install:
-	poetry install --with dev
+	poetry install --with dev --no-root
 
 lint:
 	poetry run ruff check libs

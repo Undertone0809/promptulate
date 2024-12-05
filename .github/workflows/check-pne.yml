@@ -1,4 +1,4 @@
-name: Check
+name: Check pne package
 
 on: [push, pull_request]
 
