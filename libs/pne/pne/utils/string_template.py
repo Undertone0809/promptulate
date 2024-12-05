@@ -1,7 +1,5 @@
 import re
-from typing import Any, List
-
-from typing_extensions import Literal
+from typing import Any, List, Literal
 
 
 def _get_jinja2_variables(template: str) -> List[str]:
