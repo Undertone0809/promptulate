@@ -134,3 +134,90 @@ def test_function_call_schemas(tool_manager):
         assert "parameters" in schema
         assert "properties" in schema["parameters"]
         assert "required" in schema["parameters"]
+
+
+class TestToolKit(ToolKit):
+    """A test toolkit for testing purposes."""
+
+    def __init__(self):
+        super().__init__()
+
+        # Register tools in the constructor
+        @self.register
+        def tool2(a: float) -> float:
+            """Square a number.
+
+            Args:
+                a: Number to square
+
+            Returns:
+                Square of the input
+            """
+            return a * a
+
+        @self.register
+        def tool3(text: str) -> str:
+            """Convert text to uppercase.
+
+            Args:
+                text: Text to convert
+
+            Returns:
+                Uppercase text
+            """
+            return text.upper()
+
+
+def test_add_tool():
+    # Initialize empty manager
+    manager = ToolManager([])
+    assert len(manager.tools) == 0
+
+    # Add a single tool
+    def tool1(x: int, y: int) -> int:
+        """Add two numbers.
+
+        Args:
+            x: First number
+            y: Second number
+
+        Returns:
+            Sum of x and y
+        """
+        return x + y
+
+    t1 = Tool.from_function(tool1)
+    manager.add_tool(t1)
+    assert len(manager.tools) == 1
+    assert "tool1" in manager.tools
+    assert manager.tools["tool1"] == t1
+
+    # Add a function tool directly
+    def test_func(name: str) -> str:
+        """Return a greeting.
+
+        Args:
+            name: Name to greet
+
+        Returns:
+            Greeting message
+        """
+        return f"Hello {name}"
+
+    manager.add_tool(test_func)
+    assert len(manager.tools) == 2
+    assert "test_func" in manager.tools
+    assert isinstance(manager.tools["test_func"], Tool)
+
+    # Add a toolkit
+    toolkit = TestToolKit()  # Create an instance of our test toolkit
+    manager.add_tool(toolkit)
+    assert len(manager.tools) == 4
+    assert "tool2" in manager.tools
+    assert "tool3" in manager.tools
+    assert isinstance(manager.tools["tool2"], Tool)
+    assert isinstance(manager.tools["tool3"], Tool)
+
+    # Test adding invalid tool type
+    with pytest.raises(ValueError, match="Unknown tool type"):
+        manager.add_tool(123)
