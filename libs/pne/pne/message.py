@@ -200,17 +200,17 @@ class MessageSet:
         self,
         messages: List[BaseMessage],
         created_at: Optional[datetime] = None,
-        metadata: Optional[dict] = None,
+        metadata: Optional[Dict] = None,
     ):
         self.messages: List[BaseMessage] = messages
         self.created_at: datetime = created_at or datetime.now()
-        self.metadata: dict = metadata or {}
+        self.metadata: Dict = metadata or {}
 
     @classmethod
-    def from_listdict_data(
-        cls, messages: List[dict], metadata: Optional[dict] = None
+    def from_raw(
+        cls, messages: List[Dict], metadata: Optional[Dict] = None
     ) -> "MessageSet":
-        """Initialize MessageSet from a List[Dict] data
+        """Initialize MessageSet from a list[dict[str, any]] data
 
         Args:
             messages (List[Dict]): List of message dictionaries. Example:
@@ -249,8 +249,8 @@ class MessageSet:
             if role == "assistant":
                 kwargs = {
                     "content": msg["content"],
-                    "function_call": msg.get("function_call"),
-                    "tool_calls": msg.get("tool_calls"),
+                    "function_call": msg.get("function_call", {}),
+                    "tool_calls": msg.get("tool_calls", []),
                 }
             elif role in ["function", "tool"]:
                 kwargs = {
@@ -270,3 +270,18 @@ class MessageSet:
             processed_messages.append(message_class(**kwargs))
 
         return cls(messages=processed_messages, metadata=metadata)
+
+    def to_raw(self) -> List[Dict[str, Any]]:
+        return [
+            {
+                "role": message.type,
+                "content": message.content,
+                "function_call": message.function_call
+                if isinstance(message, AssistantMessage)
+                else None,
+                "tool_calls": message.tool_calls
+                if isinstance(message, AssistantMessage)
+                else None,
+            }
+            for message in self.messages
+        ]

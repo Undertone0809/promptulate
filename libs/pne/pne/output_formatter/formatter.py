@@ -72,7 +72,7 @@ class OutputFormatter:
 
 def get_formatted_instructions(
     json_schema: Union[type(BaseModel), Dict[str, Any]],
-    examples: List[BaseModel] = None,
+    examples: Optional[List[BaseModel]] = None,
 ) -> str:
     """
     Get formatted instructions for a JSON schema or Pydantic object.
