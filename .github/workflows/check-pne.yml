@@ -27,8 +27,9 @@ jobs:
         key: venv-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('poetry.lock') }}
     - name: Install dependencies
       run: |
+        cd ./libs/pne
         poetry config virtualenvs.in-project true
-        make install
+        poetry install --with dev
 
     - name: Run tests
       run: |
@@ -37,4 +38,5 @@ jobs:
 
     - name: Run style checks
       run: |
+        cd ./libs/pne
         make lint
