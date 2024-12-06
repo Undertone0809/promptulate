@@ -117,7 +117,7 @@ def test_message_set():
     ]
 
     metadata = {"session_id": "test_123"}
-    message_set = MessageSet.from_listdict_data(messages_data, metadata=metadata)
+    message_set = MessageSet.from_raw(messages_data, metadata=metadata)
 
     assert len(message_set.messages) == 4
     assert message_set.metadata["session_id"] == "test_123"
@@ -164,7 +164,7 @@ def test_message_set_with_tool_calls():
         },
     ]
 
-    message_set = MessageSet.from_listdict_data(messages_data)
+    message_set = MessageSet.from_raw(messages_data)
 
     assert len(message_set.messages) == 3
     assert isinstance(message_set.messages[1], AssistantMessage)

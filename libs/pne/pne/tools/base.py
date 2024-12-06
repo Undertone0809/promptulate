@@ -33,7 +33,35 @@ class Tool(BaseModel):
         return self.function(*args, **kwargs)
 
     def to_function_call(self) -> Dict[str, Any]:
-        """Convert the tool to OpenAI function call type JSON schema."""
+        """Convert the tool to OpenAI function call type JSON schema.
+
+        Example:
+            >>> def add(a: int, b: int) -> int:
+            ...     \"""Adds two integers.
+            ...
+            ...     Args:
+            ...         a: First integer.
+            ...         b: Second integer.
+            ...
+            ...     Returns:
+            ...         Sum of a and b.
+            ...     \"""
+            ...     return a + b
+            >>> tool = Tool.from_function(add)
+            >>> tool.to_function_call()
+            {
+                'name': 'add',
+                'description': 'Adds two integers.',
+                'parameters': {
+                    'type': 'object',
+                    'properties': {
+                        'a': {'type': 'integer', 'description': 'First integer.'},
+                        'b': {'type': 'integer', 'description': 'Second integer.'}
+                    },
+                    'required': ['a', 'b']
+                }
+            }
+        """
         return {
             "name": self.name,
             "description": self.description,
@@ -41,7 +69,38 @@ class Tool(BaseModel):
         }
 
     def to_tool_call_schema(self) -> Dict[str, Any]:
-        """Convert the tool to OpenAI function schema format."""
+        """Convert the tool to OpenAI function schema format.
+
+        Example:
+            >>> def add(a: int, b: int) -> int:
+            ...     \"""Adds two integers.
+            ...
+            ...     Args:
+            ...         a: First integer.
+            ...         b: Second integer.
+            ...
+            ...     Returns:
+            ...         Sum of a and b.
+            ...     \"""
+            ...     return a + b
+            >>> tool = Tool.from_function(add)
+            >>> tool.to_tool_call_schema()
+            {
+                'type': 'function',
+                'function': {
+                    'name': 'add',
+                    'description': 'Adds two integers.',
+                    'parameters': {
+                        'type': 'object',
+                        'properties': {
+                            'a': {'type': 'integer', 'description': 'First integer.'},
+                            'b': {'type': 'integer', 'description': 'Second integer.'}
+                        },
+                        'required': ['a', 'b']
+                    }
+                }
+            }
+        """
         return {
             "type": "function",
             "function": self.to_function_call(),
@@ -58,12 +117,33 @@ class Tool(BaseModel):
         Returns:
             A Tool instance.
 
+        Example:
+            >>> def add(a: int, b: int) -> int:
+            ...     \"""Adds two integers.
+            ...
+            ...     Args:
+            ...         a: First integer.
+            ...         b: Second integer.
+            ...
+            ...     Returns:
+            ...         Sum of a and b.
+            ...     \"""
+            ...     return a + b
+            >>> tool = Tool.from_function(add)
+            >>> tool.name
+            'add'
+            >>> tool.description
+            'Adds two integers.'
+            >>> tool.parameters
+            {'a': {'type': 'integer', 'description': 'First integer.'}, 'b': {'type':
+            'integer', 'description': 'Second integer.'}}
+
         Raises:
             ValueError: If the callable lacks a docstring or parameter type hints.
         """
         if not func.__doc__:
             raise ValueError(
-                "Function must have a docstring describing its parameters and return values."
+                "Function must have a docstring describing its parameters and return values."  # noqa
             )
 
         # Extract metadata
@@ -90,7 +170,11 @@ class Tool(BaseModel):
 
     @staticmethod
     def _parse_description(docstring: str) -> str:
-        """Parse and clean the function's docstring."""
+        """Parse and clean the function's docstring.
+
+        Args:
+            docstring: Function docstring.
+        """
         parsed_doc = parse(docstring)
         return parsed_doc.short_description or docstring.strip()
 
@@ -115,13 +199,13 @@ class Tool(BaseModel):
 
             if param.annotation == inspect.Parameter.empty:
                 raise ValueError(
-                    f"Parameter {param_name} in function '{func.__name__}' must have type hints. "
+                    f"Parameter {param_name} in function '{func.__name__}' must have type hints. "  # noqa
                     "Supported types: str, int, float, bool, list, dict."
                 )
 
             parameters[param_name] = {
                 "type": cls._python_type_to_json_type(param.annotation),
-                "description": f"Parameter {param_name}",  # Placeholder, improve if needed.
+                "description": f"Parameter {param_name}",
             }
         return parameters
 
