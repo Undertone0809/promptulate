@@ -184,32 +184,33 @@ def example3():
     print(response.cities)
 
 
-def example4():
-    class LLMResponse(BaseModel):
-        cities: List[str]
+# def example4():
+#     class LLMResponse(BaseModel):
+#         cities: List[str]
 
-    examples = [
-        LLMResponse(cities=["Shanghai", "Beijing"]),
-        LLMResponse(cities=["Guangzhou", "Shenzhen"]),
-    ]
+#     examples = [
+#         LLMResponse(cities=["Shanghai", "Beijing"]),
+#         LLMResponse(cities=["Guangzhou", "Shenzhen"]),
+#     ]
 
-    model = LiteLLM(
-        model="deepseek/deepseek-chat",
-        model_config={"temperature": 0.5},
-        tools=[web_search],
-    )
+#     model = LiteLLM(
+#         model="deepseek/deepseek-chat",
+#         model_config={"temperature": 0.5},
+#         tools=[web_search],
+#     )
 
-    # get error when using tools, cannot use tools in run_with_structured
-    response: LLMResponse = model.run_with_structured(
-        messages="Please tell me all provinces in China.",
-        response_format=LLMResponse,
-    )
+#     # get error when using tools, cannot use tools in run_with_structured
+#     response: LLMResponse = model.run_with_structured(
+#         messages="Please tell me all provinces in China.",
+#         response_format=LLMResponse,
+#     )
 
 
 def example5():
+    import os
+
     from dotenv import load_dotenv
     from pydantic import BaseModel, Field
-    import os
 
     load_dotenv("../../../../.env")
 

@@ -14,22 +14,18 @@ from typing import (
     Any,
     Dict,
     List,
-    Literal,
     Optional,
-    TypedDict,
+    Type,
     TypeVar,
     Union,
-    overload,
-    Type,
 )
 
-import litellm
 from pydantic import BaseModel
 
 from pne.callbacks.base import CallbackHandler
 from pne.callbacks.manager import CallbackManager
 from pne.message import AssistantMessage, BaseMessage, MessageSet, StreamMessageIterator
-from pne.output_formatter import get_formatted_instructions, formatting_result
+from pne.output_formatter import formatting_result, get_formatted_instructions
 from pne.tools.base import ToolTypes
 from pne.tools.manager import ToolManager
 from pne.utils.logger import logger
@@ -61,9 +57,10 @@ class LLM(ABC):
         """Run the LLM with the given messages.
 
         Args:
-            messages: Input messages in various formats (List[Dict], MessageSet, or List[BaseMessage])
-            tools: Optional list of tools to use
-            stream: Whether to stream the response
+            messages(Union[List[Dict], MessageSet, List[BaseMessage]]): Input messages
+                in various formats.
+            tools(Optional[List[ToolTypes]]): Optional list of tools to use.
+            stream(bool): Whether to stream the response.
 
         Returns:
             AssistantMessage: The response from the LLM
@@ -81,7 +78,8 @@ class LLM(ABC):
         """Run the LLM in streaming mode.
 
         Args:
-            messages: Input messages in various formats (List[dict], MessageSet, or List[BaseMessage])
+            messages: Input messages in various formats (List[dict], MessageSet, or
+            List[BaseMessage])
 
         Returns:
             Generator yielding response tokens from the LLM
