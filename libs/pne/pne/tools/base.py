@@ -32,7 +32,7 @@ class Tool(BaseModel):
         """Run the tool."""
         return self.function(*args, **kwargs)
 
-    def to_function_call(self) -> Dict[str, Any]:
+    def to_function_schema(self) -> Dict[str, Any]:
         """Convert the tool to OpenAI function call type JSON schema.
 
         Example:
@@ -48,7 +48,7 @@ class Tool(BaseModel):
             ...     \"""
             ...     return a + b
             >>> tool = Tool.from_function(add)
-            >>> tool.to_function_call()
+            >>> tool.to_function_schema()
             {
                 'name': 'add',
                 'description': 'Adds two integers.',
@@ -68,7 +68,7 @@ class Tool(BaseModel):
             "parameters": self.parameters.model_dump(),
         }
 
-    def to_tool_call_schema(self) -> Dict[str, Any]:
+    def to_tool_schema(self) -> Dict[str, Any]:
         """Convert the tool to OpenAI function schema format.
 
         Example:
@@ -84,7 +84,7 @@ class Tool(BaseModel):
             ...     \"""
             ...     return a + b
             >>> tool = Tool.from_function(add)
-            >>> tool.to_tool_call_schema()
+            >>> tool.to_tool_schema()
             {
                 'type': 'function',
                 'function': {
@@ -103,7 +103,7 @@ class Tool(BaseModel):
         """
         return {
             "type": "function",
-            "function": self.to_function_call(),
+            "function": self.to_function_schema(),
         }
 
     @classmethod

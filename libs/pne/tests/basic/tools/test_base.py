@@ -46,7 +46,7 @@ def test_to_tool_call_schema():
         function=lambda param1, param2: f"{param1} {param2}",
     )
 
-    schema = tool.to_tool_call_schema()
+    schema = tool.to_tool_schema()
 
     assert schema["type"] == "function"
     assert schema["function"]["name"] == "test_tool"

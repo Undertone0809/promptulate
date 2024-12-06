@@ -60,14 +60,16 @@ class ToolManager:
     @property
     def tool_descriptions(self) -> str:
         """Get all tool descriptions, including the schema if available."""
-        return "\n".join(json.dumps(t.to_function_call()) for t in self.tools.values())
+        return "\n".join(
+            json.dumps(t.to_function_schema()) for t in self.tools.values()
+        )
 
     @property
     def tool_call_schemas(self) -> List[Dict[str, Any]]:
         """Get all tool call schemas."""
-        return [t.to_tool_call_schema() for t in self.tools.values()]
+        return [t.to_tool_schema() for t in self.tools.values()]
 
     @property
     def function_call_schemas(self) -> List[Dict[str, Any]]:
         """Get all function call schemas."""
-        return [t.to_function_call() for t in self.tools.values()]
+        return [t.to_function_schema() for t in self.tools.values()]
