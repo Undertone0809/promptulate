@@ -54,7 +54,7 @@ pytest-mock = "^3.12.0"
 [tool.poetry.group.test_integration.dependencies]
 langchain = "^0.1.1"
 arxiv = "^1.4.7"
-duckduckgo_search = "^3.9.11"
+duckduckgo_search = ">=3.9.11,<8.0.0"
 pyjwt = "^2.8.0"
 
 [tool.poetry.scripts]
