@@ -51,5 +51,5 @@ typing-extensions==4.12.2 ; python_full_version >= "3.8.1" and python_version < 
 tzdata==2024.1 ; python_version >= "3.9" and python_version < "4.0"
 urllib3==2.2.2 ; python_full_version >= "3.8.1" and python_version < "4.0"
 wcwidth==0.2.13 ; python_full_version >= "3.8.1" and python_version < "4.0"
-yarl==1.9.11 ; python_full_version >= "3.8.1" and python_version < "4.0"
+yarl==1.18.3 ; python_full_version >= "3.8.1" and python_version < "4.0"
 zipp==3.20.1 ; python_full_version >= "3.8.1" and python_version < "4.0"
