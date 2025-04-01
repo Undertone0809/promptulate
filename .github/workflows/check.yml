@@ -21,7 +21,7 @@ jobs:
       run: pip install poetry
 
     - name: Set up cache
-      uses: actions/cache@v4.2.2
+      uses: actions/cache@v4.2.3
       with:
         path: .venv
         key: venv-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('poetry.lock') }}
