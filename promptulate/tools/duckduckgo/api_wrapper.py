@@ -10,7 +10,7 @@ class DuckDuckGoSearchAPIWrapper(BaseModel):
     safe_search: str = "moderate"
     time: Optional[str] = "y"
     max_num_of_results: int = 5
-
+    proxies: Optional[str] = None
     class Config:
         """Configuration for this pydantic object."""
 
@@ -37,7 +37,7 @@ class DuckDuckGoSearchAPIWrapper(BaseModel):
         if not num_results:
             num_results = self.max_num_of_results
 
-        with DDGS() as ddgs:
+        with DDGS(self.proxies) as ddgs:
             results = ddgs.text(
                 keyword,
                 region=self.region,
@@ -74,7 +74,7 @@ class DuckDuckGoSearchAPIWrapper(BaseModel):
         if not num_results:
             num_results = self.max_num_of_results
 
-        with DDGS() as ddgs:
+        with DDGS(self.proxies) as ddgs:
             results = ddgs.text(
                 query,
                 region=self.region,
