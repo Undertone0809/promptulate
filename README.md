@@ -314,3 +314,14 @@ See anything changelog, describe the [telegram channel](https://t.me/zeeland0809
 ## ⭐ Contribution
 
 We appreciate your interest in contributing to our open-source initiative. We have provided a [Developer's Guide](https://undertone0809.github.io/promptulate/#/other/contribution) outlining the steps to contribute to Promptulate. Please refer to this guide to ensure smooth collaboration and successful contributions. Additionally, you can view the [Current Development Plan](https://undertone0809.github.io/promptulate/#/other/plan) to see the latest development progress 🤝🚀
+
+## RunLedger CI gate
+
+This repo includes a deterministic CI gate for tool-using agents:
+
+```bash
+runledger run evals/runledger --mode replay --baseline baselines/runledger-demo.json
+```
+
+It replays recorded tool calls and fails the PR on schema/tool/budget regressions.
+
