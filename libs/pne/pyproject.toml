@@ -95,8 +95,8 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 
 [tool.coverage.run]
-source = ["tests"]
+source = ["pne"]
 
-[coverage.report]
+[tool.coverage.report]
 fail_under = 50
 show_missing = true

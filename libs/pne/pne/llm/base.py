@@ -177,4 +177,7 @@ class LLMFactory:
     @classmethod
     def build(
         cls, model_name: str, model_config: Optional[Dict[str, Any]] = None, **kwargs
-    ) -> LLM: ...
+    ) -> LLM:
+        from pne.llm._litellm import LiteLLM
+
+        return LiteLLM(model=model_name, model_config=model_config or {}, **kwargs)

@@ -1,12 +1,14 @@
 SHELL := /usr/bin/env bash
 OS := $(shell python -c "import sys; print(sys.platform)")
+COVERAGE_TARGET := pne
+PYTEST_ARGS := -c pyproject.toml --cov-report=term-missing --cov-report=html --cov=$(COVERAGE_TARGET) --cov-fail-under=50 tests/basic
 
 ifeq ($(OS),win32)
 	PYTHONPATH := $(shell python -c "import os; print(os.getcwd())")    
-	TEST_COMMAND := set PYTHONPATH=$(PYTHONPATH) && poetry run pytest -c pyproject.toml --cov-report=html --cov=promptulate tests/basic
+	TEST_COMMAND := set PYTHONPATH=$(PYTHONPATH) && poetry run pytest $(PYTEST_ARGS)
 else
 	PYTHONPATH := `pwd`
-	TEST_COMMAND := PYTHONPATH=$(PYTHONPATH) poetry run pytest -c pyproject.toml --cov-report=html --cov=promptulate tests/basic
+	TEST_COMMAND := PYTHONPATH=$(PYTHONPATH) poetry run pytest $(PYTEST_ARGS)
 endif
 
 lock:
