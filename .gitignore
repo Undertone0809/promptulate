@@ -5,6 +5,7 @@ gpt_output.md
 private
 litellm_uuid.txt
 node_modules
+.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
