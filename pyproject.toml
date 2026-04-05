@@ -3,7 +3,7 @@ requires = ["hatchling>=1.26"]
 build-backend = "hatchling.build"
 
 [project]
-name = "promptulate"
+name = "pne"
 version = "0.1.0"
 description = "A new generation agent core."
 readme = "README.md"
@@ -14,4 +14,4 @@ dependencies = []
 dev-dependencies = []
 
 [tool.hatch.build.targets.wheel]
-packages = ["promptulate"]
+packages = ["pne"]
