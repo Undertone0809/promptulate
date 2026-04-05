@@ -30,6 +30,22 @@ answer = agent.run("What is 17 * 23?")
 print(answer)
 ```
 
+异步流式事件 API (`run_stream`) 也支持边产出边显示模型决策和工具调用过程：
+
+```python
+import asyncio
+from pne import build_adapter, build_agent
+
+
+async def main() -> None:
+    agent = build_agent(adapter=build_adapter("auto"))
+    async for event in agent.run_stream("What is 17 * 23?"):
+        print(event["type"], "=>", event.get("content") or event.get("output"))
+
+
+asyncio.run(main())
+```
+
 `build_agent` now constructs the normal production agent.
 `ReActAgent` is kept as an experimental variant and can be built explicitly.
 

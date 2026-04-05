@@ -4,10 +4,17 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
-from typing import Any, Callable, Literal, Protocol, Sequence
+from typing import Any, Callable, Literal, Protocol, Sequence, TypedDict
 
 JsonObject = dict[str, Any]
 ToolHandler = Callable[[JsonObject], Any]
+AgentEventType = Literal[
+    "step_start",
+    "model_turn",
+    "tool_call",
+    "tool_output",
+    "final",
+]
 
 
 def _json_default(value: Any) -> str:
@@ -63,6 +70,18 @@ class ModelTurn:
     tool_calls: tuple[ToolCall, ...] = ()
 
 
+class AgentEvent(TypedDict, total=False):
+    type: AgentEventType
+    agent: str
+    step: int
+    messages: int
+    content: str | None
+    tool_calls: list[dict[str, Any]]
+    tool_call: dict[str, Any]
+    tool: str
+    output: str | None
+
+
 class ModelAdapter(Protocol):
     adapter_type: str
 
@@ -75,4 +94,3 @@ class ModelAdapter(Protocol):
         temperature: float,
     ) -> ModelTurn:
         """Generate one turn of model output."""
-

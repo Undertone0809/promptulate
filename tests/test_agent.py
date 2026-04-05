@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import asyncio
 import tempfile
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-from unittest import TestCase
+from unittest import IsolatedAsyncioTestCase, TestCase
+from unittest.mock import patch
 
 from pne.agent import (
     Agent,
@@ -168,6 +170,16 @@ class TestAgent(TestCase):
         self.assertEqual("model_turn", events[1]["type"])
         self.assertEqual("final", events[2]["type"])
 
+    def test_run_remains_sync_compatible(self) -> None:
+        adapter = _FakeAdapter([ModelTurn(content="legacy final")])
+        agent = build_agent(adapter=adapter)
+
+        got = agent.run("Hello")
+
+        self.assertEqual("legacy final", got)
+        self.assertEqual(1, len(adapter.calls))
+        self.assertEqual("legacy final", got)
+
     def test_safe_calculate_supports_arithmetic(self) -> None:
         self.assertEqual(7, _safe_calculate("1 + 2 * 3"))
         self.assertEqual(3, _safe_calculate("10 // 3"))
@@ -186,3 +198,85 @@ class TestAgent(TestCase):
         utc_value = result["utc_now"]
         parsed = datetime.fromisoformat(utc_value)
         self.assertEqual("UTC", parsed.tzinfo.tzname(parsed))
+
+
+class TestAgentStream(IsolatedAsyncioTestCase):
+    async def test_run_stream_yields_step_events_and_final(self) -> None:
+        adapter = _FakeAdapter([ModelTurn(content="final in stream")])
+        agent = build_agent(adapter=adapter)
+        events: list[dict[str, Any]] = []
+
+        async for event in agent.run_stream("Hello", max_steps=3):
+            events.append(event)
+
+        self.assertEqual("final", events[-1]["type"])
+        self.assertEqual("final in stream", events[-1]["content"])
+        self.assertEqual(["step_start", "model_turn", "final"], [e["type"] for e in events])
+
+    async def test_run_stream_yields_tool_call_and_tool_output(self) -> None:
+        adapter = _FakeAdapter(
+            [
+                ModelTurn(
+                    content=None,
+                    tool_calls=(
+                        ToolCall(
+                            id="t-1",
+                            name="calculator",
+                            arguments={"expression": "1+2"},
+                        ),
+                    ),
+                ),
+                ModelTurn(content="3"),
+            ]
+        )
+        agent = build_agent(adapter=adapter)
+        events: list[dict[str, Any]] = []
+
+        async for event in agent.run_stream("Use calculator", max_steps=2):
+            events.append(event)
+
+        self.assertIn("tool_call", [event["type"] for event in events])
+        self.assertIn("tool_output", [event["type"] for event in events])
+        self.assertEqual("3", events[-1]["content"])
+
+    async def test_run_stream_with_max_steps_timeout(self) -> None:
+        adapter = _FakeAdapter(
+            [
+                ModelTurn(
+                    content=None,
+                    tool_calls=(ToolCall(id="loop-1", name="calculator", arguments={"expression": "1+1"}),),
+                ),
+                ModelTurn(
+                    content=None,
+                    tool_calls=(ToolCall(id="loop-2", name="calculator", arguments={"expression": "2+2"}),),
+                ),
+            ]
+        )
+        agent = build_agent(adapter=adapter)
+
+        with self.assertRaisesRegex(RuntimeError, "Reached max_steps=2"):
+            async for _ in agent.run_stream("Loop", max_steps=2):
+                pass
+
+    async def test_run_stream_wraps_sync_adapter_in_thread(self) -> None:
+        adapter = _FakeAdapter(
+            [
+                ModelTurn(
+                    content=None,
+                    tool_calls=(ToolCall(id="t1", name="calculator", arguments={"expression": "1+2"}),),
+                ),
+                ModelTurn(content="3"),
+            ]
+        )
+        agent = build_agent(adapter=adapter)
+        calls: list[Any] = []
+
+        async def fake_to_thread(func: Any, *args: Any, **kwargs: Any):
+            calls.append(func)
+            return await asyncio.to_thread(func, *args, **kwargs)
+
+        with patch("pne.agent.asyncio.to_thread", side_effect=fake_to_thread):
+            async for _ in agent.run_stream("Hello"):
+                pass
+
+        self.assertGreaterEqual(len(calls), 2)

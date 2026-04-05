@@ -6,6 +6,7 @@ private
 litellm_uuid.txt
 node_modules
 .DS_Store
+.ruff_cache/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -11,6 +11,22 @@ agent = build_agent(adapter=build_adapter("auto"))
 print(agent.run("What is 17 * 23?"))
 ```
 
+流式事件消费示例：
+
+```python
+import asyncio
+from pne import build_adapter, build_agent
+
+
+async def main() -> None:
+    agent = build_agent(adapter=build_adapter("auto"))
+    async for event in agent.run_stream("What is 17 * 23?"):
+        print(f"[{event['type']}] {event.get('content') or event.get('output')}")
+
+
+asyncio.run(main())
+```
+
 ## 示例入口
 
 本仓库的使用示例集中在 `use_cases/` 目录下维护，每个入口有独立的 README 与运行脚本。
