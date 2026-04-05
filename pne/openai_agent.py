@@ -2,10 +2,8 @@
 
 from __future__ import annotations
 
-import os
 import subprocess
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Any, Sequence
 
 from .skills import LocalSkill, skill_context
@@ -29,27 +27,6 @@ def _truncate_text(text: str, max_length: int) -> str:
     if max_length <= 0 or len(text) <= max_length:
         return text
     return text[: max_length - 1] + "…"
-
-
-def _load_dotenv_if_needed() -> None:
-    if os.getenv("OPENAI_API_KEY"):
-        return
-
-    for directory in (Path.cwd(), *Path.cwd().parents):
-        dotenv_path = directory / ".env"
-        if not dotenv_path.is_file():
-            continue
-        for line in dotenv_path.read_text(encoding="utf-8").splitlines():
-            stripped = line.strip()
-            if not stripped or stripped.startswith("#") or "=" not in stripped:
-                continue
-            key, value = stripped.split("=", 1)
-            key = key.strip()
-            if not key or key in os.environ:
-                continue
-            os.environ[key] = value.strip().strip("'\"")
-        if os.getenv("OPENAI_API_KEY"):
-            return
 
 
 def _response_text(response: Any) -> str:
@@ -87,21 +64,22 @@ class LocalShellExecutor:
             stdout = _truncate_text(completed.stdout or "", max_output_length)
             stderr = _truncate_text(completed.stderr or "", max_output_length)
             return {
-                "command": command,
                 "stdout": stdout,
                 "stderr": stderr,
-                "exit_code": completed.returncode,
-                "timed_out": False,
+                "outcome": {
+                    "type": "exit",
+                    "exit_code": completed.returncode,
+                },
             }
         except subprocess.TimeoutExpired as exc:
             stdout = _truncate_text(exc.stdout or "", max_output_length)
             stderr = _truncate_text(exc.stderr or "", max_output_length)
             return {
-                "command": command,
                 "stdout": stdout,
                 "stderr": stderr,
-                "exit_code": None,
-                "timed_out": True,
+                "outcome": {
+                    "type": "timeout",
+                },
             }
 
 
@@ -127,8 +105,7 @@ class OpenAIResponsesAgent:
                     "OpenAI agent requested but the `openai` package is not installed."
                 ) from exc
 
-            _load_dotenv_if_needed()
-            self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+            self.client = OpenAI()
 
         if self.instructions is None:
             self.instructions = (
@@ -147,9 +124,11 @@ class OpenAIResponsesAgent:
 
     def _execute_shell_call(self, item: Any) -> dict[str, Any]:
         action = _item_get(item, "action", {}) or {}
-        commands = action.get("commands") or []
-        timeout_ms = int(action.get("timeout_ms") or self.shell_timeout_ms)
-        max_output_length = int(action.get("max_output_length") or self.shell_max_output_length)
+        commands = _item_get(action, "commands", []) or []
+        timeout_ms = int(_item_get(action, "timeout_ms") or self.shell_timeout_ms)
+        max_output_length = int(
+            _item_get(action, "max_output_length") or self.shell_max_output_length
+        )
         results = [
             self.shell_executor.run(
                 command,

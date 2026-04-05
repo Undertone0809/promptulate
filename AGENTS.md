@@ -5,6 +5,16 @@
 - Use `README.md` for the project overview.
 - For use cases, keep one folder per use case, put a `README.md` in each folder, and leave `use_cases/README.md` empty for now.
 
+## SDK Boundaries
+
+- Keep `pne/` import-only and side-effect free.
+- Do not make SDK code discover repository files, load `.env`, mutate process environment, or infer runtime configuration from the current working directory.
+- Keep environment loading, CLI parsing, and other app bootstrap logic in `use_cases/` or in the caller.
+- When a behavior depends on local machine state, make it explicit in the example or entrypoint so the SDK surface stays predictable and embeddable.
+- Why: SDKs are reused in notebooks, services, tests, and other host applications, so hidden bootstrap logic makes behavior depend on cwd, checkout layout, or local files instead of explicit caller input.
+- Why: implicit file loading and env mutation blur the boundary between library and application, which makes debugging, composition, and security review harder.
+- Why: examples can be opinionated and convenience-driven, but the package API itself should stay deterministic, portable, and easy to embed in larger systems.
+
 ## Git commit rules
 
 - After completing a feature, small functionality, test change, or bug fix, and after the necessary validation passes, default to running `git commit` and `git push` to the current remote branch.
