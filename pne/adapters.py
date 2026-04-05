@@ -223,15 +223,20 @@ def anthropic_adapter(
             "Anthropic backend requested but the `anthropic` package is not installed."
         ) from exc
 
+    adapter_model = model
+    adapter_api_key = api_key
+
     @dataclass
     class AnthropicMessagesAdapter:
-        model: str = model
+        model: str = adapter_model
         client: Any | None = None
         adapter_type: str = "anthropic"
 
         def __post_init__(self) -> None:
             if self.client is None:
-                self.client = anthropic.Anthropic(api_key=api_key or os.getenv("ANTHROPIC_API_KEY"))
+                self.client = anthropic.Anthropic(
+                    api_key=adapter_api_key or os.getenv("ANTHROPIC_API_KEY")
+                )
 
         def step(
             self,

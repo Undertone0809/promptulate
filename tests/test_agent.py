@@ -1,0 +1,188 @@
+from __future__ import annotations
+
+import tempfile
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+from unittest import TestCase
+
+from pne.agent import (
+    Agent,
+    ReActAgent,
+    _safe_calculate,
+    build_agent,
+    build_react_agent,
+    calculator_tool,
+    utc_now_tool,
+)
+from pne.skills import LocalSkill
+from pne.types import ModelTurn, ToolCall
+
+
+class _FakeAdapter:
+    def __init__(self, turns: list[ModelTurn]):
+        self._turns = list(turns)
+        self.calls: list[tuple[str, list[Any], list[Any], float]] = []
+
+    def step(
+        self,
+        *,
+        instructions: str,
+        messages: list[Any],
+        tools: list[Any],
+        temperature: float,
+    ) -> ModelTurn:
+        self.calls.append((instructions, messages, tools, temperature))
+        return self._turns.pop(0)
+
+
+class TestAgent(TestCase):
+    def test_build_agent_defaults_have_builtin_tools(self) -> None:
+        adapter = _FakeAdapter([ModelTurn(content="ok")])
+        agent = build_agent(adapter=adapter)
+        self.assertEqual({"calculator", "utc_now"}, set(agent._tools.keys()))
+
+    def test_agent_run_without_tool_calls_returns_final(self) -> None:
+        adapter = _FakeAdapter([ModelTurn(content="final answer")])
+        agent = build_agent(adapter=adapter)
+        got = agent.run("What is 2 + 2?", max_steps=2, verbose=False)
+
+        self.assertEqual("final answer", got)
+        self.assertEqual(1, len(adapter.calls))
+        _, messages, _tools, temperature = adapter.calls[0]
+        self.assertEqual("What is 2 + 2?", messages[0].content)
+        self.assertEqual(0.0, temperature)
+
+    def test_agent_runs_tool_then_returns_final(self) -> None:
+        adapter = _FakeAdapter(
+            [
+                ModelTurn(
+                    content=None,
+                    tool_calls=(
+                        ToolCall(
+                            id="t1",
+                            name="calculator",
+                            arguments={"expression": "1+2"},
+                        ),
+                    ),
+                ),
+                ModelTurn(content="3"),
+            ]
+        )
+        agent = build_agent(adapter=adapter)
+        got = agent.run("Compute 1+2", max_steps=2, verbose=False)
+
+        self.assertEqual("3", got)
+        self.assertEqual(2, len(adapter.calls))
+        second_messages = adapter.calls[1][1]
+        tool_messages = [
+            message
+            for message in second_messages
+            if message.role == "tool"
+        ]
+        self.assertEqual(1, len(tool_messages))
+        self.assertEqual("calculator", tool_messages[0].name)
+        self.assertEqual("t1", tool_messages[0].tool_call_id)
+
+    def test_agent_unknown_tool_call_raises(self) -> None:
+        adapter = _FakeAdapter(
+            [
+                ModelTurn(
+                    content=None,
+                    tool_calls=(ToolCall(id="bad", name="missing", arguments={}),),
+                )
+            ]
+        )
+        agent = Agent(adapter=adapter, tools=[])
+        with self.assertRaises(KeyError):
+            agent.run("Call unknown tool", max_steps=1)
+
+    def test_agent_runs_until_max_steps_and_raises(self) -> None:
+        adapter = _FakeAdapter(
+            [
+                ModelTurn(
+                    content=None,
+                    tool_calls=(
+                        ToolCall(
+                            id="loop-1",
+                            name="calculator",
+                            arguments={"expression": "1+1"},
+                        ),
+                    ),
+                ),
+                ModelTurn(
+                    content=None,
+                    tool_calls=(
+                        ToolCall(
+                            id="loop-2",
+                            name="calculator",
+                            arguments={"expression": "2+2"},
+                        ),
+                    ),
+                ),
+            ]
+        )
+        agent = build_agent(adapter=adapter, tools=[calculator_tool(), utc_now_tool()])
+        with self.assertRaisesRegex(RuntimeError, "Reached max_steps=2"):
+            agent.run("Keep asking for tools", max_steps=2)
+
+    def test_build_react_agent_is_experimental_variant(self) -> None:
+        adapter = _FakeAdapter([ModelTurn(content="ok")])
+        agent = build_react_agent(adapter=adapter)
+        got = agent.run("status")
+
+        self.assertEqual("ok", got)
+        self.assertIsInstance(agent, ReActAgent)
+        self.assertEqual("ReACT", agent.agent_type)
+        self.assertIn("ReACT", agent.instructions)
+
+    def test_build_agent_includes_skills_instructions(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            skill_dir = Path(tmp) / "skill"
+            skill_dir.mkdir()
+            manifest = skill_dir / "SKILL.md"
+            manifest.write_text("name: test\ndescription: desc\n\ndesc\n", encoding="utf-8")
+
+            skill = LocalSkill(
+                name="test",
+                description="desc",
+                root=skill_dir,
+                manifest_path=manifest,
+                instructions="desc",
+            )
+            adapter = _FakeAdapter([ModelTurn(content="ok")])
+            build_agent(adapter=adapter, skills=[skill]).run("x")
+
+            instructions, *_ = adapter.calls[0]
+            self.assertIn("Available local skills", instructions)
+            self.assertIn("- test: desc", instructions)
+
+    def test_agent_on_step_callback_receives_events(self) -> None:
+        adapter = _FakeAdapter([ModelTurn(content="final")])
+        events: list[dict[str, Any]] = []
+        agent = build_agent(adapter=adapter)
+
+        result = agent.run("hello", on_step=lambda event: events.append(event))
+        self.assertEqual("final", result)
+        self.assertEqual("step_start", events[0]["type"])
+        self.assertEqual("model_turn", events[1]["type"])
+        self.assertEqual("final", events[2]["type"])
+
+    def test_safe_calculate_supports_arithmetic(self) -> None:
+        self.assertEqual(7, _safe_calculate("1 + 2 * 3"))
+        self.assertEqual(3, _safe_calculate("10 // 3"))
+        self.assertEqual(4, _safe_calculate("2 ** 2"))
+
+    def test_safe_calculate_rejects_unsupported_expression(self) -> None:
+        with self.assertRaises(ValueError):
+            _safe_calculate("1 << 2")
+
+    def test_calculator_tool_returns_expected_result(self) -> None:
+        got = calculator_tool().handler({"expression": "4 // 2"})
+        self.assertEqual({"result": 2}, got)
+
+    def test_utc_now_tool_returns_iso_timestamp(self) -> None:
+        result = utc_now_tool().handler({})
+        utc_value = result["utc_now"]
+        parsed = datetime.fromisoformat(utc_value)
+        self.assertEqual("UTC", parsed.tzinfo.tzname(parsed))

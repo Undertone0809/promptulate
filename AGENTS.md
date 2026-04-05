@@ -15,6 +15,20 @@
 - Why: implicit file loading and env mutation blur the boundary between library and application, which makes debugging, composition, and security review harder.
 - Why: examples can be opinionated and convenience-driven, but the package API itself should stay deterministic, portable, and easy to embed in larger systems.
 
+## Testing policy
+
+- All public SDK behaviors must have mock unit tests in this repository.
+- For adapter/provider behavior, always use mocks for:
+  - `openai` / `anthropic` imports,
+  - shell command execution,
+  - backend detection (`importlib` and `shutil.which`).
+- Tests must not touch the network and should avoid real command execution.
+- Preferred command:
+
+```bash
+python -m unittest
+```
+
 ## Git commit rules
 
 - After completing a feature, small functionality, test change, or bug fix, and after the necessary validation passes, default to running `git commit` and `git push` to the current remote branch.
