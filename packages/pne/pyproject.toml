@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pne"
-version = "0.1.0"
+version = "2.0.0"
 description = "A new generation agent core."
 readme = "../../README.md"
 requires-python = ">=3.13"

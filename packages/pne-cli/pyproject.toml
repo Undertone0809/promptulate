@@ -4,10 +4,10 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pne-cli"
-version = "0.1.0"
+version = "2.0.0"
 description = "Interactive CLI for the Pne local agent SDK."
 requires-python = ">=3.13"
-dependencies = ["pne>=0.1.0"]
+dependencies = ["pne>=2.0.0"]
 
 [project.scripts]
 pne = "pne_cli.__main__:main"
