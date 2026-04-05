@@ -2,7 +2,8 @@
 
 ## Documentation
 
-- Use `README.md` for the project overview and `docs/DEVELOPMENT.md` for development conventions.
+- Use `README.md` for the project overview.
+- For use cases, keep one folder per use case, put a `README.md` in each folder, and leave `use_cases/README.md` empty for now.
 
 ## Git commit rules
 
