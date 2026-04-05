@@ -8,7 +8,12 @@ version = "0.1.0"
 description = "A new generation agent core."
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "openai>=2.30.0",
+]
+
+[project.scripts]
+pne-react = "pne.react_agent:main"
 
 [tool.uv]
 dev-dependencies = []
