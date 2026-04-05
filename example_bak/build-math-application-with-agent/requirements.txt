@@ -1,4 +1,0 @@
-streamlit>=1.28
-pne
-wikipedia
-numexpr

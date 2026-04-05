@@ -1,6 +1,0 @@
-streamlit>=1.28
-pne
-wikipedia
-matplotlib
-networkx
-pydantic

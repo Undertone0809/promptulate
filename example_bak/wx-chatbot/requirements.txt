@@ -1,3 +1,0 @@
-itchat-uos == 1.4.1
-pne
-promotulate
