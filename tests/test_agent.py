@@ -211,7 +211,10 @@ class TestAgentStream(IsolatedAsyncioTestCase):
 
         self.assertEqual("final", events[-1]["type"])
         self.assertEqual("final in stream", events[-1]["content"])
-        self.assertEqual(["step_start", "model_turn", "final"], [e["type"] for e in events])
+        self.assertEqual("final in stream", events[-1]["content"])
+        self.assertIn("model_delta", [event["type"] for event in events])
+        self.assertEqual("step_start", events[0]["type"])
+        self.assertEqual("model_turn", events[1]["type"])
 
     async def test_run_stream_yields_tool_call_and_tool_output(self) -> None:
         adapter = _FakeAdapter(
@@ -257,6 +260,18 @@ class TestAgentStream(IsolatedAsyncioTestCase):
         with self.assertRaisesRegex(RuntimeError, "Reached max_steps=2"):
             async for _ in agent.run_stream("Loop", max_steps=2):
                 pass
+
+    async def test_run_stream_emits_model_delta_events(self) -> None:
+        adapter = _FakeAdapter([ModelTurn(content="streaming answer")])
+        agent = build_agent(adapter=adapter)
+        events: list[dict[str, Any]] = []
+
+        async for event in agent.run_stream("Hello", max_steps=1):
+            events.append(event)
+
+        types = [event["type"] for event in events]
+        self.assertIn("model_delta", types)
+        self.assertTrue(any("streaming" in str(event.get("delta", "")) for event in events if event["type"] == "model_delta"))
 
     async def test_run_stream_wraps_sync_adapter_in_thread(self) -> None:
         adapter = _FakeAdapter(

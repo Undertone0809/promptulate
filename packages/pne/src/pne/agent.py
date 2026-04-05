@@ -125,6 +125,20 @@ class Agent:
             "output": output,
         }
 
+    def _model_delta_event(self, step: int, delta: str) -> AgentEvent:
+        return {
+            "type": "model_delta",
+            "agent": self.agent_type,
+            "step": step,
+            "delta": delta,
+        }
+
+    @staticmethod
+    def _iter_chunks(text: str, size: int = 24) -> list[str]:
+        if size <= 0:
+            return [text]
+        return [text[index : index + size] for index in range(0, len(text), size)]
+
     def _final_event(self, step: int, final_text: str) -> AgentEvent:
         return {
             "type": "final",
@@ -275,6 +289,17 @@ class Agent:
                 verbose=verbose,
             )
             yield model_turn_event
+
+            if turn.content:
+                for delta in self._iter_chunks(turn.content, 24):
+                    model_delta_event = self._model_delta_event(step=step, delta=delta)
+                    self._emit_event(
+                        model_delta_event,
+                        on_step=on_step,
+                        verbose=verbose,
+                    )
+                    yield model_delta_event
+                    await asyncio.sleep(0)
 
             if turn.content is not None:
                 messages.append(

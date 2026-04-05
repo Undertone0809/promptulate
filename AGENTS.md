@@ -26,7 +26,16 @@
 - Preferred command:
 
 ```bash
-python -m unittest
+uv run python -m unittest
+```
+
+- In this monorepo, run `uv sync` first to ensure `packages/pne` and `packages/pne-cli` are installed from local workspace sources.
+- For CLI smoke checks:
+
+```bash
+uv run pne --help
+uv run pne ask --help
+uv run pne chat --help
 ```
 
 ## Git commit rules

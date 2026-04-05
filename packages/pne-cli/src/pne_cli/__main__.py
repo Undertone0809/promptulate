@@ -12,10 +12,10 @@ from typing import Callable, Iterable, Sequence
 from pne import (
     ChatMessage,
     AgentEvent,
+    ToolSpec,
     build_adapter,
     build_agent,
     build_local_tools,
-    ToolSpec,
 )
 
 
@@ -167,6 +167,7 @@ async def _consume_events(
     history: Sequence[ChatMessage],
 ) -> str:
     final_text = ""
+    streaming = False
     async for event in agent.run_stream(prompt, max_steps=max_steps, on_step=on_step, history=history):
         event_type = event.get("type")
         if quiet and event_type != "final":
@@ -174,22 +175,44 @@ async def _consume_events(
 
         if event_type == "step_start":
             print(f"\n[step {event['step']}]")
+            streaming = False
         elif event_type == "model_turn":
             has_tools = bool(event.get("tool_calls"))
-            content = event.get("content")
-            if content:
-                print(f"assistant: {content}")
-            elif has_tools:
-                print("assistant thinking...")
+            if has_tools:
+                print("assistant: thinking...")
+            elif event.get("content"):
+                print("assistant: ", end="", flush=True)
+                streaming = True
+            else:
+                print("assistant: ")
+                streaming = False
+        elif event_type == "model_delta":
+            delta = str(event.get("delta") or "")
+            if delta:
+                if not streaming:
+                    print("assistant: ", end="", flush=True)
+                    streaming = True
+                print(delta, end="", flush=True)
         elif event_type == "tool_call":
+            if streaming:
+                print()
+                streaming = False
             tool_call = event.get("tool_call", {})
             name = tool_call.get("name")
             args = tool_call.get("arguments")
-            print(f"tool_call: {name} {json.dumps(args, ensure_ascii=False)}")
+            print("  - tool_call")
+            print(f"    name: {name}")
+            print(f"    args: {json.dumps(args, ensure_ascii=False)}")
         elif event_type == "tool_output":
-            print(f"tool_output: {event.get('output')}")
+            if streaming:
+                print()
+                streaming = False
+            print(f"  - tool_output: {event.get('output')}")
         elif event_type == "final":
             final_text = str(event.get("content") or "")
+            if streaming:
+                print()
+                streaming = False
             print(f"final: {final_text}")
 
     return final_text
@@ -253,8 +276,8 @@ def _handle_chat(args: argparse.Namespace) -> int:
                 print("history reset.")
                 continue
             if text == "/help":
-                print("/quit 退出会话")
-                print("/reset 清空历史")
+                print("/quit exit the session")
+                print("/reset clear the history")
                 continue
 
             final_text = _run_single(

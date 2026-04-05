@@ -16,4 +16,4 @@ pne = "pne_cli.__main__:main"
 Homepage = "https://pne.zeeland.studio"
 
 [tool.uv.sources]
-pne = { path = "../pne" }
+pne = { workspace = true }

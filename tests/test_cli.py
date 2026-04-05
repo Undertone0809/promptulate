@@ -108,6 +108,6 @@ class TestCLIAsync(IsolatedAsyncioTestCase):
         self.assertEqual("done", final_text)
         text = out.getvalue()
         self.assertIn("[step 1]", text)
-        self.assertIn("assistant thinking...", text)
+        self.assertIn("assistant: thinking...", text)
         self.assertIn("tool_output: 2", text)
         self.assertIn("final: done", text)

@@ -11,6 +11,7 @@ ToolHandler = Callable[[JsonObject], Any]
 AgentEventType = Literal[
     "step_start",
     "model_turn",
+    "model_delta",
     "tool_call",
     "tool_output",
     "final",
@@ -76,6 +77,7 @@ class AgentEvent(TypedDict, total=False):
     step: int
     messages: int
     content: str | None
+    delta: str
     tool_calls: list[dict[str, Any]]
     tool_call: dict[str, Any]
     tool: str
