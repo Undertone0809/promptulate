@@ -1,7 +1,61 @@
 :root {
-  --vp-c-brand: #2b6cb0;
-  --vp-c-brand-light: #3a78bd;
-  --vp-c-brand-lighter: #5c8fd1;
+  --vp-c-bg: #f0efea;
+  --vp-c-bg-alt: #fafaf8;
+  --vp-c-bg-elv: #ffffff;
+  --vp-c-bg-soft: #ffffff;
+}
+
+.dark {
+  --vp-c-bg: #2b2a27;
+  --vp-c-bg-alt: #393937;
+  --vp-c-bg-elv: #1c1c19;
+  --vp-c-bg-soft: #383735;
+}
+
+:root {
+  --vp-c-default-1: var(--vp-c-gray-1);
+  --vp-c-default-2: var(--vp-c-gray-2);
+  --vp-c-default-3: var(--vp-c-gray-3);
+  --vp-c-default-soft: var(--vp-c-gray-soft);
+
+  --vp-c-brand-1: #d77a59;
+  --vp-c-brand-2: #dfa691;
+  --vp-c-brand-3: #b15f3b;
+  --vp-c-brand-soft: #8b4424;
+
+  --vp-c-tip-1: var(--vp-c-brand-1);
+  --vp-c-tip-2: var(--vp-c-brand-2);
+  --vp-c-tip-3: var(--vp-c-brand-3);
+  --vp-c-tip-soft: var(--vp-c-brand-soft);
+
+  --vp-c-warning-1: var(--vp-c-yellow-1);
+  --vp-c-warning-2: var(--vp-c-yellow-2);
+  --vp-c-warning-3: var(--vp-c-yellow-3);
+  --vp-c-warning-soft: var(--vp-c-yellow-soft);
+
+  --vp-c-danger-1: var(--vp-c-red-1);
+  --vp-c-danger-2: var(--vp-c-red-2);
+  --vp-c-danger-3: var(--vp-c-red-3);
+  --vp-c-danger-soft: var(--vp-c-red-soft);
+}
+
+:root {
+  --vp-button-brand-border: transparent;
+  --vp-button-brand-text: var(--vp-c-white);
+  --vp-button-brand-bg: var(--vp-c-brand-3);
+  --vp-button-brand-hover-border: transparent;
+  --vp-button-brand-hover-text: var(--vp-c-white);
+  --vp-button-brand-hover-bg: var(--vp-c-brand-2);
+  --vp-button-brand-active-border: transparent;
+  --vp-button-brand-active-text: var(--vp-c-white);
+  --vp-button-brand-active-bg: var(--vp-c-brand-1);
+}
+
+:root {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #dfa691 30%, #d77a59);
+  --vp-home-hero-image-background-image: linear-gradient(-45deg, #ad7f6f 45%, #d77a59 55%);
+  --vp-home-hero-image-filter: blur(44px);
 }
 
 html {
@@ -10,4 +64,32 @@ html {
 
 .vp-doc a {
   font-weight: 600;
+}
+
+.doc-banner {
+  border-radius: 12px;
+  box-shadow: 0 10px 28px rgb(30 30 30 / 0.2);
+  max-width: 100%;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --vp-home-hero-image-filter: blur(56px);
+  }
+}
+
+@media (min-width: 960px) {
+  :root {
+    --vp-home-hero-image-filter: blur(68px);
+  }
+}
+
+.VPFeature * {
+  transition: transform 0.25s ease;
+}
+
+.VPFeature:hover * {
+  color: var(--vp-c-text-1);
+  transform: scale(1.01);
+  border-color: var(--vp-c-brand-1);
 }

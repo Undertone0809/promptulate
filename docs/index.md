@@ -1,5 +1,7 @@
 # Promptulate 文档
 
+![Promptulate Banner](/banner.png){.doc-banner}
+
 <script setup>
 const features = [
   '轻量 SDK，支持 OpenAI 与 Anthropic',
@@ -8,7 +10,7 @@ const features = [
 ]
 </script>
 
-<h1 class="vp-doc"><strong>Promptulate</strong> 文档</h1>
+<h1 class="vp-doc"><strong>Promptulate</strong> 文档站点</h1>
 
 > 面向应用接入的智能体基础库，支持可组合的适配器与工具生态。
 

@@ -1,13 +1,27 @@
 import { defineConfig } from 'vitepress'
 
+const repoUrl = 'https://github.com/Undertone0809/promptulate'
+
 export default defineConfig({
   title: 'Promptulate',
-  description: 'An SDK for REACT-style agents and tool integrations.',
+  description:
+    'Build your LLM Agent application in a Pythonic way with a lightweight SDK and modular agent components.',
   lang: 'zh-CN',
   srcDir: './',
   outDir: '.vitepress/dist',
+  head: [
+    ['link', { rel: 'icon', href: '/logo.ico' }],
+    ['meta', { property: 'description', content: 'Build your LLM Agent application in a Pythonic way with a lightweight SDK and modular agent components.' }],
+    ['meta', { property: 'keywords', content: 'Promptulate, pne, LLM, autonomous agents, tool integrations, AI agent sdk' }],
+    ['meta', { property: 'og:site_name', content: 'Promptulate' }],
+    ['meta', { property: 'og:title', content: 'Promptulate Docs' }],
+    ['meta', { property: 'og:description', content: 'Build your LLM Agent application in a Pythonic way with a lightweight SDK and modular agent components.' }],
+    ['meta', { property: 'twitter:card', content: 'summary_large_image' }],
+    ['meta', { property: 'twitter:title', content: 'Promptulate Docs' }],
+    ['meta', { property: 'twitter:description', content: 'Build your LLM Agent application in a Pythonic way with a lightweight SDK and modular agent components.' }],
+  ],
   themeConfig: {
-    logo: 'Promptulate',
+    logo: '/logo.svg',
     siteTitle: 'Promptulate',
     nav: [
       { text: '主页', link: '/' },
@@ -32,9 +46,16 @@ export default defineConfig({
         ],
       },
     ],
+    outline: {
+      level: [2, 3],
+    },
     footer: {
-      message: '基于 VitePress 构建，适配 Vercel 部署。',
+      message: 'Prompts and agent docs for Promptulate.',
       copyright: 'Copyright © 2026 Promptulate',
+    },
+    editLink: {
+      pattern: `${repoUrl}/edit/main/docs/:path`,
+      text: '在 GitHub 上编辑此页',
     },
     search: {
       provider: 'local',
@@ -42,7 +63,7 @@ export default defineConfig({
     socialLinks: [
       {
         icon: 'github',
-        link: 'https://github.com/',
+        link: repoUrl,
       },
     ],
   },
