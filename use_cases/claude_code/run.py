@@ -1,4 +1,4 @@
-"""Example runner for the PNE ReACT agent."""
+"""Example runner for the PNE ReACT agent with Claude Code."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ def _read_prompt() -> str:
 
 def main() -> None:
     prompt = _read_prompt()
-    adapter = build_adapter("auto")
+    adapter = build_adapter("claude-code")
     agent = build_agent(adapter=adapter)
     print(agent.run(prompt))
 

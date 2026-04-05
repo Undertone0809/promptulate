@@ -1,31 +1,13 @@
-"""Minimal ReACT agent built on OpenAI's Responses API.
-
-This uses the official Responses API function-calling loop:
-user prompt -> model -> function call(s) -> tool output(s) -> model -> final answer.
-"""
+"""Minimal ReACT agent core."""
 
 from __future__ import annotations
 
 import ast
-import json
-from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Any, Callable
+from typing import Any, Callable, Sequence
 
-from openai import OpenAI
-
-JsonObject = dict[str, Any]
-ToolHandler = Callable[[JsonObject], Any]
-
-
-def _json_default(value: Any) -> str:
-    return str(value)
-
-
-def _serialize_output(value: Any) -> str:
-    if isinstance(value, str):
-        return value
-    return json.dumps(value, ensure_ascii=False, default=_json_default)
+from .adapters import build_adapter
+from .types import ChatMessage, ModelAdapter, ToolSpec, serialize_output
 
 
 def _safe_calculate(expression: str) -> int | float:
@@ -66,7 +48,7 @@ def _safe_calculate(expression: str) -> int | float:
     return evaluate(tree)
 
 
-def calculator_tool() -> "ToolSpec":
+def calculator_tool() -> ToolSpec:
     return ToolSpec(
         name="calculator",
         description="Evaluate a simple arithmetic expression using +, -, *, /, //, %, ** and parentheses.",
@@ -85,7 +67,7 @@ def calculator_tool() -> "ToolSpec":
     )
 
 
-def utc_now_tool() -> "ToolSpec":
+def utc_now_tool() -> ToolSpec:
     return ToolSpec(
         name="utc_now",
         description="Return the current UTC time in ISO 8601 format.",
@@ -99,24 +81,6 @@ def utc_now_tool() -> "ToolSpec":
     )
 
 
-@dataclass(frozen=True)
-class ToolSpec:
-    name: str
-    description: str
-    parameters: JsonObject
-    handler: ToolHandler
-    strict: bool = True
-
-    def as_openai_tool(self) -> JsonObject:
-        return {
-            "type": "function",
-            "name": self.name,
-            "description": self.description,
-            "parameters": self.parameters,
-            "strict": self.strict,
-        }
-
-
 class ReActAgent:
     """A small ReACT agent that loops through model calls and local tools."""
 
@@ -125,92 +89,64 @@ class ReActAgent:
     def __init__(
         self,
         *,
-        client: OpenAI | None = None,
-        model: str = "gpt-5.1",
+        adapter: ModelAdapter | None = None,
         instructions: str | None = None,
-        reasoning_effort: str | None = "low",
         temperature: float = 0.0,
-        tools: list[ToolSpec] | None = None,
+        tools: Sequence[ToolSpec] | None = None,
     ) -> None:
-        self.client = client or OpenAI()
-        self.model = model
+        self.adapter = adapter or build_adapter("auto")
         self.instructions = instructions or (
             "You are a ReACT agent. Use tools when they help. "
             "Think privately, call tools one step at a time, and answer succinctly."
         )
-        self.reasoning_effort = reasoning_effort
         self.temperature = temperature
         self._tools: dict[str, ToolSpec] = {tool.name: tool for tool in (tools or [])}
 
     def register_tool(self, tool: ToolSpec) -> None:
         self._tools[tool.name] = tool
 
-    def _tool_payload(self) -> list[JsonObject]:
-        return [tool.as_openai_tool() for tool in self._tools.values()]
+    def _tool_payload(self) -> list[ToolSpec]:
+        return list(self._tools.values())
 
     def run(self, prompt: str, *, max_steps: int = 8) -> str:
         """Run the agent until it produces a final answer or hits max_steps."""
 
-        previous_response_id: str | None = None
-        input_items: list[JsonObject] = [
-            {
-                "type": "message",
-                "role": "user",
-                "content": [{"type": "input_text", "text": prompt}],
-            }
-        ]
+        messages: list[ChatMessage] = [ChatMessage(role="user", content=prompt)]
 
         for _ in range(max_steps):
-            request: JsonObject = {
-                "model": self.model,
-                "instructions": self.instructions,
-                "input": input_items,
-                "tools": self._tool_payload(),
-                "tool_choice": "auto",
-                "parallel_tool_calls": False,
-                "temperature": self.temperature,
-            }
-            if previous_response_id is not None:
-                request["previous_response_id"] = previous_response_id
-            if self.reasoning_effort is not None:
-                request["reasoning"] = {"effort": self.reasoning_effort}
-
-            response = self.client.responses.create(**request)
-            previous_response_id = response.id
-
-            tool_calls = [
-                item
-                for item in response.output
-                if getattr(item, "type", None) == "function_call"
-            ]
-            if not tool_calls:
-                final_text = (response.output_text or "").strip()
+            turn = self.adapter.step(
+                instructions=self.instructions,
+                messages=messages,
+                tools=self._tool_payload(),
+                temperature=self.temperature,
+            )
+            if turn.content is not None:
+                messages.append(
+                    ChatMessage(
+                        role="assistant",
+                        content=turn.content,
+                        tool_calls=list(turn.tool_calls),
+                    )
+                )
+            if not turn.tool_calls:
+                final_text = (turn.content or "").strip()
                 if final_text:
                     return final_text
-                raise RuntimeError(
-                    "The model returned no final text and no tool calls."
-                )
+                raise RuntimeError("The model returned no final text and no tool calls.")
 
-            input_items = []
-            for call in tool_calls:
+            for call in turn.tool_calls:
                 tool = self._tools.get(call.name)
                 if tool is None:
                     raise KeyError(f"Unknown tool requested by model: {call.name}")
 
-                try:
-                    arguments = json.loads(call.arguments or "{}")
-                except json.JSONDecodeError as exc:
-                    raise ValueError(
-                        f"Invalid JSON arguments from tool call {call.name}: {call.arguments}"
-                    ) from exc
-
-                output = _serialize_output(tool.handler(arguments))
-                input_items.append(
-                    {
-                        "type": "function_call_output",
-                        "call_id": call.call_id,
-                        "output": output,
-                    }
+                output = serialize_output(tool.handler(call.arguments))
+                messages.append(
+                    ChatMessage(
+                        role="tool",
+                        content=output,
+                        name=call.name,
+                        tool_call_id=call.id,
+                    )
                 )
 
         raise RuntimeError(
@@ -220,13 +156,10 @@ class ReActAgent:
 
 def build_agent(
     *,
-    client: OpenAI | None = None,
-    model: str = "gpt-5.1",
-    reasoning_effort: str | None = "low",
+    adapter: ModelAdapter | None = None,
+    tools: Sequence[ToolSpec] | None = None,
 ) -> ReActAgent:
     return ReActAgent(
-        client=client,
-        model=model,
-        reasoning_effort=reasoning_effort,
-        tools=[calculator_tool(), utc_now_tool()],
+        adapter=adapter,
+        tools=tools or [calculator_tool(), utc_now_tool()],
     )

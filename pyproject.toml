@@ -8,9 +8,11 @@ version = "0.1.0"
 description = "A new generation agent core."
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = [
-    "openai>=2.30.0",
-]
+dependencies = []
+
+[project.optional-dependencies]
+openai = ["openai>=2.30.0"]
+anthropic = ["anthropic>=0.40.0"]
 
 [tool.uv]
 dev-dependencies = [
