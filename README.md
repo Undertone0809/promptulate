@@ -33,6 +33,7 @@ agent = build_agent(
         base_path=".",
         allow_write=False,  # optional
         allow_command=False,  # enable run_command explicitly
+        allow_shell=False,  # enable shell explicitly when you need pipes/redirects
     ),
 )
 ```
@@ -65,6 +66,7 @@ uv run pne chat
 - `pne chat`: interactive multi-turn REPL, supports `/reset`, `/quit`.
 - `pne ask`: one-shot ask.
 - Use `--approve-commands` to expose `run_command` and `--allow-write` to expose `write_file`.
+- Use `--allow-shell` to expose a full shell tool when the agent needs pipes, redirects, or shell expansion.
 - Use `--trace-json` to keep raw event logs for replay.
 
 Examples and reference entry points are still in:

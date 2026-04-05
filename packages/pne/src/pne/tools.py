@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import ast
-import json
 import os
 import shlex
 import subprocess
@@ -83,6 +82,29 @@ def utc_now_tool() -> ToolSpec:
             "additionalProperties": False,
         },
         handler=lambda args: {"utc_now": datetime.now(timezone.utc).isoformat()},
+    )
+
+
+def shell_tool(*, base_path: str | Path = ".") -> ToolSpec:
+    root = Path(base_path).expanduser().absolute()
+    return ToolSpec(
+        name="shell",
+        description=(
+            "Run a shell command string through /bin/sh (or cmd.exe on Windows). "
+            "Use this for pipes, redirects, globbing, and other shell features."
+        ),
+        parameters={
+            "type": "object",
+            "properties": {
+                "command": {
+                    "type": "string",
+                    "description": "Shell command string to execute.",
+                }
+            },
+            "required": ["command"],
+            "additionalProperties": False,
+        },
+        handler=lambda args, _root=root: _shell_command_impl(args, base_path=_root),
     )
 
 
@@ -221,6 +243,38 @@ def _run_command_impl(
     }
 
 
+def _shell_command_argv(command_text: str) -> list[str]:
+    if os.name == "nt":
+        return ["cmd.exe", "/c", command_text]
+    return ["/bin/sh", "-c", command_text]
+
+
+def _shell_command_impl(
+    args: dict[str, Any],
+    *,
+    base_path: Path,
+) -> dict[str, Any]:
+    command_text = str(args.get("command", "")).strip()
+    if not command_text:
+        raise ValueError("command is required")
+
+    argv = _shell_command_argv(command_text)
+    result = subprocess.run(
+        argv,
+        cwd=str(base_path),
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    return {
+        "command": command_text,
+        "shell": argv[0],
+        "return_code": result.returncode,
+        "stdout": result.stdout,
+        "stderr": result.stderr,
+    }
+
+
 def _write_file_impl(args: dict[str, Any], *, base_path: Path) -> dict[str, Any]:
     path = _safe_path(base_path, args["path"])
     content = str(args.get("content", ""))
@@ -234,6 +288,7 @@ class ToolPreset:
     base_path: str = "."
     allow_write: bool = False
     allow_command: bool = False
+    allow_shell: bool = False
     command_allowlist: tuple[str, ...] = (
         "ls",
         "find",
@@ -250,6 +305,7 @@ def build_local_tools(
     include_builtins: bool = True,
     allow_write: bool = False,
     allow_command: bool = False,
+    allow_shell: bool = False,
     command_allowlist: Sequence[str] = (
         "ls",
         "find",
@@ -364,6 +420,9 @@ def build_local_tools(
                 ),
             )
         )
+
+    if allow_shell:
+        tools.append(shell_tool(base_path=root))
 
     if allow_write:
         tools.append(

@@ -36,6 +36,11 @@ def _build_parser() -> argparse.ArgumentParser:
             help="Expose write_file in toolset.",
         )
         command_parser.add_argument(
+            "--allow-shell",
+            action="store_true",
+            help="Expose shell in toolset.",
+        )
+        command_parser.add_argument(
             "--approve-commands",
             action="store_true",
             help="Expose and execute run_command after confirmation.",
@@ -126,11 +131,13 @@ def _build_tools(
     *,
     base_dir: str,
     allow_write: bool,
+    allow_shell: bool,
     approve_commands: bool,
 ) -> list[ToolSpec]:
     tools = build_local_tools(
         base_path=base_dir,
         allow_write=allow_write,
+        allow_shell=allow_shell,
         allow_command=approve_commands,
     )
     wrapped: list[ToolSpec] = []
@@ -246,6 +253,7 @@ def _build_agent(args: argparse.Namespace) -> object:
     tools = _build_tools(
         base_dir=args.base_dir,
         allow_write=args.allow_write,
+        allow_shell=args.allow_shell,
         approve_commands=args.approve_commands,
     )
     return build_agent(

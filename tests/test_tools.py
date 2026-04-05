@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 from pathlib import Path
+from subprocess import CompletedProcess
 from tempfile import TemporaryDirectory
 from unittest import TestCase
+from unittest.mock import patch
 
 from pne import build_local_tools, ToolSpec
+from pne.tools import _shell_command_argv
 
 
 class TestLocalTools(TestCase):
@@ -17,6 +20,7 @@ class TestLocalTools(TestCase):
         self.assertIn("utc_now", tools)
         self.assertNotIn("write_file", tools)
         self.assertNotIn("run_command", tools)
+        self.assertNotIn("shell", tools)
 
     def test_read_file_and_path_traversal(self) -> None:
         with TemporaryDirectory() as tmp:
@@ -78,3 +82,31 @@ class TestLocalTools(TestCase):
             command_tool: ToolSpec = tools["run_command"]
             with self.assertRaises(RuntimeError):
                 command_tool.handler({"command": "rm -rf /tmp"})
+
+    def test_shell_tool_runs_in_shell_when_enabled(self) -> None:
+        with TemporaryDirectory() as tmp:
+            command = "printf 'hello' | tr a-z A-Z"
+            with patch("pne.tools.subprocess.run") as run:
+                run.return_value = CompletedProcess(
+                    args=["shell"],
+                    returncode=0,
+                    stdout="HELLO",
+                    stderr="",
+                )
+                tools = {tool.name: tool for tool in build_local_tools(base_path=tmp, allow_shell=True)}
+                shell_tool: ToolSpec = tools["shell"]
+                got = shell_tool.handler({"command": command})
+
+            self.assertEqual(
+                {
+                    "command": command,
+                    "shell": _shell_command_argv(command)[0],
+                    "return_code": 0,
+                    "stdout": "HELLO",
+                    "stderr": "",
+                },
+                got,
+            )
+            run.assert_called_once()
+            self.assertEqual(_shell_command_argv(command), run.call_args.args[0])
+            self.assertEqual(tmp, run.call_args.kwargs["cwd"])

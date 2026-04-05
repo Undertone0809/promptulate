@@ -37,6 +37,10 @@ class TestCLI(TestCase):
         args = parser.parse_args(["ask", "--allow-write", "hello"])
         self.assertEqual("ask", args.command)
         self.assertEqual("hello", " ".join(args.prompt))
+        self.assertFalse(getattr(args, "allow_shell", False))
+
+        args = parser.parse_args(["ask", "--allow-shell", "hello"])
+        self.assertTrue(args.allow_shell)
 
     def test_trace_writer_can_be_disabled(self) -> None:
         write, close = _load_trace_writer(None)
@@ -65,6 +69,12 @@ class TestCLI(TestCase):
                 handler=lambda args: {"status": "ran"},
             ),
             ToolSpec(
+                name="shell",
+                description="",
+                parameters={},
+                handler=lambda args: {"status": "shell"},
+            ),
+            ToolSpec(
                 name="write_file",
                 description="",
                 parameters={},
@@ -72,15 +82,23 @@ class TestCLI(TestCase):
             ),
             ToolSpec(name="calculator", description="", parameters={}, handler=lambda args: {"ok": True}),
         ]
-        with patch("pne_cli.__main__.build_local_tools", return_value=tools):
+        with patch("pne_cli.__main__.build_local_tools", return_value=tools) as build_local_tools:
             with patch("pne_cli.__main__._prompt_once", side_effect=["n", "y"]):
                 wrapped = _build_tools(
                     base_dir="/tmp",
                     allow_write=True,
+                    allow_shell=True,
                     approve_commands=True,
+                )
+                build_local_tools.assert_called_once_with(
+                    base_path="/tmp",
+                    allow_write=True,
+                    allow_command=True,
+                    allow_shell=True,
                 )
                 wrapped_by_name = {tool.name: tool for tool in wrapped}
                 self.assertEqual({"status": "rejected", "tool": "run_command"}, wrapped_by_name["run_command"].handler({}))
+                self.assertEqual({"status": "shell"}, wrapped_by_name["shell"].handler({}))
                 self.assertEqual({"status": "written"}, wrapped_by_name["write_file"].handler({}))
                 self.assertEqual({"ok": True}, wrapped_by_name["calculator"].handler({}))
 
