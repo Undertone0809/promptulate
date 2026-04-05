@@ -17,6 +17,7 @@ If you do not install any provider extra, the runtime can still use local comman
 
 Example usage lives in [use_cases/react_agent/README.md](use_cases/react_agent/README.md).
 An alternative unified-agent example with local skills lives in [use_cases/openai_agent/README.md](use_cases/openai_agent/README.md).
+You can also inspect [use_cases/claude_code/README.md](use_cases/claude_code/README.md) and [use_cases/codex/README.md](use_cases/codex/README.md).
 Example runners may load a repository-local `.env`, but the SDK itself does not.
 
 Client-side usage:
