@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+import json
 import subprocess
 from dataclasses import dataclass, field
-from typing import Any, Sequence
+from typing import Any, Callable, Sequence
 
 from .skills import LocalSkill, skill_context
 
@@ -144,7 +145,14 @@ class OpenAIResponsesAgent:
             "max_output_length": max_output_length,
         }
 
-    def run(self, prompt: str, *, max_steps: int = 8) -> str:
+    def run(
+        self,
+        prompt: str,
+        *,
+        max_steps: int = 8,
+        verbose: bool = False,
+        on_step: Callable[[dict[str, Any]], None] | None = None,
+    ) -> str:
         response = self.client.responses.create(
             model=self.model,
             instructions=self._instructions(),
@@ -152,16 +160,53 @@ class OpenAIResponsesAgent:
             tools=[self._shell_tool()],
         )
 
-        for _ in range(max_steps):
+        def emit(event: dict[str, Any]) -> None:
+            if on_step is not None:
+                on_step(event)
+            if verbose:
+                print(json.dumps(event, ensure_ascii=False, indent=2))
+
+        for step in range(1, max_steps + 1):
+            emit(
+                {
+                    "type": "step_start",
+                    "agent": self.agent_type,
+                    "step": step,
+                }
+            )
             output_items = getattr(response, "output", None) or []
             shell_calls = [item for item in output_items if _item_type(item) == "shell_call"]
             if not shell_calls:
                 final_text = _response_text(response)
                 if final_text:
+                    emit(
+                        {
+                            "type": "final",
+                            "agent": self.agent_type,
+                            "step": step,
+                            "content": final_text,
+                        }
+                    )
                     return final_text
                 raise RuntimeError("OpenAI agent returned no final text and no shell calls.")
 
+            emit(
+                {
+                    "type": "shell_call_batch",
+                    "agent": self.agent_type,
+                    "step": step,
+                    "count": len(shell_calls),
+                }
+            )
             input_items = [self._execute_shell_call(item) for item in shell_calls]
+            emit(
+                {
+                    "type": "shell_results",
+                    "agent": self.agent_type,
+                    "step": step,
+                    "results": input_items,
+                }
+            )
             response = self.client.responses.create(
                 model=self.model,
                 previous_response_id=getattr(response, "id", None),

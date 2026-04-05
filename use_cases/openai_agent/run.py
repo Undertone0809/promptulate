@@ -19,7 +19,7 @@ def main() -> None:
     load_dotenv(Path(__file__).resolve().parents[2] / ".env")
     skill_root = Path(__file__).with_name("skills") / "basic_math"
     agent = build_openai_agent(skills=load_local_skills([skill_root]))
-    print(agent.run(_prompt()))
+    print(agent.run(_prompt(), verbose=True))
 
 
 if __name__ == "__main__":

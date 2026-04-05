@@ -17,7 +17,7 @@ def main() -> None:
     prompt = _read_prompt()
     adapter = build_adapter("codex")
     agent = build_agent(adapter=adapter)
-    print(agent.run(prompt))
+    print(agent.run(prompt, verbose=True))
 
 
 if __name__ == "__main__":

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import ast
+import json
 from datetime import datetime, timezone
 from typing import Any, Callable, Sequence
 
@@ -108,17 +109,50 @@ class ReActAgent:
     def _tool_payload(self) -> list[ToolSpec]:
         return list(self._tools.values())
 
-    def run(self, prompt: str, *, max_steps: int = 8) -> str:
+    def run(
+        self,
+        prompt: str,
+        *,
+        max_steps: int = 8,
+        verbose: bool = False,
+        on_step: Callable[[dict[str, Any]], None] | None = None,
+    ) -> str:
         """Run the agent until it produces a final answer or hits max_steps."""
 
         messages: list[ChatMessage] = [ChatMessage(role="user", content=prompt)]
 
-        for _ in range(max_steps):
+        def emit(event: dict[str, Any]) -> None:
+            if on_step is not None:
+                on_step(event)
+            if verbose:
+                print(json.dumps(event, ensure_ascii=False, indent=2))
+
+        for step in range(1, max_steps + 1):
+            emit(
+                {
+                    "type": "step_start",
+                    "agent": self.agent_type,
+                    "step": step,
+                    "messages": len(messages),
+                }
+            )
             turn = self.adapter.step(
                 instructions=self.instructions,
                 messages=messages,
                 tools=self._tool_payload(),
                 temperature=self.temperature,
+            )
+            emit(
+                {
+                    "type": "model_turn",
+                    "step": step,
+                    "agent": self.agent_type,
+                    "content": turn.content,
+                    "tool_calls": [
+                        {"name": call.name, "id": call.id, "arguments": call.arguments}
+                        for call in turn.tool_calls
+                    ],
+                }
             )
             if turn.content is not None:
                 messages.append(
@@ -131,6 +165,14 @@ class ReActAgent:
             if not turn.tool_calls:
                 final_text = (turn.content or "").strip()
                 if final_text:
+                    emit(
+                        {
+                            "type": "final",
+                            "agent": self.agent_type,
+                            "step": step,
+                            "content": final_text,
+                        }
+                    )
                     return final_text
                 raise RuntimeError("The model returned no final text and no tool calls.")
 
@@ -139,7 +181,28 @@ class ReActAgent:
                 if tool is None:
                     raise KeyError(f"Unknown tool requested by model: {call.name}")
 
+                emit(
+                    {
+                        "type": "tool_call",
+                        "agent": self.agent_type,
+                        "step": step,
+                        "tool_call": {
+                            "id": call.id,
+                            "name": call.name,
+                            "arguments": call.arguments,
+                        },
+                    }
+                )
                 output = serialize_output(tool.handler(call.arguments))
+                emit(
+                    {
+                        "type": "tool_output",
+                        "agent": self.agent_type,
+                        "step": step,
+                        "tool": call.name,
+                        "output": output,
+                    }
+                )
                 messages.append(
                     ChatMessage(
                         role="tool",
