@@ -2,15 +2,14 @@
 
 from __future__ import annotations
 
-import ast
 import asyncio
 import json
 import inspect
-from datetime import datetime, timezone
 from typing import Any, AsyncIterator, Callable, Sequence
 
 from .adapters import build_adapter
 from .skills import LocalSkill, skill_context
+from .tools import _safe_calculate, calculator_tool, utc_now_tool
 from .types import (
     AgentEvent,
     ChatMessage,
@@ -20,77 +19,6 @@ from .types import (
     ToolSpec,
     serialize_output,
 )
-
-
-def _safe_calculate(expression: str) -> int | float:
-    """Evaluate a simple arithmetic expression safely."""
-
-    allowed_binops: dict[type[ast.AST], Callable[[Any, Any], Any]] = {
-        ast.Add: lambda a, b: a + b,
-        ast.Sub: lambda a, b: a - b,
-        ast.Mult: lambda a, b: a * b,
-        ast.Div: lambda a, b: a / b,
-        ast.FloorDiv: lambda a, b: a // b,
-        ast.Mod: lambda a, b: a % b,
-        ast.Pow: lambda a, b: a**b,
-    }
-    allowed_unaryops: dict[type[ast.AST], Callable[[Any], Any]] = {
-        ast.UAdd: lambda a: a,
-        ast.USub: lambda a: -a,
-    }
-
-    def evaluate(node: ast.AST) -> Any:
-        if isinstance(node, ast.Expression):
-            return evaluate(node.body)
-        if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
-            return node.value
-        if isinstance(node, ast.BinOp):
-            operator = allowed_binops.get(type(node.op))
-            if operator is None:
-                raise ValueError(f"Unsupported operator: {type(node.op).__name__}")
-            return operator(evaluate(node.left), evaluate(node.right))
-        if isinstance(node, ast.UnaryOp):
-            operator = allowed_unaryops.get(type(node.op))
-            if operator is None:
-                raise ValueError(f"Unsupported operator: {type(node.op).__name__}")
-            return operator(evaluate(node.operand))
-        raise ValueError(f"Unsupported expression: {type(node).__name__}")
-
-    tree = ast.parse(expression, mode="eval")
-    return evaluate(tree)
-
-
-def calculator_tool() -> ToolSpec:
-    return ToolSpec(
-        name="calculator",
-        description="Evaluate a simple arithmetic expression using +, -, *, /, //, %, ** and parentheses.",
-        parameters={
-            "type": "object",
-            "properties": {
-                "expression": {
-                    "type": "string",
-                    "description": "Arithmetic expression to evaluate.",
-                }
-            },
-            "required": ["expression"],
-            "additionalProperties": False,
-        },
-        handler=lambda args: {"result": _safe_calculate(args["expression"])},
-    )
-
-
-def utc_now_tool() -> ToolSpec:
-    return ToolSpec(
-        name="utc_now",
-        description="Return the current UTC time in ISO 8601 format.",
-        parameters={
-            "type": "object",
-            "properties": {},
-            "required": [],
-            "additionalProperties": False,
-        },
-        handler=lambda args: {"utc_now": datetime.now(timezone.utc).isoformat()},
-    )
 
 
 def _with_skill_context(
@@ -222,6 +150,16 @@ class Agent:
             return await result
         return await asyncio.to_thread(handler, arguments)
 
+    @staticmethod
+    def _prepare_messages(
+        prompt: str,
+        *,
+        history: Sequence[ChatMessage] | None = None,
+    ) -> list[ChatMessage]:
+        messages: list[ChatMessage] = list(history or [])
+        messages.append(ChatMessage(role="user", content=prompt))
+        return messages
+
     def run(
         self,
         prompt: str,
@@ -229,10 +167,10 @@ class Agent:
         max_steps: int = 8,
         verbose: bool = False,
         on_step: Callable[[dict[str, Any]], None] | None = None,
+        history: Sequence[ChatMessage] | None = None,
     ) -> str:
         """Run the agent until it produces a final answer or hits max_steps."""
-
-        messages: list[ChatMessage] = [ChatMessage(role="user", content=prompt)]
+        messages = self._prepare_messages(prompt, history=history)
 
         for step in range(1, max_steps + 1):
             self._emit_event(
@@ -308,10 +246,10 @@ class Agent:
         max_steps: int = 8,
         verbose: bool = False,
         on_step: Callable[[dict[str, Any]], None] | None = None,
+        history: Sequence[ChatMessage] | None = None,
     ) -> AsyncIterator[AgentEvent]:
         """Run the agent and emit events as an async iterator."""
-
-        messages: list[ChatMessage] = [ChatMessage(role="user", content=prompt)]
+        messages = self._prepare_messages(prompt, history=history)
 
         for step in range(1, max_steps + 1):
             step_start_event = self._step_start_event(step=step, messages=messages)

@@ -270,10 +270,11 @@ class TestAgentStream(IsolatedAsyncioTestCase):
         )
         agent = build_agent(adapter=adapter)
         calls: list[Any] = []
+        original_to_thread = asyncio.to_thread
 
         async def fake_to_thread(func: Any, *args: Any, **kwargs: Any):
             calls.append(func)
-            return await asyncio.to_thread(func, *args, **kwargs)
+            return await original_to_thread(func, *args, **kwargs)
 
         with patch("pne.agent.asyncio.to_thread", side_effect=fake_to_thread):
             async for _ in agent.run_stream("Hello"):

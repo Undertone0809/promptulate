@@ -1,8 +1,8 @@
 # 运行方式
 
-`pne` 核心 SDK 只做能力拼装，不做运行时启动参数解析，推荐在 `use_cases/` 中保存具体入口。
+`pne` 核心 SDK 负责能力拼装，不直接承担运行参数解析；本仓库为 workspace 结构，`pne_cli` 负责交互式入口。
 
-## 通用调用示例
+## SDK 示例
 
 ```python
 from pne import build_adapter, build_agent
@@ -27,8 +27,34 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
-## 示例入口
+本地工具示例：
 
-本仓库的使用示例集中在 `use_cases/` 目录下维护，每个入口有独立的 README 与运行脚本。
+```python
+from pne import build_adapter, build_agent, build_local_tools
 
-如需接入新上下文（HTTP、CLI、任务队列），请在对应 `use_case` 模块封装启动逻辑。
+agent = build_agent(
+    adapter=build_adapter("auto"),
+    tools=build_local_tools(base_path=".", allow_write=False, allow_command=False),
+)
+```
+
+## CLI 使用
+
+```bash
+uv run pne ask "列一个 3x3 表格"
+uv run pne chat
+```
+
+`pne chat` 逐步输出：
+
+- `step_start`
+- `model_turn`
+- `tool_call`
+- `tool_output`
+- `final`
+
+会话内置命令：
+
+- `/quit`：退出
+- `/reset`：清空历史
+- `/help`：显示帮助

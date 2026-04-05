@@ -2,6 +2,18 @@ version = 1
 revision = 3
 requires-python = ">=3.13"
 
+[manifest]
+members = [
+    "pne",
+    "pne-cli",
+]
+
+[manifest.dependency-groups]
+dev = [
+    { name = "python-dotenv", specifier = ">=1.0.1" },
+    { name = "ruff", specifier = ">=0.15.9" },
+]
+
 [[package]]
 name = "annotated-types"
 version = "0.7.0"
@@ -197,7 +209,7 @@ wheels = [
 [[package]]
 name = "pne"
 version = "0.1.0"
-source = { editable = "." }
+source = { editable = "packages/pne" }
 
 [package.optional-dependencies]
 anthropic = [
@@ -207,12 +219,6 @@ openai = [
     { name = "openai" },
 ]
 
-[package.dev-dependencies]
-dev = [
-    { name = "python-dotenv" },
-    { name = "ruff" },
-]
-
 [package.metadata]
 requires-dist = [
     { name = "anthropic", marker = "extra == 'anthropic'", specifier = ">=0.40.0" },
@@ -220,11 +226,16 @@ requires-dist = [
 ]
 provides-extras = ["openai", "anthropic"]
 
-[package.metadata.requires-dev]
-dev = [
-    { name = "python-dotenv", specifier = ">=1.0.1" },
-    { name = "ruff", specifier = ">=0.15.9" },
+[[package]]
+name = "pne-cli"
+version = "0.1.0"
+source = { editable = "packages/pne-cli" }
+dependencies = [
+    { name = "pne" },
 ]
+
+[package.metadata]
+requires-dist = [{ name = "pne", editable = "packages/pne" }]
 
 [[package]]
 name = "pydantic"

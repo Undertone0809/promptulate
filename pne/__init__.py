@@ -11,6 +11,7 @@ from .adapters import (
 )
 from .agent import Agent, ReActAgent, ToolSpec, build_agent, build_react_agent
 from .skills import LocalSkill, load_local_skill, load_local_skills, skill_context
+from .tools import ToolPreset, build_local_tools, calculator_tool, utc_now_tool
 from .types import AgentEvent, AgentEventType, ChatMessage, ModelAdapter, ModelTurn, ToolCall
 
 __all__ = [
@@ -33,7 +34,11 @@ __all__ = [
     "load_local_skill",
     "load_local_skills",
     "openai_adapter",
+    "build_local_tools",
+    "ToolPreset",
     "AgentEvent",
     "AgentEventType",
     "skill_context",
+    "calculator_tool",
+    "utc_now_tool",
 ]
