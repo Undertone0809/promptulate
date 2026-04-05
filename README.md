@@ -30,3 +30,19 @@ print(answer)
 ```
 
 You can register your own tools by importing `ReActAgent` and `ToolSpec` from `pne`.
+
+## Docs
+
+This repository includes a VitePress documentation site in `docs/`.
+
+```bash
+cd docs
+npm install
+npm run docs:dev
+```
+
+Deploy to Vercel is configured via `vercel.json`:
+
+- Install command: `cd docs && npm install`
+- Build command: `cd docs && npm run docs:build`
+- Output directory: `docs/.vitepress/dist`

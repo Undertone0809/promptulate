@@ -1,0 +1,13 @@
+:root {
+  --vp-c-brand: #2b6cb0;
+  --vp-c-brand-light: #3a78bd;
+  --vp-c-brand-lighter: #5c8fd1;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.vp-doc a {
+  font-weight: 600;
+}
