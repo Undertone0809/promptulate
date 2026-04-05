@@ -1,4 +1,4 @@
-"""Minimal ReAct agent built on OpenAI's Responses API.
+"""Minimal ReACT agent built on OpenAI's Responses API.
 
 This uses the official Responses API function-calling loop:
 user prompt -> model -> function call(s) -> tool output(s) -> model -> final answer.
@@ -118,7 +118,9 @@ class ToolSpec:
 
 
 class ReActAgent:
-    """A small ReAct agent that loops through model calls and local tools."""
+    """A small ReACT agent that loops through model calls and local tools."""
+
+    agent_type = "ReACT"
 
     def __init__(
         self,
@@ -133,7 +135,7 @@ class ReActAgent:
         self.client = client or OpenAI()
         self.model = model
         self.instructions = instructions or (
-            "You are a ReAct agent. Use tools when they help. "
+            "You are a ReACT agent. Use tools when they help. "
             "Think privately, call tools one step at a time, and answer succinctly."
         )
         self.reasoning_effort = reasoning_effort
@@ -216,7 +218,7 @@ class ReActAgent:
         )
 
 
-def build_default_agent(
+def build_agent(
     *,
     client: OpenAI | None = None,
     model: str = "gpt-5.1",

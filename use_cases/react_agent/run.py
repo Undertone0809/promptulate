@@ -1,4 +1,4 @@
-"""Example runner for the PNE ReAct agent.
+"""Example runner for the PNE ReACT agent.
 
 This lives under `use_cases/` so the SDK package stays import-only.
 """
@@ -8,11 +8,11 @@ from __future__ import annotations
 import argparse
 import sys
 
-from pne import build_default_agent
+from pne import build_agent
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Run the PNE ReAct agent example.")
+    parser = argparse.ArgumentParser(description="Run the PNE ReACT agent example.")
     parser.add_argument(
         "prompt", nargs="?", help="Prompt to send to the agent. Reads stdin if omitted."
     )
@@ -28,9 +28,7 @@ def main() -> None:
     if prompt is None:
         prompt = sys.stdin.read().strip()
 
-    agent = build_default_agent(
-        model=args.model, reasoning_effort=args.reasoning_effort
-    )
+    agent = build_agent(model=args.model, reasoning_effort=args.reasoning_effort)
     print(agent.run(prompt))
 
 
