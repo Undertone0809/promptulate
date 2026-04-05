@@ -2,15 +2,25 @@
 
 A new generation agent core.
 
-## ReAct Agent
+## SDK
 
-This repo now includes a minimal OpenAI ReAct agent in `pne/react_agent.py`.
+`pne` is a small SDK for building OpenAI-based ReAct agents.
 
-Run it with:
+Example usage:
 
 ```bash
 export OPENAI_API_KEY=your_key
-uv run pne-react "What is 17 * 23?"
+uv run python use_cases/react_agent_cli.py "What is 17 * 23?"
+```
+
+Client-side usage:
+
+```python
+from pne import build_default_agent
+
+agent = build_default_agent()
+answer = agent.run("What is 17 * 23?")
+print(answer)
 ```
 
 You can register your own tools by importing `ReActAgent` and `ToolSpec` from `pne`.

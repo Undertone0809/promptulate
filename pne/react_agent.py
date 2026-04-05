@@ -6,10 +6,8 @@ user prompt -> model -> function call(s) -> tool output(s) -> model -> final ans
 
 from __future__ import annotations
 
-import argparse
 import ast
 import json
-import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Callable
@@ -178,12 +176,18 @@ class ReActAgent:
             response = self.client.responses.create(**request)
             previous_response_id = response.id
 
-            tool_calls = [item for item in response.output if getattr(item, "type", None) == "function_call"]
+            tool_calls = [
+                item
+                for item in response.output
+                if getattr(item, "type", None) == "function_call"
+            ]
             if not tool_calls:
                 final_text = (response.output_text or "").strip()
                 if final_text:
                     return final_text
-                raise RuntimeError("The model returned no final text and no tool calls.")
+                raise RuntimeError(
+                    "The model returned no final text and no tool calls."
+                )
 
             input_items = []
             for call in tool_calls:
@@ -194,7 +198,9 @@ class ReActAgent:
                 try:
                     arguments = json.loads(call.arguments or "{}")
                 except json.JSONDecodeError as exc:
-                    raise ValueError(f"Invalid JSON arguments from tool call {call.name}: {call.arguments}") from exc
+                    raise ValueError(
+                        f"Invalid JSON arguments from tool call {call.name}: {call.arguments}"
+                    ) from exc
 
                 output = _serialize_output(tool.handler(arguments))
                 input_items.append(
@@ -205,7 +211,9 @@ class ReActAgent:
                     }
                 )
 
-        raise RuntimeError(f"Reached max_steps={max_steps} without producing a final answer.")
+        raise RuntimeError(
+            f"Reached max_steps={max_steps} without producing a final answer."
+        )
 
 
 def build_default_agent(
@@ -220,22 +228,3 @@ def build_default_agent(
         reasoning_effort=reasoning_effort,
         tools=[calculator_tool(), utc_now_tool()],
     )
-
-
-def main() -> None:
-    parser = argparse.ArgumentParser(description="Run a minimal OpenAI ReAct agent.")
-    parser.add_argument("prompt", nargs="?", help="Prompt to send to the agent. Reads stdin if omitted.")
-    parser.add_argument("--model", default="gpt-5.1", help="OpenAI model name.")
-    parser.add_argument("--reasoning-effort", default="low", help="Reasoning effort for reasoning models.")
-    args = parser.parse_args()
-
-    prompt = args.prompt
-    if prompt is None:
-        prompt = sys.stdin.read().strip()
-
-    agent = build_default_agent(model=args.model, reasoning_effort=args.reasoning_effort)
-    print(agent.run(prompt))
-
-
-if __name__ == "__main__":
-    main()

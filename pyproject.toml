@@ -12,9 +12,6 @@ dependencies = [
     "openai>=2.30.0",
 ]
 
-[project.scripts]
-pne-react = "pne.react_agent:main"
-
 [tool.uv]
 dev-dependencies = [
     "ruff>=0.15.9",
