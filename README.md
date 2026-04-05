@@ -16,6 +16,7 @@ uv add "pne[anthropic]"
 If you do not install any provider extra, the runtime can still use local command-based adapters when available on `PATH`.
 
 Example usage lives in [use_cases/react_agent/README.md](use_cases/react_agent/README.md).
+An OpenAI Responses API example with a local skill bundle lives in [use_cases/openai_agent/README.md](use_cases/openai_agent/README.md).
 
 Client-side usage:
 
