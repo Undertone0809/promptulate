@@ -9,8 +9,7 @@ from .adapters import (
     codex_adapter,
     openai_adapter,
 )
-from .openai_agent import OpenAIResponsesAgent, build_openai_agent
-from .react_agent import ReActAgent, ToolSpec, build_agent
+from .agent import Agent, ReActAgent, ToolSpec, build_agent, build_react_agent
 from .skills import LocalSkill, load_local_skill, load_local_skills, skill_context
 from .types import ChatMessage, ModelAdapter, ModelTurn, ToolCall
 
@@ -20,14 +19,14 @@ __all__ = [
     "ModelAdapter",
     "ModelTurn",
     "OpenAIChatAdapter",
-    "OpenAIResponsesAgent",
+    "Agent",
     "ReActAgent",
+    "build_react_agent",
     "ToolCall",
     "ToolSpec",
     "anthropic_adapter",
     "build_adapter",
     "build_agent",
-    "build_openai_agent",
     "claude_code_adapter",
     "codex_adapter",
     "LocalSkill",
