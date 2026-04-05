@@ -6,12 +6,7 @@ A new generation agent core.
 
 `pne` is a small SDK for building OpenAI-based ReAct agents.
 
-Example usage:
-
-```bash
-export OPENAI_API_KEY=your_key
-uv run python use_cases/react_agent_cli.py "What is 17 * 23?"
-```
+Example usage lives in [use_cases/react_agent/README.md](use_cases/react_agent/README.md).
 
 Client-side usage:
 
