@@ -16,7 +16,9 @@ dependencies = [
 pne-react = "pne.react_agent:main"
 
 [tool.uv]
-dev-dependencies = []
+dev-dependencies = [
+    "ruff>=0.15.9",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["pne"]
