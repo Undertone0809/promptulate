@@ -1,5 +1,9 @@
 # Repository Guidelines
 
+## Documentation
+
+- Use `README.md` for the project overview and `docs/DEVELOPMENT.md` for development conventions.
+
 ## Git commit rules
 
 - After completing a feature, small functionality, test change, or bug fix, and after the necessary validation passes, default to running `git commit` and `git push` to the current remote branch.
