@@ -13,7 +13,7 @@ dependencies = ["pne>=2.0.0"]
 pne = "pne_cli.__main__:main"
 
 [project.urls]
-Homepage = "https://example.com"
+Homepage = "https://pne.zeeland.studio"
 
 [tool.uv.sources]
-pne = { workspace = true }
+pne = { path = "../pne" }

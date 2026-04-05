@@ -6,7 +6,6 @@ build-backend = "hatchling.build"
 name = "pne"
 version = "2.0.0"
 description = "A new generation agent core."
-readme = "../../README.md"
 requires-python = ">=3.13"
 dependencies = []
 
@@ -14,6 +13,8 @@ dependencies = []
 openai = ["openai>=2.30.0"]
 anthropic = ["anthropic>=0.40.0"]
 
+[project.urls]
+Homepage = "https://pne.zeeland.studio"
+
 [tool.hatch.build.targets.wheel]
-packages = ["pne"]
-package-dir = {"" = "src"}
+packages = ["src/pne"]

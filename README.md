@@ -2,6 +2,8 @@
 
 A new generation agent core plus local interactive CLI.
 
+Official site: https://pne.zeeland.studio
+
 ## Workspace layout
 
 This repo adopts a small workspace:

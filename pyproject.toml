@@ -1,8 +1,12 @@
 [tool.uv.workspace]
-members = ["packages/pne", "packages/pne-cli"]
+members = ["packages/pne-cli"]
 
 [tool.uv]
 dev-dependencies = [
+    "pne>=2.0.0",
     "ruff>=0.15.9",
     "python-dotenv>=1.0.1",
 ]
+
+[tool.uv.sources]
+pne = { path = "packages/pne" }
