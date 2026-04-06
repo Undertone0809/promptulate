@@ -11,7 +11,8 @@ from unittest.mock import patch
 from pne_cli.__main__ import (
     AgentEvent,
     _build_parser,
-    _build_tools,
+    _build_local_tools,
+    _wrap_tools,
     _consume_events,
     _load_trace_writer,
 )
@@ -84,11 +85,15 @@ class TestCLI(TestCase):
         ]
         with patch("pne_cli.__main__.build_local_tools", return_value=tools) as build_local_tools:
             with patch("pne_cli.__main__._prompt_once", side_effect=["n", "y"]):
-                wrapped = _build_tools(
+                local_tools = _build_local_tools(
                     base_dir="/tmp",
                     allow_write=True,
                     allow_shell=True,
                     approve_commands=True,
+                    advanced_tools=False,
+                    allow_bash=False,
+                    allow_repl=False,
+                    allow_ask=False,
                 )
                 build_local_tools.assert_called_once_with(
                     base_path="/tmp",
@@ -96,6 +101,7 @@ class TestCLI(TestCase):
                     allow_command=True,
                     allow_shell=True,
                 )
+                wrapped = _wrap_tools(local_tools, permission_mode="ask")
                 wrapped_by_name = {tool.name: tool for tool in wrapped}
                 self.assertEqual({"status": "rejected", "tool": "run_command"}, wrapped_by_name["run_command"].handler({}))
                 self.assertEqual({"status": "shell"}, wrapped_by_name["shell"].handler({}))
@@ -121,6 +127,7 @@ class TestCLIAsync(IsolatedAsyncioTestCase):
                 max_steps=2,
                 on_step=lambda event: None,
                 quiet=False,
+                rich_ui=False,
                 history=[],
             )
         self.assertEqual("done", final_text)
@@ -129,3 +136,78 @@ class TestCLIAsync(IsolatedAsyncioTestCase):
         self.assertIn("assistant: thinking...", text)
         self.assertIn("tool_output: 2", text)
         self.assertIn("final: done", text)
+
+    def test_advanced_tools_flag_parsed(self) -> None:
+        parser = _build_parser()
+        args = parser.parse_args(["chat", "--advanced-tools"])
+        self.assertTrue(args.advanced_tools)
+
+    def test_allow_bash_flag_parsed(self) -> None:
+        parser = _build_parser()
+        args = parser.parse_args(["chat", "--allow-bash"])
+        self.assertTrue(args.allow_bash)
+
+    def test_allow_repl_flag_parsed(self) -> None:
+        parser = _build_parser()
+        args = parser.parse_args(["chat", "--allow-repl"])
+        self.assertTrue(args.allow_repl)
+
+    def test_allow_mcp_flag_parsed(self) -> None:
+        parser = _build_parser()
+        args = parser.parse_args(["chat", "--allow-mcp"])
+        self.assertTrue(args.allow_mcp)
+
+    def test_allow_ask_flag_parsed(self) -> None:
+        parser = _build_parser()
+        args = parser.parse_args(["chat", "--allow-ask"])
+        self.assertTrue(args.allow_ask)
+
+    def test_permission_mode_bypass_parsed(self) -> None:
+        parser = _build_parser()
+        args = parser.parse_args(["chat", "--permission-mode", "bypass"])
+        self.assertEqual("bypass", args.permission_mode)
+
+    def test_permission_mode_ask_parsed(self) -> None:
+        parser = _build_parser()
+        args = parser.parse_args(["chat", "--permission-mode", "ask"])
+        self.assertEqual("ask", args.permission_mode)
+
+    def test_mcp_servers_parsed(self) -> None:
+        parser = _build_parser()
+        args = parser.parse_args(["chat", "--mcp-servers", "cmd1 arg;cmd2"])
+        self.assertEqual("cmd1 arg;cmd2", args.mcp_servers)
+
+    def test_plain_flag_parsed(self) -> None:
+        parser = _build_parser()
+        args = parser.parse_args(["chat", "--plain"])
+        self.assertTrue(args.plain)
+
+    def test_build_local_tools_uses_advanced_tools(self) -> None:
+        with patch("pne_cli.__main__.build_advanced_tools") as mock_build:
+            mock_build.return_value = []
+            _build_local_tools(
+                base_dir="/tmp",
+                allow_write=False,
+                allow_shell=False,
+                approve_commands=False,
+                advanced_tools=True,
+                allow_bash=False,
+                allow_repl=False,
+                allow_ask=False,
+            )
+            mock_build.assert_called_once()
+
+    def test_build_local_tools_uses_basic_tools(self) -> None:
+        with patch("pne_cli.__main__.build_local_tools") as mock_build:
+            mock_build.return_value = []
+            _build_local_tools(
+                base_dir="/tmp",
+                allow_write=False,
+                allow_shell=False,
+                approve_commands=False,
+                advanced_tools=False,
+                allow_bash=False,
+                allow_repl=False,
+                allow_ask=False,
+            )
+            mock_build.assert_called_once()

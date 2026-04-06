@@ -9,6 +9,13 @@ import sys
 from pathlib import Path
 from typing import Callable, Sequence
 
+from rich.console import Console
+from rich.live import Live
+from rich.markdown import Markdown
+from rich.panel import Panel
+from rich.syntax import Syntax
+from rich.text import Text
+
 from pne import (
     ChatMessage,
     AgentEvent,
@@ -61,6 +68,11 @@ def _build_parser() -> argparse.ArgumentParser:
             "--quiet",
             action="store_true",
             help="Only print final result instead of full event stream.",
+        )
+        command_parser.add_argument(
+            "--plain",
+            action="store_true",
+            help="Disable colors and live markdown rendering (plain stdout).",
         )
         # New flags
         command_parser.add_argument(
@@ -305,6 +317,41 @@ def _build_agent_sync(
     )
 
 
+class _StreamingAssistantMarkdown:
+    """Live-updating markdown panel for streamed assistant text."""
+
+    def __init__(self, console: Console) -> None:
+        self._console = console
+        self._buffer = ""
+        self._live: Live | None = None
+
+    def append(self, delta: str) -> None:
+        self._buffer += delta
+        panel = Panel(
+            Markdown(self._buffer),
+            title=Text("assistant", style="bold cyan"),
+            border_style="cyan",
+            padding=(0, 1),
+        )
+        if self._live is None:
+            self._live = Live(
+                panel,
+                console=self._console,
+                refresh_per_second=20,
+                transient=False,
+                vertical_overflow="visible",
+            )
+            self._live.start()
+        else:
+            self._live.update(panel)
+
+    def stop(self) -> None:
+        if self._live is not None:
+            self._live.stop()
+            self._live = None
+        self._buffer = ""
+
+
 async def _consume_events(
     *,
     prompt: str,
@@ -313,38 +360,121 @@ async def _consume_events(
     on_step: Callable[[AgentEvent], None],
     quiet: bool,
     history: Sequence[ChatMessage],
+    rich_ui: bool,
 ) -> str:
+    console = Console(highlight=False, soft_wrap=True)
+    stream = _StreamingAssistantMarkdown(console)
     final_text = ""
-    streaming = False
+    streaming_plain = False
+    had_stream_deltas = False
+
     async for event in agent.run_stream(prompt, max_steps=max_steps, on_step=on_step, history=history):
         event_type = event.get("type")
         if quiet and event_type != "final":
             continue
 
+        if quiet and event_type == "final":
+            final_text = str(event.get("content") or "")
+            if rich_ui:
+                console.print(Markdown(final_text))
+            else:
+                print(final_text)
+            continue
+
+        if rich_ui:
+            if event_type == "step_start":
+                stream.stop()
+                had_stream_deltas = False
+                console.rule(
+                    f"[dim cyan]step {event['step']}[/]",
+                    style="dim",
+                )
+            elif event_type == "model_turn":
+                has_tools = bool(event.get("tool_calls"))
+                if has_tools:
+                    console.print(
+                        Text("assistant", style="bold cyan"),
+                        end=" ",
+                    )
+                    console.print("[yellow italic]thinking…[/]")
+                elif event.get("content"):
+                    pass
+                else:
+                    console.print(Text("assistant", style="bold cyan"), end=" ")
+                    console.print()
+            elif event_type == "model_delta":
+                delta = str(event.get("delta") or "")
+                if delta:
+                    had_stream_deltas = True
+                    stream.append(delta)
+            elif event_type == "tool_call":
+                stream.stop()
+                tool_call = event.get("tool_call", {})
+                name = tool_call.get("name")
+                args = tool_call.get("arguments")
+                args_json = json.dumps(args, ensure_ascii=False, indent=2)
+                body = Syntax(args_json, "json", theme="monokai", word_wrap=True)
+                console.print(
+                    Panel(
+                        body,
+                        title=Text(f"tool · {name}", style="bold magenta"),
+                        border_style="magenta",
+                    )
+                )
+            elif event_type == "tool_output":
+                stream.stop()
+                output = event.get("output")
+                output_str = str(output) if output is not None else ""
+                if len(output_str) > 500:
+                    output_str = output_str[:500] + "... [truncated]"
+                console.print(
+                    Panel(
+                        Text(output_str, style="dim"),
+                        title=Text("tool output", style="bold blue"),
+                        border_style="blue",
+                    )
+                )
+            elif event_type == "final":
+                final_text = str(event.get("content") or "")
+                stream.stop()
+                if final_text and not had_stream_deltas:
+                    console.print(
+                        Panel(
+                            Markdown(final_text),
+                            title=Text("assistant", style="bold cyan"),
+                            border_style="cyan",
+                            padding=(0, 1),
+                        )
+                    )
+                elif final_text:
+                    console.print()
+                had_stream_deltas = False
+            continue
+
         if event_type == "step_start":
             print(f"\n[step {event['step']}]")
-            streaming = False
+            streaming_plain = False
         elif event_type == "model_turn":
             has_tools = bool(event.get("tool_calls"))
             if has_tools:
                 print("assistant: thinking...")
             elif event.get("content"):
                 print("assistant: ", end="", flush=True)
-                streaming = True
+                streaming_plain = True
             else:
                 print("assistant: ")
-                streaming = False
+                streaming_plain = False
         elif event_type == "model_delta":
             delta = str(event.get("delta") or "")
             if delta:
-                if not streaming:
+                if not streaming_plain:
                     print("assistant: ", end="", flush=True)
-                    streaming = True
+                    streaming_plain = True
                 print(delta, end="", flush=True)
         elif event_type == "tool_call":
-            if streaming:
+            if streaming_plain:
                 print()
-                streaming = False
+                streaming_plain = False
             tool_call = event.get("tool_call", {})
             name = tool_call.get("name")
             args = tool_call.get("arguments")
@@ -352,9 +482,9 @@ async def _consume_events(
             print(f"    name: {name}")
             print(f"    args: {json.dumps(args, ensure_ascii=False)}")
         elif event_type == "tool_output":
-            if streaming:
+            if streaming_plain:
                 print()
-                streaming = False
+                streaming_plain = False
             output = event.get("output")
             output_str = str(output) if output is not None else ""
             if len(output_str) > 500:
@@ -362,9 +492,9 @@ async def _consume_events(
             print(f"  - tool_output: {output_str}")
         elif event_type == "final":
             final_text = str(event.get("content") or "")
-            if streaming:
+            if streaming_plain:
                 print()
-                streaming = False
+                streaming_plain = False
             print(f"final: {final_text}")
 
     return final_text
@@ -377,6 +507,7 @@ async def _run_single(
     max_steps: int,
     trace_writer: Callable[[dict[str, object]], None],
     quiet: bool,
+    rich_ui: bool,
     history: list[ChatMessage],
 ) -> str:
     def _on_step(event: dict[str, object]) -> None:
@@ -388,6 +519,7 @@ async def _run_single(
         max_steps=max_steps,
         on_step=_on_step,
         quiet=quiet,
+        rich_ui=rich_ui,
         history=history,
     )
 
@@ -431,6 +563,7 @@ async def _handle_chat_async(args: argparse.Namespace) -> int:
                     max_steps=args.max_steps,
                     trace_writer=trace_write,
                     quiet=args.quiet,
+                    rich_ui=not args.plain,
                     history=history,
                 )
                 history.append(ChatMessage(role="user", content=text))
@@ -456,16 +589,15 @@ async def _handle_ask_async(args: argparse.Namespace) -> int:
 
         try:
             prompt = " ".join(args.prompt)
-            final_text = await _run_single(
+            await _run_single(
                 agent=agent,
                 prompt=prompt,
                 max_steps=args.max_steps,
                 trace_writer=trace_write,
                 quiet=args.quiet,
+                rich_ui=not args.plain,
                 history=[],
             )
-            if args.quiet:
-                print(final_text)
         finally:
             trace_close()
     finally:

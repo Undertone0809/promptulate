@@ -12,6 +12,8 @@ dependencies = []
 [project.optional-dependencies]
 openai = ["openai>=2.30.0"]
 anthropic = ["anthropic>=0.40.0"]
+mcp = ["mcp>=1.0.0"]
+notebook = ["nbformat>=5.0.0"]
 
 [project.urls]
 Homepage = "https://pne.zeeland.studio"
