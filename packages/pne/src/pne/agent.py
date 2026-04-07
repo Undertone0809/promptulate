@@ -147,6 +147,19 @@ class Agent:
             "content": final_text,
         }
 
+    def _unknown_tool_payload(self, requested: str) -> dict[str, Any]:
+        """Structured error when the model requests a tool we did not register."""
+        return {
+            "status": "error",
+            "error": "unknown_tool",
+            "requested_tool": requested,
+            "available_tools": sorted(self._tools.keys()),
+            "message": (
+                f"Tool {requested!r} is not registered in this session. "
+                "Use only tools listed in available_tools."
+            ),
+        }
+
     async def _call_model(self, **kwargs: Any) -> ModelTurn:
         step_async = getattr(self.adapter, "step_async", None)
         if step_async is not None:
@@ -226,15 +239,15 @@ class Agent:
 
             for call in turn.tool_calls:
                 tool = self._tools.get(call.name)
-                if tool is None:
-                    raise KeyError(f"Unknown tool requested by model: {call.name}")
-
                 self._emit_event(
                     self._tool_call_event(step=step, call=call),
                     on_step=on_step,
                     verbose=verbose,
                 )
-                output = serialize_output(tool.handler(call.arguments))
+                if tool is None:
+                    output = serialize_output(self._unknown_tool_payload(call.name))
+                else:
+                    output = serialize_output(tool.handler(call.arguments))
                 self._emit_event(
                     self._tool_output_event(step=step, tool=call.name, output=output),
                     on_step=on_step,
@@ -325,9 +338,6 @@ class Agent:
 
             for call in turn.tool_calls:
                 tool = self._tools.get(call.name)
-                if tool is None:
-                    raise KeyError(f"Unknown tool requested by model: {call.name}")
-
                 tool_call_event = self._tool_call_event(step=step, call=call)
                 self._emit_event(
                     tool_call_event,
@@ -336,9 +346,12 @@ class Agent:
                 )
                 yield tool_call_event
 
-                output = serialize_output(
-                    await self._call_tool(tool.handler, call.arguments)
-                )
+                if tool is None:
+                    output = serialize_output(self._unknown_tool_payload(call.name))
+                else:
+                    output = serialize_output(
+                        await self._call_tool(tool.handler, call.arguments)
+                    )
                 tool_output_event = self._tool_output_event(
                     step=step,
                     tool=call.name,

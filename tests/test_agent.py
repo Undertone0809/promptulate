@@ -86,18 +86,26 @@ class TestAgent(TestCase):
         self.assertEqual("calculator", tool_messages[0].name)
         self.assertEqual("t1", tool_messages[0].tool_call_id)
 
-    def test_agent_unknown_tool_call_raises(self) -> None:
+    def test_agent_unknown_tool_returns_error_payload_then_can_finish(self) -> None:
         adapter = _FakeAdapter(
             [
                 ModelTurn(
                     content=None,
-                    tool_calls=(ToolCall(id="bad", name="missing", arguments={}),),
-                )
+                    tool_calls=(ToolCall(id="bad", name="Skill", arguments={}),),
+                ),
+                ModelTurn(content="No Skill tool in this host; answering directly."),
             ]
         )
         agent = Agent(adapter=adapter, tools=[])
-        with self.assertRaises(KeyError):
-            agent.run("Call unknown tool", max_steps=1)
+        got = agent.run("Hello", max_steps=3, verbose=False)
+
+        self.assertEqual("No Skill tool in this host; answering directly.", got)
+        second_messages = adapter.calls[1][1]
+        tool_msgs = [m for m in second_messages if m.role == "tool"]
+        self.assertEqual(1, len(tool_msgs))
+        self.assertEqual("Skill", tool_msgs[0].name)
+        self.assertIn("unknown_tool", tool_msgs[0].content)
+        self.assertIn("Skill", tool_msgs[0].content)
 
     def test_agent_runs_until_max_steps_and_raises(self) -> None:
         adapter = _FakeAdapter(
@@ -296,3 +304,25 @@ class TestAgentStream(IsolatedAsyncioTestCase):
                 pass
 
         self.assertGreaterEqual(len(calls), 2)
+
+    async def test_run_stream_unknown_tool_emits_tool_output_with_error(self) -> None:
+        adapter = _FakeAdapter(
+            [
+                ModelTurn(
+                    content=None,
+                    tool_calls=(ToolCall(id="x1", name="Skill", arguments={"name": "x"}),),
+                ),
+                ModelTurn(content="Recovered."),
+            ]
+        )
+        agent = Agent(adapter=adapter, tools=[])
+        events: list[dict[str, Any]] = []
+
+        async for event in agent.run_stream("Hi", max_steps=3):
+            events.append(event)
+
+        tool_outputs = [e for e in events if e["type"] == "tool_output"]
+        self.assertEqual(1, len(tool_outputs))
+        self.assertIn("unknown_tool", str(tool_outputs[0].get("output", "")))
+        self.assertEqual("final", events[-1]["type"])
+        self.assertEqual("Recovered.", events[-1]["content"])
