@@ -1,15 +1,16 @@
 name: Dependency refresh
 
 on:
-  push:
+  pull_request:
     branches:
-      - chore/update-dependencies-20260715
+      - main
+    types: [opened, reopened, synchronize]
 
 permissions:
   contents: write
 
 concurrency:
-  group: dependency-refresh-${{ github.ref }}
+  group: dependency-refresh-${{ github.event.pull_request.number }}
   cancel-in-progress: false
 
 jobs:
@@ -18,6 +19,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -61,4 +64,4 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add poetry.lock requirements.txt
           git commit -m "chore(deps): refresh locked dependencies"
-          git push
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
