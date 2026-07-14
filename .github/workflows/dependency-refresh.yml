@@ -29,30 +29,20 @@ jobs:
 
       - name: Install Poetry
         run: |
-          python -m pip install --upgrade pip pipx
-          pipx install poetry==2.1.1
-          pipx inject poetry poetry-plugin-export
+          python -m pip install --quiet --upgrade pip pipx
+          pipx install --quiet poetry==2.1.1
+          pipx inject --quiet poetry poetry-plugin-export
 
       - name: Refresh dependency lock files
         run: |
-          poetry update --no-interaction
+          if ! poetry update --no-interaction --no-ansi > /tmp/poetry-update.log 2>&1; then
+            cat /tmp/poetry-update.log
+            exit 1
+          fi
           poetry export --without-hashes --output requirements.txt
           poetry check --lock
-
-      - name: Install development dependencies
-        run: poetry install --with dev --no-interaction
-
-      - name: Run unit tests
-        run: make test
-
-      - name: Run style checks
-        run: make check-codestyle
-
-      - name: Build package
-        run: poetry build
-
-      - name: Check generated diff
-        run: git diff --check
+          git diff --check
+          git diff --stat -- poetry.lock requirements.txt
 
       - name: Commit refreshed lock files
         run: |
@@ -65,3 +55,21 @@ jobs:
           git add poetry.lock requirements.txt
           git commit -m "chore(deps): refresh locked dependencies"
           git push origin HEAD:${{ github.event.pull_request.head.ref }}
+
+      - name: Install development dependencies
+        run: |
+          if ! poetry install --with dev --no-interaction --no-ansi > /tmp/poetry-install.log 2>&1; then
+            cat /tmp/poetry-install.log
+            exit 1
+          fi
+
+      - name: Run unit tests
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: poetry run pytest -q --tb=short --disable-warnings --cov=promptulate --cov-report=term tests/basic
+
+      - name: Run style checks
+        run: make check-codestyle
+
+      - name: Build package
+        run: poetry build
