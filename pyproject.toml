@@ -38,6 +38,7 @@ python = ">=3.8.1,<4.0"
 python-dotenv = "^1.0.0"
 questionary = "^2.0.1"
 requests = "^2.31.0"
+tokenizers = { version = "<0.21", python = "<3.9" }
 typing-extensions = "^4.10.0"
 
 
@@ -99,6 +100,7 @@ respect-gitignore = true
 
 [tool.ruff.lint]
 # https://beta.ruff.rs/docs/rules/
+# https://docs.astral.sh/ruff/configuration/
 extend-select = ["I"]
 exclude = ["*.ipynb"]
 ignore = ["F401"]
