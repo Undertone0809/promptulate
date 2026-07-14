@@ -11,7 +11,7 @@ permissions:
 
 concurrency:
   group: dependency-refresh-${{ github.event.pull_request.number }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   refresh-and-verify:
@@ -64,7 +64,7 @@ jobs:
           fi
 
       - name: Run unit tests
-        id: unit-tests
+        id: unit_tests
         continue-on-error: true
         env:
           PYTHONPATH: ${{ github.workspace }}
@@ -73,14 +73,14 @@ jobs:
           poetry run pytest -q --tb=short --disable-warnings --cov=promptulate --cov-report=term tests/basic 2>&1 | tee pytest.log
 
       - name: Run style checks
-        id: style-checks
+        id: style_checks
         continue-on-error: true
         run: |
           set -o pipefail
           make check-codestyle 2>&1 | tee style.log
 
       - name: Build package
-        id: package-build
+        id: package_build
         continue-on-error: true
         run: |
           set -o pipefail
@@ -102,9 +102,9 @@ jobs:
       - name: Enforce validation results
         if: always()
         env:
-          UNIT_TESTS: ${{ steps.unit-tests.outcome }}
-          STYLE_CHECKS: ${{ steps.style-checks.outcome }}
-          PACKAGE_BUILD: ${{ steps.package-build.outcome }}
+          UNIT_TESTS: ${{ steps.unit_tests.outcome }}
+          STYLE_CHECKS: ${{ steps.style_checks.outcome }}
+          PACKAGE_BUILD: ${{ steps.package_build.outcome }}
         run: |
           printf 'unit-tests=%s\nstyle-checks=%s\npackage-build=%s\n' "$UNIT_TESTS" "$STYLE_CHECKS" "$PACKAGE_BUILD"
           test "$UNIT_TESTS" = success
