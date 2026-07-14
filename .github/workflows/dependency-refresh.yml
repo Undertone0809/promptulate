@@ -1,0 +1,64 @@
+name: Dependency refresh
+
+on:
+  push:
+    branches:
+      - chore/update-dependencies-20260715
+
+permissions:
+  contents: write
+
+concurrency:
+  group: dependency-refresh-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  refresh-and-verify:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Poetry
+        run: |
+          python -m pip install --upgrade pip pipx
+          pipx install poetry==2.1.1
+          pipx inject poetry poetry-plugin-export
+
+      - name: Refresh dependency lock files
+        run: |
+          poetry update --no-interaction
+          poetry export --without-hashes --output requirements.txt
+          poetry check --lock
+
+      - name: Install development dependencies
+        run: poetry install --with dev --no-interaction
+
+      - name: Run unit tests
+        run: make test
+
+      - name: Run style checks
+        run: make check-codestyle
+
+      - name: Build package
+        run: poetry build
+
+      - name: Check generated diff
+        run: git diff --check
+
+      - name: Commit refreshed lock files
+        run: |
+          if git diff --quiet -- poetry.lock requirements.txt; then
+            echo "Dependency lock files are already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add poetry.lock requirements.txt
+          git commit -m "chore(deps): refresh locked dependencies"
+          git push
