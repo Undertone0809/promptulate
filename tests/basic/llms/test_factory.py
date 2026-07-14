@@ -5,17 +5,26 @@ import pytest
 import promptulate as pne
 
 
-def test_init_litellm():
-    import litellm
+@mock.patch("promptulate.llms._litellm.litellm.completion")
+def test_init_litellm(mock_completion):
+    response = mock.Mock()
+    response.choices = [mock.Mock(message=mock.Mock(content="mock response"))]
+    response.json.return_value = {
+        "choices": [{"message": {"content": "mock response"}}]
+    }
+    mock_completion.return_value = response
 
-    with pytest.raises(litellm.exceptions.APIConnectionError) as e:
-        model = pne.LLMFactory.build(model_name="claude-2")
-        model("hello")
+    model = pne.LLMFactory.build(model_name="claude-2")
 
-        assert (
-            str(e.value)
-            == "Missing Anthropic API Key - A call is being made to anthropic but no key is set either in the environment variables or via params"  # noqa
-        )
+    assert model("hello") == "mock response"
+    mock_completion.assert_called_once_with(
+        model="claude-2",
+        messages=[
+            {"content": "You are a helpful assistant.", "role": "system"},
+            {"content": "hello", "role": "user"},
+        ],
+        stream=False,
+    )
 
 
 def test_init_zhipu():
