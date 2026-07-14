@@ -35,8 +35,8 @@ jobs:
 
       - name: Refresh dependency lock files
         run: |
-          if ! poetry update --no-interaction --no-ansi > /tmp/poetry-update.log 2>&1; then
-            cat /tmp/poetry-update.log
+          if ! poetry update --no-interaction --no-ansi > poetry-update.log 2>&1; then
+            cat poetry-update.log
             exit 1
           fi
           poetry export --without-hashes --output requirements.txt
@@ -58,18 +58,55 @@ jobs:
 
       - name: Install development dependencies
         run: |
-          if ! poetry install --with dev --no-interaction --no-ansi > /tmp/poetry-install.log 2>&1; then
-            cat /tmp/poetry-install.log
+          if ! poetry install --with dev --no-interaction --no-ansi > poetry-install.log 2>&1; then
+            cat poetry-install.log
             exit 1
           fi
 
       - name: Run unit tests
+        id: unit-tests
+        continue-on-error: true
         env:
           PYTHONPATH: ${{ github.workspace }}
-        run: poetry run pytest -q --tb=short --disable-warnings --cov=promptulate --cov-report=term tests/basic
+        run: |
+          set -o pipefail
+          poetry run pytest -q --tb=short --disable-warnings --cov=promptulate --cov-report=term tests/basic 2>&1 | tee pytest.log
 
       - name: Run style checks
-        run: make check-codestyle
+        id: style-checks
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          make check-codestyle 2>&1 | tee style.log
 
       - name: Build package
-        run: poetry build
+        id: package-build
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          poetry build 2>&1 | tee build.log
+
+      - name: Upload validation logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-refresh-diagnostics
+          path: |
+            poetry-update.log
+            poetry-install.log
+            pytest.log
+            style.log
+            build.log
+          if-no-files-found: ignore
+
+      - name: Enforce validation results
+        if: always()
+        env:
+          UNIT_TESTS: ${{ steps.unit-tests.outcome }}
+          STYLE_CHECKS: ${{ steps.style-checks.outcome }}
+          PACKAGE_BUILD: ${{ steps.package-build.outcome }}
+        run: |
+          printf 'unit-tests=%s\nstyle-checks=%s\npackage-build=%s\n' "$UNIT_TESTS" "$STYLE_CHECKS" "$PACKAGE_BUILD"
+          test "$UNIT_TESTS" = success
+          test "$STYLE_CHECKS" = success
+          test "$PACKAGE_BUILD" = success
