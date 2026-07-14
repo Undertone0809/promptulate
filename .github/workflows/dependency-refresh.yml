@@ -113,6 +113,7 @@ jobs:
 
   python38-compatibility:
     if: github.actor != 'github-actions[bot]'
+    needs: refresh-and-verify
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
