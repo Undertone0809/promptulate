@@ -110,3 +110,60 @@ jobs:
           test "$UNIT_TESTS" = success
           test "$STYLE_CHECKS" = success
           test "$PACKAGE_BUILD" = success
+
+  python38-compatibility:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.8'
+
+      - name: Install Poetry
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet poetry
+          poetry --version | tee python38-poetry.log
+
+      - name: Install development dependencies
+        id: install_dependencies
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          poetry install --with dev --no-interaction --no-ansi 2>&1 | tee python38-install.log
+
+      - name: Run Python 3.8 unit tests
+        id: python38_tests
+        if: steps.install_dependencies.outcome == 'success'
+        continue-on-error: true
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          set -o pipefail
+          poetry run pytest -q --tb=short --disable-warnings --cov=promptulate --cov-report=term tests/basic 2>&1 | tee python38-pytest.log
+
+      - name: Upload Python 3.8 diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: python38-compatibility-diagnostics
+          path: |
+            python38-poetry.log
+            python38-install.log
+            python38-pytest.log
+          if-no-files-found: ignore
+
+      - name: Enforce Python 3.8 compatibility
+        if: always()
+        env:
+          INSTALL_RESULT: ${{ steps.install_dependencies.outcome }}
+          TEST_RESULT: ${{ steps.python38_tests.outcome }}
+        run: |
+          printf 'install=%s\ntests=%s\n' "$INSTALL_RESULT" "$TEST_RESULT"
+          test "$INSTALL_RESULT" = success
+          test "$TEST_RESULT" = success
